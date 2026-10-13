@@ -29,3 +29,15 @@ Ghi một mục cho mỗi task có dùng AI. Cập nhật liên kết PR/commit 
 - **Cách kiểm chứng:** Đã chạy `pnpm check`, `pnpm build` và `git diff --check`; tất cả đều thành công.
 - **Lỗi hoặc đề xuất sai của AI đã phát hiện:** Không phát hiện.
 - **Minh chứng:** Các thay đổi trong branch triển khai API client và TanStack Query; cập nhật liên kết PR/commit sau khi tạo.
+
+### 2026-10-13 — Review luồng xác thực trước PR
+
+- **Người thực hiện:** Hải Dương
+- **Công cụ:** Codex
+- **Mục đích và phạm vi:** Review diff frontend trước PR, tập trung vào luồng đăng nhập, đăng ký, xác minh email, đặt lại mật khẩu, JWT session, refresh token và contract API với backend.
+- **Prompt chính:** Review git diff hiện tại trước khi mở PR; đề xuất branch, commit, tiêu đề và mô tả PR theo template của repo.
+- **Đầu ra AI được sử dụng:** Kết quả review và metadata PR đề xuất; không dùng mã AI sinh trong lần review này. Đối chiếu `src/modules/auth/services/auth.api.ts`, `auth.config.ts`, `src/proxy-policy.ts` và các form/hook xác thực với backend.
+- **Phần tự làm hoặc đã chỉnh sửa:** Người thực hiện chấp nhận edge case logout khi nhiều request refresh dùng token cũ và chốt yêu cầu logout trước khi reset mật khẩu.
+- **Cách kiểm chứng:** `pnpm check` và `pnpm build` đều pass; `git diff --check` pass tại thời điểm review. Tái hiện bằng script gọi mã nguồn với mock backend dùng refresh token một lần: lần refresh đầu thành công, request đến sau dùng token cũ thất bại. Kiểm tra policy xác nhận link reset mật khẩu và xác minh email bị redirect về trang chủ khi có session.
+- **Lỗi hoặc đề xuất sai của AI đã phát hiện:** AI ban đầu đề xuất xem việc chặn reset mật khẩu khi còn đăng nhập là lỗi cần sửa; người thực hiện xác nhận đây là hành vi chủ đích, nên đã bỏ finding này. Rủi ro refresh token được chấp nhận và không coi là blocker cho PR.
+- **Minh chứng:** Diff được review trên branch `feat/setup-api-query-client`; branch đề xuất `feat/auth-account-flows`, commit đề xuất `feat(auth): add account flows and JWT session integration`.
