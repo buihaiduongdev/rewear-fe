@@ -4,43 +4,59 @@ import { useRouter } from 'next/navigation';
 
 import { AUTH_ROUTES } from '@/modules/auth/constants/route.constant';
 import {
-  forgotPasswordSchema,
-  type TForgotPasswordInput,
-} from '@/modules/auth/schemas';
-import {
-  resendVerificationMutationOptions,
-  verifyEmailMutationOptions,
-} from '@/modules/auth/services/auth.query';
+  useAuthControllerResendVerification,
+  useAuthControllerVerifyEmail,
+} from '@/shared/api/query-generated/auth/auth';
+import { AuthControllerResendVerificationBody } from '@/shared/api/zod-generated/auth/auth';
+import { TOAST_DURATION_MS } from '@/shared/constants/toast';
+import { useToastStore } from '@/shared/stores/toast.store';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useMutation } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
 
 export function useVerifyEmail(token?: string) {
   const router = useRouter();
-  const options = verifyEmailMutationOptions();
   const {
     mutate: verifyMutate,
     isPending: isVerifying,
     isSuccess: isVerified,
     isError: isVerifyError,
-  } = useMutation({
-    ...options,
-    onSuccess: (...args) => {
-      options.onSuccess?.(...args);
-      router.replace(AUTH_ROUTES.LOGIN);
+  } = useAuthControllerVerifyEmail({
+    mutation: {
+      meta: { skipSuccessToast: true, toastDurationMs: TOAST_DURATION_MS.LONG },
+      onSuccess: () => {
+        useToastStore.getState().addToast({
+          type: 'success',
+          title: 'Success',
+          description: 'Your email has been verified. You can now log in.',
+          durationMs: TOAST_DURATION_MS.LONG,
+        });
+        router.replace(AUTH_ROUTES.LOGIN);
+      },
     },
   });
   const {
     mutate: resendMutate,
     isPending: isSubmitting,
     isSuccess: isResent,
-  } = useMutation(resendVerificationMutationOptions());
+  } = useAuthControllerResendVerification({
+    mutation: {
+      meta: { skipSuccessToast: true, toastDurationMs: TOAST_DURATION_MS.LONG },
+      onSuccess: () => {
+        useToastStore.getState().addToast({
+          type: 'success',
+          title: 'Check your email',
+          description: 'Check your email for a new verification link.',
+          durationMs: TOAST_DURATION_MS.LONG,
+        });
+      },
+    },
+  });
   const {
     register,
     handleSubmit,
     formState: { errors, isValid },
-  } = useForm<TForgotPasswordInput>({
-    resolver: zodResolver(forgotPasswordSchema),
+  } = useForm({
+    resolver: zodResolver(AuthControllerResendVerificationBody),
     defaultValues: { email: '' },
     mode: 'onChange',
   });
@@ -50,11 +66,11 @@ export function useVerifyEmail(token?: string) {
       return;
     }
 
-    verifyMutate(token);
+    verifyMutate({ data: { token } });
   };
 
   const resend = handleSubmit((payload) => {
-    resendMutate(payload);
+    resendMutate({ data: payload });
   });
 
   return {

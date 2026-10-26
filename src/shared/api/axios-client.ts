@@ -1,15 +1,9 @@
-import { env } from '@/shared/config/env';
 import axios from 'axios';
-import ms from 'ms';
 import { getSession, signOut } from 'next-auth/react';
 
-export const axiosClient = axios.create({
-  baseURL: env.NEXT_PUBLIC_API_URL,
-  headers: {
-    'Content-Type': 'application/json',
-  },
-  timeout: ms('10s'),
-});
+import { axiosConfig } from './axios-config';
+
+export const axiosClient = axios.create(axiosConfig);
 
 axiosClient.interceptors.request.use(async (config) => {
   if (typeof window !== 'undefined' && !config.headers.Authorization) {

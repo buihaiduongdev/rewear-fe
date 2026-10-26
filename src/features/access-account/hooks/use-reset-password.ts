@@ -6,17 +6,27 @@ import {
   resetPasswordSchema,
   type TResetPasswordInput,
 } from '@/modules/auth/schemas';
-import { resetPasswordMutationOptions } from '@/modules/auth/services/auth.query';
 import { getPasswordStrengthScore } from '@/modules/auth/validators';
+import { useAuthControllerResetPassword } from '@/shared/api/query-generated/auth/auth';
+import { TOAST_DURATION_MS } from '@/shared/constants/toast';
 import { useToastStore } from '@/shared/stores/toast.store';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useMutation } from '@tanstack/react-query';
 import { useForm, useWatch } from 'react-hook-form';
 
 export function useResetPassword(token?: string) {
-  const { mutate, isPending, isSuccess } = useMutation(
-    resetPasswordMutationOptions(),
-  );
+  const { mutate, isPending, isSuccess } = useAuthControllerResetPassword({
+    mutation: {
+      meta: { skipSuccessToast: true, toastDurationMs: TOAST_DURATION_MS.LONG },
+      onSuccess: () => {
+        useToastStore.getState().addToast({
+          type: 'success',
+          title: 'Success',
+          description: 'Your password has been reset. You can now log in.',
+          durationMs: TOAST_DURATION_MS.LONG,
+        });
+      },
+    },
+  });
   const {
     register,
     handleSubmit,
@@ -34,7 +44,7 @@ export function useResetPassword(token?: string) {
         type: 'error',
         title: 'Invalid reset link',
         description: 'Please request a new password reset link.',
-        durationMs: 10000,
+        durationMs: TOAST_DURATION_MS.LONG,
       });
   }, [token]);
 
@@ -45,7 +55,7 @@ export function useResetPassword(token?: string) {
       return;
     }
 
-    mutate({ token, newPassword });
+    mutate({ data: { token, newPassword } });
   });
 
   return {

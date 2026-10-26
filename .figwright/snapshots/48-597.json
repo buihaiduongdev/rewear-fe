@@ -1,0 +1,271 @@
+{
+  "figwrightSnapshot": 2,
+  "nodeId": "48:597",
+  "capturedAt": "2026-10-24T09:38:30.951Z",
+  "context": {
+    "nodes": [
+      {
+        "id": "48:597",
+        "name": "Check your email",
+        "type": "FRAME",
+        "x": 2630,
+        "y": 80,
+        "width": 520,
+        "height": 262,
+        "layout": {
+          "mode": "VERTICAL",
+          "paddingTop": 32,
+          "paddingRight": 32,
+          "paddingBottom": 32,
+          "paddingLeft": 32,
+          "itemSpacing": 24,
+          "primaryAxisAlignItems": "MIN",
+          "counterAxisAlignItems": "MIN",
+          "layoutWrap": "NO_WRAP",
+          "strokesIncludedInLayout": true
+        },
+        "constraints": {
+          "horizontal": "MIN",
+          "vertical": "MIN"
+        },
+        "clipsContent": true,
+        "fill": "fill_nll9eq",
+        "children": [
+          {
+            "id": "48:598",
+            "name": "Close ×",
+            "type": "TEXT",
+            "x": 32,
+            "y": 32,
+            "width": 50,
+            "height": 20,
+            "layoutSizingHorizontal": "HUG",
+            "layoutSizingVertical": "HUG",
+            "characters": "Close ×",
+            "styleIds": {
+              "text": "S:715a3ccfdc7f8681436205c1f1ee1637ce781490"
+            },
+            "fill": "fill_1yo0wxt",
+            "textStyle": "text_835ow5"
+          },
+          {
+            "id": "48:599",
+            "name": "Check your email",
+            "type": "TEXT",
+            "x": 32,
+            "y": 76,
+            "width": 220,
+            "height": 34,
+            "layoutSizingHorizontal": "HUG",
+            "layoutSizingVertical": "HUG",
+            "characters": "Check your email",
+            "styleIds": {
+              "text": "S:697be5e71b6395434cf9dbdde9319623d6779e4f"
+            },
+            "fill": "fill_1yo0wxt",
+            "textStyle": "text_bcqohx"
+          },
+          {
+            "id": "48:600",
+            "name": "Open the link we sent to verify your account.",
+            "type": "TEXT",
+            "x": 32,
+            "y": 134,
+            "width": 331,
+            "height": 24,
+            "layoutSizingHorizontal": "HUG",
+            "layoutSizingVertical": "HUG",
+            "characters": "Open the link we sent to verify your account.",
+            "styleIds": {
+              "text": "S:100d7af0e0551771610dccc1db9d001ca95260c8"
+            },
+            "fill": "fill_1yo0wxt",
+            "textStyle": "text_h5c07e"
+          },
+          {
+            "id": "48:601",
+            "name": "RE.WEAR/Button/Primary",
+            "type": "INSTANCE",
+            "x": 32,
+            "y": 182,
+            "width": 456,
+            "height": 48,
+            "layout": {
+              "mode": "HORIZONTAL",
+              "paddingTop": 12,
+              "paddingRight": 20,
+              "paddingBottom": 12,
+              "paddingLeft": 20,
+              "itemSpacing": 8,
+              "primaryAxisAlignItems": "CENTER",
+              "counterAxisAlignItems": "CENTER",
+              "layoutWrap": "NO_WRAP",
+              "strokesIncludedInLayout": true
+            },
+            "layoutSizingHorizontal": "FIXED",
+            "layoutSizingVertical": "FIXED",
+            "clipsContent": false,
+            "boundVariables": {
+              "paddingLeft": [
+                "VariableID:56:1031"
+              ],
+              "paddingTop": [
+                "VariableID:56:1030"
+              ],
+              "paddingRight": [
+                "VariableID:56:1031"
+              ],
+              "paddingBottom": [
+                "VariableID:56:1030"
+              ],
+              "fills": [
+                "VariableID:41:13"
+              ]
+            },
+            "mainComponentId": "41:24",
+            "mainComponent": {
+              "id": "41:24",
+              "name": "RE.WEAR/Button/Primary",
+              "key": "e8cb63fd2b6fe87f03754dc814022bf43f7e09ae"
+            },
+            "fill": "fill_1obmrtn",
+            "children": [
+              {
+                "id": "I48:601;41:25",
+                "name": "Continue",
+                "type": "TEXT",
+                "x": 181,
+                "y": 14,
+                "width": 94,
+                "height": 20,
+                "layoutSizingHorizontal": "HUG",
+                "layoutSizingVertical": "HUG",
+                "characters": "Back to sign in",
+                "styleIds": {
+                  "text": "S:cca39d0d004db68f84549cf9d5d44cb09a92d7be"
+                },
+                "boundVariables": {
+                  "fills": [
+                    "VariableID:41:9"
+                  ]
+                },
+                "fill": "fill_1yo0wxt",
+                "textStyle": "text_1av4204"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "variables": {
+      "VariableID:56:1031": {
+        "name": "space/20",
+        "type": "FLOAT"
+      },
+      "VariableID:56:1030": {
+        "name": "space/12",
+        "type": "FLOAT"
+      },
+      "VariableID:41:13": {
+        "name": "color/accent",
+        "type": "COLOR",
+        "codeSyntax": {
+          "WEB": "var(--rewear-accent)"
+        }
+      },
+      "VariableID:41:9": {
+        "name": "color/text",
+        "type": "COLOR",
+        "codeSyntax": {
+          "WEB": "var(--rewear-text)"
+        }
+      }
+    },
+    "globalVars": {
+      "styles": {
+        "fill_nll9eq": [
+          {
+            "type": "SOLID",
+            "color": "#FFFFFF"
+          }
+        ],
+        "fill_1yo0wxt": [
+          {
+            "type": "SOLID",
+            "color": "#1A1C1D"
+          }
+        ],
+        "text_835ow5": {
+          "fontFamily": "DM Sans",
+          "fontStyle": "SemiBold",
+          "fontSize": 14,
+          "fontVariationSettings": {
+            "opsz": 14,
+            "wght": 600
+          },
+          "lineHeight": {
+            "value": 20,
+            "unit": "PIXELS"
+          }
+        },
+        "text_bcqohx": {
+          "fontFamily": "DM Sans",
+          "fontStyle": "SemiBold",
+          "fontSize": 28,
+          "fontVariationSettings": {
+            "opsz": 14,
+            "wght": 600
+          },
+          "lineHeight": {
+            "value": 34,
+            "unit": "PIXELS"
+          },
+          "letterSpacing": {
+            "value": -2,
+            "unit": "PERCENT"
+          }
+        },
+        "text_h5c07e": {
+          "fontFamily": "DM Sans",
+          "fontStyle": "Regular",
+          "fontSize": 16,
+          "fontVariationSettings": {
+            "opsz": 14,
+            "wght": 400
+          },
+          "lineHeight": {
+            "value": 24,
+            "unit": "PIXELS"
+          }
+        },
+        "fill_1obmrtn": [
+          {
+            "type": "SOLID",
+            "color": "#C3F832"
+          }
+        ],
+        "text_1av4204": {
+          "fontFamily": "DM Sans",
+          "fontStyle": "Regular",
+          "fontSize": 14,
+          "fontVariationSettings": {
+            "opsz": 14,
+            "wght": 400
+          },
+          "lineHeight": {
+            "value": 20,
+            "unit": "PIXELS"
+          }
+        }
+      }
+    },
+    "metrics": {
+      "nodeCount": 6,
+      "maxDepth": 3,
+      "styleCount": 7,
+      "tokenCount": 4,
+      "inlineSizeKb": 3.69,
+      "dedupedSizeKb": 3.33
+    }
+  }
+}

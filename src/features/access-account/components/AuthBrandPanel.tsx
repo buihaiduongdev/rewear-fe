@@ -1,4 +1,3 @@
-import { LogoImage } from '@/shared/components/ui/logo-image';
 import { SITE } from '@/shared/constants/site';
 
 export function AuthBrandPanel() {
@@ -8,7 +7,6 @@ export function AuthBrandPanel() {
 
       {/* Brand mark */}
       <div className="animate-rise relative z-10 flex items-center gap-3">
-        <LogoImage src={SITE.logoSrc} size={40} alt="" className="rounded-xl" />
         <span className="font-heading text-xl font-semibold tracking-tight text-white">
           {SITE.name}
         </span>

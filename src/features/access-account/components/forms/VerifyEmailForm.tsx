@@ -20,6 +20,7 @@ export function VerifyEmailForm({ token }: TVerifyEmailFormProps) {
     isVerifying,
     canVerify,
     isVerified,
+    isResent,
     register,
     resend,
     verify,
@@ -27,19 +28,19 @@ export function VerifyEmailForm({ token }: TVerifyEmailFormProps) {
 
   if (canVerify) {
     return (
-      <div>
+      <div className="flex flex-col gap-6">
         <Button
           disabled={isVerified}
           type="button"
           onClick={verify}
           loading={isVerifying}
-          className="h-10 w-full text-sm"
+          className="inline-flex h-12 w-full items-center justify-center rounded-none border-0 bg-[#c3f832] text-sm leading-5 font-normal text-[#1a1c1d] shadow-none hover:bg-[#b4e82a] hover:no-underline max-[600px]:min-h-[52px]"
         >
           Verify email
         </Button>
         <Link
           href={AUTH_ROUTES.LOGIN}
-          className="text-primary mt-6 block text-center text-sm font-medium hover:underline"
+          className="text-center text-sm leading-5 font-semibold"
         >
           Go to log in
         </Link>
@@ -48,22 +49,31 @@ export function VerifyEmailForm({ token }: TVerifyEmailFormProps) {
   }
 
   return (
-    <form onSubmit={resend} noValidate>
-      <div className="min-h-[6rem]">
-        <EmailInput {...register('email')} error={errors.email?.message} />
+    <form onSubmit={resend} noValidate className="flex flex-col gap-6">
+      <div>
+        <EmailInput
+          {...register('email')}
+          appearance="filled"
+          autoComplete="email"
+          placeholder="name@example.com"
+          error={errors.email?.message}
+        />
       </div>
 
       <Button
         type="submit"
         disabled={isSubmitDisabled}
         loading={isSubmitting}
-        className="h-10 w-full text-sm"
+        className="inline-flex h-12 w-full items-center justify-center rounded-none border-0 bg-[#c3f832] text-sm leading-5 font-normal text-[#1a1c1d] shadow-none hover:bg-[#b4e82a] hover:no-underline max-[600px]:min-h-[52px]"
       >
         Send a new link
       </Button>
+      {isResent && (
+        <p role="status">Check your email for a new verification link.</p>
+      )}
       <Link
         href={AUTH_ROUTES.LOGIN}
-        className="text-primary mt-6 block text-center text-sm font-medium hover:underline"
+        className="text-center text-sm leading-5 font-semibold"
       >
         Back to log in
       </Link>

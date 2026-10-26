@@ -1,11 +1,18 @@
 import { Suspense } from 'react';
 
-import Link from 'next/link';
+import type { Metadata } from 'next';
 
 import { LoginForm } from '@/features/access-account/components/forms/LoginForm';
-import { AUTH_ERROR_MESSAGES } from '@/modules/auth/constants/auth.constant';
-import { AUTH_ROUTES } from '@/modules/auth/constants/route.constant';
-import { TAuthErrorCode } from '@/modules/auth/types';
+import { LoginShell } from '@/features/access-account/components/LoginShell';
+import {
+  AUTH_ERROR_MESSAGES,
+  type TAuthErrorCode,
+} from '@/modules/auth/constants/auth.constant';
+
+export const metadata: Metadata = {
+  title: 'Sign in | RE.WEAR',
+  description: 'Sign in to your RE.WEAR account.',
+};
 
 type TLoginPageProps = {
   searchParams: Promise<{
@@ -16,16 +23,10 @@ type TLoginPageProps = {
 
 export default function LoginPage({ searchParams }: TLoginPageProps) {
   return (
-    <>
-      <div className="mb-8">
-        <h1 className="font-heading text-foreground mb-2 text-2xl font-semibold tracking-tight">
-          Welcome back
-        </h1>
-        <p className="text-muted-foreground text-sm">
-          Log in to your Rewear account
-        </p>
-      </div>
-
+    <LoginShell>
+      <h1 className="text-[40px] leading-[46px] font-semibold tracking-[-0.8px]">
+        Sign in
+      </h1>
       <Suspense
         fallback={
           <p role="status" className="text-muted-foreground text-sm">
@@ -35,17 +36,7 @@ export default function LoginPage({ searchParams }: TLoginPageProps) {
       >
         <LoginContent searchParams={searchParams} />
       </Suspense>
-
-      <p className="text-muted-foreground mt-8 text-center text-sm">
-        Don’t have an account?{' '}
-        <Link
-          href={AUTH_ROUTES.REGISTER}
-          className="text-primary font-medium hover:underline"
-        >
-          Sign up
-        </Link>
-      </p>
-    </>
+    </LoginShell>
   );
 }
 

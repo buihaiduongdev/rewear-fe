@@ -1,23 +1,25 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
-
-import { AUTH_ROUTES } from '@/modules/auth/constants/route.constant';
 import { registerSchema, type TRegisterInput } from '@/modules/auth/schemas';
-import { registerMutationOptions } from '@/modules/auth/services/auth.query';
-import { getPasswordStrengthScore } from '@/modules/auth/validators';
+import { useAuthControllerRegister } from '@/shared/api/query-generated/auth/auth';
+import { TOAST_DURATION_MS } from '@/shared/constants/toast';
+import { useToastStore } from '@/shared/stores/toast.store';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useMutation } from '@tanstack/react-query';
 import { useForm, useWatch } from 'react-hook-form';
 
 export function useRegister() {
-  const router = useRouter();
-  const options = registerMutationOptions();
-  const { mutate, isPending, isSuccess } = useMutation({
-    ...options,
-    onSuccess: (...args) => {
-      options.onSuccess?.(...args);
-      router.replace(AUTH_ROUTES.LOGIN);
+  const { mutate, isPending, isSuccess } = useAuthControllerRegister({
+    mutation: {
+      meta: { skipSuccessToast: true, toastDurationMs: TOAST_DURATION_MS.LONG },
+      onSuccess: () => {
+        useToastStore.getState().addToast({
+          type: 'success',
+          title: 'Check your email',
+          description:
+            'We sent a verification link. Check your email to activate your account.',
+          durationMs: TOAST_DURATION_MS.LONG,
+        });
+      },
     },
   });
   const {
@@ -38,11 +40,9 @@ export function useRegister() {
     mode: 'onChange',
   });
 
-  const password = useWatch({ control, name: 'password' }) ?? '';
   const isChecked = useWatch({ control, name: 'acceptedTerms' }) ?? false;
-  const passwordStrengthScore = getPasswordStrengthScore(password);
   const onSubmit = handleSubmit(({ fullName, email, password }) => {
-    mutate({ fullName, email, password });
+    mutate({ data: { fullName, email, password } });
   });
 
   return {
@@ -51,7 +51,6 @@ export function useRegister() {
     isPending,
     isSuccess,
     isChecked,
-    passwordStrengthScore,
     onSubmit,
     register,
     setValue,

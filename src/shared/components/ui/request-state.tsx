@@ -2,6 +2,7 @@
 
 import { useEffect } from 'react';
 
+import { TOAST_DURATION_MS } from '@/shared/constants/toast';
 import { useToastStore } from '@/shared/stores/toast.store';
 import { InboxIcon } from '@hugeicons/core-free-icons';
 import { HugeiconsIcon } from '@hugeicons/react';
@@ -12,7 +13,7 @@ export function ErrorNotice({ message }: { message: string }) {
   useEffect(() => {
     addToast({
       type: 'error',
-      durationMs: 4000,
+      durationMs: TOAST_DURATION_MS.DEFAULT,
       title: 'Request failed',
       description: message,
     });

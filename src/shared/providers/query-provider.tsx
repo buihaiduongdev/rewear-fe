@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { getApiErrorMessage } from '@/shared/api/api-error';
 import { createQueryClient } from '@/shared/api/query-client';
 import { ToastViewport } from '@/shared/components/ui/toast';
+import { TOAST_DURATION_MS } from '@/shared/constants/toast';
 import { useToastStore } from '@/shared/stores/toast.store';
 import {
   MutationCache,
@@ -12,9 +13,11 @@ import {
   QueryClientProvider,
 } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-import ms from 'ms';
 
-function showErrorToast(error: unknown, durationMs = ms('4s')) {
+function showErrorToast(
+  error: unknown,
+  durationMs = TOAST_DURATION_MS.DEFAULT,
+) {
   useToastStore.getState().addToast({
     type: 'error',
     durationMs,
@@ -32,7 +35,7 @@ export function QueryProvider({ children }: { children: React.ReactNode }) {
 
           useToastStore.getState().addToast({
             type: 'success',
-            durationMs: ms('4s'),
+            durationMs: TOAST_DURATION_MS.DEFAULT,
             title: 'Request completed',
             description: 'Your request was completed successfully.',
           });

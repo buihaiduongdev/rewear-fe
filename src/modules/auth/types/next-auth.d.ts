@@ -1,13 +1,12 @@
+import type { AuthControllerLogin200DataUserRole } from '@/shared/api/models';
 import type { DefaultSession } from 'next-auth';
 import 'next-auth/jwt';
 
-type TUserRole = 'USER' | 'ADMIN';
-
-declare module 'next-auth' {
+declare module '@auth/core/types' {
   interface User {
     id?: string;
     fullName?: string;
-    role?: TUserRole;
+    role?: AuthControllerLogin200DataUserRole;
     accessToken?: string;
     refreshToken?: string;
     expiresAt?: number;
@@ -17,7 +16,7 @@ declare module 'next-auth' {
     user: {
       id: string;
       fullName: string;
-      role: TUserRole;
+      role: AuthControllerLogin200DataUserRole;
       accessToken: string;
       expiresAt: number;
     } & DefaultSession['user'];
@@ -29,7 +28,7 @@ declare module 'next-auth/jwt' {
   interface JWT {
     id: string;
     fullName: string;
-    role: TUserRole;
+    role: AuthControllerLogin200DataUserRole;
     accessToken: string;
     refreshToken?: string;
     expiresAt: number;

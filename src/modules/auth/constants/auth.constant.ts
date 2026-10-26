@@ -1,22 +1,3 @@
-export const AUTH_VALIDATION = {
-  fullName: {
-    min: 1,
-    max: 255,
-  },
-  email: {
-    max: 255,
-  },
-  password: {
-    min: 8,
-    max: 72,
-  },
-} as const;
-
-export const AUTH_PROVIDER = {
-  credentials: 'credentials',
-  google: 'google',
-} as const;
-
 export const LOGIN_ERROR_MESSAGES = {
   invalid_credentials: 'Invalid email or password.',
   email_unverified: 'Please verify your email before logging in.',
@@ -34,3 +15,6 @@ export const AUTH_ERROR_MESSAGES = {
   AccessDenied: 'Google sign-in could not be completed. Please try again.',
   SessionRequired: 'Your session has expired. Please log in again.',
 } as const;
+
+export type TAuthErrorCode = keyof typeof AUTH_ERROR_MESSAGES;
+export type TLoginErrorCode = keyof typeof LOGIN_ERROR_MESSAGES;
