@@ -41,3 +41,15 @@ Ghi một mục cho mỗi task có dùng AI. Cập nhật liên kết PR/commit 
 - **Cách kiểm chứng:** `pnpm check` và `pnpm build` đều pass; `git diff --check` pass tại thời điểm review. Tái hiện bằng script gọi mã nguồn với mock backend dùng refresh token một lần: lần refresh đầu thành công, request đến sau dùng token cũ thất bại. Kiểm tra policy xác nhận link reset mật khẩu và xác minh email bị redirect về trang chủ khi có session.
 - **Lỗi hoặc đề xuất sai của AI đã phát hiện:** AI ban đầu đề xuất xem việc chặn reset mật khẩu khi còn đăng nhập là lỗi cần sửa; người thực hiện xác nhận đây là hành vi chủ đích, nên đã bỏ finding này. Rủi ro refresh token được chấp nhận và không coi là blocker cho PR.
 - **Minh chứng:** Diff được review trên branch `feat/setup-api-query-client`; branch đề xuất `feat/auth-account-flows`, commit đề xuất `feat(auth): add account flows and JWT session integration`.
+
+### 2026-10-27 — Dọn hạ tầng API cũ sau khi tích hợp Orval
+
+- **Người thực hiện:** Hải Dương
+- **Công cụ:** Codex
+- **Mục đích và phạm vi:** Rà soát `src/shared/api` và dọn các thành phần của kiến trúc gọi API trước Orval.
+- **Prompt chính:** Chấp thuận thực hiện bốn đề xuất: bỏ `api-request.ts`, bỏ barrel `api/index.ts`, thống nhất cách đọc lỗi và gom cấu hình HTTP dùng chung.
+- **Đầu ra AI được sử dụng:** Xóa `src/shared/api/api-request.ts` và `src/shared/api/index.ts` sau khi kiểm tra không còn nơi sử dụng; thêm `axios-config.ts` để chia sẻ base URL, JSON headers và timeout; cập nhật `axios-client.ts` và `orval-request.ts` dùng cấu hình chung. Nhánh auth dùng `getApiErrorMessage()` để đọc message giống các request khác và vẫn giữ error code trong `Error.cause` cho Auth.js. Bảng `authResponses` và validation response auth được giữ lại.
+- **Phần tự làm hoặc đã chỉnh sửa:** Người thực hiện xác nhận các lớp cần bỏ thuộc kiến trúc cũ trước Orval và chốt phạm vi thực hiện ở các mục 1–4; mục cân nhắc bảng `authResponses` chưa được chấp thuận thay đổi.
+- **Cách kiểm chứng:** `pnpm check` pass (TypeScript và ESLint); `pnpm test` pass với một test schema auth; `git diff --check` pass. `pnpm build` ban đầu dừng ở cảnh báo bảo mật của Next.js 16.4.0, chạy lại thành công nhưng cảnh báo vẫn còn. Chưa kiểm tra đăng nhập với backend thật, Google OAuth, email delivery hoặc E2E dùng database seed; test hiện có không xác minh transport bằng request thật.
+- **Lỗi hoặc đề xuất sai của AI đã phát hiện:** Chưa phát hiện lỗi trong phần cleanup này qua các kiểm tra đã chạy; kiểm chứng runtime với backend thật vẫn chưa thực hiện.
+- **Minh chứng:** [PR #3](https://github.com/buihaiduongdev/rewear-fe/pull/3), commit [c0ac958](https://github.com/buihaiduongdev/rewear-fe/commit/c0ac958) trên branch `refactor/auth-orval-cleanup`.
