@@ -44,3 +44,6 @@ yarn-error.log*
 next-env.d.ts
 
 /tests/cypress/downloads/
+
+# Local Figma design baselines
+/.figwright/snapshots/

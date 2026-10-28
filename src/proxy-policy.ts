@@ -20,7 +20,7 @@ export const getProxyDecision = (
     };
   }
 
-  if (!authRoute && !isLoggedIn) {
+  if (url.pathname !== '/' && !authRoute && !isLoggedIn) {
     const loginUrl = new URL(AUTH_ROUTES.LOGIN, url);
     loginUrl.searchParams.set('callbackUrl', `${url.pathname}${url.search}`);
 
