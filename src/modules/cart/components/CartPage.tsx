@@ -85,7 +85,7 @@ export function CartPage() {
                       key={item.productId}
                       className="flex gap-4 md:flex-wrap md:items-center md:gap-x-6 md:gap-y-1"
                     >
-                      <div className="bg-rewear-soft relative aspect-[4/5] w-20 shrink-0 md:w-[148px]">
+                      <div className="bg-rewear-soft relative aspect-[4/5] w-20 shrink-0 self-start md:w-[148px]">
                         <ProductPhoto
                           url={item.product?.coverUrl ?? null}
                           title={item.product?.title ?? null}
@@ -123,7 +123,7 @@ export function CartPage() {
                           onClick={() =>
                             remove.mutate({ productId: item.productId })
                           }
-                          className="min-h-11 cursor-pointer text-sm font-semibold disabled:opacity-50"
+                          className="min-h-11 cursor-pointer text-sm font-semibold disabled:opacity-50 md:hidden"
                         >
                           {remove.isPending &&
                           remove.variables?.productId === item.productId
@@ -131,6 +131,19 @@ export function CartPage() {
                             : 'Remove'}
                         </button>
                       </div>
+                      <button
+                        type="button"
+                        disabled={remove.isPending}
+                        onClick={() =>
+                          remove.mutate({ productId: item.productId })
+                        }
+                        className="hidden min-h-11 w-full cursor-pointer items-center text-left text-sm font-semibold disabled:opacity-50 md:flex"
+                      >
+                        {remove.isPending &&
+                        remove.variables?.productId === item.productId
+                          ? 'Removing…'
+                          : 'Remove'}
+                      </button>
                     </article>
                   ))}
                 </section>
@@ -156,8 +169,7 @@ export function CartPage() {
                 </span>
               </div>
               <p className="md:text-rewear-muted text-base leading-6">
-                Shipping calculated at checkout. Availability and prices may
-                change.
+                Shipping calculated at checkout.
               </p>
               <button
                 type="button"
@@ -185,7 +197,7 @@ export function CartPage() {
         cartAction={
           <CartLink
             active
-            className="bg-rewear-soft flex min-h-11 items-center px-3"
+            className="bg-rewear-soft flex min-h-11 items-center justify-center px-3"
           />
         }
       />

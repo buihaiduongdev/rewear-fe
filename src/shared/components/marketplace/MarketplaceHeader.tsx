@@ -78,7 +78,7 @@ export function MarketplaceHeader({
           />
         </Link>
         <a
-          href="#new-arrivals"
+          href="/?view=all#new-arrivals"
           className="hidden min-h-11 items-center hover:underline md:inline-flex"
         >
           Explore

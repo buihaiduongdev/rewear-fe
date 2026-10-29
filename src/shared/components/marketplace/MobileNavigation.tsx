@@ -17,13 +17,13 @@ export function MobileNavigation({
       <Link
         href="/"
         aria-current={active === 'home' ? 'page' : undefined}
-        className="bg-rewear-soft flex min-h-11 items-center px-3"
+        className="bg-rewear-soft flex min-h-11 items-center justify-center px-3"
       >
         Home
       </Link>
       <Link
         href="/?view=all#new-arrivals"
-        className="bg-rewear-soft flex min-h-11 items-center px-3"
+        className="bg-rewear-soft flex min-h-11 items-center justify-center px-3"
       >
         Shop
       </Link>
