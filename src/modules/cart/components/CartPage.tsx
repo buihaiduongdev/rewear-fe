@@ -4,7 +4,6 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
 import { getApiErrorMessage } from '@/shared/api/api-error';
-import { MarketplaceFooter } from '@/shared/components/marketplace/MarketplaceFooter';
 import { MarketplaceHeader } from '@/shared/components/marketplace/MarketplaceHeader';
 import { MobileNavigation } from '@/shared/components/marketplace/MobileNavigation';
 import { ProductPhoto } from '@/shared/components/marketplace/ProductPhoto';
@@ -37,15 +36,9 @@ export function CartPage() {
       />
       <main
         id="main-content"
-        className="mx-auto min-h-[60vh] max-w-[1440px] px-4 py-10 md:px-12 md:py-16"
+        className="mx-auto min-h-[60vh] max-w-[1280px] px-4 pt-4 pb-4 md:px-12 md:py-12"
       >
-        <Link
-          href="/"
-          className="text-sm font-semibold underline underline-offset-4"
-        >
-          Continue browsing
-        </Link>
-        <h1 className="mt-8 text-4xl font-semibold tracking-tight md:text-5xl">
+        <h1 className="text-[28px] leading-[34px] font-semibold tracking-[-0.02em] md:text-[40px] md:leading-[46px]">
           Your cart
         </h1>
         {cart.isPending && (
@@ -77,31 +70,34 @@ export function CartPage() {
           </div>
         )}
         {data && data.summary.itemCount > 0 && (
-          <div className="mt-8 grid gap-10 lg:grid-cols-[minmax(0,1fr)_320px]">
-            <div className="space-y-8">
+          <div className="mt-6 grid gap-6 md:mt-8 md:gap-10 lg:grid-cols-[minmax(0,1fr)_416px]">
+            <div className="space-y-6 md:space-y-8">
               {data.groups.map((group, index) => (
-                <section key={group.source?.id ?? `unavailable-${index}`}>
-                  <h2 className="border-rewear-border border-b pb-4 text-lg font-semibold">
+                <section
+                  key={group.source?.id ?? `unavailable-${index}`}
+                  className="bg-rewear-soft space-y-4 p-4 md:space-y-[18px] md:bg-transparent md:p-0"
+                >
+                  <h2 className="text-sm leading-5 font-semibold md:text-[28px] md:leading-[34px] md:tracking-[-0.02em]">
                     {group.source?.name ?? 'Unavailable items'}
                   </h2>
                   {group.items.map((item) => (
                     <article
                       key={item.productId}
-                      className="border-rewear-border flex gap-4 border-b py-5 md:gap-6"
+                      className="flex gap-4 md:flex-wrap md:items-center md:gap-x-6 md:gap-y-1"
                     >
-                      <div className="bg-rewear-soft relative aspect-[4/5] w-24 shrink-0 md:w-32">
+                      <div className="bg-rewear-soft relative aspect-[4/5] w-20 shrink-0 md:w-[148px]">
                         <ProductPhoto
                           url={item.product?.coverUrl ?? null}
                           title={item.product?.title ?? null}
-                          sizes="128px"
+                          sizes="(min-width: 768px) 148px, 80px"
                         />
                       </div>
-                      <div className="flex min-w-0 flex-1 flex-col items-start gap-2">
-                        <h3 className="text-base font-semibold">
+                      <div className="flex min-w-0 flex-1 flex-col items-start gap-2.5">
+                        <h3 className="text-base leading-6 md:text-[28px] md:leading-[34px] md:font-semibold md:tracking-[-0.02em]">
                           {item.product?.title ?? 'Unavailable item'}
                         </h3>
                         {item.product && (
-                          <p className="text-rewear-muted text-sm">
+                          <p className="text-rewear-muted text-sm font-semibold md:text-base md:font-normal">
                             {[
                               item.product.size,
                               item.product.color,
@@ -112,7 +108,7 @@ export function CartPage() {
                           </p>
                         )}
                         {item.product && (
-                          <p className="font-semibold">
+                          <p className="text-base leading-6 md:text-[28px] md:leading-[34px] md:font-semibold md:tracking-[-0.02em]">
                             {formatPrice(item.product.price)}
                           </p>
                         )}
@@ -127,7 +123,7 @@ export function CartPage() {
                           onClick={() =>
                             remove.mutate({ productId: item.productId })
                           }
-                          className="mt-auto min-h-11 cursor-pointer text-sm underline underline-offset-4 disabled:opacity-50"
+                          className="min-h-11 cursor-pointer text-sm font-semibold disabled:opacity-50"
                         >
                           {remove.isPending &&
                           remove.variables?.productId === item.productId
@@ -144,29 +140,46 @@ export function CartPage() {
               )}
             </div>
             <aside
-              className="bg-rewear-soft h-fit space-y-4 p-6"
+              className="md:bg-rewear-soft flex h-fit flex-col gap-6 md:p-6"
               aria-label="Cart summary"
             >
-              <h2 className="text-xl font-semibold">Summary</h2>
-              <div className="flex justify-between gap-4">
-                <span>Available items ({data.summary.availableItemCount})</span>
-                <span>{formatPrice(data.summary.totalPrice)}</span>
+              <h2 className="hidden text-[28px] leading-[34px] font-semibold tracking-[-0.02em] md:block">
+                Summary
+              </h2>
+              <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between md:gap-4">
+                <span className="md:text-rewear-muted text-base leading-6">
+                  Subtotal · {data.summary.availableItemCount}{' '}
+                  {data.summary.availableItemCount === 1 ? 'item' : 'items'}
+                </span>
+                <span className="text-[40px] leading-[46px] font-semibold tracking-[-0.02em] md:text-[28px] md:leading-[34px]">
+                  {formatPrice(data.summary.totalPrice)}
+                </span>
               </div>
-              <p className="text-rewear-muted text-sm">
-                Subtotal excludes shipping. Availability and prices may change.
+              <p className="md:text-rewear-muted text-base leading-6">
+                Shipping calculated at checkout. Availability and prices may
+                change.
               </p>
               <button
                 type="button"
                 disabled
-                className="bg-rewear-text w-full p-4 text-white opacity-50"
+                className="bg-rewear-accent text-rewear-text h-[52px] w-full text-sm opacity-60 md:h-12"
               >
                 Checkout coming soon
               </button>
+              <Link
+                href="/"
+                className="flex min-h-11 items-center justify-center text-sm font-semibold"
+              >
+                Keep browsing
+              </Link>
             </aside>
           </div>
         )}
       </main>
-      <MarketplaceFooter />
+      <footer className="text-rewear-muted mx-auto hidden max-w-[1280px] justify-between px-12 py-6 text-sm font-semibold md:flex">
+        <span>© 2026 RE.WEAR</span>
+        <span className="text-rewear-text">Help &amp; returns</span>
+      </footer>
       <MobileNavigation
         active="cart"
         cartAction={
