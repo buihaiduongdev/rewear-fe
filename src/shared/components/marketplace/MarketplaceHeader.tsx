@@ -77,12 +77,12 @@ export function MarketplaceHeader({
             unoptimized
           />
         </Link>
-        <a
+        <Link
           href="/?view=all#new-arrivals"
           className="hidden min-h-11 items-center hover:underline md:inline-flex"
         >
           Explore
-        </a>
+        </Link>
         {searchForm(false)}
         <button
           type="button"
