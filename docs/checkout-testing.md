@@ -4,12 +4,13 @@ Based on the cart implementation and the Figma checkout content
 `53:2098` in Re.wear-design. Payment and shipping quote controls are not enabled.
 This increment supports choosing saved cart items and an existing delivery address,
 creating a 10-minute reservation, reloading the saved checkout URL, and cancelling.
+Users can also add a delivery address directly from the preparation screen.
 The address snapshot and merchandise subtotal are shown, with shipping pending.
 
 Run the backend checkout branch and marketplace seed against a disposable database.
 Create a delivery-address fixture for `buyer.demo@seed.rewear.test` in that same
-DB. The seed currently does not include addresses; this UI only selects existing
-addresses and does not yet provide the address-creation screen.
+DB. The seed currently does not include addresses; the Add address dialog can create
+one using the backend province/ward directory.
 Set NEXT_PUBLIC_API_URL to that backend's /api URL and allow the FE origin in CORS.
 
 ```bash
@@ -33,3 +34,18 @@ This fixture suite targets the backend at http://localhost:5004/api.
 
 The browser suite also switches to 390x912, asserts no horizontal overflow and
 saves a full-page checkout screenshot. Cancellation uses a confirmation dialog.
+
+## Address creation test
+
+Run the address branch at FE port 5006 with NEXT_PUBLIC_API_URL pointing to
+http://localhost:5007/api, and a checkout backend at 5007 allowing that FE origin.
+Use a fresh disposable marketplace seed: seller-2.demo starts without addresses.
+
+```bash
+CYPRESS_BASE_URL=http://localhost:5006 pnpm test:e2e --spec tests/cypress/e2e/checkout-address.cy.ts
+```
+
+This test validates required fields and phone format, changes province and checks
+that the ward resets, saves a default address, verifies immediate selection and
+its checkout snapshot, cancels the reservation, and deletes its test address.
+It uses real API responses and does not stub the directory or persistence.
