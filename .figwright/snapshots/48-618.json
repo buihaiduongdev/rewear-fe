@@ -1,0 +1,369 @@
+{
+  "figwrightSnapshot": 2,
+  "nodeId": "48:618",
+  "capturedAt": "2026-10-24T09:38:30.854Z",
+  "context": {
+    "nodes": [
+      {
+        "id": "48:618",
+        "name": "Reset password",
+        "type": "FRAME",
+        "x": 3270,
+        "y": 80,
+        "width": 520,
+        "height": 318,
+        "layout": {
+          "mode": "VERTICAL",
+          "paddingTop": 32,
+          "paddingRight": 32,
+          "paddingBottom": 32,
+          "paddingLeft": 32,
+          "itemSpacing": 24,
+          "primaryAxisAlignItems": "MIN",
+          "counterAxisAlignItems": "MIN",
+          "layoutWrap": "NO_WRAP",
+          "strokesIncludedInLayout": true
+        },
+        "constraints": {
+          "horizontal": "MIN",
+          "vertical": "MIN"
+        },
+        "clipsContent": true,
+        "fill": "fill_nll9eq",
+        "children": [
+          {
+            "id": "48:619",
+            "name": "Close ×",
+            "type": "TEXT",
+            "x": 32,
+            "y": 32,
+            "width": 50,
+            "height": 20,
+            "layoutSizingHorizontal": "HUG",
+            "layoutSizingVertical": "HUG",
+            "characters": "Close ×",
+            "styleIds": {
+              "text": "S:715a3ccfdc7f8681436205c1f1ee1637ce781490"
+            },
+            "fill": "fill_1yo0wxt",
+            "textStyle": "text_835ow5"
+          },
+          {
+            "id": "48:620",
+            "name": "Reset password",
+            "type": "TEXT",
+            "x": 32,
+            "y": 76,
+            "width": 201,
+            "height": 34,
+            "layoutSizingHorizontal": "HUG",
+            "layoutSizingVertical": "HUG",
+            "characters": "Reset password",
+            "styleIds": {
+              "text": "S:697be5e71b6395434cf9dbdde9319623d6779e4f"
+            },
+            "fill": "fill_1yo0wxt",
+            "textStyle": "text_bcqohx"
+          },
+          {
+            "id": "48:621",
+            "name": "RE.WEAR/Field",
+            "type": "INSTANCE",
+            "x": 32,
+            "y": 134,
+            "width": 456,
+            "height": 80,
+            "layout": {
+              "mode": "VERTICAL",
+              "paddingTop": 12,
+              "paddingRight": 16,
+              "paddingBottom": 12,
+              "paddingLeft": 16,
+              "itemSpacing": 8,
+              "primaryAxisAlignItems": "MIN",
+              "counterAxisAlignItems": "MIN",
+              "layoutWrap": "NO_WRAP",
+              "strokesIncludedInLayout": true
+            },
+            "layoutSizingHorizontal": "FIXED",
+            "layoutSizingVertical": "FIXED",
+            "clipsContent": false,
+            "boundVariables": {
+              "paddingLeft": [
+                "VariableID:56:344"
+              ],
+              "paddingTop": [
+                "VariableID:56:1030"
+              ],
+              "paddingRight": [
+                "VariableID:56:344"
+              ],
+              "paddingBottom": [
+                "VariableID:56:1030"
+              ],
+              "fills": [
+                "VariableID:41:17"
+              ]
+            },
+            "mainComponentId": "41:30",
+            "mainComponent": {
+              "id": "41:30",
+              "name": "RE.WEAR/Field",
+              "key": "d24adb46d3dfb7492d7e3b773081f286bac0199a"
+            },
+            "fill": "fill_1dynyi3",
+            "children": [
+              {
+                "id": "I48:621;41:31",
+                "name": "Field label",
+                "type": "TEXT",
+                "x": 16,
+                "y": 12,
+                "width": 424,
+                "height": 20,
+                "layoutSizingHorizontal": "FILL",
+                "layoutSizingVertical": "HUG",
+                "layoutAlign": "STRETCH",
+                "characters": "Email",
+                "textAutoResize": "HEIGHT",
+                "styleIds": {
+                  "text": "S:715a3ccfdc7f8681436205c1f1ee1637ce781490"
+                },
+                "boundVariables": {
+                  "fills": [
+                    "VariableID:41:9"
+                  ]
+                },
+                "fill": "fill_1yo0wxt",
+                "textStyle": "text_835ow5"
+              },
+              {
+                "id": "I48:621;41:32",
+                "name": "Value",
+                "type": "TEXT",
+                "x": 16,
+                "y": 40,
+                "width": 424,
+                "height": 24,
+                "layoutSizingHorizontal": "FILL",
+                "layoutSizingVertical": "HUG",
+                "layoutAlign": "STRETCH",
+                "characters": "name@example.com",
+                "textAutoResize": "HEIGHT",
+                "styleIds": {
+                  "text": "S:100d7af0e0551771610dccc1db9d001ca95260c8"
+                },
+                "boundVariables": {
+                  "fills": [
+                    "VariableID:41:9"
+                  ]
+                },
+                "fill": "fill_1yo0wxt",
+                "textStyle": "text_h5c07e"
+              }
+            ]
+          },
+          {
+            "id": "48:624",
+            "name": "RE.WEAR/Button/Primary",
+            "type": "INSTANCE",
+            "x": 32,
+            "y": 238,
+            "width": 456,
+            "height": 48,
+            "layout": {
+              "mode": "HORIZONTAL",
+              "paddingTop": 12,
+              "paddingRight": 20,
+              "paddingBottom": 12,
+              "paddingLeft": 20,
+              "itemSpacing": 8,
+              "primaryAxisAlignItems": "CENTER",
+              "counterAxisAlignItems": "CENTER",
+              "layoutWrap": "NO_WRAP",
+              "strokesIncludedInLayout": true
+            },
+            "layoutSizingHorizontal": "FIXED",
+            "layoutSizingVertical": "FIXED",
+            "clipsContent": false,
+            "boundVariables": {
+              "paddingLeft": [
+                "VariableID:56:1031"
+              ],
+              "paddingTop": [
+                "VariableID:56:1030"
+              ],
+              "paddingRight": [
+                "VariableID:56:1031"
+              ],
+              "paddingBottom": [
+                "VariableID:56:1030"
+              ],
+              "fills": [
+                "VariableID:41:13"
+              ]
+            },
+            "mainComponentId": "41:24",
+            "mainComponent": {
+              "id": "41:24",
+              "name": "RE.WEAR/Button/Primary",
+              "key": "e8cb63fd2b6fe87f03754dc814022bf43f7e09ae"
+            },
+            "fill": "fill_1obmrtn",
+            "children": [
+              {
+                "id": "I48:624;41:25",
+                "name": "Continue",
+                "type": "TEXT",
+                "x": 180,
+                "y": 14,
+                "width": 96,
+                "height": 20,
+                "layoutSizingHorizontal": "HUG",
+                "layoutSizingVertical": "HUG",
+                "characters": "Send reset link",
+                "styleIds": {
+                  "text": "S:cca39d0d004db68f84549cf9d5d44cb09a92d7be"
+                },
+                "boundVariables": {
+                  "fills": [
+                    "VariableID:41:9"
+                  ]
+                },
+                "fill": "fill_1yo0wxt",
+                "textStyle": "text_1av4204"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "variables": {
+      "VariableID:56:344": {
+        "name": "space/16",
+        "type": "FLOAT"
+      },
+      "VariableID:56:1030": {
+        "name": "space/12",
+        "type": "FLOAT"
+      },
+      "VariableID:41:17": {
+        "name": "color/soft",
+        "type": "COLOR",
+        "codeSyntax": {
+          "WEB": "var(--rewear-soft)"
+        }
+      },
+      "VariableID:41:9": {
+        "name": "color/text",
+        "type": "COLOR",
+        "codeSyntax": {
+          "WEB": "var(--rewear-text)"
+        }
+      },
+      "VariableID:56:1031": {
+        "name": "space/20",
+        "type": "FLOAT"
+      },
+      "VariableID:41:13": {
+        "name": "color/accent",
+        "type": "COLOR",
+        "codeSyntax": {
+          "WEB": "var(--rewear-accent)"
+        }
+      }
+    },
+    "globalVars": {
+      "styles": {
+        "fill_nll9eq": [
+          {
+            "type": "SOLID",
+            "color": "#FFFFFF"
+          }
+        ],
+        "fill_1yo0wxt": [
+          {
+            "type": "SOLID",
+            "color": "#1A1C1D"
+          }
+        ],
+        "text_835ow5": {
+          "fontFamily": "DM Sans",
+          "fontStyle": "SemiBold",
+          "fontSize": 14,
+          "fontVariationSettings": {
+            "opsz": 14,
+            "wght": 600
+          },
+          "lineHeight": {
+            "value": 20,
+            "unit": "PIXELS"
+          }
+        },
+        "text_bcqohx": {
+          "fontFamily": "DM Sans",
+          "fontStyle": "SemiBold",
+          "fontSize": 28,
+          "fontVariationSettings": {
+            "opsz": 14,
+            "wght": 600
+          },
+          "lineHeight": {
+            "value": 34,
+            "unit": "PIXELS"
+          },
+          "letterSpacing": {
+            "value": -2,
+            "unit": "PERCENT"
+          }
+        },
+        "fill_1dynyi3": [
+          {
+            "type": "SOLID",
+            "color": "#F3F3F5"
+          }
+        ],
+        "text_h5c07e": {
+          "fontFamily": "DM Sans",
+          "fontStyle": "Regular",
+          "fontSize": 16,
+          "fontVariationSettings": {
+            "opsz": 14,
+            "wght": 400
+          },
+          "lineHeight": {
+            "value": 24,
+            "unit": "PIXELS"
+          }
+        },
+        "fill_1obmrtn": [
+          {
+            "type": "SOLID",
+            "color": "#C3F832"
+          }
+        ],
+        "text_1av4204": {
+          "fontFamily": "DM Sans",
+          "fontStyle": "Regular",
+          "fontSize": 14,
+          "fontVariationSettings": {
+            "opsz": 14,
+            "wght": 400
+          },
+          "lineHeight": {
+            "value": 20,
+            "unit": "PIXELS"
+          }
+        }
+      }
+    },
+    "metrics": {
+      "nodeCount": 8,
+      "maxDepth": 3,
+      "styleCount": 8,
+      "tokenCount": 6,
+      "inlineSizeKb": 5.32,
+      "dedupedSizeKb": 4.54
+    }
+  }
+}

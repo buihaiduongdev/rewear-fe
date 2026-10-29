@@ -10,7 +10,7 @@ export function FullNameInput({ error, ...props }: TFullNameInputProps) {
       type="text"
       label="Full name"
       error={error}
-      placeholder="Enter your name"
+      placeholder={props.placeholder ?? 'Enter your name'}
     />
   );
 }

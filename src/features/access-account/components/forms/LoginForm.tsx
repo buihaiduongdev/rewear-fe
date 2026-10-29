@@ -22,32 +22,45 @@ export function LoginForm({ authError, callbackUrl = '/' }: TLoginFormProps) {
   );
 
   return (
-    <form onSubmit={onSubmit} noValidate>
-      <div className="min-h-[13rem]">
-        <EmailInput {...register('email')} error={errors.email?.message} />
-        <PasswordInput
-          {...register('password')}
-          error={errors.password?.message}
-        />
-      </div>
-
+    <form onSubmit={onSubmit} noValidate className="flex flex-col gap-6">
+      <OAuthButtons callbackUrl={callbackUrl} appearance="login" />
+      <EmailInput
+        {...register('email')}
+        appearance="filled"
+        autoComplete="email"
+        placeholder="name@example.com"
+        error={errors.email?.message}
+      />
+      <PasswordInput
+        {...register('password')}
+        appearance="filled"
+        autoComplete="current-password"
+        placeholder="Enter password"
+        error={errors.password?.message}
+      />
       <Link
         href={AUTH_ROUTES.FORGOT_PASSWORD}
-        className="text-primary -mt-2 mb-2.5 block text-right text-xs font-medium hover:underline"
+        className="w-fit text-sm leading-5 font-semibold hover:underline"
       >
         Forgot password?
       </Link>
-
       <Button
         type="submit"
         disabled={isSubmitDisabled}
         loading={isPending}
-        className="h-10 w-full text-sm"
+        className="h-12 w-full rounded-[8px] bg-[#c3f832] text-sm font-normal text-[#1a1c1d] shadow-none hover:bg-[#b4e82a]"
       >
-        Log in
+        Sign in
       </Button>
-
-      <OAuthButtons callbackUrl={callbackUrl} />
+      <p className="text-sm leading-5 font-semibold">
+        New here?{' '}
+        <Link
+          href={AUTH_ROUTES.REGISTER}
+          className="underline-offset-4 hover:underline"
+        >
+          Create account
+        </Link>
+      </p>
     </form>
   );
 }

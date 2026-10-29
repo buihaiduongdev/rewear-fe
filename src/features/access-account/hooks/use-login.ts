@@ -3,21 +3,23 @@
 import { useEffect } from 'react';
 
 import { LOGIN_ERROR_MESSAGES } from '@/modules/auth/constants/auth.constant';
-import { loginSchema, type TLoginInput } from '@/modules/auth/schemas';
-import { type TLoginErrorCode } from '@/modules/auth/types';
+import { type TLoginErrorCode } from '@/modules/auth/constants/auth.constant';
+import { AuthControllerLoginBody } from '@/shared/api/zod-generated/auth/auth';
+import { TOAST_DURATION_MS } from '@/shared/constants/toast';
 import { useToastStore } from '@/shared/stores/toast.store';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
 import { signIn } from 'next-auth/react';
 import { useForm } from 'react-hook-form';
+import type { z } from 'zod';
 
 export function useLogin(callbackUrl: string, authError?: string) {
   const {
     register,
     handleSubmit,
     formState: { errors, isValid },
-  } = useForm<TLoginInput>({
-    resolver: zodResolver(loginSchema),
+  } = useForm({
+    resolver: zodResolver(AuthControllerLoginBody),
     defaultValues: { email: '', password: '' },
     mode: 'onChange',
   });
@@ -28,14 +30,17 @@ export function useLogin(callbackUrl: string, authError?: string) {
         type: 'error',
         title: 'Login failed',
         description: authError,
-        durationMs: 10000,
+        durationMs: TOAST_DURATION_MS.LONG,
       });
     }
   }, [authError]);
 
   const { mutate, isPending } = useMutation({
     meta: { skipErrorToast: true },
-    mutationFn: async ({ email, password }: TLoginInput) => {
+    mutationFn: async ({
+      email,
+      password,
+    }: z.output<typeof AuthControllerLoginBody>) => {
       const result = await signIn('credentials', {
         email,
         password,
@@ -58,7 +63,7 @@ export function useLogin(callbackUrl: string, authError?: string) {
         type: 'error',
         title: 'Login failed',
         description: message,
-        durationMs: 10000,
+        durationMs: TOAST_DURATION_MS.LONG,
       });
     },
   });

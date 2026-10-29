@@ -1,11 +1,15 @@
+import {
+  authControllerLogin,
+  authControllerLogout,
+  authControllerOauth,
+} from '@/shared/api/generated/auth/auth';
+import { AuthControllerLoginBody } from '@/shared/api/zod-generated/auth/auth';
 import { AccessDenied } from '@auth/core/errors';
 import NextAuth, { CredentialsSignin } from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
 import Google from 'next-auth/providers/google';
 
-import { AUTH_PROVIDER } from '../constants';
-import { loginSchema } from '../schemas';
-import { buildAuthToken, getRefreshToken, login, logout } from './auth.api';
+import { buildAuthToken, getRefreshToken } from './auth.session';
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
@@ -16,19 +20,21 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         password: { label: 'Password', type: 'password' },
       },
       async authorize(credentials) {
-        const parsed = loginSchema.safeParse(credentials);
+        const parsed = AuthControllerLoginBody.safeParse({
+          email: credentials.email,
+          password: credentials.password,
+        });
         if (!parsed.success) {
           return null;
         }
 
         try {
-          const response = await login({
-            provider: AUTH_PROVIDER.credentials,
+          const response = await authControllerLogin({
             email: parsed.data.email,
             password: parsed.data.password,
           });
 
-          return buildAuthToken({}, response);
+          return buildAuthToken({}, response.data);
         } catch (error) {
           const loginError = new CredentialsSignin();
           loginError.code =
@@ -42,15 +48,13 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   ],
   callbacks: {
     async jwt({ token, user, account }) {
-      if (account?.provider === AUTH_PROVIDER.credentials) {
+      if (account?.provider === 'credentials') {
         return { ...token, ...user };
       }
 
       if (account) {
-        const provider =
-          AUTH_PROVIDER[account.provider as keyof typeof AUTH_PROVIDER];
-        if (!provider) {
-          return token;
+        if (account.provider !== 'google') {
+          throw new AccessDenied('Unsupported OAuth provider.');
         }
 
         const oauthToken = account.id_token || account.access_token;
@@ -59,11 +63,11 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         }
 
         try {
-          const response = await login({
-            provider,
+          const response = await authControllerOauth({
+            provider: account.provider,
             token: oauthToken,
           });
-          return buildAuthToken(token, response);
+          return buildAuthToken(token, response.data);
         } catch (error) {
           throw new AccessDenied(
             error instanceof Error ? error.message : undefined,
@@ -109,7 +113,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   events: {
     async signOut(message) {
       if ('token' in message && message.token?.refreshToken) {
-        await logout(message.token.refreshToken).catch(() => undefined);
+        await authControllerLogout({
+          refreshToken: message.token.refreshToken,
+        }).catch(() => undefined);
       }
     },
   },

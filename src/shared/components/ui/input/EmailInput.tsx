@@ -10,7 +10,7 @@ export function EmailInput({ error, ...props }: TEmailInputProps) {
       type="email"
       label="Email"
       error={error}
-      placeholder="Enter your email"
+      placeholder={props.placeholder ?? 'Enter your email'}
     />
   );
 }
