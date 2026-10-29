@@ -76,3 +76,9 @@ Ghi một mục cho mỗi task có dùng AI. Cập nhật liên kết PR/commit 
 - **Điều chỉnh khi kiểm tra:** Assertion focus bên trong Cypress iframe không khớp với input thật của Chrome. E2E giữ kiểm tra mở/đóng và các luồng catalog; focus được xác minh riêng bằng native Chrome, không dùng assertion iframe làm bằng chứng. Font popup ban đầu rơi về Times New Roman do font chỉ đặt ở wrapper Home và token sans tự tham chiếu; đã sửa ở layout/font token chung.
 - **Giới hạn:** Chưa triển khai Cart/Orders/Messages, công cụ seller hoặc trang product detail đầy đủ. Chưa chạy luồng đăng nhập/đăng ký, upload R2, checkout/payment trong E2E Home. Backend QA chạy từ build của worktree product PR #18, dùng DB local riêng và cấu hình SSL false chỉ trong bootstrap tạm; không sửa source BE hoặc DB của agent cart. Next.js 16.4.0 vẫn phát cảnh báo bảo mật; build chạy lại thành công theo hướng dẫn CLI, chưa nâng dependency.
 - **Minh chứng:** [PR #4](https://github.com/buihaiduongdev/rewear-fe/pull/4), branch `feat/homepage`, commit code [657e14f](https://github.com/buihaiduongdev/rewear-fe/commit/657e14f); base `refactor/auth-orval-cleanup` do FE PR #3 chưa merge. PR phụ thuộc product contract của BE #18; chưa merge. Runtime QA: frontend `http://localhost:5000`, API `http://localhost:5001/api`, PostgreSQL riêng port 55440. Không thêm mock API, dữ liệu giả ở FE hoặc dependency mới.
+
+### 2026-10-29 — Cart frontend
+
+- **Phạm vi:** Nối API giỏ hàng qua Orval, thêm sản phẩm từ quick view, xem giỏ theo người bán, xử lý trạng thái không khả dụng và xóa sản phẩm. Checkout chưa triển khai.
+- **Kiểm chứng:** TypeScript, ESLint, unit tests và production build; Cypress Chrome đăng nhập bằng tài khoản seed rồi thêm, xem và xóa sản phẩm qua backend và PostgreSQL riêng.
+- **Giới hạn:** Chưa đối chiếu màn Cart với Figma trong phiên này; chưa kiểm thử checkout hoặc thanh toán. Next.js cảnh báo phiên bản hiện tại có lỗ hổng và đề nghị nâng cấp.

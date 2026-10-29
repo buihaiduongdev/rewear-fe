@@ -1,5 +1,6 @@
 export * from './administrative-divisions/administrative-divisions';
 export * from './auth/auth';
+export * from './cart/cart';
 export * from './categories/categories';
 export * from './product-media/product-media';
 export * from './products/products';

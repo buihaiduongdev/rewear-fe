@@ -1,10 +1,12 @@
 'use client';
 
+import { AddToCartAction } from '@/modules/cart/components/AddToCartAction';
+import { ProductPhoto } from '@/shared/components/marketplace/ProductPhoto';
+import { formatCondition, formatPrice } from '@/shared/utils/product';
 import { Dialog } from '@base-ui/react/dialog';
 import { X } from 'lucide-react';
 
-import { formatCondition, formatPrice, type HomeProduct } from '../lib/product';
-import { ProductPhoto } from './ProductPhoto';
+import type { HomeProduct } from '../lib/product';
 
 export function ProductPreview({
   handle,
@@ -53,6 +55,7 @@ export function ProductPreview({
                       product.seller?.fullName ??
                       'an independent seller'}
                   </p>
+                  <AddToCartAction product={product} primary />
                   {product.brand && (
                     <p className="text-sm">Brand: {product.brand}</p>
                   )}
