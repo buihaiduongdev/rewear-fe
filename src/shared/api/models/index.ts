@@ -594,7 +594,36 @@ export type CheckoutControllerCreate200DataOrdersItemAddress = {
   deliveryInstructions: string | null;
 };
 
+/**
+ * @nullable
+ */
+export type CheckoutControllerCreate200DataOrdersItemItemsItemShippingPackage =
+  {
+    /**
+     * @maximum 9007199254740991
+     * @exclusiveMinimum 0
+     */
+    weightGrams: number;
+    /**
+     * @maximum 9007199254740991
+     * @exclusiveMinimum 0
+     */
+    lengthCm: number;
+    /**
+     * @maximum 9007199254740991
+     * @exclusiveMinimum 0
+     */
+    widthCm: number;
+    /**
+     * @maximum 9007199254740991
+     * @exclusiveMinimum 0
+     */
+    heightCm: number;
+  } | null;
+
 export type CheckoutControllerCreate200DataOrdersItemItemsItem = {
+  /** @nullable */
+  shippingPackage: CheckoutControllerCreate200DataOrdersItemItemsItemShippingPackage;
   /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
   productId: string;
   title: string;
@@ -741,7 +770,35 @@ export type CheckoutControllerFind200DataOrdersItemAddress = {
   deliveryInstructions: string | null;
 };
 
+/**
+ * @nullable
+ */
+export type CheckoutControllerFind200DataOrdersItemItemsItemShippingPackage = {
+  /**
+   * @maximum 9007199254740991
+   * @exclusiveMinimum 0
+   */
+  weightGrams: number;
+  /**
+   * @maximum 9007199254740991
+   * @exclusiveMinimum 0
+   */
+  lengthCm: number;
+  /**
+   * @maximum 9007199254740991
+   * @exclusiveMinimum 0
+   */
+  widthCm: number;
+  /**
+   * @maximum 9007199254740991
+   * @exclusiveMinimum 0
+   */
+  heightCm: number;
+} | null;
+
 export type CheckoutControllerFind200DataOrdersItemItemsItem = {
+  /** @nullable */
+  shippingPackage: CheckoutControllerFind200DataOrdersItemItemsItemShippingPackage;
   /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
   productId: string;
   title: string;
@@ -888,7 +945,36 @@ export type CheckoutControllerCancel200DataOrdersItemAddress = {
   deliveryInstructions: string | null;
 };
 
+/**
+ * @nullable
+ */
+export type CheckoutControllerCancel200DataOrdersItemItemsItemShippingPackage =
+  {
+    /**
+     * @maximum 9007199254740991
+     * @exclusiveMinimum 0
+     */
+    weightGrams: number;
+    /**
+     * @maximum 9007199254740991
+     * @exclusiveMinimum 0
+     */
+    lengthCm: number;
+    /**
+     * @maximum 9007199254740991
+     * @exclusiveMinimum 0
+     */
+    widthCm: number;
+    /**
+     * @maximum 9007199254740991
+     * @exclusiveMinimum 0
+     */
+    heightCm: number;
+  } | null;
+
 export type CheckoutControllerCancel200DataOrdersItemItemsItem = {
+  /** @nullable */
+  shippingPackage: CheckoutControllerCancel200DataOrdersItemItemsItemShippingPackage;
   /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
   productId: string;
   title: string;
@@ -1395,6 +1481,384 @@ export type ShopControllerUpdateStaff200 = {
   data: ShopControllerUpdateStaff200Data;
 };
 
+export type ShippingControllerUpdatePackageBodyWeight =
+  | {
+      mode: 'RANGE';
+      preset:
+        | 'UP_TO_250_G'
+        | 'UP_TO_500_G'
+        | 'UP_TO_1000_G'
+        | 'UP_TO_2000_G'
+        | 'UP_TO_5000_G';
+    }
+  | {
+      mode: 'CUSTOM';
+      /**
+       * @maximum 50000
+       * @exclusiveMinimum 0
+       */
+      grams: number;
+    };
+
+export type ShippingControllerUpdatePackageBodySize =
+  | {
+      mode: 'RANGE';
+      preset:
+        | 'BOX_20_15_10_CM'
+        | 'BOX_30_20_15_CM'
+        | 'BOX_40_30_20_CM'
+        | 'BOX_50_40_30_CM';
+    }
+  | {
+      mode: 'CUSTOM';
+      /**
+       * @maximum 200
+       * @exclusiveMinimum 0
+       */
+      lengthCm: number;
+      /**
+       * @maximum 200
+       * @exclusiveMinimum 0
+       */
+      widthCm: number;
+      /**
+       * @maximum 200
+       * @exclusiveMinimum 0
+       */
+      heightCm: number;
+    };
+
+export type ShippingControllerUpdatePackageBody = {
+  weight: ShippingControllerUpdatePackageBodyWeight;
+  size: ShippingControllerUpdatePackageBodySize;
+};
+
+export type ShippingControllerUpdatePackage200StatusCode =
+  (typeof ShippingControllerUpdatePackage200StatusCode)[keyof typeof ShippingControllerUpdatePackage200StatusCode];
+
+export const ShippingControllerUpdatePackage200StatusCode = {
+  NUMBER_200: 200,
+} as const;
+
+/**
+ * @nullable
+ */
+export type ShippingControllerUpdatePackage200DataCondition =
+  | (typeof ShippingControllerUpdatePackage200DataCondition)[keyof typeof ShippingControllerUpdatePackage200DataCondition]
+  | null;
+
+export const ShippingControllerUpdatePackage200DataCondition = {
+  FAIR: 'FAIR',
+  GOOD: 'GOOD',
+  EXCELLENT: 'EXCELLENT',
+  PRISTINE: 'PRISTINE',
+} as const;
+
+export type ShippingControllerUpdatePackage200DataMeasurements = {
+  /**
+   * @maximum 500
+   * @exclusiveMinimum 0
+   */
+  chest?: number;
+  /**
+   * @maximum 500
+   * @exclusiveMinimum 0
+   */
+  waist?: number;
+  /**
+   * @maximum 500
+   * @exclusiveMinimum 0
+   */
+  hip?: number;
+  /**
+   * @maximum 500
+   * @exclusiveMinimum 0
+   */
+  length?: number;
+  /**
+   * @maximum 500
+   * @exclusiveMinimum 0
+   */
+  shoulder?: number;
+  /**
+   * @maximum 500
+   * @exclusiveMinimum 0
+   */
+  sleeve?: number;
+  /**
+   * @maximum 500
+   * @exclusiveMinimum 0
+   */
+  inseam?: number;
+};
+
+export type ShippingControllerUpdatePackage200DataShippingPackageWeight =
+  | {
+      mode: 'RANGE';
+      preset:
+        | 'UP_TO_250_G'
+        | 'UP_TO_500_G'
+        | 'UP_TO_1000_G'
+        | 'UP_TO_2000_G'
+        | 'UP_TO_5000_G';
+    }
+  | {
+      mode: 'CUSTOM';
+      /**
+       * @maximum 50000
+       * @exclusiveMinimum 0
+       */
+      grams: number;
+    };
+
+export type ShippingControllerUpdatePackage200DataShippingPackageSize =
+  | {
+      mode: 'RANGE';
+      preset:
+        | 'BOX_20_15_10_CM'
+        | 'BOX_30_20_15_CM'
+        | 'BOX_40_30_20_CM'
+        | 'BOX_50_40_30_CM';
+    }
+  | {
+      mode: 'CUSTOM';
+      /**
+       * @maximum 200
+       * @exclusiveMinimum 0
+       */
+      lengthCm: number;
+      /**
+       * @maximum 200
+       * @exclusiveMinimum 0
+       */
+      widthCm: number;
+      /**
+       * @maximum 200
+       * @exclusiveMinimum 0
+       */
+      heightCm: number;
+    };
+
+/**
+ * @nullable
+ */
+export type ShippingControllerUpdatePackage200DataShippingPackage = {
+  weight: ShippingControllerUpdatePackage200DataShippingPackageWeight;
+  size: ShippingControllerUpdatePackage200DataShippingPackageSize;
+} | null;
+
+export type ShippingControllerUpdatePackage200DataDefectsItem = {
+  /**
+   * @minLength 1
+   * @maxLength 1000
+   */
+  description: string;
+  /**
+   * @minItems 1
+   * @maxItems 10
+   * @items.pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+   */
+  mediaIds: string[];
+};
+
+export type ShippingControllerUpdatePackage200DataStatus =
+  (typeof ShippingControllerUpdatePackage200DataStatus)[keyof typeof ShippingControllerUpdatePackage200DataStatus];
+
+export const ShippingControllerUpdatePackage200DataStatus = {
+  DRAFT: 'DRAFT',
+  PENDING_REVIEW: 'PENDING_REVIEW',
+  REJECTED: 'REJECTED',
+  SUSPENDED: 'SUSPENDED',
+  ACTIVE: 'ACTIVE',
+  HELD: 'HELD',
+  SOLD: 'SOLD',
+  HIDDEN: 'HIDDEN',
+} as const;
+
+/**
+ * @nullable
+ */
+export type ShippingControllerUpdatePackage200DataCategory = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  name: string;
+  slug: string;
+} | null;
+
+/**
+ * @nullable
+ */
+export type ShippingControllerUpdatePackage200DataSeller = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  fullName: string;
+} | null;
+
+/**
+ * @nullable
+ */
+export type ShippingControllerUpdatePackage200DataShop = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  name: string;
+} | null;
+
+export type ShippingControllerUpdatePackage200Data = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  /**
+   * @nullable
+   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+   */
+  categoryId: string | null;
+  /**
+   * @nullable
+   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+   */
+  sellerUserId: string | null;
+  /**
+   * @nullable
+   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+   */
+  shopId: string | null;
+  /** @nullable */
+  title: string | null;
+  /** @nullable */
+  description: string | null;
+  /** @nullable */
+  condition: ShippingControllerUpdatePackage200DataCondition;
+  /** @nullable */
+  size: string | null;
+  /** @nullable */
+  color: string | null;
+  /** @nullable */
+  brand: string | null;
+  /**
+   * @minimum 0
+   * @maximum 9007199254740991
+   * @nullable
+   */
+  price: number | null;
+  measurements: ShippingControllerUpdatePackage200DataMeasurements;
+  /** @nullable */
+  shippingPackage: ShippingControllerUpdatePackage200DataShippingPackage;
+  /** @nullable */
+  repairs: string | null;
+  defects: ShippingControllerUpdatePackage200DataDefectsItem[];
+  /**
+   * @maximum 9007199254740991
+   * @exclusiveMinimum 0
+   */
+  revision: number;
+  /**
+   * @maximum 9007199254740991
+   * @exclusiveMinimum 0
+   * @nullable
+   */
+  approvedRevision: number | null;
+  /** @nullable */
+  coverUrl: string | null;
+  /**
+   * @minimum 0
+   * @maximum 9007199254740991
+   */
+  mediaCount: number;
+  status: ShippingControllerUpdatePackage200DataStatus;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  publishedAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  heldUntil: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  soldAt: string | null;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  createdAt: string;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  updatedAt: string;
+  /** @nullable */
+  category: ShippingControllerUpdatePackage200DataCategory;
+  /** @nullable */
+  seller: ShippingControllerUpdatePackage200DataSeller;
+  /** @nullable */
+  shop: ShippingControllerUpdatePackage200DataShop;
+};
+
+export type ShippingControllerUpdatePackage200 = {
+  statusCode: ShippingControllerUpdatePackage200StatusCode;
+  message: string;
+  data: ShippingControllerUpdatePackage200Data;
+};
+
+export type ShippingControllerPackageOptions200StatusCode =
+  (typeof ShippingControllerPackageOptions200StatusCode)[keyof typeof ShippingControllerPackageOptions200StatusCode];
+
+export const ShippingControllerPackageOptions200StatusCode = {
+  NUMBER_200: 200,
+} as const;
+
+export type ShippingControllerPackageOptions200DataWeightPresetsItem = {
+  id: string;
+  label: string;
+  /**
+   * @minimum -9007199254740991
+   * @maximum 9007199254740991
+   */
+  upperGrams: number;
+};
+
+export type ShippingControllerPackageOptions200DataSizePresetsItem = {
+  id: string;
+  label: string;
+  /**
+   * @minimum -9007199254740991
+   * @maximum 9007199254740991
+   */
+  lengthCm: number;
+  /**
+   * @minimum -9007199254740991
+   * @maximum 9007199254740991
+   */
+  widthCm: number;
+  /**
+   * @minimum -9007199254740991
+   * @maximum 9007199254740991
+   */
+  heightCm: number;
+};
+
+export type ShippingControllerPackageOptions200DataCustomLimits = {
+  /**
+   * @minimum -9007199254740991
+   * @maximum 9007199254740991
+   */
+  maxWeightGrams: number;
+  /**
+   * @minimum -9007199254740991
+   * @maximum 9007199254740991
+   */
+  maxDimensionCm: number;
+};
+
+export type ShippingControllerPackageOptions200Data = {
+  weightPresets: ShippingControllerPackageOptions200DataWeightPresetsItem[];
+  sizePresets: ShippingControllerPackageOptions200DataSizePresetsItem[];
+  customLimits: ShippingControllerPackageOptions200DataCustomLimits;
+};
+
+export type ShippingControllerPackageOptions200 = {
+  statusCode: ShippingControllerPackageOptions200StatusCode;
+  message: string;
+  data: ShippingControllerPackageOptions200Data;
+};
+
 export type ProductControllerFindAllParams = {
   page?: string | number;
   pageSize?: string | number;
@@ -1514,6 +1978,61 @@ export type ProductControllerFindAll200DataItemsItemMeasurements = {
   inseam?: number;
 };
 
+export type ProductControllerFindAll200DataItemsItemShippingPackageWeight =
+  | {
+      mode: 'RANGE';
+      preset:
+        | 'UP_TO_250_G'
+        | 'UP_TO_500_G'
+        | 'UP_TO_1000_G'
+        | 'UP_TO_2000_G'
+        | 'UP_TO_5000_G';
+    }
+  | {
+      mode: 'CUSTOM';
+      /**
+       * @maximum 50000
+       * @exclusiveMinimum 0
+       */
+      grams: number;
+    };
+
+export type ProductControllerFindAll200DataItemsItemShippingPackageSize =
+  | {
+      mode: 'RANGE';
+      preset:
+        | 'BOX_20_15_10_CM'
+        | 'BOX_30_20_15_CM'
+        | 'BOX_40_30_20_CM'
+        | 'BOX_50_40_30_CM';
+    }
+  | {
+      mode: 'CUSTOM';
+      /**
+       * @maximum 200
+       * @exclusiveMinimum 0
+       */
+      lengthCm: number;
+      /**
+       * @maximum 200
+       * @exclusiveMinimum 0
+       */
+      widthCm: number;
+      /**
+       * @maximum 200
+       * @exclusiveMinimum 0
+       */
+      heightCm: number;
+    };
+
+/**
+ * @nullable
+ */
+export type ProductControllerFindAll200DataItemsItemShippingPackage = {
+  weight: ProductControllerFindAll200DataItemsItemShippingPackageWeight;
+  size: ProductControllerFindAll200DataItemsItemShippingPackageSize;
+} | null;
+
 export type ProductControllerFindAll200DataItemsItemDefectsItem = {
   /**
    * @minLength 1
@@ -1607,6 +2126,8 @@ export type ProductControllerFindAll200DataItemsItem = {
    */
   price: number | null;
   measurements: ProductControllerFindAll200DataItemsItemMeasurements;
+  /** @nullable */
+  shippingPackage: ProductControllerFindAll200DataItemsItemShippingPackage;
   /** @nullable */
   repairs: string | null;
   defects: ProductControllerFindAll200DataItemsItemDefectsItem[];
@@ -1744,6 +2265,61 @@ export type ProductControllerCreateBodyMeasurements = {
   inseam?: number;
 };
 
+export type ProductControllerCreateBodyShippingPackageWeight =
+  | {
+      mode: 'RANGE';
+      preset:
+        | 'UP_TO_250_G'
+        | 'UP_TO_500_G'
+        | 'UP_TO_1000_G'
+        | 'UP_TO_2000_G'
+        | 'UP_TO_5000_G';
+    }
+  | {
+      mode: 'CUSTOM';
+      /**
+       * @maximum 50000
+       * @exclusiveMinimum 0
+       */
+      grams: number;
+    };
+
+export type ProductControllerCreateBodyShippingPackageSize =
+  | {
+      mode: 'RANGE';
+      preset:
+        | 'BOX_20_15_10_CM'
+        | 'BOX_30_20_15_CM'
+        | 'BOX_40_30_20_CM'
+        | 'BOX_50_40_30_CM';
+    }
+  | {
+      mode: 'CUSTOM';
+      /**
+       * @maximum 200
+       * @exclusiveMinimum 0
+       */
+      lengthCm: number;
+      /**
+       * @maximum 200
+       * @exclusiveMinimum 0
+       */
+      widthCm: number;
+      /**
+       * @maximum 200
+       * @exclusiveMinimum 0
+       */
+      heightCm: number;
+    };
+
+/**
+ * @nullable
+ */
+export type ProductControllerCreateBodyShippingPackage = {
+  weight: ProductControllerCreateBodyShippingPackageWeight;
+  size: ProductControllerCreateBodyShippingPackageSize;
+} | null;
+
 export type ProductControllerCreateBodyDefectsItem = {
   /**
    * @minLength 1
@@ -1804,6 +2380,8 @@ export type ProductControllerCreateBody = {
    */
   price?: number | null;
   measurements?: ProductControllerCreateBodyMeasurements;
+  /** @nullable */
+  shippingPackage?: ProductControllerCreateBodyShippingPackage;
   /**
    * @maxLength 2000
    * @nullable
@@ -1871,6 +2449,61 @@ export type ProductControllerCreate201DataMeasurements = {
    */
   inseam?: number;
 };
+
+export type ProductControllerCreate201DataShippingPackageWeight =
+  | {
+      mode: 'RANGE';
+      preset:
+        | 'UP_TO_250_G'
+        | 'UP_TO_500_G'
+        | 'UP_TO_1000_G'
+        | 'UP_TO_2000_G'
+        | 'UP_TO_5000_G';
+    }
+  | {
+      mode: 'CUSTOM';
+      /**
+       * @maximum 50000
+       * @exclusiveMinimum 0
+       */
+      grams: number;
+    };
+
+export type ProductControllerCreate201DataShippingPackageSize =
+  | {
+      mode: 'RANGE';
+      preset:
+        | 'BOX_20_15_10_CM'
+        | 'BOX_30_20_15_CM'
+        | 'BOX_40_30_20_CM'
+        | 'BOX_50_40_30_CM';
+    }
+  | {
+      mode: 'CUSTOM';
+      /**
+       * @maximum 200
+       * @exclusiveMinimum 0
+       */
+      lengthCm: number;
+      /**
+       * @maximum 200
+       * @exclusiveMinimum 0
+       */
+      widthCm: number;
+      /**
+       * @maximum 200
+       * @exclusiveMinimum 0
+       */
+      heightCm: number;
+    };
+
+/**
+ * @nullable
+ */
+export type ProductControllerCreate201DataShippingPackage = {
+  weight: ProductControllerCreate201DataShippingPackageWeight;
+  size: ProductControllerCreate201DataShippingPackageSize;
+} | null;
 
 export type ProductControllerCreate201DataDefectsItem = {
   /**
@@ -1965,6 +2598,8 @@ export type ProductControllerCreate201Data = {
    */
   price: number | null;
   measurements: ProductControllerCreate201DataMeasurements;
+  /** @nullable */
+  shippingPackage: ProductControllerCreate201DataShippingPackage;
   /** @nullable */
   repairs: string | null;
   defects: ProductControllerCreate201DataDefectsItem[];
@@ -2154,6 +2789,61 @@ export type ProductControllerFindMine200DataItemsItemMeasurements = {
   inseam?: number;
 };
 
+export type ProductControllerFindMine200DataItemsItemShippingPackageWeight =
+  | {
+      mode: 'RANGE';
+      preset:
+        | 'UP_TO_250_G'
+        | 'UP_TO_500_G'
+        | 'UP_TO_1000_G'
+        | 'UP_TO_2000_G'
+        | 'UP_TO_5000_G';
+    }
+  | {
+      mode: 'CUSTOM';
+      /**
+       * @maximum 50000
+       * @exclusiveMinimum 0
+       */
+      grams: number;
+    };
+
+export type ProductControllerFindMine200DataItemsItemShippingPackageSize =
+  | {
+      mode: 'RANGE';
+      preset:
+        | 'BOX_20_15_10_CM'
+        | 'BOX_30_20_15_CM'
+        | 'BOX_40_30_20_CM'
+        | 'BOX_50_40_30_CM';
+    }
+  | {
+      mode: 'CUSTOM';
+      /**
+       * @maximum 200
+       * @exclusiveMinimum 0
+       */
+      lengthCm: number;
+      /**
+       * @maximum 200
+       * @exclusiveMinimum 0
+       */
+      widthCm: number;
+      /**
+       * @maximum 200
+       * @exclusiveMinimum 0
+       */
+      heightCm: number;
+    };
+
+/**
+ * @nullable
+ */
+export type ProductControllerFindMine200DataItemsItemShippingPackage = {
+  weight: ProductControllerFindMine200DataItemsItemShippingPackageWeight;
+  size: ProductControllerFindMine200DataItemsItemShippingPackageSize;
+} | null;
+
 export type ProductControllerFindMine200DataItemsItemDefectsItem = {
   /**
    * @minLength 1
@@ -2247,6 +2937,8 @@ export type ProductControllerFindMine200DataItemsItem = {
    */
   price: number | null;
   measurements: ProductControllerFindMine200DataItemsItemMeasurements;
+  /** @nullable */
+  shippingPackage: ProductControllerFindMine200DataItemsItemShippingPackage;
   /** @nullable */
   repairs: string | null;
   defects: ProductControllerFindMine200DataItemsItemDefectsItem[];
@@ -2391,6 +3083,61 @@ export type ProductControllerFindManaged200DataMeasurements = {
   inseam?: number;
 };
 
+export type ProductControllerFindManaged200DataShippingPackageWeight =
+  | {
+      mode: 'RANGE';
+      preset:
+        | 'UP_TO_250_G'
+        | 'UP_TO_500_G'
+        | 'UP_TO_1000_G'
+        | 'UP_TO_2000_G'
+        | 'UP_TO_5000_G';
+    }
+  | {
+      mode: 'CUSTOM';
+      /**
+       * @maximum 50000
+       * @exclusiveMinimum 0
+       */
+      grams: number;
+    };
+
+export type ProductControllerFindManaged200DataShippingPackageSize =
+  | {
+      mode: 'RANGE';
+      preset:
+        | 'BOX_20_15_10_CM'
+        | 'BOX_30_20_15_CM'
+        | 'BOX_40_30_20_CM'
+        | 'BOX_50_40_30_CM';
+    }
+  | {
+      mode: 'CUSTOM';
+      /**
+       * @maximum 200
+       * @exclusiveMinimum 0
+       */
+      lengthCm: number;
+      /**
+       * @maximum 200
+       * @exclusiveMinimum 0
+       */
+      widthCm: number;
+      /**
+       * @maximum 200
+       * @exclusiveMinimum 0
+       */
+      heightCm: number;
+    };
+
+/**
+ * @nullable
+ */
+export type ProductControllerFindManaged200DataShippingPackage = {
+  weight: ProductControllerFindManaged200DataShippingPackageWeight;
+  size: ProductControllerFindManaged200DataShippingPackageSize;
+} | null;
+
 export type ProductControllerFindManaged200DataDefectsItem = {
   /**
    * @minLength 1
@@ -2484,6 +3231,8 @@ export type ProductControllerFindManaged200Data = {
    */
   price: number | null;
   measurements: ProductControllerFindManaged200DataMeasurements;
+  /** @nullable */
+  shippingPackage: ProductControllerFindManaged200DataShippingPackage;
   /** @nullable */
   repairs: string | null;
   defects: ProductControllerFindManaged200DataDefectsItem[];
@@ -2732,6 +3481,61 @@ export type ProductControllerReviewQueue200DataItemsItemMeasurements = {
   inseam?: number;
 };
 
+export type ProductControllerReviewQueue200DataItemsItemShippingPackageWeight =
+  | {
+      mode: 'RANGE';
+      preset:
+        | 'UP_TO_250_G'
+        | 'UP_TO_500_G'
+        | 'UP_TO_1000_G'
+        | 'UP_TO_2000_G'
+        | 'UP_TO_5000_G';
+    }
+  | {
+      mode: 'CUSTOM';
+      /**
+       * @maximum 50000
+       * @exclusiveMinimum 0
+       */
+      grams: number;
+    };
+
+export type ProductControllerReviewQueue200DataItemsItemShippingPackageSize =
+  | {
+      mode: 'RANGE';
+      preset:
+        | 'BOX_20_15_10_CM'
+        | 'BOX_30_20_15_CM'
+        | 'BOX_40_30_20_CM'
+        | 'BOX_50_40_30_CM';
+    }
+  | {
+      mode: 'CUSTOM';
+      /**
+       * @maximum 200
+       * @exclusiveMinimum 0
+       */
+      lengthCm: number;
+      /**
+       * @maximum 200
+       * @exclusiveMinimum 0
+       */
+      widthCm: number;
+      /**
+       * @maximum 200
+       * @exclusiveMinimum 0
+       */
+      heightCm: number;
+    };
+
+/**
+ * @nullable
+ */
+export type ProductControllerReviewQueue200DataItemsItemShippingPackage = {
+  weight: ProductControllerReviewQueue200DataItemsItemShippingPackageWeight;
+  size: ProductControllerReviewQueue200DataItemsItemShippingPackageSize;
+} | null;
+
 export type ProductControllerReviewQueue200DataItemsItemDefectsItem = {
   /**
    * @minLength 1
@@ -2825,6 +3629,8 @@ export type ProductControllerReviewQueue200DataItemsItem = {
    */
   price: number | null;
   measurements: ProductControllerReviewQueue200DataItemsItemMeasurements;
+  /** @nullable */
+  shippingPackage: ProductControllerReviewQueue200DataItemsItemShippingPackage;
   /** @nullable */
   repairs: string | null;
   defects: ProductControllerReviewQueue200DataItemsItemDefectsItem[];
@@ -2969,6 +3775,61 @@ export type ProductControllerReviewDetail200DataMeasurements = {
   inseam?: number;
 };
 
+export type ProductControllerReviewDetail200DataShippingPackageWeight =
+  | {
+      mode: 'RANGE';
+      preset:
+        | 'UP_TO_250_G'
+        | 'UP_TO_500_G'
+        | 'UP_TO_1000_G'
+        | 'UP_TO_2000_G'
+        | 'UP_TO_5000_G';
+    }
+  | {
+      mode: 'CUSTOM';
+      /**
+       * @maximum 50000
+       * @exclusiveMinimum 0
+       */
+      grams: number;
+    };
+
+export type ProductControllerReviewDetail200DataShippingPackageSize =
+  | {
+      mode: 'RANGE';
+      preset:
+        | 'BOX_20_15_10_CM'
+        | 'BOX_30_20_15_CM'
+        | 'BOX_40_30_20_CM'
+        | 'BOX_50_40_30_CM';
+    }
+  | {
+      mode: 'CUSTOM';
+      /**
+       * @maximum 200
+       * @exclusiveMinimum 0
+       */
+      lengthCm: number;
+      /**
+       * @maximum 200
+       * @exclusiveMinimum 0
+       */
+      widthCm: number;
+      /**
+       * @maximum 200
+       * @exclusiveMinimum 0
+       */
+      heightCm: number;
+    };
+
+/**
+ * @nullable
+ */
+export type ProductControllerReviewDetail200DataShippingPackage = {
+  weight: ProductControllerReviewDetail200DataShippingPackageWeight;
+  size: ProductControllerReviewDetail200DataShippingPackageSize;
+} | null;
+
 export type ProductControllerReviewDetail200DataDefectsItem = {
   /**
    * @minLength 1
@@ -3062,6 +3923,8 @@ export type ProductControllerReviewDetail200Data = {
    */
   price: number | null;
   measurements: ProductControllerReviewDetail200DataMeasurements;
+  /** @nullable */
+  shippingPackage: ProductControllerReviewDetail200DataShippingPackage;
   /** @nullable */
   repairs: string | null;
   defects: ProductControllerReviewDetail200DataDefectsItem[];
@@ -3235,6 +4098,61 @@ export type ProductControllerSubmit200DataMeasurements = {
   inseam?: number;
 };
 
+export type ProductControllerSubmit200DataShippingPackageWeight =
+  | {
+      mode: 'RANGE';
+      preset:
+        | 'UP_TO_250_G'
+        | 'UP_TO_500_G'
+        | 'UP_TO_1000_G'
+        | 'UP_TO_2000_G'
+        | 'UP_TO_5000_G';
+    }
+  | {
+      mode: 'CUSTOM';
+      /**
+       * @maximum 50000
+       * @exclusiveMinimum 0
+       */
+      grams: number;
+    };
+
+export type ProductControllerSubmit200DataShippingPackageSize =
+  | {
+      mode: 'RANGE';
+      preset:
+        | 'BOX_20_15_10_CM'
+        | 'BOX_30_20_15_CM'
+        | 'BOX_40_30_20_CM'
+        | 'BOX_50_40_30_CM';
+    }
+  | {
+      mode: 'CUSTOM';
+      /**
+       * @maximum 200
+       * @exclusiveMinimum 0
+       */
+      lengthCm: number;
+      /**
+       * @maximum 200
+       * @exclusiveMinimum 0
+       */
+      widthCm: number;
+      /**
+       * @maximum 200
+       * @exclusiveMinimum 0
+       */
+      heightCm: number;
+    };
+
+/**
+ * @nullable
+ */
+export type ProductControllerSubmit200DataShippingPackage = {
+  weight: ProductControllerSubmit200DataShippingPackageWeight;
+  size: ProductControllerSubmit200DataShippingPackageSize;
+} | null;
+
 export type ProductControllerSubmit200DataDefectsItem = {
   /**
    * @minLength 1
@@ -3328,6 +4246,8 @@ export type ProductControllerSubmit200Data = {
    */
   price: number | null;
   measurements: ProductControllerSubmit200DataMeasurements;
+  /** @nullable */
+  shippingPackage: ProductControllerSubmit200DataShippingPackage;
   /** @nullable */
   repairs: string | null;
   defects: ProductControllerSubmit200DataDefectsItem[];
@@ -3464,6 +4384,61 @@ export type ProductControllerModerate200DataMeasurements = {
   inseam?: number;
 };
 
+export type ProductControllerModerate200DataShippingPackageWeight =
+  | {
+      mode: 'RANGE';
+      preset:
+        | 'UP_TO_250_G'
+        | 'UP_TO_500_G'
+        | 'UP_TO_1000_G'
+        | 'UP_TO_2000_G'
+        | 'UP_TO_5000_G';
+    }
+  | {
+      mode: 'CUSTOM';
+      /**
+       * @maximum 50000
+       * @exclusiveMinimum 0
+       */
+      grams: number;
+    };
+
+export type ProductControllerModerate200DataShippingPackageSize =
+  | {
+      mode: 'RANGE';
+      preset:
+        | 'BOX_20_15_10_CM'
+        | 'BOX_30_20_15_CM'
+        | 'BOX_40_30_20_CM'
+        | 'BOX_50_40_30_CM';
+    }
+  | {
+      mode: 'CUSTOM';
+      /**
+       * @maximum 200
+       * @exclusiveMinimum 0
+       */
+      lengthCm: number;
+      /**
+       * @maximum 200
+       * @exclusiveMinimum 0
+       */
+      widthCm: number;
+      /**
+       * @maximum 200
+       * @exclusiveMinimum 0
+       */
+      heightCm: number;
+    };
+
+/**
+ * @nullable
+ */
+export type ProductControllerModerate200DataShippingPackage = {
+  weight: ProductControllerModerate200DataShippingPackageWeight;
+  size: ProductControllerModerate200DataShippingPackageSize;
+} | null;
+
 export type ProductControllerModerate200DataDefectsItem = {
   /**
    * @minLength 1
@@ -3557,6 +4532,8 @@ export type ProductControllerModerate200Data = {
    */
   price: number | null;
   measurements: ProductControllerModerate200DataMeasurements;
+  /** @nullable */
+  shippingPackage: ProductControllerModerate200DataShippingPackage;
   /** @nullable */
   repairs: string | null;
   defects: ProductControllerModerate200DataDefectsItem[];
@@ -3679,6 +4656,61 @@ export type ProductControllerSuspend200DataMeasurements = {
   inseam?: number;
 };
 
+export type ProductControllerSuspend200DataShippingPackageWeight =
+  | {
+      mode: 'RANGE';
+      preset:
+        | 'UP_TO_250_G'
+        | 'UP_TO_500_G'
+        | 'UP_TO_1000_G'
+        | 'UP_TO_2000_G'
+        | 'UP_TO_5000_G';
+    }
+  | {
+      mode: 'CUSTOM';
+      /**
+       * @maximum 50000
+       * @exclusiveMinimum 0
+       */
+      grams: number;
+    };
+
+export type ProductControllerSuspend200DataShippingPackageSize =
+  | {
+      mode: 'RANGE';
+      preset:
+        | 'BOX_20_15_10_CM'
+        | 'BOX_30_20_15_CM'
+        | 'BOX_40_30_20_CM'
+        | 'BOX_50_40_30_CM';
+    }
+  | {
+      mode: 'CUSTOM';
+      /**
+       * @maximum 200
+       * @exclusiveMinimum 0
+       */
+      lengthCm: number;
+      /**
+       * @maximum 200
+       * @exclusiveMinimum 0
+       */
+      widthCm: number;
+      /**
+       * @maximum 200
+       * @exclusiveMinimum 0
+       */
+      heightCm: number;
+    };
+
+/**
+ * @nullable
+ */
+export type ProductControllerSuspend200DataShippingPackage = {
+  weight: ProductControllerSuspend200DataShippingPackageWeight;
+  size: ProductControllerSuspend200DataShippingPackageSize;
+} | null;
+
 export type ProductControllerSuspend200DataDefectsItem = {
   /**
    * @minLength 1
@@ -3772,6 +4804,8 @@ export type ProductControllerSuspend200Data = {
    */
   price: number | null;
   measurements: ProductControllerSuspend200DataMeasurements;
+  /** @nullable */
+  shippingPackage: ProductControllerSuspend200DataShippingPackage;
   /** @nullable */
   repairs: string | null;
   defects: ProductControllerSuspend200DataDefectsItem[];
@@ -3886,6 +4920,61 @@ export type ProductControllerFindOne200DataMeasurements = {
   inseam?: number;
 };
 
+export type ProductControllerFindOne200DataShippingPackageWeight =
+  | {
+      mode: 'RANGE';
+      preset:
+        | 'UP_TO_250_G'
+        | 'UP_TO_500_G'
+        | 'UP_TO_1000_G'
+        | 'UP_TO_2000_G'
+        | 'UP_TO_5000_G';
+    }
+  | {
+      mode: 'CUSTOM';
+      /**
+       * @maximum 50000
+       * @exclusiveMinimum 0
+       */
+      grams: number;
+    };
+
+export type ProductControllerFindOne200DataShippingPackageSize =
+  | {
+      mode: 'RANGE';
+      preset:
+        | 'BOX_20_15_10_CM'
+        | 'BOX_30_20_15_CM'
+        | 'BOX_40_30_20_CM'
+        | 'BOX_50_40_30_CM';
+    }
+  | {
+      mode: 'CUSTOM';
+      /**
+       * @maximum 200
+       * @exclusiveMinimum 0
+       */
+      lengthCm: number;
+      /**
+       * @maximum 200
+       * @exclusiveMinimum 0
+       */
+      widthCm: number;
+      /**
+       * @maximum 200
+       * @exclusiveMinimum 0
+       */
+      heightCm: number;
+    };
+
+/**
+ * @nullable
+ */
+export type ProductControllerFindOne200DataShippingPackage = {
+  weight: ProductControllerFindOne200DataShippingPackageWeight;
+  size: ProductControllerFindOne200DataShippingPackageSize;
+} | null;
+
 export type ProductControllerFindOne200DataDefectsItem = {
   /**
    * @minLength 1
@@ -3979,6 +5068,8 @@ export type ProductControllerFindOne200Data = {
    */
   price: number | null;
   measurements: ProductControllerFindOne200DataMeasurements;
+  /** @nullable */
+  shippingPackage: ProductControllerFindOne200DataShippingPackage;
   /** @nullable */
   repairs: string | null;
   defects: ProductControllerFindOne200DataDefectsItem[];
@@ -4086,6 +5177,61 @@ export type ProductControllerUpdateBodyMeasurements = {
   inseam?: number;
 };
 
+export type ProductControllerUpdateBodyShippingPackageWeight =
+  | {
+      mode: 'RANGE';
+      preset:
+        | 'UP_TO_250_G'
+        | 'UP_TO_500_G'
+        | 'UP_TO_1000_G'
+        | 'UP_TO_2000_G'
+        | 'UP_TO_5000_G';
+    }
+  | {
+      mode: 'CUSTOM';
+      /**
+       * @maximum 50000
+       * @exclusiveMinimum 0
+       */
+      grams: number;
+    };
+
+export type ProductControllerUpdateBodyShippingPackageSize =
+  | {
+      mode: 'RANGE';
+      preset:
+        | 'BOX_20_15_10_CM'
+        | 'BOX_30_20_15_CM'
+        | 'BOX_40_30_20_CM'
+        | 'BOX_50_40_30_CM';
+    }
+  | {
+      mode: 'CUSTOM';
+      /**
+       * @maximum 200
+       * @exclusiveMinimum 0
+       */
+      lengthCm: number;
+      /**
+       * @maximum 200
+       * @exclusiveMinimum 0
+       */
+      widthCm: number;
+      /**
+       * @maximum 200
+       * @exclusiveMinimum 0
+       */
+      heightCm: number;
+    };
+
+/**
+ * @nullable
+ */
+export type ProductControllerUpdateBodyShippingPackage = {
+  weight: ProductControllerUpdateBodyShippingPackageWeight;
+  size: ProductControllerUpdateBodyShippingPackageSize;
+} | null;
+
 export type ProductControllerUpdateBodyDefectsItem = {
   /**
    * @minLength 1
@@ -4141,6 +5287,8 @@ export type ProductControllerUpdateBody = {
    */
   price?: number | null;
   measurements?: ProductControllerUpdateBodyMeasurements;
+  /** @nullable */
+  shippingPackage?: ProductControllerUpdateBodyShippingPackage;
   /**
    * @maxLength 2000
    * @nullable
@@ -4208,6 +5356,61 @@ export type ProductControllerUpdate200DataMeasurements = {
    */
   inseam?: number;
 };
+
+export type ProductControllerUpdate200DataShippingPackageWeight =
+  | {
+      mode: 'RANGE';
+      preset:
+        | 'UP_TO_250_G'
+        | 'UP_TO_500_G'
+        | 'UP_TO_1000_G'
+        | 'UP_TO_2000_G'
+        | 'UP_TO_5000_G';
+    }
+  | {
+      mode: 'CUSTOM';
+      /**
+       * @maximum 50000
+       * @exclusiveMinimum 0
+       */
+      grams: number;
+    };
+
+export type ProductControllerUpdate200DataShippingPackageSize =
+  | {
+      mode: 'RANGE';
+      preset:
+        | 'BOX_20_15_10_CM'
+        | 'BOX_30_20_15_CM'
+        | 'BOX_40_30_20_CM'
+        | 'BOX_50_40_30_CM';
+    }
+  | {
+      mode: 'CUSTOM';
+      /**
+       * @maximum 200
+       * @exclusiveMinimum 0
+       */
+      lengthCm: number;
+      /**
+       * @maximum 200
+       * @exclusiveMinimum 0
+       */
+      widthCm: number;
+      /**
+       * @maximum 200
+       * @exclusiveMinimum 0
+       */
+      heightCm: number;
+    };
+
+/**
+ * @nullable
+ */
+export type ProductControllerUpdate200DataShippingPackage = {
+  weight: ProductControllerUpdate200DataShippingPackageWeight;
+  size: ProductControllerUpdate200DataShippingPackageSize;
+} | null;
 
 export type ProductControllerUpdate200DataDefectsItem = {
   /**
@@ -4302,6 +5505,8 @@ export type ProductControllerUpdate200Data = {
    */
   price: number | null;
   measurements: ProductControllerUpdate200DataMeasurements;
+  /** @nullable */
+  shippingPackage: ProductControllerUpdate200DataShippingPackage;
   /** @nullable */
   repairs: string | null;
   defects: ProductControllerUpdate200DataDefectsItem[];
@@ -4428,6 +5633,61 @@ export type ProductControllerUpdateStatus200DataMeasurements = {
   inseam?: number;
 };
 
+export type ProductControllerUpdateStatus200DataShippingPackageWeight =
+  | {
+      mode: 'RANGE';
+      preset:
+        | 'UP_TO_250_G'
+        | 'UP_TO_500_G'
+        | 'UP_TO_1000_G'
+        | 'UP_TO_2000_G'
+        | 'UP_TO_5000_G';
+    }
+  | {
+      mode: 'CUSTOM';
+      /**
+       * @maximum 50000
+       * @exclusiveMinimum 0
+       */
+      grams: number;
+    };
+
+export type ProductControllerUpdateStatus200DataShippingPackageSize =
+  | {
+      mode: 'RANGE';
+      preset:
+        | 'BOX_20_15_10_CM'
+        | 'BOX_30_20_15_CM'
+        | 'BOX_40_30_20_CM'
+        | 'BOX_50_40_30_CM';
+    }
+  | {
+      mode: 'CUSTOM';
+      /**
+       * @maximum 200
+       * @exclusiveMinimum 0
+       */
+      lengthCm: number;
+      /**
+       * @maximum 200
+       * @exclusiveMinimum 0
+       */
+      widthCm: number;
+      /**
+       * @maximum 200
+       * @exclusiveMinimum 0
+       */
+      heightCm: number;
+    };
+
+/**
+ * @nullable
+ */
+export type ProductControllerUpdateStatus200DataShippingPackage = {
+  weight: ProductControllerUpdateStatus200DataShippingPackageWeight;
+  size: ProductControllerUpdateStatus200DataShippingPackageSize;
+} | null;
+
 export type ProductControllerUpdateStatus200DataDefectsItem = {
   /**
    * @minLength 1
@@ -4521,6 +5781,8 @@ export type ProductControllerUpdateStatus200Data = {
    */
   price: number | null;
   measurements: ProductControllerUpdateStatus200DataMeasurements;
+  /** @nullable */
+  shippingPackage: ProductControllerUpdateStatus200DataShippingPackage;
   /** @nullable */
   repairs: string | null;
   defects: ProductControllerUpdateStatus200DataDefectsItem[];
