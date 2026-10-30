@@ -22,11 +22,13 @@ export function PickupAddressPage() {
   const [shopId, setShopId] = useState('');
   const [saving, setSaving] = useState(false);
   const enabled = status === 'authenticated' && !session?.error;
-  const key = ['pickup-location', session?.user.id, shopId];
+  const personalKey = ['pickup-location', session?.user.id, 'personal'];
+  const shopKey = ['pickup-location', session?.user.id, 'shop', shopId];
+  const key = shopId ? shopKey : personalKey;
   const personal = usePickupLocationControllerFindPersonal({
     query: {
       enabled: enabled && !shopId,
-      queryKey: ['pickup-location', session?.user.id, ''],
+      queryKey: personalKey,
       retry: false,
       refetchOnWindowFocus: false,
     },
@@ -34,7 +36,7 @@ export function PickupAddressPage() {
   const shop = usePickupLocationControllerFindShop(shopId, {
     query: {
       enabled: enabled && !!shopId,
-      queryKey: ['pickup-location', session?.user.id, shopId],
+      queryKey: shopKey,
       retry: false,
       refetchOnWindowFocus: false,
     },
