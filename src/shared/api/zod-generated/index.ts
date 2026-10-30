@@ -3,6 +3,7 @@ export * from './auth/auth';
 export * from './cart/cart';
 export * from './categories/categories';
 export * from './checkout/checkout';
+export * from './pickup-locations/pickup-locations';
 export * from './product-media/product-media';
 export * from './products/products';
 export * from './shipping/shipping';
