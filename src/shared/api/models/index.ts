@@ -1859,6 +1859,224 @@ export type ShippingControllerPackageOptions200 = {
   data: ShippingControllerPackageOptions200Data;
 };
 
+export type PickupLocationControllerFindPersonal200StatusCode =
+  (typeof PickupLocationControllerFindPersonal200StatusCode)[keyof typeof PickupLocationControllerFindPersonal200StatusCode];
+
+export const PickupLocationControllerFindPersonal200StatusCode = {
+  NUMBER_200: 200,
+} as const;
+
+export type PickupLocationControllerFindPersonal200DataLocationCountryCode =
+  (typeof PickupLocationControllerFindPersonal200DataLocationCountryCode)[keyof typeof PickupLocationControllerFindPersonal200DataLocationCountryCode];
+
+export const PickupLocationControllerFindPersonal200DataLocationCountryCode = {
+  VN: 'VN',
+} as const;
+
+/**
+ * @nullable
+ */
+export type PickupLocationControllerFindPersonal200DataLocation = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  contactName: string;
+  phone: string;
+  addressLine1: string;
+  countryCode: PickupLocationControllerFindPersonal200DataLocationCountryCode;
+  provinceCode: string;
+  provinceName: string;
+  wardCode: string;
+  wardName: string;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  createdAt: string;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  updatedAt: string;
+} | null;
+
+export type PickupLocationControllerFindPersonal200Data = {
+  /** @nullable */
+  location: PickupLocationControllerFindPersonal200DataLocation;
+};
+
+export type PickupLocationControllerFindPersonal200 = {
+  statusCode: PickupLocationControllerFindPersonal200StatusCode;
+  message: string;
+  data: PickupLocationControllerFindPersonal200Data;
+};
+
+export type PickupLocationControllerSavePersonalBody = {
+  /** @pattern ^\+?[0-9]{8,15}$ */
+  phone: string;
+  /**
+   * @minLength 1
+   * @maxLength 255
+   */
+  addressLine1: string;
+  /** @pattern ^\d{2}$ */
+  provinceCode: string;
+  /** @pattern ^\d{5}$ */
+  wardCode: string;
+  /**
+   * @minLength 1
+   * @maxLength 100
+   */
+  contactName: string;
+};
+
+export type PickupLocationControllerSavePersonal200StatusCode =
+  (typeof PickupLocationControllerSavePersonal200StatusCode)[keyof typeof PickupLocationControllerSavePersonal200StatusCode];
+
+export const PickupLocationControllerSavePersonal200StatusCode = {
+  NUMBER_200: 200,
+} as const;
+
+export type PickupLocationControllerSavePersonal200DataLocationCountryCode =
+  (typeof PickupLocationControllerSavePersonal200DataLocationCountryCode)[keyof typeof PickupLocationControllerSavePersonal200DataLocationCountryCode];
+
+export const PickupLocationControllerSavePersonal200DataLocationCountryCode = {
+  VN: 'VN',
+} as const;
+
+/**
+ * @nullable
+ */
+export type PickupLocationControllerSavePersonal200DataLocation = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  contactName: string;
+  phone: string;
+  addressLine1: string;
+  countryCode: PickupLocationControllerSavePersonal200DataLocationCountryCode;
+  provinceCode: string;
+  provinceName: string;
+  wardCode: string;
+  wardName: string;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  createdAt: string;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  updatedAt: string;
+} | null;
+
+export type PickupLocationControllerSavePersonal200Data = {
+  /** @nullable */
+  location: PickupLocationControllerSavePersonal200DataLocation;
+};
+
+export type PickupLocationControllerSavePersonal200 = {
+  statusCode: PickupLocationControllerSavePersonal200StatusCode;
+  message: string;
+  data: PickupLocationControllerSavePersonal200Data;
+};
+
+export type PickupLocationControllerFindShop200StatusCode =
+  (typeof PickupLocationControllerFindShop200StatusCode)[keyof typeof PickupLocationControllerFindShop200StatusCode];
+
+export const PickupLocationControllerFindShop200StatusCode = {
+  NUMBER_200: 200,
+} as const;
+
+export type PickupLocationControllerFindShop200DataLocationCountryCode =
+  (typeof PickupLocationControllerFindShop200DataLocationCountryCode)[keyof typeof PickupLocationControllerFindShop200DataLocationCountryCode];
+
+export const PickupLocationControllerFindShop200DataLocationCountryCode = {
+  VN: 'VN',
+} as const;
+
+/**
+ * @nullable
+ */
+export type PickupLocationControllerFindShop200DataLocation = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  contactName: string;
+  phone: string;
+  addressLine1: string;
+  countryCode: PickupLocationControllerFindShop200DataLocationCountryCode;
+  provinceCode: string;
+  provinceName: string;
+  wardCode: string;
+  wardName: string;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  createdAt: string;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  updatedAt: string;
+} | null;
+
+export type PickupLocationControllerFindShop200Data = {
+  /** @nullable */
+  location: PickupLocationControllerFindShop200DataLocation;
+};
+
+export type PickupLocationControllerFindShop200 = {
+  statusCode: PickupLocationControllerFindShop200StatusCode;
+  message: string;
+  data: PickupLocationControllerFindShop200Data;
+};
+
+export type PickupLocationControllerSaveShopBody = {
+  /** @pattern ^\+?[0-9]{8,15}$ */
+  phone: string;
+  /**
+   * @minLength 1
+   * @maxLength 255
+   */
+  addressLine1: string;
+  /** @pattern ^\d{2}$ */
+  provinceCode: string;
+  /** @pattern ^\d{5}$ */
+  wardCode: string;
+  /**
+   * @minLength 1
+   * @maxLength 100
+   */
+  contactName: string;
+};
+
+export type PickupLocationControllerSaveShop200StatusCode =
+  (typeof PickupLocationControllerSaveShop200StatusCode)[keyof typeof PickupLocationControllerSaveShop200StatusCode];
+
+export const PickupLocationControllerSaveShop200StatusCode = {
+  NUMBER_200: 200,
+} as const;
+
+export type PickupLocationControllerSaveShop200DataLocationCountryCode =
+  (typeof PickupLocationControllerSaveShop200DataLocationCountryCode)[keyof typeof PickupLocationControllerSaveShop200DataLocationCountryCode];
+
+export const PickupLocationControllerSaveShop200DataLocationCountryCode = {
+  VN: 'VN',
+} as const;
+
+/**
+ * @nullable
+ */
+export type PickupLocationControllerSaveShop200DataLocation = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  contactName: string;
+  phone: string;
+  addressLine1: string;
+  countryCode: PickupLocationControllerSaveShop200DataLocationCountryCode;
+  provinceCode: string;
+  provinceName: string;
+  wardCode: string;
+  wardName: string;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  createdAt: string;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  updatedAt: string;
+} | null;
+
+export type PickupLocationControllerSaveShop200Data = {
+  /** @nullable */
+  location: PickupLocationControllerSaveShop200DataLocation;
+};
+
+export type PickupLocationControllerSaveShop200 = {
+  statusCode: PickupLocationControllerSaveShop200StatusCode;
+  message: string;
+  data: PickupLocationControllerSaveShop200Data;
+};
+
 export type ProductControllerFindAllParams = {
   page?: string | number;
   pageSize?: string | number;

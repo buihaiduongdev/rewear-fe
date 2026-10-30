@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
 import { CartLink } from '@/modules/cart/components/CartLink';
@@ -83,6 +84,12 @@ export function ShippingPackagesPage() {
         <h1 className="text-[28px] leading-[34px] font-semibold tracking-[-0.02em] md:text-[40px] md:leading-[46px]">
           Listing packages
         </h1>
+        <Link
+          href="/selling/pickup"
+          className="inline-flex min-h-11 items-center text-sm font-semibold underline"
+        >
+          Pickup address
+        </Link>
         <p>
           Choose a listing you own, then enter its packed weight and outer
           dimensions.
