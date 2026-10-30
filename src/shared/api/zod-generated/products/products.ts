@@ -139,6 +139,20 @@ export const productControllerFindAllResponseDataItemsItemMeasurementsSleeveMax 
 export const productControllerFindAllResponseDataItemsItemMeasurementsInseamExclusiveMin = 0;
 export const productControllerFindAllResponseDataItemsItemMeasurementsInseamMax = 500;
 
+export const productControllerFindAllResponseDataItemsItemShippingPackageWeightTwoGramsExclusiveMin = 0;
+export const productControllerFindAllResponseDataItemsItemShippingPackageWeightTwoGramsMax = 50000;
+
+export const productControllerFindAllResponseDataItemsItemShippingPackageSizeTwoLengthCmExclusiveMin = 0;
+export const productControllerFindAllResponseDataItemsItemShippingPackageSizeTwoLengthCmMax = 200;
+
+export const productControllerFindAllResponseDataItemsItemShippingPackageSizeTwoWidthCmExclusiveMin = 0;
+export const productControllerFindAllResponseDataItemsItemShippingPackageSizeTwoWidthCmMax = 200;
+
+export const productControllerFindAllResponseDataItemsItemShippingPackageSizeTwoHeightCmExclusiveMin = 0;
+export const productControllerFindAllResponseDataItemsItemShippingPackageSizeTwoHeightCmMax = 200;
+
+export const productControllerFindAllResponseDataItemsItemShippingPackageDefault =
+  null;
 export const productControllerFindAllResponseDataItemsItemDefectsItemDescriptionMax = 1000;
 
 export const productControllerFindAllResponseDataItemsItemDefectsItemMediaIdsItemRegExp =
@@ -305,6 +319,74 @@ export const ProductControllerFindAllResponse = zod.object({
             )
             .optional(),
         }),
+        shippingPackage: zod
+          .object({
+            weight: zod.union([
+              zod.object({
+                mode: zod.enum(['RANGE']),
+                preset: zod.enum([
+                  'UP_TO_250_G',
+                  'UP_TO_500_G',
+                  'UP_TO_1000_G',
+                  'UP_TO_2000_G',
+                  'UP_TO_5000_G',
+                ]),
+              }),
+              zod.object({
+                mode: zod.enum(['CUSTOM']),
+                grams: zod
+                  .int()
+                  .gt(
+                    productControllerFindAllResponseDataItemsItemShippingPackageWeightTwoGramsExclusiveMin,
+                  )
+                  .max(
+                    productControllerFindAllResponseDataItemsItemShippingPackageWeightTwoGramsMax,
+                  ),
+              }),
+            ]),
+            size: zod.union([
+              zod.object({
+                mode: zod.enum(['RANGE']),
+                preset: zod.enum([
+                  'BOX_20_15_10_CM',
+                  'BOX_30_20_15_CM',
+                  'BOX_40_30_20_CM',
+                  'BOX_50_40_30_CM',
+                ]),
+              }),
+              zod.object({
+                mode: zod.enum(['CUSTOM']),
+                lengthCm: zod
+                  .number()
+                  .gt(
+                    productControllerFindAllResponseDataItemsItemShippingPackageSizeTwoLengthCmExclusiveMin,
+                  )
+                  .max(
+                    productControllerFindAllResponseDataItemsItemShippingPackageSizeTwoLengthCmMax,
+                  ),
+                widthCm: zod
+                  .number()
+                  .gt(
+                    productControllerFindAllResponseDataItemsItemShippingPackageSizeTwoWidthCmExclusiveMin,
+                  )
+                  .max(
+                    productControllerFindAllResponseDataItemsItemShippingPackageSizeTwoWidthCmMax,
+                  ),
+                heightCm: zod
+                  .number()
+                  .gt(
+                    productControllerFindAllResponseDataItemsItemShippingPackageSizeTwoHeightCmExclusiveMin,
+                  )
+                  .max(
+                    productControllerFindAllResponseDataItemsItemShippingPackageSizeTwoHeightCmMax,
+                  ),
+              }),
+            ]),
+          })
+          .nullable()
+          .default(
+            productControllerFindAllResponseDataItemsItemShippingPackageDefault,
+          ),
         repairs: zod.string().nullable(),
         defects: zod.array(
           zod.object({
@@ -468,6 +550,18 @@ export const productControllerCreateBodyMeasurementsSleeveMax = 500;
 export const productControllerCreateBodyMeasurementsInseamExclusiveMin = 0;
 export const productControllerCreateBodyMeasurementsInseamMax = 500;
 
+export const productControllerCreateBodyShippingPackageWeightTwoGramsExclusiveMin = 0;
+export const productControllerCreateBodyShippingPackageWeightTwoGramsMax = 50000;
+
+export const productControllerCreateBodyShippingPackageSizeTwoLengthCmExclusiveMin = 0;
+export const productControllerCreateBodyShippingPackageSizeTwoLengthCmMax = 200;
+
+export const productControllerCreateBodyShippingPackageSizeTwoWidthCmExclusiveMin = 0;
+export const productControllerCreateBodyShippingPackageSizeTwoWidthCmMax = 200;
+
+export const productControllerCreateBodyShippingPackageSizeTwoHeightCmExclusiveMin = 0;
+export const productControllerCreateBodyShippingPackageSizeTwoHeightCmMax = 200;
+
 export const productControllerCreateBodyRepairsMax = 2000;
 
 export const productControllerCreateBodyDefectsItemDescriptionMax = 1000;
@@ -547,6 +641,63 @@ export const ProductControllerCreateBody = zod.strictObject({
         .optional(),
     })
     .optional(),
+  shippingPackage: zod
+    .strictObject({
+      weight: zod.union([
+        zod.strictObject({
+          mode: zod.enum(['RANGE']),
+          preset: zod.enum([
+            'UP_TO_250_G',
+            'UP_TO_500_G',
+            'UP_TO_1000_G',
+            'UP_TO_2000_G',
+            'UP_TO_5000_G',
+          ]),
+        }),
+        zod.strictObject({
+          mode: zod.enum(['CUSTOM']),
+          grams: zod
+            .int()
+            .gt(
+              productControllerCreateBodyShippingPackageWeightTwoGramsExclusiveMin,
+            )
+            .max(productControllerCreateBodyShippingPackageWeightTwoGramsMax),
+        }),
+      ]),
+      size: zod.union([
+        zod.strictObject({
+          mode: zod.enum(['RANGE']),
+          preset: zod.enum([
+            'BOX_20_15_10_CM',
+            'BOX_30_20_15_CM',
+            'BOX_40_30_20_CM',
+            'BOX_50_40_30_CM',
+          ]),
+        }),
+        zod.strictObject({
+          mode: zod.enum(['CUSTOM']),
+          lengthCm: zod
+            .number()
+            .gt(
+              productControllerCreateBodyShippingPackageSizeTwoLengthCmExclusiveMin,
+            )
+            .max(productControllerCreateBodyShippingPackageSizeTwoLengthCmMax),
+          widthCm: zod
+            .number()
+            .gt(
+              productControllerCreateBodyShippingPackageSizeTwoWidthCmExclusiveMin,
+            )
+            .max(productControllerCreateBodyShippingPackageSizeTwoWidthCmMax),
+          heightCm: zod
+            .number()
+            .gt(
+              productControllerCreateBodyShippingPackageSizeTwoHeightCmExclusiveMin,
+            )
+            .max(productControllerCreateBodyShippingPackageSizeTwoHeightCmMax),
+        }),
+      ]),
+    })
+    .nullish(),
   repairs: zod.string().max(productControllerCreateBodyRepairsMax).nullish(),
   defects: zod
     .array(
@@ -605,6 +756,19 @@ export const productControllerCreateResponseDataMeasurementsSleeveMax = 500;
 export const productControllerCreateResponseDataMeasurementsInseamExclusiveMin = 0;
 export const productControllerCreateResponseDataMeasurementsInseamMax = 500;
 
+export const productControllerCreateResponseDataShippingPackageWeightTwoGramsExclusiveMin = 0;
+export const productControllerCreateResponseDataShippingPackageWeightTwoGramsMax = 50000;
+
+export const productControllerCreateResponseDataShippingPackageSizeTwoLengthCmExclusiveMin = 0;
+export const productControllerCreateResponseDataShippingPackageSizeTwoLengthCmMax = 200;
+
+export const productControllerCreateResponseDataShippingPackageSizeTwoWidthCmExclusiveMin = 0;
+export const productControllerCreateResponseDataShippingPackageSizeTwoWidthCmMax = 200;
+
+export const productControllerCreateResponseDataShippingPackageSizeTwoHeightCmExclusiveMin = 0;
+export const productControllerCreateResponseDataShippingPackageSizeTwoHeightCmMax = 200;
+
+export const productControllerCreateResponseDataShippingPackageDefault = null;
 export const productControllerCreateResponseDataDefectsItemDescriptionMax = 1000;
 
 export const productControllerCreateResponseDataDefectsItemMediaIdsItemRegExp =
@@ -721,6 +885,72 @@ export const ProductControllerCreateResponse = zod.object({
         .max(productControllerCreateResponseDataMeasurementsInseamMax)
         .optional(),
     }),
+    shippingPackage: zod
+      .object({
+        weight: zod.union([
+          zod.object({
+            mode: zod.enum(['RANGE']),
+            preset: zod.enum([
+              'UP_TO_250_G',
+              'UP_TO_500_G',
+              'UP_TO_1000_G',
+              'UP_TO_2000_G',
+              'UP_TO_5000_G',
+            ]),
+          }),
+          zod.object({
+            mode: zod.enum(['CUSTOM']),
+            grams: zod
+              .int()
+              .gt(
+                productControllerCreateResponseDataShippingPackageWeightTwoGramsExclusiveMin,
+              )
+              .max(
+                productControllerCreateResponseDataShippingPackageWeightTwoGramsMax,
+              ),
+          }),
+        ]),
+        size: zod.union([
+          zod.object({
+            mode: zod.enum(['RANGE']),
+            preset: zod.enum([
+              'BOX_20_15_10_CM',
+              'BOX_30_20_15_CM',
+              'BOX_40_30_20_CM',
+              'BOX_50_40_30_CM',
+            ]),
+          }),
+          zod.object({
+            mode: zod.enum(['CUSTOM']),
+            lengthCm: zod
+              .number()
+              .gt(
+                productControllerCreateResponseDataShippingPackageSizeTwoLengthCmExclusiveMin,
+              )
+              .max(
+                productControllerCreateResponseDataShippingPackageSizeTwoLengthCmMax,
+              ),
+            widthCm: zod
+              .number()
+              .gt(
+                productControllerCreateResponseDataShippingPackageSizeTwoWidthCmExclusiveMin,
+              )
+              .max(
+                productControllerCreateResponseDataShippingPackageSizeTwoWidthCmMax,
+              ),
+            heightCm: zod
+              .number()
+              .gt(
+                productControllerCreateResponseDataShippingPackageSizeTwoHeightCmExclusiveMin,
+              )
+              .max(
+                productControllerCreateResponseDataShippingPackageSizeTwoHeightCmMax,
+              ),
+          }),
+        ]),
+      })
+      .nullable()
+      .default(productControllerCreateResponseDataShippingPackageDefault),
     repairs: zod.string().nullable(),
     defects: zod.array(
       zod.object({
@@ -953,6 +1183,20 @@ export const productControllerFindMineResponseDataItemsItemMeasurementsSleeveMax
 export const productControllerFindMineResponseDataItemsItemMeasurementsInseamExclusiveMin = 0;
 export const productControllerFindMineResponseDataItemsItemMeasurementsInseamMax = 500;
 
+export const productControllerFindMineResponseDataItemsItemShippingPackageWeightTwoGramsExclusiveMin = 0;
+export const productControllerFindMineResponseDataItemsItemShippingPackageWeightTwoGramsMax = 50000;
+
+export const productControllerFindMineResponseDataItemsItemShippingPackageSizeTwoLengthCmExclusiveMin = 0;
+export const productControllerFindMineResponseDataItemsItemShippingPackageSizeTwoLengthCmMax = 200;
+
+export const productControllerFindMineResponseDataItemsItemShippingPackageSizeTwoWidthCmExclusiveMin = 0;
+export const productControllerFindMineResponseDataItemsItemShippingPackageSizeTwoWidthCmMax = 200;
+
+export const productControllerFindMineResponseDataItemsItemShippingPackageSizeTwoHeightCmExclusiveMin = 0;
+export const productControllerFindMineResponseDataItemsItemShippingPackageSizeTwoHeightCmMax = 200;
+
+export const productControllerFindMineResponseDataItemsItemShippingPackageDefault =
+  null;
 export const productControllerFindMineResponseDataItemsItemDefectsItemDescriptionMax = 1000;
 
 export const productControllerFindMineResponseDataItemsItemDefectsItemMediaIdsItemRegExp =
@@ -1119,6 +1363,74 @@ export const ProductControllerFindMineResponse = zod.object({
             )
             .optional(),
         }),
+        shippingPackage: zod
+          .object({
+            weight: zod.union([
+              zod.object({
+                mode: zod.enum(['RANGE']),
+                preset: zod.enum([
+                  'UP_TO_250_G',
+                  'UP_TO_500_G',
+                  'UP_TO_1000_G',
+                  'UP_TO_2000_G',
+                  'UP_TO_5000_G',
+                ]),
+              }),
+              zod.object({
+                mode: zod.enum(['CUSTOM']),
+                grams: zod
+                  .int()
+                  .gt(
+                    productControllerFindMineResponseDataItemsItemShippingPackageWeightTwoGramsExclusiveMin,
+                  )
+                  .max(
+                    productControllerFindMineResponseDataItemsItemShippingPackageWeightTwoGramsMax,
+                  ),
+              }),
+            ]),
+            size: zod.union([
+              zod.object({
+                mode: zod.enum(['RANGE']),
+                preset: zod.enum([
+                  'BOX_20_15_10_CM',
+                  'BOX_30_20_15_CM',
+                  'BOX_40_30_20_CM',
+                  'BOX_50_40_30_CM',
+                ]),
+              }),
+              zod.object({
+                mode: zod.enum(['CUSTOM']),
+                lengthCm: zod
+                  .number()
+                  .gt(
+                    productControllerFindMineResponseDataItemsItemShippingPackageSizeTwoLengthCmExclusiveMin,
+                  )
+                  .max(
+                    productControllerFindMineResponseDataItemsItemShippingPackageSizeTwoLengthCmMax,
+                  ),
+                widthCm: zod
+                  .number()
+                  .gt(
+                    productControllerFindMineResponseDataItemsItemShippingPackageSizeTwoWidthCmExclusiveMin,
+                  )
+                  .max(
+                    productControllerFindMineResponseDataItemsItemShippingPackageSizeTwoWidthCmMax,
+                  ),
+                heightCm: zod
+                  .number()
+                  .gt(
+                    productControllerFindMineResponseDataItemsItemShippingPackageSizeTwoHeightCmExclusiveMin,
+                  )
+                  .max(
+                    productControllerFindMineResponseDataItemsItemShippingPackageSizeTwoHeightCmMax,
+                  ),
+              }),
+            ]),
+          })
+          .nullable()
+          .default(
+            productControllerFindMineResponseDataItemsItemShippingPackageDefault,
+          ),
         repairs: zod.string().nullable(),
         defects: zod.array(
           zod.object({
@@ -1294,6 +1606,20 @@ export const productControllerFindManagedResponseDataMeasurementsSleeveMax = 500
 export const productControllerFindManagedResponseDataMeasurementsInseamExclusiveMin = 0;
 export const productControllerFindManagedResponseDataMeasurementsInseamMax = 500;
 
+export const productControllerFindManagedResponseDataShippingPackageWeightTwoGramsExclusiveMin = 0;
+export const productControllerFindManagedResponseDataShippingPackageWeightTwoGramsMax = 50000;
+
+export const productControllerFindManagedResponseDataShippingPackageSizeTwoLengthCmExclusiveMin = 0;
+export const productControllerFindManagedResponseDataShippingPackageSizeTwoLengthCmMax = 200;
+
+export const productControllerFindManagedResponseDataShippingPackageSizeTwoWidthCmExclusiveMin = 0;
+export const productControllerFindManagedResponseDataShippingPackageSizeTwoWidthCmMax = 200;
+
+export const productControllerFindManagedResponseDataShippingPackageSizeTwoHeightCmExclusiveMin = 0;
+export const productControllerFindManagedResponseDataShippingPackageSizeTwoHeightCmMax = 200;
+
+export const productControllerFindManagedResponseDataShippingPackageDefault =
+  null;
 export const productControllerFindManagedResponseDataDefectsItemDescriptionMax = 1000;
 
 export const productControllerFindManagedResponseDataDefectsItemMediaIdsItemRegExp =
@@ -1428,6 +1754,72 @@ export const ProductControllerFindManagedResponse = zod.object({
         .max(productControllerFindManagedResponseDataMeasurementsInseamMax)
         .optional(),
     }),
+    shippingPackage: zod
+      .object({
+        weight: zod.union([
+          zod.object({
+            mode: zod.enum(['RANGE']),
+            preset: zod.enum([
+              'UP_TO_250_G',
+              'UP_TO_500_G',
+              'UP_TO_1000_G',
+              'UP_TO_2000_G',
+              'UP_TO_5000_G',
+            ]),
+          }),
+          zod.object({
+            mode: zod.enum(['CUSTOM']),
+            grams: zod
+              .int()
+              .gt(
+                productControllerFindManagedResponseDataShippingPackageWeightTwoGramsExclusiveMin,
+              )
+              .max(
+                productControllerFindManagedResponseDataShippingPackageWeightTwoGramsMax,
+              ),
+          }),
+        ]),
+        size: zod.union([
+          zod.object({
+            mode: zod.enum(['RANGE']),
+            preset: zod.enum([
+              'BOX_20_15_10_CM',
+              'BOX_30_20_15_CM',
+              'BOX_40_30_20_CM',
+              'BOX_50_40_30_CM',
+            ]),
+          }),
+          zod.object({
+            mode: zod.enum(['CUSTOM']),
+            lengthCm: zod
+              .number()
+              .gt(
+                productControllerFindManagedResponseDataShippingPackageSizeTwoLengthCmExclusiveMin,
+              )
+              .max(
+                productControllerFindManagedResponseDataShippingPackageSizeTwoLengthCmMax,
+              ),
+            widthCm: zod
+              .number()
+              .gt(
+                productControllerFindManagedResponseDataShippingPackageSizeTwoWidthCmExclusiveMin,
+              )
+              .max(
+                productControllerFindManagedResponseDataShippingPackageSizeTwoWidthCmMax,
+              ),
+            heightCm: zod
+              .number()
+              .gt(
+                productControllerFindManagedResponseDataShippingPackageSizeTwoHeightCmExclusiveMin,
+              )
+              .max(
+                productControllerFindManagedResponseDataShippingPackageSizeTwoHeightCmMax,
+              ),
+          }),
+        ]),
+      })
+      .nullable()
+      .default(productControllerFindManagedResponseDataShippingPackageDefault),
     repairs: zod.string().nullable(),
     defects: zod.array(
       zod.object({
@@ -1743,6 +2135,20 @@ export const productControllerReviewQueueResponseDataItemsItemMeasurementsSleeve
 export const productControllerReviewQueueResponseDataItemsItemMeasurementsInseamExclusiveMin = 0;
 export const productControllerReviewQueueResponseDataItemsItemMeasurementsInseamMax = 500;
 
+export const productControllerReviewQueueResponseDataItemsItemShippingPackageWeightTwoGramsExclusiveMin = 0;
+export const productControllerReviewQueueResponseDataItemsItemShippingPackageWeightTwoGramsMax = 50000;
+
+export const productControllerReviewQueueResponseDataItemsItemShippingPackageSizeTwoLengthCmExclusiveMin = 0;
+export const productControllerReviewQueueResponseDataItemsItemShippingPackageSizeTwoLengthCmMax = 200;
+
+export const productControllerReviewQueueResponseDataItemsItemShippingPackageSizeTwoWidthCmExclusiveMin = 0;
+export const productControllerReviewQueueResponseDataItemsItemShippingPackageSizeTwoWidthCmMax = 200;
+
+export const productControllerReviewQueueResponseDataItemsItemShippingPackageSizeTwoHeightCmExclusiveMin = 0;
+export const productControllerReviewQueueResponseDataItemsItemShippingPackageSizeTwoHeightCmMax = 200;
+
+export const productControllerReviewQueueResponseDataItemsItemShippingPackageDefault =
+  null;
 export const productControllerReviewQueueResponseDataItemsItemDefectsItemDescriptionMax = 1000;
 
 export const productControllerReviewQueueResponseDataItemsItemDefectsItemMediaIdsItemRegExp =
@@ -1911,6 +2317,74 @@ export const ProductControllerReviewQueueResponse = zod.object({
             )
             .optional(),
         }),
+        shippingPackage: zod
+          .object({
+            weight: zod.union([
+              zod.object({
+                mode: zod.enum(['RANGE']),
+                preset: zod.enum([
+                  'UP_TO_250_G',
+                  'UP_TO_500_G',
+                  'UP_TO_1000_G',
+                  'UP_TO_2000_G',
+                  'UP_TO_5000_G',
+                ]),
+              }),
+              zod.object({
+                mode: zod.enum(['CUSTOM']),
+                grams: zod
+                  .int()
+                  .gt(
+                    productControllerReviewQueueResponseDataItemsItemShippingPackageWeightTwoGramsExclusiveMin,
+                  )
+                  .max(
+                    productControllerReviewQueueResponseDataItemsItemShippingPackageWeightTwoGramsMax,
+                  ),
+              }),
+            ]),
+            size: zod.union([
+              zod.object({
+                mode: zod.enum(['RANGE']),
+                preset: zod.enum([
+                  'BOX_20_15_10_CM',
+                  'BOX_30_20_15_CM',
+                  'BOX_40_30_20_CM',
+                  'BOX_50_40_30_CM',
+                ]),
+              }),
+              zod.object({
+                mode: zod.enum(['CUSTOM']),
+                lengthCm: zod
+                  .number()
+                  .gt(
+                    productControllerReviewQueueResponseDataItemsItemShippingPackageSizeTwoLengthCmExclusiveMin,
+                  )
+                  .max(
+                    productControllerReviewQueueResponseDataItemsItemShippingPackageSizeTwoLengthCmMax,
+                  ),
+                widthCm: zod
+                  .number()
+                  .gt(
+                    productControllerReviewQueueResponseDataItemsItemShippingPackageSizeTwoWidthCmExclusiveMin,
+                  )
+                  .max(
+                    productControllerReviewQueueResponseDataItemsItemShippingPackageSizeTwoWidthCmMax,
+                  ),
+                heightCm: zod
+                  .number()
+                  .gt(
+                    productControllerReviewQueueResponseDataItemsItemShippingPackageSizeTwoHeightCmExclusiveMin,
+                  )
+                  .max(
+                    productControllerReviewQueueResponseDataItemsItemShippingPackageSizeTwoHeightCmMax,
+                  ),
+              }),
+            ]),
+          })
+          .nullable()
+          .default(
+            productControllerReviewQueueResponseDataItemsItemShippingPackageDefault,
+          ),
         repairs: zod.string().nullable(),
         defects: zod.array(
           zod.object({
@@ -2092,6 +2566,20 @@ export const productControllerReviewDetailResponseDataMeasurementsSleeveMax = 50
 export const productControllerReviewDetailResponseDataMeasurementsInseamExclusiveMin = 0;
 export const productControllerReviewDetailResponseDataMeasurementsInseamMax = 500;
 
+export const productControllerReviewDetailResponseDataShippingPackageWeightTwoGramsExclusiveMin = 0;
+export const productControllerReviewDetailResponseDataShippingPackageWeightTwoGramsMax = 50000;
+
+export const productControllerReviewDetailResponseDataShippingPackageSizeTwoLengthCmExclusiveMin = 0;
+export const productControllerReviewDetailResponseDataShippingPackageSizeTwoLengthCmMax = 200;
+
+export const productControllerReviewDetailResponseDataShippingPackageSizeTwoWidthCmExclusiveMin = 0;
+export const productControllerReviewDetailResponseDataShippingPackageSizeTwoWidthCmMax = 200;
+
+export const productControllerReviewDetailResponseDataShippingPackageSizeTwoHeightCmExclusiveMin = 0;
+export const productControllerReviewDetailResponseDataShippingPackageSizeTwoHeightCmMax = 200;
+
+export const productControllerReviewDetailResponseDataShippingPackageDefault =
+  null;
 export const productControllerReviewDetailResponseDataDefectsItemDescriptionMax = 1000;
 
 export const productControllerReviewDetailResponseDataDefectsItemMediaIdsItemRegExp =
@@ -2228,6 +2716,72 @@ export const ProductControllerReviewDetailResponse = zod.object({
         .max(productControllerReviewDetailResponseDataMeasurementsInseamMax)
         .optional(),
     }),
+    shippingPackage: zod
+      .object({
+        weight: zod.union([
+          zod.object({
+            mode: zod.enum(['RANGE']),
+            preset: zod.enum([
+              'UP_TO_250_G',
+              'UP_TO_500_G',
+              'UP_TO_1000_G',
+              'UP_TO_2000_G',
+              'UP_TO_5000_G',
+            ]),
+          }),
+          zod.object({
+            mode: zod.enum(['CUSTOM']),
+            grams: zod
+              .int()
+              .gt(
+                productControllerReviewDetailResponseDataShippingPackageWeightTwoGramsExclusiveMin,
+              )
+              .max(
+                productControllerReviewDetailResponseDataShippingPackageWeightTwoGramsMax,
+              ),
+          }),
+        ]),
+        size: zod.union([
+          zod.object({
+            mode: zod.enum(['RANGE']),
+            preset: zod.enum([
+              'BOX_20_15_10_CM',
+              'BOX_30_20_15_CM',
+              'BOX_40_30_20_CM',
+              'BOX_50_40_30_CM',
+            ]),
+          }),
+          zod.object({
+            mode: zod.enum(['CUSTOM']),
+            lengthCm: zod
+              .number()
+              .gt(
+                productControllerReviewDetailResponseDataShippingPackageSizeTwoLengthCmExclusiveMin,
+              )
+              .max(
+                productControllerReviewDetailResponseDataShippingPackageSizeTwoLengthCmMax,
+              ),
+            widthCm: zod
+              .number()
+              .gt(
+                productControllerReviewDetailResponseDataShippingPackageSizeTwoWidthCmExclusiveMin,
+              )
+              .max(
+                productControllerReviewDetailResponseDataShippingPackageSizeTwoWidthCmMax,
+              ),
+            heightCm: zod
+              .number()
+              .gt(
+                productControllerReviewDetailResponseDataShippingPackageSizeTwoHeightCmExclusiveMin,
+              )
+              .max(
+                productControllerReviewDetailResponseDataShippingPackageSizeTwoHeightCmMax,
+              ),
+          }),
+        ]),
+      })
+      .nullable()
+      .default(productControllerReviewDetailResponseDataShippingPackageDefault),
     repairs: zod.string().nullable(),
     defects: zod.array(
       zod.object({
@@ -2445,6 +2999,19 @@ export const productControllerSubmitResponseDataMeasurementsSleeveMax = 500;
 export const productControllerSubmitResponseDataMeasurementsInseamExclusiveMin = 0;
 export const productControllerSubmitResponseDataMeasurementsInseamMax = 500;
 
+export const productControllerSubmitResponseDataShippingPackageWeightTwoGramsExclusiveMin = 0;
+export const productControllerSubmitResponseDataShippingPackageWeightTwoGramsMax = 50000;
+
+export const productControllerSubmitResponseDataShippingPackageSizeTwoLengthCmExclusiveMin = 0;
+export const productControllerSubmitResponseDataShippingPackageSizeTwoLengthCmMax = 200;
+
+export const productControllerSubmitResponseDataShippingPackageSizeTwoWidthCmExclusiveMin = 0;
+export const productControllerSubmitResponseDataShippingPackageSizeTwoWidthCmMax = 200;
+
+export const productControllerSubmitResponseDataShippingPackageSizeTwoHeightCmExclusiveMin = 0;
+export const productControllerSubmitResponseDataShippingPackageSizeTwoHeightCmMax = 200;
+
+export const productControllerSubmitResponseDataShippingPackageDefault = null;
 export const productControllerSubmitResponseDataDefectsItemDescriptionMax = 1000;
 
 export const productControllerSubmitResponseDataDefectsItemMediaIdsItemRegExp =
@@ -2561,6 +3128,72 @@ export const ProductControllerSubmitResponse = zod.object({
         .max(productControllerSubmitResponseDataMeasurementsInseamMax)
         .optional(),
     }),
+    shippingPackage: zod
+      .object({
+        weight: zod.union([
+          zod.object({
+            mode: zod.enum(['RANGE']),
+            preset: zod.enum([
+              'UP_TO_250_G',
+              'UP_TO_500_G',
+              'UP_TO_1000_G',
+              'UP_TO_2000_G',
+              'UP_TO_5000_G',
+            ]),
+          }),
+          zod.object({
+            mode: zod.enum(['CUSTOM']),
+            grams: zod
+              .int()
+              .gt(
+                productControllerSubmitResponseDataShippingPackageWeightTwoGramsExclusiveMin,
+              )
+              .max(
+                productControllerSubmitResponseDataShippingPackageWeightTwoGramsMax,
+              ),
+          }),
+        ]),
+        size: zod.union([
+          zod.object({
+            mode: zod.enum(['RANGE']),
+            preset: zod.enum([
+              'BOX_20_15_10_CM',
+              'BOX_30_20_15_CM',
+              'BOX_40_30_20_CM',
+              'BOX_50_40_30_CM',
+            ]),
+          }),
+          zod.object({
+            mode: zod.enum(['CUSTOM']),
+            lengthCm: zod
+              .number()
+              .gt(
+                productControllerSubmitResponseDataShippingPackageSizeTwoLengthCmExclusiveMin,
+              )
+              .max(
+                productControllerSubmitResponseDataShippingPackageSizeTwoLengthCmMax,
+              ),
+            widthCm: zod
+              .number()
+              .gt(
+                productControllerSubmitResponseDataShippingPackageSizeTwoWidthCmExclusiveMin,
+              )
+              .max(
+                productControllerSubmitResponseDataShippingPackageSizeTwoWidthCmMax,
+              ),
+            heightCm: zod
+              .number()
+              .gt(
+                productControllerSubmitResponseDataShippingPackageSizeTwoHeightCmExclusiveMin,
+              )
+              .max(
+                productControllerSubmitResponseDataShippingPackageSizeTwoHeightCmMax,
+              ),
+          }),
+        ]),
+      })
+      .nullable()
+      .default(productControllerSubmitResponseDataShippingPackageDefault),
     repairs: zod.string().nullable(),
     defects: zod.array(
       zod.object({
@@ -2711,6 +3344,19 @@ export const productControllerModerateResponseDataMeasurementsSleeveMax = 500;
 export const productControllerModerateResponseDataMeasurementsInseamExclusiveMin = 0;
 export const productControllerModerateResponseDataMeasurementsInseamMax = 500;
 
+export const productControllerModerateResponseDataShippingPackageWeightTwoGramsExclusiveMin = 0;
+export const productControllerModerateResponseDataShippingPackageWeightTwoGramsMax = 50000;
+
+export const productControllerModerateResponseDataShippingPackageSizeTwoLengthCmExclusiveMin = 0;
+export const productControllerModerateResponseDataShippingPackageSizeTwoLengthCmMax = 200;
+
+export const productControllerModerateResponseDataShippingPackageSizeTwoWidthCmExclusiveMin = 0;
+export const productControllerModerateResponseDataShippingPackageSizeTwoWidthCmMax = 200;
+
+export const productControllerModerateResponseDataShippingPackageSizeTwoHeightCmExclusiveMin = 0;
+export const productControllerModerateResponseDataShippingPackageSizeTwoHeightCmMax = 200;
+
+export const productControllerModerateResponseDataShippingPackageDefault = null;
 export const productControllerModerateResponseDataDefectsItemDescriptionMax = 1000;
 
 export const productControllerModerateResponseDataDefectsItemMediaIdsItemRegExp =
@@ -2830,6 +3476,72 @@ export const ProductControllerModerateResponse = zod.object({
         .max(productControllerModerateResponseDataMeasurementsInseamMax)
         .optional(),
     }),
+    shippingPackage: zod
+      .object({
+        weight: zod.union([
+          zod.object({
+            mode: zod.enum(['RANGE']),
+            preset: zod.enum([
+              'UP_TO_250_G',
+              'UP_TO_500_G',
+              'UP_TO_1000_G',
+              'UP_TO_2000_G',
+              'UP_TO_5000_G',
+            ]),
+          }),
+          zod.object({
+            mode: zod.enum(['CUSTOM']),
+            grams: zod
+              .int()
+              .gt(
+                productControllerModerateResponseDataShippingPackageWeightTwoGramsExclusiveMin,
+              )
+              .max(
+                productControllerModerateResponseDataShippingPackageWeightTwoGramsMax,
+              ),
+          }),
+        ]),
+        size: zod.union([
+          zod.object({
+            mode: zod.enum(['RANGE']),
+            preset: zod.enum([
+              'BOX_20_15_10_CM',
+              'BOX_30_20_15_CM',
+              'BOX_40_30_20_CM',
+              'BOX_50_40_30_CM',
+            ]),
+          }),
+          zod.object({
+            mode: zod.enum(['CUSTOM']),
+            lengthCm: zod
+              .number()
+              .gt(
+                productControllerModerateResponseDataShippingPackageSizeTwoLengthCmExclusiveMin,
+              )
+              .max(
+                productControllerModerateResponseDataShippingPackageSizeTwoLengthCmMax,
+              ),
+            widthCm: zod
+              .number()
+              .gt(
+                productControllerModerateResponseDataShippingPackageSizeTwoWidthCmExclusiveMin,
+              )
+              .max(
+                productControllerModerateResponseDataShippingPackageSizeTwoWidthCmMax,
+              ),
+            heightCm: zod
+              .number()
+              .gt(
+                productControllerModerateResponseDataShippingPackageSizeTwoHeightCmExclusiveMin,
+              )
+              .max(
+                productControllerModerateResponseDataShippingPackageSizeTwoHeightCmMax,
+              ),
+          }),
+        ]),
+      })
+      .nullable()
+      .default(productControllerModerateResponseDataShippingPackageDefault),
     repairs: zod.string().nullable(),
     defects: zod.array(
       zod.object({
@@ -2970,6 +3682,19 @@ export const productControllerSuspendResponseDataMeasurementsSleeveMax = 500;
 export const productControllerSuspendResponseDataMeasurementsInseamExclusiveMin = 0;
 export const productControllerSuspendResponseDataMeasurementsInseamMax = 500;
 
+export const productControllerSuspendResponseDataShippingPackageWeightTwoGramsExclusiveMin = 0;
+export const productControllerSuspendResponseDataShippingPackageWeightTwoGramsMax = 50000;
+
+export const productControllerSuspendResponseDataShippingPackageSizeTwoLengthCmExclusiveMin = 0;
+export const productControllerSuspendResponseDataShippingPackageSizeTwoLengthCmMax = 200;
+
+export const productControllerSuspendResponseDataShippingPackageSizeTwoWidthCmExclusiveMin = 0;
+export const productControllerSuspendResponseDataShippingPackageSizeTwoWidthCmMax = 200;
+
+export const productControllerSuspendResponseDataShippingPackageSizeTwoHeightCmExclusiveMin = 0;
+export const productControllerSuspendResponseDataShippingPackageSizeTwoHeightCmMax = 200;
+
+export const productControllerSuspendResponseDataShippingPackageDefault = null;
 export const productControllerSuspendResponseDataDefectsItemDescriptionMax = 1000;
 
 export const productControllerSuspendResponseDataDefectsItemMediaIdsItemRegExp =
@@ -3088,6 +3813,72 @@ export const ProductControllerSuspendResponse = zod.object({
         .max(productControllerSuspendResponseDataMeasurementsInseamMax)
         .optional(),
     }),
+    shippingPackage: zod
+      .object({
+        weight: zod.union([
+          zod.object({
+            mode: zod.enum(['RANGE']),
+            preset: zod.enum([
+              'UP_TO_250_G',
+              'UP_TO_500_G',
+              'UP_TO_1000_G',
+              'UP_TO_2000_G',
+              'UP_TO_5000_G',
+            ]),
+          }),
+          zod.object({
+            mode: zod.enum(['CUSTOM']),
+            grams: zod
+              .int()
+              .gt(
+                productControllerSuspendResponseDataShippingPackageWeightTwoGramsExclusiveMin,
+              )
+              .max(
+                productControllerSuspendResponseDataShippingPackageWeightTwoGramsMax,
+              ),
+          }),
+        ]),
+        size: zod.union([
+          zod.object({
+            mode: zod.enum(['RANGE']),
+            preset: zod.enum([
+              'BOX_20_15_10_CM',
+              'BOX_30_20_15_CM',
+              'BOX_40_30_20_CM',
+              'BOX_50_40_30_CM',
+            ]),
+          }),
+          zod.object({
+            mode: zod.enum(['CUSTOM']),
+            lengthCm: zod
+              .number()
+              .gt(
+                productControllerSuspendResponseDataShippingPackageSizeTwoLengthCmExclusiveMin,
+              )
+              .max(
+                productControllerSuspendResponseDataShippingPackageSizeTwoLengthCmMax,
+              ),
+            widthCm: zod
+              .number()
+              .gt(
+                productControllerSuspendResponseDataShippingPackageSizeTwoWidthCmExclusiveMin,
+              )
+              .max(
+                productControllerSuspendResponseDataShippingPackageSizeTwoWidthCmMax,
+              ),
+            heightCm: zod
+              .number()
+              .gt(
+                productControllerSuspendResponseDataShippingPackageSizeTwoHeightCmExclusiveMin,
+              )
+              .max(
+                productControllerSuspendResponseDataShippingPackageSizeTwoHeightCmMax,
+              ),
+          }),
+        ]),
+      })
+      .nullable()
+      .default(productControllerSuspendResponseDataShippingPackageDefault),
     repairs: zod.string().nullable(),
     defects: zod.array(
       zod.object({
@@ -3222,6 +4013,19 @@ export const productControllerFindOneResponseDataMeasurementsSleeveMax = 500;
 export const productControllerFindOneResponseDataMeasurementsInseamExclusiveMin = 0;
 export const productControllerFindOneResponseDataMeasurementsInseamMax = 500;
 
+export const productControllerFindOneResponseDataShippingPackageWeightTwoGramsExclusiveMin = 0;
+export const productControllerFindOneResponseDataShippingPackageWeightTwoGramsMax = 50000;
+
+export const productControllerFindOneResponseDataShippingPackageSizeTwoLengthCmExclusiveMin = 0;
+export const productControllerFindOneResponseDataShippingPackageSizeTwoLengthCmMax = 200;
+
+export const productControllerFindOneResponseDataShippingPackageSizeTwoWidthCmExclusiveMin = 0;
+export const productControllerFindOneResponseDataShippingPackageSizeTwoWidthCmMax = 200;
+
+export const productControllerFindOneResponseDataShippingPackageSizeTwoHeightCmExclusiveMin = 0;
+export const productControllerFindOneResponseDataShippingPackageSizeTwoHeightCmMax = 200;
+
+export const productControllerFindOneResponseDataShippingPackageDefault = null;
 export const productControllerFindOneResponseDataDefectsItemDescriptionMax = 1000;
 
 export const productControllerFindOneResponseDataDefectsItemMediaIdsItemRegExp =
@@ -3340,6 +4144,72 @@ export const ProductControllerFindOneResponse = zod.object({
         .max(productControllerFindOneResponseDataMeasurementsInseamMax)
         .optional(),
     }),
+    shippingPackage: zod
+      .object({
+        weight: zod.union([
+          zod.object({
+            mode: zod.enum(['RANGE']),
+            preset: zod.enum([
+              'UP_TO_250_G',
+              'UP_TO_500_G',
+              'UP_TO_1000_G',
+              'UP_TO_2000_G',
+              'UP_TO_5000_G',
+            ]),
+          }),
+          zod.object({
+            mode: zod.enum(['CUSTOM']),
+            grams: zod
+              .int()
+              .gt(
+                productControllerFindOneResponseDataShippingPackageWeightTwoGramsExclusiveMin,
+              )
+              .max(
+                productControllerFindOneResponseDataShippingPackageWeightTwoGramsMax,
+              ),
+          }),
+        ]),
+        size: zod.union([
+          zod.object({
+            mode: zod.enum(['RANGE']),
+            preset: zod.enum([
+              'BOX_20_15_10_CM',
+              'BOX_30_20_15_CM',
+              'BOX_40_30_20_CM',
+              'BOX_50_40_30_CM',
+            ]),
+          }),
+          zod.object({
+            mode: zod.enum(['CUSTOM']),
+            lengthCm: zod
+              .number()
+              .gt(
+                productControllerFindOneResponseDataShippingPackageSizeTwoLengthCmExclusiveMin,
+              )
+              .max(
+                productControllerFindOneResponseDataShippingPackageSizeTwoLengthCmMax,
+              ),
+            widthCm: zod
+              .number()
+              .gt(
+                productControllerFindOneResponseDataShippingPackageSizeTwoWidthCmExclusiveMin,
+              )
+              .max(
+                productControllerFindOneResponseDataShippingPackageSizeTwoWidthCmMax,
+              ),
+            heightCm: zod
+              .number()
+              .gt(
+                productControllerFindOneResponseDataShippingPackageSizeTwoHeightCmExclusiveMin,
+              )
+              .max(
+                productControllerFindOneResponseDataShippingPackageSizeTwoHeightCmMax,
+              ),
+          }),
+        ]),
+      })
+      .nullable()
+      .default(productControllerFindOneResponseDataShippingPackageDefault),
     repairs: zod.string().nullable(),
     defects: zod.array(
       zod.object({
@@ -3474,6 +4344,18 @@ export const productControllerUpdateBodyMeasurementsSleeveMax = 500;
 export const productControllerUpdateBodyMeasurementsInseamExclusiveMin = 0;
 export const productControllerUpdateBodyMeasurementsInseamMax = 500;
 
+export const productControllerUpdateBodyShippingPackageWeightTwoGramsExclusiveMin = 0;
+export const productControllerUpdateBodyShippingPackageWeightTwoGramsMax = 50000;
+
+export const productControllerUpdateBodyShippingPackageSizeTwoLengthCmExclusiveMin = 0;
+export const productControllerUpdateBodyShippingPackageSizeTwoLengthCmMax = 200;
+
+export const productControllerUpdateBodyShippingPackageSizeTwoWidthCmExclusiveMin = 0;
+export const productControllerUpdateBodyShippingPackageSizeTwoWidthCmMax = 200;
+
+export const productControllerUpdateBodyShippingPackageSizeTwoHeightCmExclusiveMin = 0;
+export const productControllerUpdateBodyShippingPackageSizeTwoHeightCmMax = 200;
+
 export const productControllerUpdateBodyRepairsMax = 2000;
 
 export const productControllerUpdateBodyDefectsItemDescriptionMax = 1000;
@@ -3552,6 +4434,63 @@ export const ProductControllerUpdateBody = zod.strictObject({
         .optional(),
     })
     .optional(),
+  shippingPackage: zod
+    .strictObject({
+      weight: zod.union([
+        zod.strictObject({
+          mode: zod.enum(['RANGE']),
+          preset: zod.enum([
+            'UP_TO_250_G',
+            'UP_TO_500_G',
+            'UP_TO_1000_G',
+            'UP_TO_2000_G',
+            'UP_TO_5000_G',
+          ]),
+        }),
+        zod.strictObject({
+          mode: zod.enum(['CUSTOM']),
+          grams: zod
+            .int()
+            .gt(
+              productControllerUpdateBodyShippingPackageWeightTwoGramsExclusiveMin,
+            )
+            .max(productControllerUpdateBodyShippingPackageWeightTwoGramsMax),
+        }),
+      ]),
+      size: zod.union([
+        zod.strictObject({
+          mode: zod.enum(['RANGE']),
+          preset: zod.enum([
+            'BOX_20_15_10_CM',
+            'BOX_30_20_15_CM',
+            'BOX_40_30_20_CM',
+            'BOX_50_40_30_CM',
+          ]),
+        }),
+        zod.strictObject({
+          mode: zod.enum(['CUSTOM']),
+          lengthCm: zod
+            .number()
+            .gt(
+              productControllerUpdateBodyShippingPackageSizeTwoLengthCmExclusiveMin,
+            )
+            .max(productControllerUpdateBodyShippingPackageSizeTwoLengthCmMax),
+          widthCm: zod
+            .number()
+            .gt(
+              productControllerUpdateBodyShippingPackageSizeTwoWidthCmExclusiveMin,
+            )
+            .max(productControllerUpdateBodyShippingPackageSizeTwoWidthCmMax),
+          heightCm: zod
+            .number()
+            .gt(
+              productControllerUpdateBodyShippingPackageSizeTwoHeightCmExclusiveMin,
+            )
+            .max(productControllerUpdateBodyShippingPackageSizeTwoHeightCmMax),
+        }),
+      ]),
+    })
+    .nullish(),
   repairs: zod.string().max(productControllerUpdateBodyRepairsMax).nullish(),
   defects: zod
     .array(
@@ -3610,6 +4549,19 @@ export const productControllerUpdateResponseDataMeasurementsSleeveMax = 500;
 export const productControllerUpdateResponseDataMeasurementsInseamExclusiveMin = 0;
 export const productControllerUpdateResponseDataMeasurementsInseamMax = 500;
 
+export const productControllerUpdateResponseDataShippingPackageWeightTwoGramsExclusiveMin = 0;
+export const productControllerUpdateResponseDataShippingPackageWeightTwoGramsMax = 50000;
+
+export const productControllerUpdateResponseDataShippingPackageSizeTwoLengthCmExclusiveMin = 0;
+export const productControllerUpdateResponseDataShippingPackageSizeTwoLengthCmMax = 200;
+
+export const productControllerUpdateResponseDataShippingPackageSizeTwoWidthCmExclusiveMin = 0;
+export const productControllerUpdateResponseDataShippingPackageSizeTwoWidthCmMax = 200;
+
+export const productControllerUpdateResponseDataShippingPackageSizeTwoHeightCmExclusiveMin = 0;
+export const productControllerUpdateResponseDataShippingPackageSizeTwoHeightCmMax = 200;
+
+export const productControllerUpdateResponseDataShippingPackageDefault = null;
 export const productControllerUpdateResponseDataDefectsItemDescriptionMax = 1000;
 
 export const productControllerUpdateResponseDataDefectsItemMediaIdsItemRegExp =
@@ -3726,6 +4678,72 @@ export const ProductControllerUpdateResponse = zod.object({
         .max(productControllerUpdateResponseDataMeasurementsInseamMax)
         .optional(),
     }),
+    shippingPackage: zod
+      .object({
+        weight: zod.union([
+          zod.object({
+            mode: zod.enum(['RANGE']),
+            preset: zod.enum([
+              'UP_TO_250_G',
+              'UP_TO_500_G',
+              'UP_TO_1000_G',
+              'UP_TO_2000_G',
+              'UP_TO_5000_G',
+            ]),
+          }),
+          zod.object({
+            mode: zod.enum(['CUSTOM']),
+            grams: zod
+              .int()
+              .gt(
+                productControllerUpdateResponseDataShippingPackageWeightTwoGramsExclusiveMin,
+              )
+              .max(
+                productControllerUpdateResponseDataShippingPackageWeightTwoGramsMax,
+              ),
+          }),
+        ]),
+        size: zod.union([
+          zod.object({
+            mode: zod.enum(['RANGE']),
+            preset: zod.enum([
+              'BOX_20_15_10_CM',
+              'BOX_30_20_15_CM',
+              'BOX_40_30_20_CM',
+              'BOX_50_40_30_CM',
+            ]),
+          }),
+          zod.object({
+            mode: zod.enum(['CUSTOM']),
+            lengthCm: zod
+              .number()
+              .gt(
+                productControllerUpdateResponseDataShippingPackageSizeTwoLengthCmExclusiveMin,
+              )
+              .max(
+                productControllerUpdateResponseDataShippingPackageSizeTwoLengthCmMax,
+              ),
+            widthCm: zod
+              .number()
+              .gt(
+                productControllerUpdateResponseDataShippingPackageSizeTwoWidthCmExclusiveMin,
+              )
+              .max(
+                productControllerUpdateResponseDataShippingPackageSizeTwoWidthCmMax,
+              ),
+            heightCm: zod
+              .number()
+              .gt(
+                productControllerUpdateResponseDataShippingPackageSizeTwoHeightCmExclusiveMin,
+              )
+              .max(
+                productControllerUpdateResponseDataShippingPackageSizeTwoHeightCmMax,
+              ),
+          }),
+        ]),
+      })
+      .nullable()
+      .default(productControllerUpdateResponseDataShippingPackageDefault),
     repairs: zod.string().nullable(),
     defects: zod.array(
       zod.object({
@@ -3863,6 +4881,20 @@ export const productControllerUpdateStatusResponseDataMeasurementsSleeveMax = 50
 export const productControllerUpdateStatusResponseDataMeasurementsInseamExclusiveMin = 0;
 export const productControllerUpdateStatusResponseDataMeasurementsInseamMax = 500;
 
+export const productControllerUpdateStatusResponseDataShippingPackageWeightTwoGramsExclusiveMin = 0;
+export const productControllerUpdateStatusResponseDataShippingPackageWeightTwoGramsMax = 50000;
+
+export const productControllerUpdateStatusResponseDataShippingPackageSizeTwoLengthCmExclusiveMin = 0;
+export const productControllerUpdateStatusResponseDataShippingPackageSizeTwoLengthCmMax = 200;
+
+export const productControllerUpdateStatusResponseDataShippingPackageSizeTwoWidthCmExclusiveMin = 0;
+export const productControllerUpdateStatusResponseDataShippingPackageSizeTwoWidthCmMax = 200;
+
+export const productControllerUpdateStatusResponseDataShippingPackageSizeTwoHeightCmExclusiveMin = 0;
+export const productControllerUpdateStatusResponseDataShippingPackageSizeTwoHeightCmMax = 200;
+
+export const productControllerUpdateStatusResponseDataShippingPackageDefault =
+  null;
 export const productControllerUpdateStatusResponseDataDefectsItemDescriptionMax = 1000;
 
 export const productControllerUpdateStatusResponseDataDefectsItemMediaIdsItemRegExp =
@@ -3999,6 +5031,72 @@ export const ProductControllerUpdateStatusResponse = zod.object({
         .max(productControllerUpdateStatusResponseDataMeasurementsInseamMax)
         .optional(),
     }),
+    shippingPackage: zod
+      .object({
+        weight: zod.union([
+          zod.object({
+            mode: zod.enum(['RANGE']),
+            preset: zod.enum([
+              'UP_TO_250_G',
+              'UP_TO_500_G',
+              'UP_TO_1000_G',
+              'UP_TO_2000_G',
+              'UP_TO_5000_G',
+            ]),
+          }),
+          zod.object({
+            mode: zod.enum(['CUSTOM']),
+            grams: zod
+              .int()
+              .gt(
+                productControllerUpdateStatusResponseDataShippingPackageWeightTwoGramsExclusiveMin,
+              )
+              .max(
+                productControllerUpdateStatusResponseDataShippingPackageWeightTwoGramsMax,
+              ),
+          }),
+        ]),
+        size: zod.union([
+          zod.object({
+            mode: zod.enum(['RANGE']),
+            preset: zod.enum([
+              'BOX_20_15_10_CM',
+              'BOX_30_20_15_CM',
+              'BOX_40_30_20_CM',
+              'BOX_50_40_30_CM',
+            ]),
+          }),
+          zod.object({
+            mode: zod.enum(['CUSTOM']),
+            lengthCm: zod
+              .number()
+              .gt(
+                productControllerUpdateStatusResponseDataShippingPackageSizeTwoLengthCmExclusiveMin,
+              )
+              .max(
+                productControllerUpdateStatusResponseDataShippingPackageSizeTwoLengthCmMax,
+              ),
+            widthCm: zod
+              .number()
+              .gt(
+                productControllerUpdateStatusResponseDataShippingPackageSizeTwoWidthCmExclusiveMin,
+              )
+              .max(
+                productControllerUpdateStatusResponseDataShippingPackageSizeTwoWidthCmMax,
+              ),
+            heightCm: zod
+              .number()
+              .gt(
+                productControllerUpdateStatusResponseDataShippingPackageSizeTwoHeightCmExclusiveMin,
+              )
+              .max(
+                productControllerUpdateStatusResponseDataShippingPackageSizeTwoHeightCmMax,
+              ),
+          }),
+        ]),
+      })
+      .nullable()
+      .default(productControllerUpdateStatusResponseDataShippingPackageDefault),
     repairs: zod.string().nullable(),
     defects: zod.array(
       zod.object({

@@ -49,6 +49,20 @@ export const checkoutControllerCreateResponseDataOrdersItemSourceIdRegExp =
   new RegExp(
     '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
   );
+export const checkoutControllerCreateResponseDataOrdersItemItemsItemShippingPackageWeightGramsExclusiveMin = 0;
+export const checkoutControllerCreateResponseDataOrdersItemItemsItemShippingPackageWeightGramsMax = 9007199254740991;
+
+export const checkoutControllerCreateResponseDataOrdersItemItemsItemShippingPackageLengthCmExclusiveMin = 0;
+export const checkoutControllerCreateResponseDataOrdersItemItemsItemShippingPackageLengthCmMax = 9007199254740991;
+
+export const checkoutControllerCreateResponseDataOrdersItemItemsItemShippingPackageWidthCmExclusiveMin = 0;
+export const checkoutControllerCreateResponseDataOrdersItemItemsItemShippingPackageWidthCmMax = 9007199254740991;
+
+export const checkoutControllerCreateResponseDataOrdersItemItemsItemShippingPackageHeightCmExclusiveMin = 0;
+export const checkoutControllerCreateResponseDataOrdersItemItemsItemShippingPackageHeightCmMax = 9007199254740991;
+
+export const checkoutControllerCreateResponseDataOrdersItemItemsItemShippingPackageDefault =
+  null;
 export const checkoutControllerCreateResponseDataOrdersItemItemsItemProductIdRegExp =
   new RegExp(
     '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
@@ -135,6 +149,45 @@ export const CheckoutControllerCreateResponse = zod.object({
         }),
         items: zod.array(
           zod.object({
+            shippingPackage: zod
+              .object({
+                weightGrams: zod
+                  .int()
+                  .gt(
+                    checkoutControllerCreateResponseDataOrdersItemItemsItemShippingPackageWeightGramsExclusiveMin,
+                  )
+                  .max(
+                    checkoutControllerCreateResponseDataOrdersItemItemsItemShippingPackageWeightGramsMax,
+                  ),
+                lengthCm: zod
+                  .int()
+                  .gt(
+                    checkoutControllerCreateResponseDataOrdersItemItemsItemShippingPackageLengthCmExclusiveMin,
+                  )
+                  .max(
+                    checkoutControllerCreateResponseDataOrdersItemItemsItemShippingPackageLengthCmMax,
+                  ),
+                widthCm: zod
+                  .int()
+                  .gt(
+                    checkoutControllerCreateResponseDataOrdersItemItemsItemShippingPackageWidthCmExclusiveMin,
+                  )
+                  .max(
+                    checkoutControllerCreateResponseDataOrdersItemItemsItemShippingPackageWidthCmMax,
+                  ),
+                heightCm: zod
+                  .int()
+                  .gt(
+                    checkoutControllerCreateResponseDataOrdersItemItemsItemShippingPackageHeightCmExclusiveMin,
+                  )
+                  .max(
+                    checkoutControllerCreateResponseDataOrdersItemItemsItemShippingPackageHeightCmMax,
+                  ),
+              })
+              .nullable()
+              .default(
+                checkoutControllerCreateResponseDataOrdersItemItemsItemShippingPackageDefault,
+              ),
             productId: zod
               .uuid()
               .regex(
@@ -211,6 +264,20 @@ export const checkoutControllerFindResponseDataOrdersItemSourceIdRegExp =
   new RegExp(
     '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
   );
+export const checkoutControllerFindResponseDataOrdersItemItemsItemShippingPackageWeightGramsExclusiveMin = 0;
+export const checkoutControllerFindResponseDataOrdersItemItemsItemShippingPackageWeightGramsMax = 9007199254740991;
+
+export const checkoutControllerFindResponseDataOrdersItemItemsItemShippingPackageLengthCmExclusiveMin = 0;
+export const checkoutControllerFindResponseDataOrdersItemItemsItemShippingPackageLengthCmMax = 9007199254740991;
+
+export const checkoutControllerFindResponseDataOrdersItemItemsItemShippingPackageWidthCmExclusiveMin = 0;
+export const checkoutControllerFindResponseDataOrdersItemItemsItemShippingPackageWidthCmMax = 9007199254740991;
+
+export const checkoutControllerFindResponseDataOrdersItemItemsItemShippingPackageHeightCmExclusiveMin = 0;
+export const checkoutControllerFindResponseDataOrdersItemItemsItemShippingPackageHeightCmMax = 9007199254740991;
+
+export const checkoutControllerFindResponseDataOrdersItemItemsItemShippingPackageDefault =
+  null;
 export const checkoutControllerFindResponseDataOrdersItemItemsItemProductIdRegExp =
   new RegExp(
     '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
@@ -296,6 +363,45 @@ export const CheckoutControllerFindResponse = zod.object({
         }),
         items: zod.array(
           zod.object({
+            shippingPackage: zod
+              .object({
+                weightGrams: zod
+                  .int()
+                  .gt(
+                    checkoutControllerFindResponseDataOrdersItemItemsItemShippingPackageWeightGramsExclusiveMin,
+                  )
+                  .max(
+                    checkoutControllerFindResponseDataOrdersItemItemsItemShippingPackageWeightGramsMax,
+                  ),
+                lengthCm: zod
+                  .int()
+                  .gt(
+                    checkoutControllerFindResponseDataOrdersItemItemsItemShippingPackageLengthCmExclusiveMin,
+                  )
+                  .max(
+                    checkoutControllerFindResponseDataOrdersItemItemsItemShippingPackageLengthCmMax,
+                  ),
+                widthCm: zod
+                  .int()
+                  .gt(
+                    checkoutControllerFindResponseDataOrdersItemItemsItemShippingPackageWidthCmExclusiveMin,
+                  )
+                  .max(
+                    checkoutControllerFindResponseDataOrdersItemItemsItemShippingPackageWidthCmMax,
+                  ),
+                heightCm: zod
+                  .int()
+                  .gt(
+                    checkoutControllerFindResponseDataOrdersItemItemsItemShippingPackageHeightCmExclusiveMin,
+                  )
+                  .max(
+                    checkoutControllerFindResponseDataOrdersItemItemsItemShippingPackageHeightCmMax,
+                  ),
+              })
+              .nullable()
+              .default(
+                checkoutControllerFindResponseDataOrdersItemItemsItemShippingPackageDefault,
+              ),
             productId: zod
               .uuid()
               .regex(
@@ -373,6 +479,20 @@ export const checkoutControllerCancelResponseDataOrdersItemSourceIdRegExp =
   new RegExp(
     '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
   );
+export const checkoutControllerCancelResponseDataOrdersItemItemsItemShippingPackageWeightGramsExclusiveMin = 0;
+export const checkoutControllerCancelResponseDataOrdersItemItemsItemShippingPackageWeightGramsMax = 9007199254740991;
+
+export const checkoutControllerCancelResponseDataOrdersItemItemsItemShippingPackageLengthCmExclusiveMin = 0;
+export const checkoutControllerCancelResponseDataOrdersItemItemsItemShippingPackageLengthCmMax = 9007199254740991;
+
+export const checkoutControllerCancelResponseDataOrdersItemItemsItemShippingPackageWidthCmExclusiveMin = 0;
+export const checkoutControllerCancelResponseDataOrdersItemItemsItemShippingPackageWidthCmMax = 9007199254740991;
+
+export const checkoutControllerCancelResponseDataOrdersItemItemsItemShippingPackageHeightCmExclusiveMin = 0;
+export const checkoutControllerCancelResponseDataOrdersItemItemsItemShippingPackageHeightCmMax = 9007199254740991;
+
+export const checkoutControllerCancelResponseDataOrdersItemItemsItemShippingPackageDefault =
+  null;
 export const checkoutControllerCancelResponseDataOrdersItemItemsItemProductIdRegExp =
   new RegExp(
     '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
@@ -459,6 +579,45 @@ export const CheckoutControllerCancelResponse = zod.object({
         }),
         items: zod.array(
           zod.object({
+            shippingPackage: zod
+              .object({
+                weightGrams: zod
+                  .int()
+                  .gt(
+                    checkoutControllerCancelResponseDataOrdersItemItemsItemShippingPackageWeightGramsExclusiveMin,
+                  )
+                  .max(
+                    checkoutControllerCancelResponseDataOrdersItemItemsItemShippingPackageWeightGramsMax,
+                  ),
+                lengthCm: zod
+                  .int()
+                  .gt(
+                    checkoutControllerCancelResponseDataOrdersItemItemsItemShippingPackageLengthCmExclusiveMin,
+                  )
+                  .max(
+                    checkoutControllerCancelResponseDataOrdersItemItemsItemShippingPackageLengthCmMax,
+                  ),
+                widthCm: zod
+                  .int()
+                  .gt(
+                    checkoutControllerCancelResponseDataOrdersItemItemsItemShippingPackageWidthCmExclusiveMin,
+                  )
+                  .max(
+                    checkoutControllerCancelResponseDataOrdersItemItemsItemShippingPackageWidthCmMax,
+                  ),
+                heightCm: zod
+                  .int()
+                  .gt(
+                    checkoutControllerCancelResponseDataOrdersItemItemsItemShippingPackageHeightCmExclusiveMin,
+                  )
+                  .max(
+                    checkoutControllerCancelResponseDataOrdersItemItemsItemShippingPackageHeightCmMax,
+                  ),
+              })
+              .nullable()
+              .default(
+                checkoutControllerCancelResponseDataOrdersItemItemsItemShippingPackageDefault,
+              ),
             productId: zod
               .uuid()
               .regex(
