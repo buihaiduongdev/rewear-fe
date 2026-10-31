@@ -516,6 +516,181 @@ export type CartControllerAdd200 = {
   data: CartControllerAdd200Data;
 };
 
+export type CheckoutControllerQuoteBody = { [key: string]: unknown };
+
+export type CheckoutControllerQuote200StatusCode =
+  (typeof CheckoutControllerQuote200StatusCode)[keyof typeof CheckoutControllerQuote200StatusCode];
+
+export const CheckoutControllerQuote200StatusCode = {
+  NUMBER_200: 200,
+} as const;
+
+export type CheckoutControllerQuote200DataStatus =
+  (typeof CheckoutControllerQuote200DataStatus)[keyof typeof CheckoutControllerQuote200DataStatus];
+
+export const CheckoutControllerQuote200DataStatus = {
+  FETCHING: 'FETCHING',
+  READY: 'READY',
+  PARTIAL: 'PARTIAL',
+  UNAVAILABLE: 'UNAVAILABLE',
+  EXPIRED: 'EXPIRED',
+  INVALIDATED: 'INVALIDATED',
+} as const;
+
+export type CheckoutControllerQuote200DataEnvironment =
+  (typeof CheckoutControllerQuote200DataEnvironment)[keyof typeof CheckoutControllerQuote200DataEnvironment];
+
+export const CheckoutControllerQuote200DataEnvironment = {
+  SANDBOX: 'SANDBOX',
+} as const;
+
+export type CheckoutControllerQuote200DataCarrier =
+  (typeof CheckoutControllerQuote200DataCarrier)[keyof typeof CheckoutControllerQuote200DataCarrier];
+
+export const CheckoutControllerQuote200DataCarrier = {
+  GHN: 'GHN',
+} as const;
+
+export type CheckoutControllerQuote200DataParcelMethod =
+  (typeof CheckoutControllerQuote200DataParcelMethod)[keyof typeof CheckoutControllerQuote200DataParcelMethod];
+
+export const CheckoutControllerQuote200DataParcelMethod = {
+  BOUNDING_STACK_V1: 'BOUNDING_STACK_V1',
+} as const;
+
+export type CheckoutControllerQuote200DataOrdersItemSourceType =
+  (typeof CheckoutControllerQuote200DataOrdersItemSourceType)[keyof typeof CheckoutControllerQuote200DataOrdersItemSourceType];
+
+export const CheckoutControllerQuote200DataOrdersItemSourceType = {
+  USER: 'USER',
+  SHOP: 'SHOP',
+} as const;
+
+/**
+ * @nullable
+ */
+export type CheckoutControllerQuote200DataOrdersItemParcel = {
+  /**
+   * @maximum 9007199254740991
+   * @exclusiveMinimum 0
+   */
+  weightGrams: number;
+  /**
+   * @maximum 9007199254740991
+   * @exclusiveMinimum 0
+   */
+  lengthCm: number;
+  /**
+   * @maximum 9007199254740991
+   * @exclusiveMinimum 0
+   */
+  widthCm: number;
+  /**
+   * @maximum 9007199254740991
+   * @exclusiveMinimum 0
+   */
+  heightCm: number;
+} | null;
+
+export type CheckoutControllerQuote200DataOrdersItemParcelCount =
+  (typeof CheckoutControllerQuote200DataOrdersItemParcelCount)[keyof typeof CheckoutControllerQuote200DataOrdersItemParcelCount];
+
+export const CheckoutControllerQuote200DataOrdersItemParcelCount = {
+  NUMBER_1: 1,
+} as const;
+
+export type CheckoutControllerQuote200DataOrdersItemStatus =
+  (typeof CheckoutControllerQuote200DataOrdersItemStatus)[keyof typeof CheckoutControllerQuote200DataOrdersItemStatus];
+
+export const CheckoutControllerQuote200DataOrdersItemStatus = {
+  QUOTED: 'QUOTED',
+  UNAVAILABLE: 'UNAVAILABLE',
+} as const;
+
+/**
+ * @nullable
+ */
+export type CheckoutControllerQuote200DataOrdersItemReason =
+  | (typeof CheckoutControllerQuote200DataOrdersItemReason)[keyof typeof CheckoutControllerQuote200DataOrdersItemReason]
+  | null;
+
+export const CheckoutControllerQuote200DataOrdersItemReason = {
+  PACKAGE_REQUIRED: 'PACKAGE_REQUIRED',
+  PARCEL_LIMIT_EXCEEDED: 'PARCEL_LIMIT_EXCEEDED',
+  PICKUP_REQUIRED: 'PICKUP_REQUIRED',
+  DECLARED_VALUE_LIMIT: 'DECLARED_VALUE_LIMIT',
+  ADDRESS_MAPPING_UNAVAILABLE: 'ADDRESS_MAPPING_UNAVAILABLE',
+  CARRIER_NOT_CONFIGURED: 'CARRIER_NOT_CONFIGURED',
+  CARRIER_REJECTED: 'CARRIER_REJECTED',
+  CARRIER_UNAVAILABLE: 'CARRIER_UNAVAILABLE',
+} as const;
+
+export type CheckoutControllerQuote200DataOrdersItem = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  orderId: string;
+  sourceType: CheckoutControllerQuote200DataOrdersItemSourceType;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  sourceId: string;
+  /** @nullable */
+  parcel: CheckoutControllerQuote200DataOrdersItemParcel;
+  parcelCount: CheckoutControllerQuote200DataOrdersItemParcelCount;
+  /**
+   * @maximum 9007199254740991
+   * @exclusiveMinimum 0
+   */
+  itemCount: number;
+  status: CheckoutControllerQuote200DataOrdersItemStatus;
+  /** @nullable */
+  reason: CheckoutControllerQuote200DataOrdersItemReason;
+  /**
+   * @minimum 0
+   * @maximum 9007199254740991
+   * @nullable
+   */
+  fee: number | null;
+  /** @nullable */
+  estimatedDeliveryAt: string | null;
+};
+
+export type CheckoutControllerQuote200DataCurrency =
+  (typeof CheckoutControllerQuote200DataCurrency)[keyof typeof CheckoutControllerQuote200DataCurrency];
+
+export const CheckoutControllerQuote200DataCurrency = {
+  VND: 'VND',
+} as const;
+
+export type CheckoutControllerQuote200Data = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  status: CheckoutControllerQuote200DataStatus;
+  environment: CheckoutControllerQuote200DataEnvironment;
+  carrier: CheckoutControllerQuote200DataCarrier;
+  parcelMethod: CheckoutControllerQuote200DataParcelMethod;
+  quotedAt: string;
+  expiresAt: string;
+  orders: CheckoutControllerQuote200DataOrdersItem[];
+  /**
+   * @minimum 0
+   * @maximum 9007199254740991
+   * @nullable
+   */
+  totalShippingFee: number | null;
+  /**
+   * @minimum 0
+   * @maximum 9007199254740991
+   * @nullable
+   */
+  grandTotal: number | null;
+  currency: CheckoutControllerQuote200DataCurrency;
+  paymentReady: false;
+};
+
+export type CheckoutControllerQuote200 = {
+  statusCode: CheckoutControllerQuote200StatusCode;
+  message: string;
+  data: CheckoutControllerQuote200Data;
+};
+
 export type CheckoutControllerCreateBody = {
   /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
   requestId: string;
@@ -535,6 +710,171 @@ export type CheckoutControllerCreate200StatusCode =
 export const CheckoutControllerCreate200StatusCode = {
   NUMBER_200: 200,
 } as const;
+
+export type CheckoutControllerCreate200DataShippingQuoteStatus =
+  (typeof CheckoutControllerCreate200DataShippingQuoteStatus)[keyof typeof CheckoutControllerCreate200DataShippingQuoteStatus];
+
+export const CheckoutControllerCreate200DataShippingQuoteStatus = {
+  FETCHING: 'FETCHING',
+  READY: 'READY',
+  PARTIAL: 'PARTIAL',
+  UNAVAILABLE: 'UNAVAILABLE',
+  EXPIRED: 'EXPIRED',
+  INVALIDATED: 'INVALIDATED',
+} as const;
+
+export type CheckoutControllerCreate200DataShippingQuoteEnvironment =
+  (typeof CheckoutControllerCreate200DataShippingQuoteEnvironment)[keyof typeof CheckoutControllerCreate200DataShippingQuoteEnvironment];
+
+export const CheckoutControllerCreate200DataShippingQuoteEnvironment = {
+  SANDBOX: 'SANDBOX',
+} as const;
+
+export type CheckoutControllerCreate200DataShippingQuoteCarrier =
+  (typeof CheckoutControllerCreate200DataShippingQuoteCarrier)[keyof typeof CheckoutControllerCreate200DataShippingQuoteCarrier];
+
+export const CheckoutControllerCreate200DataShippingQuoteCarrier = {
+  GHN: 'GHN',
+} as const;
+
+export type CheckoutControllerCreate200DataShippingQuoteParcelMethod =
+  (typeof CheckoutControllerCreate200DataShippingQuoteParcelMethod)[keyof typeof CheckoutControllerCreate200DataShippingQuoteParcelMethod];
+
+export const CheckoutControllerCreate200DataShippingQuoteParcelMethod = {
+  BOUNDING_STACK_V1: 'BOUNDING_STACK_V1',
+} as const;
+
+export type CheckoutControllerCreate200DataShippingQuoteOrdersItemSourceType =
+  (typeof CheckoutControllerCreate200DataShippingQuoteOrdersItemSourceType)[keyof typeof CheckoutControllerCreate200DataShippingQuoteOrdersItemSourceType];
+
+export const CheckoutControllerCreate200DataShippingQuoteOrdersItemSourceType =
+  {
+    USER: 'USER',
+    SHOP: 'SHOP',
+  } as const;
+
+/**
+ * @nullable
+ */
+export type CheckoutControllerCreate200DataShippingQuoteOrdersItemParcel = {
+  /**
+   * @maximum 9007199254740991
+   * @exclusiveMinimum 0
+   */
+  weightGrams: number;
+  /**
+   * @maximum 9007199254740991
+   * @exclusiveMinimum 0
+   */
+  lengthCm: number;
+  /**
+   * @maximum 9007199254740991
+   * @exclusiveMinimum 0
+   */
+  widthCm: number;
+  /**
+   * @maximum 9007199254740991
+   * @exclusiveMinimum 0
+   */
+  heightCm: number;
+} | null;
+
+export type CheckoutControllerCreate200DataShippingQuoteOrdersItemParcelCount =
+  (typeof CheckoutControllerCreate200DataShippingQuoteOrdersItemParcelCount)[keyof typeof CheckoutControllerCreate200DataShippingQuoteOrdersItemParcelCount];
+
+export const CheckoutControllerCreate200DataShippingQuoteOrdersItemParcelCount =
+  {
+    NUMBER_1: 1,
+  } as const;
+
+export type CheckoutControllerCreate200DataShippingQuoteOrdersItemStatus =
+  (typeof CheckoutControllerCreate200DataShippingQuoteOrdersItemStatus)[keyof typeof CheckoutControllerCreate200DataShippingQuoteOrdersItemStatus];
+
+export const CheckoutControllerCreate200DataShippingQuoteOrdersItemStatus = {
+  QUOTED: 'QUOTED',
+  UNAVAILABLE: 'UNAVAILABLE',
+} as const;
+
+/**
+ * @nullable
+ */
+export type CheckoutControllerCreate200DataShippingQuoteOrdersItemReason =
+  | (typeof CheckoutControllerCreate200DataShippingQuoteOrdersItemReason)[keyof typeof CheckoutControllerCreate200DataShippingQuoteOrdersItemReason]
+  | null;
+
+export const CheckoutControllerCreate200DataShippingQuoteOrdersItemReason = {
+  PACKAGE_REQUIRED: 'PACKAGE_REQUIRED',
+  PARCEL_LIMIT_EXCEEDED: 'PARCEL_LIMIT_EXCEEDED',
+  PICKUP_REQUIRED: 'PICKUP_REQUIRED',
+  DECLARED_VALUE_LIMIT: 'DECLARED_VALUE_LIMIT',
+  ADDRESS_MAPPING_UNAVAILABLE: 'ADDRESS_MAPPING_UNAVAILABLE',
+  CARRIER_NOT_CONFIGURED: 'CARRIER_NOT_CONFIGURED',
+  CARRIER_REJECTED: 'CARRIER_REJECTED',
+  CARRIER_UNAVAILABLE: 'CARRIER_UNAVAILABLE',
+} as const;
+
+export type CheckoutControllerCreate200DataShippingQuoteOrdersItem = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  orderId: string;
+  sourceType: CheckoutControllerCreate200DataShippingQuoteOrdersItemSourceType;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  sourceId: string;
+  /** @nullable */
+  parcel: CheckoutControllerCreate200DataShippingQuoteOrdersItemParcel;
+  parcelCount: CheckoutControllerCreate200DataShippingQuoteOrdersItemParcelCount;
+  /**
+   * @maximum 9007199254740991
+   * @exclusiveMinimum 0
+   */
+  itemCount: number;
+  status: CheckoutControllerCreate200DataShippingQuoteOrdersItemStatus;
+  /** @nullable */
+  reason: CheckoutControllerCreate200DataShippingQuoteOrdersItemReason;
+  /**
+   * @minimum 0
+   * @maximum 9007199254740991
+   * @nullable
+   */
+  fee: number | null;
+  /** @nullable */
+  estimatedDeliveryAt: string | null;
+};
+
+export type CheckoutControllerCreate200DataShippingQuoteCurrency =
+  (typeof CheckoutControllerCreate200DataShippingQuoteCurrency)[keyof typeof CheckoutControllerCreate200DataShippingQuoteCurrency];
+
+export const CheckoutControllerCreate200DataShippingQuoteCurrency = {
+  VND: 'VND',
+} as const;
+
+/**
+ * @nullable
+ */
+export type CheckoutControllerCreate200DataShippingQuote = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  status: CheckoutControllerCreate200DataShippingQuoteStatus;
+  environment: CheckoutControllerCreate200DataShippingQuoteEnvironment;
+  carrier: CheckoutControllerCreate200DataShippingQuoteCarrier;
+  parcelMethod: CheckoutControllerCreate200DataShippingQuoteParcelMethod;
+  quotedAt: string;
+  expiresAt: string;
+  orders: CheckoutControllerCreate200DataShippingQuoteOrdersItem[];
+  /**
+   * @minimum 0
+   * @maximum 9007199254740991
+   * @nullable
+   */
+  totalShippingFee: number | null;
+  /**
+   * @minimum 0
+   * @maximum 9007199254740991
+   * @nullable
+   */
+  grandTotal: number | null;
+  currency: CheckoutControllerCreate200DataShippingQuoteCurrency;
+  paymentReady: false;
+} | null;
 
 export type CheckoutControllerCreate200DataStatus =
   (typeof CheckoutControllerCreate200DataStatus)[keyof typeof CheckoutControllerCreate200DataStatus];
@@ -676,6 +1016,8 @@ export const CheckoutControllerCreate200DataCurrency = {
 export type CheckoutControllerCreate200Data = {
   /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
   id: string;
+  /** @nullable */
+  shippingQuote: CheckoutControllerCreate200DataShippingQuote;
   status: CheckoutControllerCreate200DataStatus;
   /**
    * @nullable
@@ -711,6 +1053,169 @@ export type CheckoutControllerFind200StatusCode =
 export const CheckoutControllerFind200StatusCode = {
   NUMBER_200: 200,
 } as const;
+
+export type CheckoutControllerFind200DataShippingQuoteStatus =
+  (typeof CheckoutControllerFind200DataShippingQuoteStatus)[keyof typeof CheckoutControllerFind200DataShippingQuoteStatus];
+
+export const CheckoutControllerFind200DataShippingQuoteStatus = {
+  FETCHING: 'FETCHING',
+  READY: 'READY',
+  PARTIAL: 'PARTIAL',
+  UNAVAILABLE: 'UNAVAILABLE',
+  EXPIRED: 'EXPIRED',
+  INVALIDATED: 'INVALIDATED',
+} as const;
+
+export type CheckoutControllerFind200DataShippingQuoteEnvironment =
+  (typeof CheckoutControllerFind200DataShippingQuoteEnvironment)[keyof typeof CheckoutControllerFind200DataShippingQuoteEnvironment];
+
+export const CheckoutControllerFind200DataShippingQuoteEnvironment = {
+  SANDBOX: 'SANDBOX',
+} as const;
+
+export type CheckoutControllerFind200DataShippingQuoteCarrier =
+  (typeof CheckoutControllerFind200DataShippingQuoteCarrier)[keyof typeof CheckoutControllerFind200DataShippingQuoteCarrier];
+
+export const CheckoutControllerFind200DataShippingQuoteCarrier = {
+  GHN: 'GHN',
+} as const;
+
+export type CheckoutControllerFind200DataShippingQuoteParcelMethod =
+  (typeof CheckoutControllerFind200DataShippingQuoteParcelMethod)[keyof typeof CheckoutControllerFind200DataShippingQuoteParcelMethod];
+
+export const CheckoutControllerFind200DataShippingQuoteParcelMethod = {
+  BOUNDING_STACK_V1: 'BOUNDING_STACK_V1',
+} as const;
+
+export type CheckoutControllerFind200DataShippingQuoteOrdersItemSourceType =
+  (typeof CheckoutControllerFind200DataShippingQuoteOrdersItemSourceType)[keyof typeof CheckoutControllerFind200DataShippingQuoteOrdersItemSourceType];
+
+export const CheckoutControllerFind200DataShippingQuoteOrdersItemSourceType = {
+  USER: 'USER',
+  SHOP: 'SHOP',
+} as const;
+
+/**
+ * @nullable
+ */
+export type CheckoutControllerFind200DataShippingQuoteOrdersItemParcel = {
+  /**
+   * @maximum 9007199254740991
+   * @exclusiveMinimum 0
+   */
+  weightGrams: number;
+  /**
+   * @maximum 9007199254740991
+   * @exclusiveMinimum 0
+   */
+  lengthCm: number;
+  /**
+   * @maximum 9007199254740991
+   * @exclusiveMinimum 0
+   */
+  widthCm: number;
+  /**
+   * @maximum 9007199254740991
+   * @exclusiveMinimum 0
+   */
+  heightCm: number;
+} | null;
+
+export type CheckoutControllerFind200DataShippingQuoteOrdersItemParcelCount =
+  (typeof CheckoutControllerFind200DataShippingQuoteOrdersItemParcelCount)[keyof typeof CheckoutControllerFind200DataShippingQuoteOrdersItemParcelCount];
+
+export const CheckoutControllerFind200DataShippingQuoteOrdersItemParcelCount = {
+  NUMBER_1: 1,
+} as const;
+
+export type CheckoutControllerFind200DataShippingQuoteOrdersItemStatus =
+  (typeof CheckoutControllerFind200DataShippingQuoteOrdersItemStatus)[keyof typeof CheckoutControllerFind200DataShippingQuoteOrdersItemStatus];
+
+export const CheckoutControllerFind200DataShippingQuoteOrdersItemStatus = {
+  QUOTED: 'QUOTED',
+  UNAVAILABLE: 'UNAVAILABLE',
+} as const;
+
+/**
+ * @nullable
+ */
+export type CheckoutControllerFind200DataShippingQuoteOrdersItemReason =
+  | (typeof CheckoutControllerFind200DataShippingQuoteOrdersItemReason)[keyof typeof CheckoutControllerFind200DataShippingQuoteOrdersItemReason]
+  | null;
+
+export const CheckoutControllerFind200DataShippingQuoteOrdersItemReason = {
+  PACKAGE_REQUIRED: 'PACKAGE_REQUIRED',
+  PARCEL_LIMIT_EXCEEDED: 'PARCEL_LIMIT_EXCEEDED',
+  PICKUP_REQUIRED: 'PICKUP_REQUIRED',
+  DECLARED_VALUE_LIMIT: 'DECLARED_VALUE_LIMIT',
+  ADDRESS_MAPPING_UNAVAILABLE: 'ADDRESS_MAPPING_UNAVAILABLE',
+  CARRIER_NOT_CONFIGURED: 'CARRIER_NOT_CONFIGURED',
+  CARRIER_REJECTED: 'CARRIER_REJECTED',
+  CARRIER_UNAVAILABLE: 'CARRIER_UNAVAILABLE',
+} as const;
+
+export type CheckoutControllerFind200DataShippingQuoteOrdersItem = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  orderId: string;
+  sourceType: CheckoutControllerFind200DataShippingQuoteOrdersItemSourceType;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  sourceId: string;
+  /** @nullable */
+  parcel: CheckoutControllerFind200DataShippingQuoteOrdersItemParcel;
+  parcelCount: CheckoutControllerFind200DataShippingQuoteOrdersItemParcelCount;
+  /**
+   * @maximum 9007199254740991
+   * @exclusiveMinimum 0
+   */
+  itemCount: number;
+  status: CheckoutControllerFind200DataShippingQuoteOrdersItemStatus;
+  /** @nullable */
+  reason: CheckoutControllerFind200DataShippingQuoteOrdersItemReason;
+  /**
+   * @minimum 0
+   * @maximum 9007199254740991
+   * @nullable
+   */
+  fee: number | null;
+  /** @nullable */
+  estimatedDeliveryAt: string | null;
+};
+
+export type CheckoutControllerFind200DataShippingQuoteCurrency =
+  (typeof CheckoutControllerFind200DataShippingQuoteCurrency)[keyof typeof CheckoutControllerFind200DataShippingQuoteCurrency];
+
+export const CheckoutControllerFind200DataShippingQuoteCurrency = {
+  VND: 'VND',
+} as const;
+
+/**
+ * @nullable
+ */
+export type CheckoutControllerFind200DataShippingQuote = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  status: CheckoutControllerFind200DataShippingQuoteStatus;
+  environment: CheckoutControllerFind200DataShippingQuoteEnvironment;
+  carrier: CheckoutControllerFind200DataShippingQuoteCarrier;
+  parcelMethod: CheckoutControllerFind200DataShippingQuoteParcelMethod;
+  quotedAt: string;
+  expiresAt: string;
+  orders: CheckoutControllerFind200DataShippingQuoteOrdersItem[];
+  /**
+   * @minimum 0
+   * @maximum 9007199254740991
+   * @nullable
+   */
+  totalShippingFee: number | null;
+  /**
+   * @minimum 0
+   * @maximum 9007199254740991
+   * @nullable
+   */
+  grandTotal: number | null;
+  currency: CheckoutControllerFind200DataShippingQuoteCurrency;
+  paymentReady: false;
+} | null;
 
 export type CheckoutControllerFind200DataStatus =
   (typeof CheckoutControllerFind200DataStatus)[keyof typeof CheckoutControllerFind200DataStatus];
@@ -851,6 +1356,8 @@ export const CheckoutControllerFind200DataCurrency = {
 export type CheckoutControllerFind200Data = {
   /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
   id: string;
+  /** @nullable */
+  shippingQuote: CheckoutControllerFind200DataShippingQuote;
   status: CheckoutControllerFind200DataStatus;
   /**
    * @nullable
@@ -886,6 +1393,171 @@ export type CheckoutControllerCancel200StatusCode =
 export const CheckoutControllerCancel200StatusCode = {
   NUMBER_200: 200,
 } as const;
+
+export type CheckoutControllerCancel200DataShippingQuoteStatus =
+  (typeof CheckoutControllerCancel200DataShippingQuoteStatus)[keyof typeof CheckoutControllerCancel200DataShippingQuoteStatus];
+
+export const CheckoutControllerCancel200DataShippingQuoteStatus = {
+  FETCHING: 'FETCHING',
+  READY: 'READY',
+  PARTIAL: 'PARTIAL',
+  UNAVAILABLE: 'UNAVAILABLE',
+  EXPIRED: 'EXPIRED',
+  INVALIDATED: 'INVALIDATED',
+} as const;
+
+export type CheckoutControllerCancel200DataShippingQuoteEnvironment =
+  (typeof CheckoutControllerCancel200DataShippingQuoteEnvironment)[keyof typeof CheckoutControllerCancel200DataShippingQuoteEnvironment];
+
+export const CheckoutControllerCancel200DataShippingQuoteEnvironment = {
+  SANDBOX: 'SANDBOX',
+} as const;
+
+export type CheckoutControllerCancel200DataShippingQuoteCarrier =
+  (typeof CheckoutControllerCancel200DataShippingQuoteCarrier)[keyof typeof CheckoutControllerCancel200DataShippingQuoteCarrier];
+
+export const CheckoutControllerCancel200DataShippingQuoteCarrier = {
+  GHN: 'GHN',
+} as const;
+
+export type CheckoutControllerCancel200DataShippingQuoteParcelMethod =
+  (typeof CheckoutControllerCancel200DataShippingQuoteParcelMethod)[keyof typeof CheckoutControllerCancel200DataShippingQuoteParcelMethod];
+
+export const CheckoutControllerCancel200DataShippingQuoteParcelMethod = {
+  BOUNDING_STACK_V1: 'BOUNDING_STACK_V1',
+} as const;
+
+export type CheckoutControllerCancel200DataShippingQuoteOrdersItemSourceType =
+  (typeof CheckoutControllerCancel200DataShippingQuoteOrdersItemSourceType)[keyof typeof CheckoutControllerCancel200DataShippingQuoteOrdersItemSourceType];
+
+export const CheckoutControllerCancel200DataShippingQuoteOrdersItemSourceType =
+  {
+    USER: 'USER',
+    SHOP: 'SHOP',
+  } as const;
+
+/**
+ * @nullable
+ */
+export type CheckoutControllerCancel200DataShippingQuoteOrdersItemParcel = {
+  /**
+   * @maximum 9007199254740991
+   * @exclusiveMinimum 0
+   */
+  weightGrams: number;
+  /**
+   * @maximum 9007199254740991
+   * @exclusiveMinimum 0
+   */
+  lengthCm: number;
+  /**
+   * @maximum 9007199254740991
+   * @exclusiveMinimum 0
+   */
+  widthCm: number;
+  /**
+   * @maximum 9007199254740991
+   * @exclusiveMinimum 0
+   */
+  heightCm: number;
+} | null;
+
+export type CheckoutControllerCancel200DataShippingQuoteOrdersItemParcelCount =
+  (typeof CheckoutControllerCancel200DataShippingQuoteOrdersItemParcelCount)[keyof typeof CheckoutControllerCancel200DataShippingQuoteOrdersItemParcelCount];
+
+export const CheckoutControllerCancel200DataShippingQuoteOrdersItemParcelCount =
+  {
+    NUMBER_1: 1,
+  } as const;
+
+export type CheckoutControllerCancel200DataShippingQuoteOrdersItemStatus =
+  (typeof CheckoutControllerCancel200DataShippingQuoteOrdersItemStatus)[keyof typeof CheckoutControllerCancel200DataShippingQuoteOrdersItemStatus];
+
+export const CheckoutControllerCancel200DataShippingQuoteOrdersItemStatus = {
+  QUOTED: 'QUOTED',
+  UNAVAILABLE: 'UNAVAILABLE',
+} as const;
+
+/**
+ * @nullable
+ */
+export type CheckoutControllerCancel200DataShippingQuoteOrdersItemReason =
+  | (typeof CheckoutControllerCancel200DataShippingQuoteOrdersItemReason)[keyof typeof CheckoutControllerCancel200DataShippingQuoteOrdersItemReason]
+  | null;
+
+export const CheckoutControllerCancel200DataShippingQuoteOrdersItemReason = {
+  PACKAGE_REQUIRED: 'PACKAGE_REQUIRED',
+  PARCEL_LIMIT_EXCEEDED: 'PARCEL_LIMIT_EXCEEDED',
+  PICKUP_REQUIRED: 'PICKUP_REQUIRED',
+  DECLARED_VALUE_LIMIT: 'DECLARED_VALUE_LIMIT',
+  ADDRESS_MAPPING_UNAVAILABLE: 'ADDRESS_MAPPING_UNAVAILABLE',
+  CARRIER_NOT_CONFIGURED: 'CARRIER_NOT_CONFIGURED',
+  CARRIER_REJECTED: 'CARRIER_REJECTED',
+  CARRIER_UNAVAILABLE: 'CARRIER_UNAVAILABLE',
+} as const;
+
+export type CheckoutControllerCancel200DataShippingQuoteOrdersItem = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  orderId: string;
+  sourceType: CheckoutControllerCancel200DataShippingQuoteOrdersItemSourceType;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  sourceId: string;
+  /** @nullable */
+  parcel: CheckoutControllerCancel200DataShippingQuoteOrdersItemParcel;
+  parcelCount: CheckoutControllerCancel200DataShippingQuoteOrdersItemParcelCount;
+  /**
+   * @maximum 9007199254740991
+   * @exclusiveMinimum 0
+   */
+  itemCount: number;
+  status: CheckoutControllerCancel200DataShippingQuoteOrdersItemStatus;
+  /** @nullable */
+  reason: CheckoutControllerCancel200DataShippingQuoteOrdersItemReason;
+  /**
+   * @minimum 0
+   * @maximum 9007199254740991
+   * @nullable
+   */
+  fee: number | null;
+  /** @nullable */
+  estimatedDeliveryAt: string | null;
+};
+
+export type CheckoutControllerCancel200DataShippingQuoteCurrency =
+  (typeof CheckoutControllerCancel200DataShippingQuoteCurrency)[keyof typeof CheckoutControllerCancel200DataShippingQuoteCurrency];
+
+export const CheckoutControllerCancel200DataShippingQuoteCurrency = {
+  VND: 'VND',
+} as const;
+
+/**
+ * @nullable
+ */
+export type CheckoutControllerCancel200DataShippingQuote = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  status: CheckoutControllerCancel200DataShippingQuoteStatus;
+  environment: CheckoutControllerCancel200DataShippingQuoteEnvironment;
+  carrier: CheckoutControllerCancel200DataShippingQuoteCarrier;
+  parcelMethod: CheckoutControllerCancel200DataShippingQuoteParcelMethod;
+  quotedAt: string;
+  expiresAt: string;
+  orders: CheckoutControllerCancel200DataShippingQuoteOrdersItem[];
+  /**
+   * @minimum 0
+   * @maximum 9007199254740991
+   * @nullable
+   */
+  totalShippingFee: number | null;
+  /**
+   * @minimum 0
+   * @maximum 9007199254740991
+   * @nullable
+   */
+  grandTotal: number | null;
+  currency: CheckoutControllerCancel200DataShippingQuoteCurrency;
+  paymentReady: false;
+} | null;
 
 export type CheckoutControllerCancel200DataStatus =
   (typeof CheckoutControllerCancel200DataStatus)[keyof typeof CheckoutControllerCancel200DataStatus];
@@ -1027,6 +1699,8 @@ export const CheckoutControllerCancel200DataCurrency = {
 export type CheckoutControllerCancel200Data = {
   /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
   id: string;
+  /** @nullable */
+  shippingQuote: CheckoutControllerCancel200DataShippingQuote;
   status: CheckoutControllerCancel200DataStatus;
   /**
    * @nullable

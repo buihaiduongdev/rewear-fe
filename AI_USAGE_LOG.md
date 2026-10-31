@@ -115,3 +115,10 @@ Ghi một mục cho mỗi task có dùng AI. Cập nhật liên kết PR/commit 
 - **Giới hạn:** Chỉ cấu hình địa chỉ; chưa carrier registration, availability, quote hoặc shipment. Không dùng Chrome DevTools MCP. Thử headed bị thiếu DISPLAY trong môi trường MCP; quay lại headless theo yêu cầu, không đổi cấu hình MCP toàn cục.
 - **Production:** Build Next 16.4.1 qua; agent-browser mở bản production và sửa/lưu địa chỉ thành công.
 - **Tự review:** Tách cache key personal và shop kể cả khi shop hook bị tắt/chưa chọn shop, tránh hai queryFn khác nhau cùng key. Production build lại qua; 2 E2E chạy lại trên bản production đều qua cho thay đổi này.
+
+### 2026-10-31 — Sandbox shipping estimate
+
+- **Yêu cầu/quyết định:** Hoàn tất BE/FE, test, tự review và mở PR. Một seller/shop là một kiện, một phí; test bằng agent-browser MCP headless. Người thực hiện chưa xác nhận đọc toàn bộ diff.
+- **AI hỗ trợ:** Sinh OpenAPI/Axios/React Query/Zod bằng Orval; UI phí/kiện/tổng theo nguồn bán, refresh, TTL, partial/unavailable/invalidated và giữ payment disabled. Tham chiếu Figma checkout 53:2098 và summary 53:2127, dùng shared component/token; không nhận toàn frame là pixel-identical.
+- **Kiểm chứng:** 5 unit tests, TypeScript ứng dụng/Cypress, ESLint phần thay đổi và production build Next 16.4.1 qua. Test đồng hồ quan sát RED (150 thay vì 120 giây sau quote đến muộn), sửa và GREEN. Cypress bản production cuối gọi JWT/API/PostgreSQL thật + GHN sandbox qua: hai món một kiện 800g/30×20×25cm, phí 20.900đ và tổng bằng subtotal + fee, reload, 390px, hết hạn/hủy ẩn tổng cũ. Các intercept chỉ quan sát, không stub API. Agent-browser MCP kiểm tra bản cuối desktop 1280 và mobile 390, screenshot, reload giữ quote; đồng hồ bắt đầu 119 giây, không tràn ngang. Viewport đặt qua CLI cùng session vì MCP core thiếu viewport tool.
+- **Giới hạn:** Sandbox preview; chưa production carrier/booking/payment. DB QA local riêng cổng 55441, API 5014/UI 5015; không chạy fixture vào DB dev dùng chung. Cypress sửa thời điểm gắn fake clock sau fixture để tránh đóng băng mốc trước lúc quote được tạo.

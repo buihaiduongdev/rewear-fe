@@ -24,6 +24,11 @@ import { useQueryClient } from '@tanstack/react-query';
 import { useSession } from 'next-auth/react';
 
 import { AddDeliveryAddress } from './AddDeliveryAddress';
+import {
+  ShippingEstimateForOrder,
+  ShippingEstimateSummary,
+  useShippingEstimateState,
+} from './ShippingEstimate';
 
 const actionClass =
   'bg-rewear-accent text-rewear-text flex min-h-[52px] w-full items-center justify-center px-5 text-sm disabled:opacity-50';
@@ -91,6 +96,10 @@ export function CheckoutPage() {
     addresses.data?.data[0]?.id ||
     '';
   const data = checkout.data?.data;
+  const shippingState = useShippingEstimateState(
+    data?.shippingQuote,
+    data?.status ?? 'EMPTY',
+  );
   const error =
     create.error ||
     cancel.error ||
@@ -287,7 +296,11 @@ export function CheckoutPage() {
                         </div>
                       </article>
                     ))}
-                    <p className="text-rewear-muted">Shipping quote pending</p>
+                    <ShippingEstimateForOrder
+                      quote={data.shippingQuote}
+                      state={shippingState}
+                      orderId={order.id}
+                    />
                   </section>
                 ))}
               </div>
@@ -299,13 +312,12 @@ export function CheckoutPage() {
                   <span>Items</span>
                   <span>{formatPrice(data.subtotal)}</span>
                 </div>
-                <p>Shipping quote pending</p>
-                <p className="text-[40px] leading-[46px] font-semibold tracking-[-0.02em]">
-                  {formatPrice(data.subtotal)}
-                </p>
-                <p className="text-sm">
-                  Item subtotal. Shipping and payment are not available yet.
-                </p>
+                <ShippingEstimateSummary
+                  key={data.id}
+                  checkout={data}
+                  state={shippingState}
+                  onRefresh={() => checkout.refetch()}
+                />
                 <button disabled className={actionClass}>
                   Payment unavailable
                 </button>
