@@ -7,6 +7,158 @@
  */
 import * as zod from 'zod';
 
+export const checkoutControllerQuotePathIdRegExp = new RegExp(
+  '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
+);
+
+export const CheckoutControllerQuoteParams = zod.object({
+  id: zod.uuid().regex(checkoutControllerQuotePathIdRegExp),
+});
+
+export const CheckoutControllerQuoteBody = zod.strictObject({});
+
+export const checkoutControllerQuoteResponseDataIdRegExp = new RegExp(
+  '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
+);
+export const checkoutControllerQuoteResponseDataOrdersItemOrderIdRegExp =
+  new RegExp(
+    '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
+  );
+export const checkoutControllerQuoteResponseDataOrdersItemSourceIdRegExp =
+  new RegExp(
+    '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
+  );
+export const checkoutControllerQuoteResponseDataOrdersItemParcelWeightGramsExclusiveMin = 0;
+export const checkoutControllerQuoteResponseDataOrdersItemParcelWeightGramsMax = 9007199254740991;
+
+export const checkoutControllerQuoteResponseDataOrdersItemParcelLengthCmExclusiveMin = 0;
+export const checkoutControllerQuoteResponseDataOrdersItemParcelLengthCmMax = 9007199254740991;
+
+export const checkoutControllerQuoteResponseDataOrdersItemParcelWidthCmExclusiveMin = 0;
+export const checkoutControllerQuoteResponseDataOrdersItemParcelWidthCmMax = 9007199254740991;
+
+export const checkoutControllerQuoteResponseDataOrdersItemParcelHeightCmExclusiveMin = 0;
+export const checkoutControllerQuoteResponseDataOrdersItemParcelHeightCmMax = 9007199254740991;
+
+export const checkoutControllerQuoteResponseDataOrdersItemItemCountExclusiveMin = 0;
+export const checkoutControllerQuoteResponseDataOrdersItemItemCountMax = 9007199254740991;
+
+export const checkoutControllerQuoteResponseDataOrdersItemFeeMin = 0;
+export const checkoutControllerQuoteResponseDataOrdersItemFeeMax = 9007199254740991;
+
+export const checkoutControllerQuoteResponseDataTotalShippingFeeMin = 0;
+export const checkoutControllerQuoteResponseDataTotalShippingFeeMax = 9007199254740991;
+
+export const checkoutControllerQuoteResponseDataGrandTotalMin = 0;
+export const checkoutControllerQuoteResponseDataGrandTotalMax = 9007199254740991;
+
+export const CheckoutControllerQuoteResponse = zod.object({
+  statusCode: zod.literal(200),
+  message: zod.string(),
+  data: zod.object({
+    id: zod.uuid().regex(checkoutControllerQuoteResponseDataIdRegExp),
+    status: zod.enum([
+      'FETCHING',
+      'READY',
+      'PARTIAL',
+      'UNAVAILABLE',
+      'EXPIRED',
+      'INVALIDATED',
+    ]),
+    environment: zod.enum(['SANDBOX']),
+    carrier: zod.enum(['GHN']),
+    parcelMethod: zod.enum(['BOUNDING_STACK_V1']),
+    quotedAt: zod.string(),
+    expiresAt: zod.string(),
+    orders: zod.array(
+      zod.object({
+        orderId: zod
+          .uuid()
+          .regex(checkoutControllerQuoteResponseDataOrdersItemOrderIdRegExp),
+        sourceType: zod.enum(['USER', 'SHOP']),
+        sourceId: zod
+          .uuid()
+          .regex(checkoutControllerQuoteResponseDataOrdersItemSourceIdRegExp),
+        parcel: zod
+          .object({
+            weightGrams: zod
+              .int()
+              .gt(
+                checkoutControllerQuoteResponseDataOrdersItemParcelWeightGramsExclusiveMin,
+              )
+              .max(
+                checkoutControllerQuoteResponseDataOrdersItemParcelWeightGramsMax,
+              ),
+            lengthCm: zod
+              .int()
+              .gt(
+                checkoutControllerQuoteResponseDataOrdersItemParcelLengthCmExclusiveMin,
+              )
+              .max(
+                checkoutControllerQuoteResponseDataOrdersItemParcelLengthCmMax,
+              ),
+            widthCm: zod
+              .int()
+              .gt(
+                checkoutControllerQuoteResponseDataOrdersItemParcelWidthCmExclusiveMin,
+              )
+              .max(
+                checkoutControllerQuoteResponseDataOrdersItemParcelWidthCmMax,
+              ),
+            heightCm: zod
+              .int()
+              .gt(
+                checkoutControllerQuoteResponseDataOrdersItemParcelHeightCmExclusiveMin,
+              )
+              .max(
+                checkoutControllerQuoteResponseDataOrdersItemParcelHeightCmMax,
+              ),
+          })
+          .nullable(),
+        parcelCount: zod.literal(1),
+        itemCount: zod
+          .int()
+          .gt(
+            checkoutControllerQuoteResponseDataOrdersItemItemCountExclusiveMin,
+          )
+          .max(checkoutControllerQuoteResponseDataOrdersItemItemCountMax),
+        status: zod.enum(['QUOTED', 'UNAVAILABLE']),
+        reason: zod
+          .union([
+            zod.literal('PACKAGE_REQUIRED'),
+            zod.literal('PARCEL_LIMIT_EXCEEDED'),
+            zod.literal('PICKUP_REQUIRED'),
+            zod.literal('DECLARED_VALUE_LIMIT'),
+            zod.literal('ADDRESS_MAPPING_UNAVAILABLE'),
+            zod.literal('CARRIER_NOT_CONFIGURED'),
+            zod.literal('CARRIER_REJECTED'),
+            zod.literal('CARRIER_UNAVAILABLE'),
+            zod.literal(null),
+          ])
+          .nullable(),
+        fee: zod
+          .int()
+          .min(checkoutControllerQuoteResponseDataOrdersItemFeeMin)
+          .max(checkoutControllerQuoteResponseDataOrdersItemFeeMax)
+          .nullable(),
+        estimatedDeliveryAt: zod.string().nullable(),
+      }),
+    ),
+    totalShippingFee: zod
+      .int()
+      .min(checkoutControllerQuoteResponseDataTotalShippingFeeMin)
+      .max(checkoutControllerQuoteResponseDataTotalShippingFeeMax)
+      .nullable(),
+    grandTotal: zod
+      .int()
+      .min(checkoutControllerQuoteResponseDataGrandTotalMin)
+      .max(checkoutControllerQuoteResponseDataGrandTotalMax)
+      .nullable(),
+    currency: zod.enum(['VND']),
+    paymentReady: zod.literal(false),
+  }),
+});
+
 export const checkoutControllerCreateBodyRequestIdRegExp = new RegExp(
   '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
 );
@@ -30,6 +182,43 @@ export const CheckoutControllerCreateBody = zod.strictObject({
 export const checkoutControllerCreateResponseDataIdRegExp = new RegExp(
   '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
 );
+export const checkoutControllerCreateResponseDataShippingQuoteIdRegExp =
+  new RegExp(
+    '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
+  );
+export const checkoutControllerCreateResponseDataShippingQuoteOrdersItemOrderIdRegExp =
+  new RegExp(
+    '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
+  );
+export const checkoutControllerCreateResponseDataShippingQuoteOrdersItemSourceIdRegExp =
+  new RegExp(
+    '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
+  );
+export const checkoutControllerCreateResponseDataShippingQuoteOrdersItemParcelWeightGramsExclusiveMin = 0;
+export const checkoutControllerCreateResponseDataShippingQuoteOrdersItemParcelWeightGramsMax = 9007199254740991;
+
+export const checkoutControllerCreateResponseDataShippingQuoteOrdersItemParcelLengthCmExclusiveMin = 0;
+export const checkoutControllerCreateResponseDataShippingQuoteOrdersItemParcelLengthCmMax = 9007199254740991;
+
+export const checkoutControllerCreateResponseDataShippingQuoteOrdersItemParcelWidthCmExclusiveMin = 0;
+export const checkoutControllerCreateResponseDataShippingQuoteOrdersItemParcelWidthCmMax = 9007199254740991;
+
+export const checkoutControllerCreateResponseDataShippingQuoteOrdersItemParcelHeightCmExclusiveMin = 0;
+export const checkoutControllerCreateResponseDataShippingQuoteOrdersItemParcelHeightCmMax = 9007199254740991;
+
+export const checkoutControllerCreateResponseDataShippingQuoteOrdersItemItemCountExclusiveMin = 0;
+export const checkoutControllerCreateResponseDataShippingQuoteOrdersItemItemCountMax = 9007199254740991;
+
+export const checkoutControllerCreateResponseDataShippingQuoteOrdersItemFeeMin = 0;
+export const checkoutControllerCreateResponseDataShippingQuoteOrdersItemFeeMax = 9007199254740991;
+
+export const checkoutControllerCreateResponseDataShippingQuoteTotalShippingFeeMin = 0;
+export const checkoutControllerCreateResponseDataShippingQuoteTotalShippingFeeMax = 9007199254740991;
+
+export const checkoutControllerCreateResponseDataShippingQuoteGrandTotalMin = 0;
+export const checkoutControllerCreateResponseDataShippingQuoteGrandTotalMax = 9007199254740991;
+
+export const checkoutControllerCreateResponseDataShippingQuoteDefault = null;
 export const checkoutControllerCreateResponseDataExpiresAtRegExp = new RegExp(
   '^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$',
 );
@@ -92,6 +281,127 @@ export const CheckoutControllerCreateResponse = zod.object({
   message: zod.string(),
   data: zod.object({
     id: zod.uuid().regex(checkoutControllerCreateResponseDataIdRegExp),
+    shippingQuote: zod
+      .object({
+        id: zod
+          .uuid()
+          .regex(checkoutControllerCreateResponseDataShippingQuoteIdRegExp),
+        status: zod.enum([
+          'FETCHING',
+          'READY',
+          'PARTIAL',
+          'UNAVAILABLE',
+          'EXPIRED',
+          'INVALIDATED',
+        ]),
+        environment: zod.enum(['SANDBOX']),
+        carrier: zod.enum(['GHN']),
+        parcelMethod: zod.enum(['BOUNDING_STACK_V1']),
+        quotedAt: zod.string(),
+        expiresAt: zod.string(),
+        orders: zod.array(
+          zod.object({
+            orderId: zod
+              .uuid()
+              .regex(
+                checkoutControllerCreateResponseDataShippingQuoteOrdersItemOrderIdRegExp,
+              ),
+            sourceType: zod.enum(['USER', 'SHOP']),
+            sourceId: zod
+              .uuid()
+              .regex(
+                checkoutControllerCreateResponseDataShippingQuoteOrdersItemSourceIdRegExp,
+              ),
+            parcel: zod
+              .object({
+                weightGrams: zod
+                  .int()
+                  .gt(
+                    checkoutControllerCreateResponseDataShippingQuoteOrdersItemParcelWeightGramsExclusiveMin,
+                  )
+                  .max(
+                    checkoutControllerCreateResponseDataShippingQuoteOrdersItemParcelWeightGramsMax,
+                  ),
+                lengthCm: zod
+                  .int()
+                  .gt(
+                    checkoutControllerCreateResponseDataShippingQuoteOrdersItemParcelLengthCmExclusiveMin,
+                  )
+                  .max(
+                    checkoutControllerCreateResponseDataShippingQuoteOrdersItemParcelLengthCmMax,
+                  ),
+                widthCm: zod
+                  .int()
+                  .gt(
+                    checkoutControllerCreateResponseDataShippingQuoteOrdersItemParcelWidthCmExclusiveMin,
+                  )
+                  .max(
+                    checkoutControllerCreateResponseDataShippingQuoteOrdersItemParcelWidthCmMax,
+                  ),
+                heightCm: zod
+                  .int()
+                  .gt(
+                    checkoutControllerCreateResponseDataShippingQuoteOrdersItemParcelHeightCmExclusiveMin,
+                  )
+                  .max(
+                    checkoutControllerCreateResponseDataShippingQuoteOrdersItemParcelHeightCmMax,
+                  ),
+              })
+              .nullable(),
+            parcelCount: zod.literal(1),
+            itemCount: zod
+              .int()
+              .gt(
+                checkoutControllerCreateResponseDataShippingQuoteOrdersItemItemCountExclusiveMin,
+              )
+              .max(
+                checkoutControllerCreateResponseDataShippingQuoteOrdersItemItemCountMax,
+              ),
+            status: zod.enum(['QUOTED', 'UNAVAILABLE']),
+            reason: zod
+              .union([
+                zod.literal('PACKAGE_REQUIRED'),
+                zod.literal('PARCEL_LIMIT_EXCEEDED'),
+                zod.literal('PICKUP_REQUIRED'),
+                zod.literal('DECLARED_VALUE_LIMIT'),
+                zod.literal('ADDRESS_MAPPING_UNAVAILABLE'),
+                zod.literal('CARRIER_NOT_CONFIGURED'),
+                zod.literal('CARRIER_REJECTED'),
+                zod.literal('CARRIER_UNAVAILABLE'),
+                zod.literal(null),
+              ])
+              .nullable(),
+            fee: zod
+              .int()
+              .min(
+                checkoutControllerCreateResponseDataShippingQuoteOrdersItemFeeMin,
+              )
+              .max(
+                checkoutControllerCreateResponseDataShippingQuoteOrdersItemFeeMax,
+              )
+              .nullable(),
+            estimatedDeliveryAt: zod.string().nullable(),
+          }),
+        ),
+        totalShippingFee: zod
+          .int()
+          .min(
+            checkoutControllerCreateResponseDataShippingQuoteTotalShippingFeeMin,
+          )
+          .max(
+            checkoutControllerCreateResponseDataShippingQuoteTotalShippingFeeMax,
+          )
+          .nullable(),
+        grandTotal: zod
+          .int()
+          .min(checkoutControllerCreateResponseDataShippingQuoteGrandTotalMin)
+          .max(checkoutControllerCreateResponseDataShippingQuoteGrandTotalMax)
+          .nullable(),
+        currency: zod.enum(['VND']),
+        paymentReady: zod.literal(false),
+      })
+      .nullable()
+      .default(checkoutControllerCreateResponseDataShippingQuoteDefault),
     status: zod.enum(['HELD', 'EMPTY', 'CANCELLED', 'EXPIRED']),
     expiresAt: zod.iso
       .datetime({ offset: true })
@@ -246,6 +556,43 @@ export const CheckoutControllerFindParams = zod.object({
 export const checkoutControllerFindResponseDataIdRegExp = new RegExp(
   '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
 );
+export const checkoutControllerFindResponseDataShippingQuoteIdRegExp =
+  new RegExp(
+    '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
+  );
+export const checkoutControllerFindResponseDataShippingQuoteOrdersItemOrderIdRegExp =
+  new RegExp(
+    '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
+  );
+export const checkoutControllerFindResponseDataShippingQuoteOrdersItemSourceIdRegExp =
+  new RegExp(
+    '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
+  );
+export const checkoutControllerFindResponseDataShippingQuoteOrdersItemParcelWeightGramsExclusiveMin = 0;
+export const checkoutControllerFindResponseDataShippingQuoteOrdersItemParcelWeightGramsMax = 9007199254740991;
+
+export const checkoutControllerFindResponseDataShippingQuoteOrdersItemParcelLengthCmExclusiveMin = 0;
+export const checkoutControllerFindResponseDataShippingQuoteOrdersItemParcelLengthCmMax = 9007199254740991;
+
+export const checkoutControllerFindResponseDataShippingQuoteOrdersItemParcelWidthCmExclusiveMin = 0;
+export const checkoutControllerFindResponseDataShippingQuoteOrdersItemParcelWidthCmMax = 9007199254740991;
+
+export const checkoutControllerFindResponseDataShippingQuoteOrdersItemParcelHeightCmExclusiveMin = 0;
+export const checkoutControllerFindResponseDataShippingQuoteOrdersItemParcelHeightCmMax = 9007199254740991;
+
+export const checkoutControllerFindResponseDataShippingQuoteOrdersItemItemCountExclusiveMin = 0;
+export const checkoutControllerFindResponseDataShippingQuoteOrdersItemItemCountMax = 9007199254740991;
+
+export const checkoutControllerFindResponseDataShippingQuoteOrdersItemFeeMin = 0;
+export const checkoutControllerFindResponseDataShippingQuoteOrdersItemFeeMax = 9007199254740991;
+
+export const checkoutControllerFindResponseDataShippingQuoteTotalShippingFeeMin = 0;
+export const checkoutControllerFindResponseDataShippingQuoteTotalShippingFeeMax = 9007199254740991;
+
+export const checkoutControllerFindResponseDataShippingQuoteGrandTotalMin = 0;
+export const checkoutControllerFindResponseDataShippingQuoteGrandTotalMax = 9007199254740991;
+
+export const checkoutControllerFindResponseDataShippingQuoteDefault = null;
 export const checkoutControllerFindResponseDataExpiresAtRegExp = new RegExp(
   '^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$',
 );
@@ -306,6 +653,127 @@ export const CheckoutControllerFindResponse = zod.object({
   message: zod.string(),
   data: zod.object({
     id: zod.uuid().regex(checkoutControllerFindResponseDataIdRegExp),
+    shippingQuote: zod
+      .object({
+        id: zod
+          .uuid()
+          .regex(checkoutControllerFindResponseDataShippingQuoteIdRegExp),
+        status: zod.enum([
+          'FETCHING',
+          'READY',
+          'PARTIAL',
+          'UNAVAILABLE',
+          'EXPIRED',
+          'INVALIDATED',
+        ]),
+        environment: zod.enum(['SANDBOX']),
+        carrier: zod.enum(['GHN']),
+        parcelMethod: zod.enum(['BOUNDING_STACK_V1']),
+        quotedAt: zod.string(),
+        expiresAt: zod.string(),
+        orders: zod.array(
+          zod.object({
+            orderId: zod
+              .uuid()
+              .regex(
+                checkoutControllerFindResponseDataShippingQuoteOrdersItemOrderIdRegExp,
+              ),
+            sourceType: zod.enum(['USER', 'SHOP']),
+            sourceId: zod
+              .uuid()
+              .regex(
+                checkoutControllerFindResponseDataShippingQuoteOrdersItemSourceIdRegExp,
+              ),
+            parcel: zod
+              .object({
+                weightGrams: zod
+                  .int()
+                  .gt(
+                    checkoutControllerFindResponseDataShippingQuoteOrdersItemParcelWeightGramsExclusiveMin,
+                  )
+                  .max(
+                    checkoutControllerFindResponseDataShippingQuoteOrdersItemParcelWeightGramsMax,
+                  ),
+                lengthCm: zod
+                  .int()
+                  .gt(
+                    checkoutControllerFindResponseDataShippingQuoteOrdersItemParcelLengthCmExclusiveMin,
+                  )
+                  .max(
+                    checkoutControllerFindResponseDataShippingQuoteOrdersItemParcelLengthCmMax,
+                  ),
+                widthCm: zod
+                  .int()
+                  .gt(
+                    checkoutControllerFindResponseDataShippingQuoteOrdersItemParcelWidthCmExclusiveMin,
+                  )
+                  .max(
+                    checkoutControllerFindResponseDataShippingQuoteOrdersItemParcelWidthCmMax,
+                  ),
+                heightCm: zod
+                  .int()
+                  .gt(
+                    checkoutControllerFindResponseDataShippingQuoteOrdersItemParcelHeightCmExclusiveMin,
+                  )
+                  .max(
+                    checkoutControllerFindResponseDataShippingQuoteOrdersItemParcelHeightCmMax,
+                  ),
+              })
+              .nullable(),
+            parcelCount: zod.literal(1),
+            itemCount: zod
+              .int()
+              .gt(
+                checkoutControllerFindResponseDataShippingQuoteOrdersItemItemCountExclusiveMin,
+              )
+              .max(
+                checkoutControllerFindResponseDataShippingQuoteOrdersItemItemCountMax,
+              ),
+            status: zod.enum(['QUOTED', 'UNAVAILABLE']),
+            reason: zod
+              .union([
+                zod.literal('PACKAGE_REQUIRED'),
+                zod.literal('PARCEL_LIMIT_EXCEEDED'),
+                zod.literal('PICKUP_REQUIRED'),
+                zod.literal('DECLARED_VALUE_LIMIT'),
+                zod.literal('ADDRESS_MAPPING_UNAVAILABLE'),
+                zod.literal('CARRIER_NOT_CONFIGURED'),
+                zod.literal('CARRIER_REJECTED'),
+                zod.literal('CARRIER_UNAVAILABLE'),
+                zod.literal(null),
+              ])
+              .nullable(),
+            fee: zod
+              .int()
+              .min(
+                checkoutControllerFindResponseDataShippingQuoteOrdersItemFeeMin,
+              )
+              .max(
+                checkoutControllerFindResponseDataShippingQuoteOrdersItemFeeMax,
+              )
+              .nullable(),
+            estimatedDeliveryAt: zod.string().nullable(),
+          }),
+        ),
+        totalShippingFee: zod
+          .int()
+          .min(
+            checkoutControllerFindResponseDataShippingQuoteTotalShippingFeeMin,
+          )
+          .max(
+            checkoutControllerFindResponseDataShippingQuoteTotalShippingFeeMax,
+          )
+          .nullable(),
+        grandTotal: zod
+          .int()
+          .min(checkoutControllerFindResponseDataShippingQuoteGrandTotalMin)
+          .max(checkoutControllerFindResponseDataShippingQuoteGrandTotalMax)
+          .nullable(),
+        currency: zod.enum(['VND']),
+        paymentReady: zod.literal(false),
+      })
+      .nullable()
+      .default(checkoutControllerFindResponseDataShippingQuoteDefault),
     status: zod.enum(['HELD', 'EMPTY', 'CANCELLED', 'EXPIRED']),
     expiresAt: zod.iso
       .datetime({ offset: true })
@@ -460,6 +928,43 @@ export const CheckoutControllerCancelParams = zod.object({
 export const checkoutControllerCancelResponseDataIdRegExp = new RegExp(
   '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
 );
+export const checkoutControllerCancelResponseDataShippingQuoteIdRegExp =
+  new RegExp(
+    '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
+  );
+export const checkoutControllerCancelResponseDataShippingQuoteOrdersItemOrderIdRegExp =
+  new RegExp(
+    '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
+  );
+export const checkoutControllerCancelResponseDataShippingQuoteOrdersItemSourceIdRegExp =
+  new RegExp(
+    '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
+  );
+export const checkoutControllerCancelResponseDataShippingQuoteOrdersItemParcelWeightGramsExclusiveMin = 0;
+export const checkoutControllerCancelResponseDataShippingQuoteOrdersItemParcelWeightGramsMax = 9007199254740991;
+
+export const checkoutControllerCancelResponseDataShippingQuoteOrdersItemParcelLengthCmExclusiveMin = 0;
+export const checkoutControllerCancelResponseDataShippingQuoteOrdersItemParcelLengthCmMax = 9007199254740991;
+
+export const checkoutControllerCancelResponseDataShippingQuoteOrdersItemParcelWidthCmExclusiveMin = 0;
+export const checkoutControllerCancelResponseDataShippingQuoteOrdersItemParcelWidthCmMax = 9007199254740991;
+
+export const checkoutControllerCancelResponseDataShippingQuoteOrdersItemParcelHeightCmExclusiveMin = 0;
+export const checkoutControllerCancelResponseDataShippingQuoteOrdersItemParcelHeightCmMax = 9007199254740991;
+
+export const checkoutControllerCancelResponseDataShippingQuoteOrdersItemItemCountExclusiveMin = 0;
+export const checkoutControllerCancelResponseDataShippingQuoteOrdersItemItemCountMax = 9007199254740991;
+
+export const checkoutControllerCancelResponseDataShippingQuoteOrdersItemFeeMin = 0;
+export const checkoutControllerCancelResponseDataShippingQuoteOrdersItemFeeMax = 9007199254740991;
+
+export const checkoutControllerCancelResponseDataShippingQuoteTotalShippingFeeMin = 0;
+export const checkoutControllerCancelResponseDataShippingQuoteTotalShippingFeeMax = 9007199254740991;
+
+export const checkoutControllerCancelResponseDataShippingQuoteGrandTotalMin = 0;
+export const checkoutControllerCancelResponseDataShippingQuoteGrandTotalMax = 9007199254740991;
+
+export const checkoutControllerCancelResponseDataShippingQuoteDefault = null;
 export const checkoutControllerCancelResponseDataExpiresAtRegExp = new RegExp(
   '^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$',
 );
@@ -522,6 +1027,127 @@ export const CheckoutControllerCancelResponse = zod.object({
   message: zod.string(),
   data: zod.object({
     id: zod.uuid().regex(checkoutControllerCancelResponseDataIdRegExp),
+    shippingQuote: zod
+      .object({
+        id: zod
+          .uuid()
+          .regex(checkoutControllerCancelResponseDataShippingQuoteIdRegExp),
+        status: zod.enum([
+          'FETCHING',
+          'READY',
+          'PARTIAL',
+          'UNAVAILABLE',
+          'EXPIRED',
+          'INVALIDATED',
+        ]),
+        environment: zod.enum(['SANDBOX']),
+        carrier: zod.enum(['GHN']),
+        parcelMethod: zod.enum(['BOUNDING_STACK_V1']),
+        quotedAt: zod.string(),
+        expiresAt: zod.string(),
+        orders: zod.array(
+          zod.object({
+            orderId: zod
+              .uuid()
+              .regex(
+                checkoutControllerCancelResponseDataShippingQuoteOrdersItemOrderIdRegExp,
+              ),
+            sourceType: zod.enum(['USER', 'SHOP']),
+            sourceId: zod
+              .uuid()
+              .regex(
+                checkoutControllerCancelResponseDataShippingQuoteOrdersItemSourceIdRegExp,
+              ),
+            parcel: zod
+              .object({
+                weightGrams: zod
+                  .int()
+                  .gt(
+                    checkoutControllerCancelResponseDataShippingQuoteOrdersItemParcelWeightGramsExclusiveMin,
+                  )
+                  .max(
+                    checkoutControllerCancelResponseDataShippingQuoteOrdersItemParcelWeightGramsMax,
+                  ),
+                lengthCm: zod
+                  .int()
+                  .gt(
+                    checkoutControllerCancelResponseDataShippingQuoteOrdersItemParcelLengthCmExclusiveMin,
+                  )
+                  .max(
+                    checkoutControllerCancelResponseDataShippingQuoteOrdersItemParcelLengthCmMax,
+                  ),
+                widthCm: zod
+                  .int()
+                  .gt(
+                    checkoutControllerCancelResponseDataShippingQuoteOrdersItemParcelWidthCmExclusiveMin,
+                  )
+                  .max(
+                    checkoutControllerCancelResponseDataShippingQuoteOrdersItemParcelWidthCmMax,
+                  ),
+                heightCm: zod
+                  .int()
+                  .gt(
+                    checkoutControllerCancelResponseDataShippingQuoteOrdersItemParcelHeightCmExclusiveMin,
+                  )
+                  .max(
+                    checkoutControllerCancelResponseDataShippingQuoteOrdersItemParcelHeightCmMax,
+                  ),
+              })
+              .nullable(),
+            parcelCount: zod.literal(1),
+            itemCount: zod
+              .int()
+              .gt(
+                checkoutControllerCancelResponseDataShippingQuoteOrdersItemItemCountExclusiveMin,
+              )
+              .max(
+                checkoutControllerCancelResponseDataShippingQuoteOrdersItemItemCountMax,
+              ),
+            status: zod.enum(['QUOTED', 'UNAVAILABLE']),
+            reason: zod
+              .union([
+                zod.literal('PACKAGE_REQUIRED'),
+                zod.literal('PARCEL_LIMIT_EXCEEDED'),
+                zod.literal('PICKUP_REQUIRED'),
+                zod.literal('DECLARED_VALUE_LIMIT'),
+                zod.literal('ADDRESS_MAPPING_UNAVAILABLE'),
+                zod.literal('CARRIER_NOT_CONFIGURED'),
+                zod.literal('CARRIER_REJECTED'),
+                zod.literal('CARRIER_UNAVAILABLE'),
+                zod.literal(null),
+              ])
+              .nullable(),
+            fee: zod
+              .int()
+              .min(
+                checkoutControllerCancelResponseDataShippingQuoteOrdersItemFeeMin,
+              )
+              .max(
+                checkoutControllerCancelResponseDataShippingQuoteOrdersItemFeeMax,
+              )
+              .nullable(),
+            estimatedDeliveryAt: zod.string().nullable(),
+          }),
+        ),
+        totalShippingFee: zod
+          .int()
+          .min(
+            checkoutControllerCancelResponseDataShippingQuoteTotalShippingFeeMin,
+          )
+          .max(
+            checkoutControllerCancelResponseDataShippingQuoteTotalShippingFeeMax,
+          )
+          .nullable(),
+        grandTotal: zod
+          .int()
+          .min(checkoutControllerCancelResponseDataShippingQuoteGrandTotalMin)
+          .max(checkoutControllerCancelResponseDataShippingQuoteGrandTotalMax)
+          .nullable(),
+        currency: zod.enum(['VND']),
+        paymentReady: zod.literal(false),
+      })
+      .nullable()
+      .default(checkoutControllerCancelResponseDataShippingQuoteDefault),
     status: zod.enum(['HELD', 'EMPTY', 'CANCELLED', 'EXPIRED']),
     expiresAt: zod.iso
       .datetime({ offset: true })

@@ -26,6 +26,8 @@ import type {
   CheckoutControllerCreate200,
   CheckoutControllerCreateBody,
   CheckoutControllerFind200,
+  CheckoutControllerQuote200,
+  CheckoutControllerQuoteBody,
 } from '../../models/index';
 import { orvalRequest } from '../../orval-request';
 
@@ -49,6 +51,100 @@ const withQueryKey = <T extends object, K>(
   return result;
 };
 
+export const checkoutControllerQuote = (
+  id: string,
+  checkoutControllerQuoteBody: CheckoutControllerQuoteBody,
+  options?: SecondParameter<typeof orvalRequest>,
+  signal?: AbortSignal,
+) => {
+  return orvalRequest<CheckoutControllerQuote200>(
+    {
+      url: `/api/checkouts/${id}/shipping-quotes`,
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      data: checkoutControllerQuoteBody,
+      signal,
+    },
+    options,
+  );
+};
+
+export const getCheckoutControllerQuoteMutationKey = () =>
+  ['checkoutControllerQuote'] as const;
+
+export const getCheckoutControllerQuoteMutationOptions = <
+  TError = unknown,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof checkoutControllerQuote>>,
+    TError,
+    CheckoutControllerQuoteMutationVariables,
+    TContext
+  >;
+  request?: SecondParameter<typeof orvalRequest>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof checkoutControllerQuote>>,
+  TError,
+  CheckoutControllerQuoteMutationVariables,
+  TContext
+> => {
+  const mutationKey = getCheckoutControllerQuoteMutationKey();
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      'mutationKey' in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof checkoutControllerQuote>>,
+    CheckoutControllerQuoteMutationVariables
+  > = (props) => {
+    const { id, data } = props ?? {};
+
+    return checkoutControllerQuote(id, data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type CheckoutControllerQuoteMutationResult = NonNullable<
+  Awaited<ReturnType<typeof checkoutControllerQuote>>
+>;
+export type CheckoutControllerQuoteMutationBody = CheckoutControllerQuoteBody;
+export type CheckoutControllerQuoteMutationError = unknown;
+export type CheckoutControllerQuoteMutationVariables = {
+  id: string;
+  data: CheckoutControllerQuoteBody;
+};
+
+export const useCheckoutControllerQuote = <
+  TError = unknown,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof checkoutControllerQuote>>,
+      TError,
+      CheckoutControllerQuoteMutationVariables,
+      TContext
+    >;
+    request?: SecondParameter<typeof orvalRequest>;
+  },
+  queryClient?: QueryClient,
+): UseMutationResult<
+  Awaited<ReturnType<typeof checkoutControllerQuote>>,
+  TError,
+  CheckoutControllerQuoteMutationVariables,
+  TContext
+> => {
+  return useMutation(
+    getCheckoutControllerQuoteMutationOptions(options),
+    queryClient,
+  );
+};
 export const checkoutControllerCreate = (
   checkoutControllerCreateBody: CheckoutControllerCreateBody,
   options?: SecondParameter<typeof orvalRequest>,

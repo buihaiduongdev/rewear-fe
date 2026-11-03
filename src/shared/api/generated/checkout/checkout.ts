@@ -10,11 +10,28 @@ import type {
   CheckoutControllerCreate200,
   CheckoutControllerCreateBody,
   CheckoutControllerFind200,
+  CheckoutControllerQuote200,
+  CheckoutControllerQuoteBody,
 } from '../../models/index';
 import { orvalRequest } from '../../orval-request';
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
+export const checkoutControllerQuote = (
+  id: string,
+  checkoutControllerQuoteBody: CheckoutControllerQuoteBody,
+  options?: SecondParameter<typeof orvalRequest<CheckoutControllerQuote200>>,
+) => {
+  return orvalRequest<CheckoutControllerQuote200>(
+    {
+      url: `/api/checkouts/${id}/shipping-quotes`,
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      data: checkoutControllerQuoteBody,
+    },
+    options,
+  );
+};
 export const checkoutControllerCreate = (
   checkoutControllerCreateBody: CheckoutControllerCreateBody,
   options?: SecondParameter<typeof orvalRequest<CheckoutControllerCreate200>>,
@@ -47,6 +64,9 @@ export const checkoutControllerCancel = (
     options,
   );
 };
+export type CheckoutControllerQuoteResult = NonNullable<
+  Awaited<ReturnType<typeof checkoutControllerQuote>>
+>;
 export type CheckoutControllerCreateResult = NonNullable<
   Awaited<ReturnType<typeof checkoutControllerCreate>>
 >;
