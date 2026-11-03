@@ -2,8 +2,7 @@
 
 import type { ShopControllerFindAll200DataItem } from '@/shared/api/models';
 import { useProductControllerFindAll } from '@/shared/api/query-generated/products/products';
-
-import { ProductPhoto } from './ProductPhoto';
+import { ProductPhoto } from '@/shared/components/marketplace/ProductPhoto';
 
 export function ShopCard({
   shop,

@@ -1,9 +1,10 @@
 'use client';
 
+import { ProductPhoto } from '@/shared/components/marketplace/ProductPhoto';
+import { formatCondition, formatPrice } from '@/shared/utils/product';
 import { Dialog } from '@base-ui/react/dialog';
 
-import { formatCondition, formatPrice, type HomeProduct } from '../lib/product';
-import { ProductPhoto } from './ProductPhoto';
+import type { HomeProduct } from '../lib/product';
 
 export function ProductCard({
   product,

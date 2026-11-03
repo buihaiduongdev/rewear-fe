@@ -273,6 +273,249 @@ export type CategoryControllerUpdate200 = {
   data: CategoryControllerUpdate200Data;
 };
 
+export type CartControllerFindMine200StatusCode =
+  (typeof CartControllerFindMine200StatusCode)[keyof typeof CartControllerFindMine200StatusCode];
+
+export const CartControllerFindMine200StatusCode = {
+  NUMBER_200: 200,
+} as const;
+
+export type CartControllerFindMine200DataGroupsItemSourceType =
+  (typeof CartControllerFindMine200DataGroupsItemSourceType)[keyof typeof CartControllerFindMine200DataGroupsItemSourceType];
+
+export const CartControllerFindMine200DataGroupsItemSourceType = {
+  USER: 'USER',
+  SHOP: 'SHOP',
+} as const;
+
+/**
+ * @nullable
+ */
+export type CartControllerFindMine200DataGroupsItemSource = {
+  type: CartControllerFindMine200DataGroupsItemSourceType;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  name: string;
+} | null;
+
+export type CartControllerFindMine200DataGroupsItemItemsItemAvailability =
+  (typeof CartControllerFindMine200DataGroupsItemItemsItemAvailability)[keyof typeof CartControllerFindMine200DataGroupsItemItemsItemAvailability];
+
+export const CartControllerFindMine200DataGroupsItemItemsItemAvailability = {
+  AVAILABLE: 'AVAILABLE',
+  HELD: 'HELD',
+  SOLD: 'SOLD',
+  UNAVAILABLE: 'UNAVAILABLE',
+  OWN_PRODUCT: 'OWN_PRODUCT',
+} as const;
+
+export type CartControllerFindMine200DataGroupsItemItemsItemProductCondition =
+  (typeof CartControllerFindMine200DataGroupsItemItemsItemProductCondition)[keyof typeof CartControllerFindMine200DataGroupsItemItemsItemProductCondition];
+
+export const CartControllerFindMine200DataGroupsItemItemsItemProductCondition =
+  {
+    FAIR: 'FAIR',
+    GOOD: 'GOOD',
+    EXCELLENT: 'EXCELLENT',
+    PRISTINE: 'PRISTINE',
+  } as const;
+
+/**
+ * @nullable
+ */
+export type CartControllerFindMine200DataGroupsItemItemsItemProduct = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  title: string;
+  /**
+   * @maximum 9007199254740991
+   * @exclusiveMinimum 0
+   */
+  price: number;
+  condition: CartControllerFindMine200DataGroupsItemItemsItemProductCondition;
+  /** @nullable */
+  size: string | null;
+  /** @nullable */
+  color: string | null;
+  /** @nullable */
+  coverUrl: string | null;
+} | null;
+
+export type CartControllerFindMine200DataGroupsItemItemsItem = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  productId: string;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  addedAt: string;
+  availability: CartControllerFindMine200DataGroupsItemItemsItemAvailability;
+  /** @nullable */
+  product: CartControllerFindMine200DataGroupsItemItemsItemProduct;
+};
+
+export type CartControllerFindMine200DataGroupsItem = {
+  /** @nullable */
+  source: CartControllerFindMine200DataGroupsItemSource;
+  items: CartControllerFindMine200DataGroupsItemItemsItem[];
+};
+
+export type CartControllerFindMine200DataSummaryCurrency =
+  (typeof CartControllerFindMine200DataSummaryCurrency)[keyof typeof CartControllerFindMine200DataSummaryCurrency];
+
+export const CartControllerFindMine200DataSummaryCurrency = {
+  VND: 'VND',
+} as const;
+
+export type CartControllerFindMine200DataSummary = {
+  /**
+   * @minimum 0
+   * @maximum 9007199254740991
+   */
+  itemCount: number;
+  /**
+   * @minimum 0
+   * @maximum 9007199254740991
+   */
+  availableItemCount: number;
+  /**
+   * @minimum 0
+   * @maximum 9007199254740991
+   */
+  totalPrice: number;
+  currency: CartControllerFindMine200DataSummaryCurrency;
+};
+
+export type CartControllerFindMine200Data = {
+  groups: CartControllerFindMine200DataGroupsItem[];
+  summary: CartControllerFindMine200DataSummary;
+};
+
+export type CartControllerFindMine200 = {
+  statusCode: CartControllerFindMine200StatusCode;
+  message: string;
+  data: CartControllerFindMine200Data;
+};
+
+export type CartControllerAddBody = { [key: string]: unknown };
+
+export type CartControllerAdd200StatusCode =
+  (typeof CartControllerAdd200StatusCode)[keyof typeof CartControllerAdd200StatusCode];
+
+export const CartControllerAdd200StatusCode = {
+  NUMBER_200: 200,
+} as const;
+
+export type CartControllerAdd200DataGroupsItemSourceType =
+  (typeof CartControllerAdd200DataGroupsItemSourceType)[keyof typeof CartControllerAdd200DataGroupsItemSourceType];
+
+export const CartControllerAdd200DataGroupsItemSourceType = {
+  USER: 'USER',
+  SHOP: 'SHOP',
+} as const;
+
+/**
+ * @nullable
+ */
+export type CartControllerAdd200DataGroupsItemSource = {
+  type: CartControllerAdd200DataGroupsItemSourceType;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  name: string;
+} | null;
+
+export type CartControllerAdd200DataGroupsItemItemsItemAvailability =
+  (typeof CartControllerAdd200DataGroupsItemItemsItemAvailability)[keyof typeof CartControllerAdd200DataGroupsItemItemsItemAvailability];
+
+export const CartControllerAdd200DataGroupsItemItemsItemAvailability = {
+  AVAILABLE: 'AVAILABLE',
+  HELD: 'HELD',
+  SOLD: 'SOLD',
+  UNAVAILABLE: 'UNAVAILABLE',
+  OWN_PRODUCT: 'OWN_PRODUCT',
+} as const;
+
+export type CartControllerAdd200DataGroupsItemItemsItemProductCondition =
+  (typeof CartControllerAdd200DataGroupsItemItemsItemProductCondition)[keyof typeof CartControllerAdd200DataGroupsItemItemsItemProductCondition];
+
+export const CartControllerAdd200DataGroupsItemItemsItemProductCondition = {
+  FAIR: 'FAIR',
+  GOOD: 'GOOD',
+  EXCELLENT: 'EXCELLENT',
+  PRISTINE: 'PRISTINE',
+} as const;
+
+/**
+ * @nullable
+ */
+export type CartControllerAdd200DataGroupsItemItemsItemProduct = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  title: string;
+  /**
+   * @maximum 9007199254740991
+   * @exclusiveMinimum 0
+   */
+  price: number;
+  condition: CartControllerAdd200DataGroupsItemItemsItemProductCondition;
+  /** @nullable */
+  size: string | null;
+  /** @nullable */
+  color: string | null;
+  /** @nullable */
+  coverUrl: string | null;
+} | null;
+
+export type CartControllerAdd200DataGroupsItemItemsItem = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  productId: string;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  addedAt: string;
+  availability: CartControllerAdd200DataGroupsItemItemsItemAvailability;
+  /** @nullable */
+  product: CartControllerAdd200DataGroupsItemItemsItemProduct;
+};
+
+export type CartControllerAdd200DataGroupsItem = {
+  /** @nullable */
+  source: CartControllerAdd200DataGroupsItemSource;
+  items: CartControllerAdd200DataGroupsItemItemsItem[];
+};
+
+export type CartControllerAdd200DataSummaryCurrency =
+  (typeof CartControllerAdd200DataSummaryCurrency)[keyof typeof CartControllerAdd200DataSummaryCurrency];
+
+export const CartControllerAdd200DataSummaryCurrency = {
+  VND: 'VND',
+} as const;
+
+export type CartControllerAdd200DataSummary = {
+  /**
+   * @minimum 0
+   * @maximum 9007199254740991
+   */
+  itemCount: number;
+  /**
+   * @minimum 0
+   * @maximum 9007199254740991
+   */
+  availableItemCount: number;
+  /**
+   * @minimum 0
+   * @maximum 9007199254740991
+   */
+  totalPrice: number;
+  currency: CartControllerAdd200DataSummaryCurrency;
+};
+
+export type CartControllerAdd200Data = {
+  groups: CartControllerAdd200DataGroupsItem[];
+  summary: CartControllerAdd200DataSummary;
+};
+
+export type CartControllerAdd200 = {
+  statusCode: CartControllerAdd200StatusCode;
+  message: string;
+  data: CartControllerAdd200Data;
+};
+
 export type ShopControllerFindAll200StatusCode =
   (typeof ShopControllerFindAll200StatusCode)[keyof typeof ShopControllerFindAll200StatusCode];
 

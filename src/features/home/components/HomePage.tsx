@@ -5,14 +5,15 @@ import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 
+import { CartLink } from '@/modules/cart/components/CartLink';
+import { MarketplaceFooter } from '@/shared/components/marketplace/MarketplaceFooter';
+import { MarketplaceHeader } from '@/shared/components/marketplace/MarketplaceHeader';
 import { Button } from '@/shared/components/ui/button';
 import { Dialog } from '@base-ui/react/dialog';
 import { useSession } from 'next-auth/react';
 
 import { useHomeCatalog } from '../hooks/use-home-catalog';
 import type { HomeProduct } from '../lib/product';
-import { MarketplaceFooter } from './MarketplaceFooter';
-import { MarketplaceHeader } from './MarketplaceHeader';
 import { ProductCard } from './ProductCard';
 import { ProductPreview } from './ProductPreview';
 import { SectionState } from './SectionState';
@@ -72,6 +73,7 @@ export function HomePage() {
   return (
     <>
       <MarketplaceHeader
+        cartAction={<CartLink />}
         search={search}
         onSearch={(value) =>
           updateFilters({ search: value, shopId: undefined, view: 'all' })
@@ -367,14 +369,7 @@ export function HomePage() {
         >
           Shop
         </a>
-        <button
-          type="button"
-          disabled
-          title="Your cart is coming soon"
-          className="bg-rewear-soft min-h-11 px-3 text-left"
-        >
-          Cart
-        </button>
+        <CartLink className="bg-rewear-soft flex min-h-11 items-center px-3" />
       </nav>
       <ProductPreview handle={previewHandle} />
     </>

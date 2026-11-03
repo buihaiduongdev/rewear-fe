@@ -1,6 +1,7 @@
 'use client';
 
 import { useRef, useState } from 'react';
+import type { ReactNode } from 'react';
 
 import Image from 'next/image';
 import Link from 'next/link';
@@ -10,9 +11,11 @@ import { signOut, useSession } from 'next-auth/react';
 export function MarketplaceHeader({
   search,
   onSearch,
+  cartAction,
 }: {
   search: string;
   onSearch: (value: string) => void;
+  cartAction: ReactNode;
 }) {
   const { data: session } = useSession();
   const [searchOpen, setSearchOpen] = useState(false);
@@ -74,12 +77,12 @@ export function MarketplaceHeader({
             unoptimized
           />
         </Link>
-        <a
-          href="#new-arrivals"
+        <Link
+          href="/?view=all#new-arrivals"
           className="hidden min-h-11 items-center hover:underline md:inline-flex"
         >
           Explore
-        </a>
+        </Link>
         {searchForm(false)}
         <button
           type="button"
@@ -100,9 +103,7 @@ export function MarketplaceHeader({
           <button type="button" disabled title="Messages are coming soon">
             Messages
           </button>
-          <button type="button" disabled title="Your cart is coming soon">
-            Cart
-          </button>
+          {cartAction}
           {session ? (
             <details className="relative">
               <summary className="flex min-h-11 cursor-pointer list-none items-center">

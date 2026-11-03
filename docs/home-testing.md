@@ -48,8 +48,7 @@ rules so unrelated protected routes retain their login redirect.
 
 Home includes responsive header/hero/catalog/shop/selling/footer sections from the
 Figma design. Quick view is a product preview, not a checkout or complete product
-detail page. Cart, Orders and Messages remain disabled pending their frontend
-flows. A logged-in seller's listing CTA remains disabled until listing tools are
+detail page. Cart is available through the header and mobile navigation; Orders and Messages remain disabled pending their frontend flows. A logged-in seller's listing CTA remains disabled until listing tools are
 implemented; a guest can open registration. Policy and language text is static.
 
 Full registration/login, upload/delete against R2, moderation in the browser,
