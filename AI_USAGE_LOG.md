@@ -105,3 +105,13 @@ Ghi một mục cho mỗi task có dùng AI. Cập nhật liên kết PR/commit 
 - **Kiểm chứng:** Agent-browser MCP dùng login seed thật, lưu khoảng/custom, reload, gửi duyệt, khóa tin đã bán và screenshot desktop/mobile. Viewport 390×912 được đặt qua CLI agent-browser cùng session vì MCP core chưa có viewport tool; đo kích thước và thao tác qua MCP. Cypress luồng package với BE/PostgreSQL thật qua, gồm invalid input không gọi save, persistence, DRAFT/PENDING_REVIEW và không tràn ngang.
 - **Giới hạn:** Chưa có quote vận chuyển hoặc gộp kiện; đây là tiện ích package, chưa phải seller editor hoàn chỉnh. Branch gồm dependency checkout-addresses và merge fix/next-security để chạy Next 16.4.1.
 - **Kiểm tra mã:** TypeScript ứng dụng/Cypress, ESLint, 4 unit tests và production build Next 16.4.1 qua. Không chỉnh tay các file API sinh tự động.
+
+### 2026-10-30 — Địa chỉ lấy hàng cá nhân và shop
+
+- **Yêu cầu:** Phát triển, test và review pickup address. Người thực hiện chốt tiếp tục dùng agent-browser headless; chưa xác nhận đã tự đọc toàn bộ diff.
+- **AI hỗ trợ:** Form /selling/pickup, scope cá nhân/shop owner, directory tỉnh/phường thật, validate/focus lỗi, cache theo user/source và khóa khi lưu. Sinh API/React Query/Zod qua Orval; liên kết từ account và package workspace.
+- **Thiết kế:** Figwright đọc đầy đủ frame 63:2315, screenshot, component/token map và motion inventory. Tái sử dụng BaseInputField/Button; form 720px và nút 360×52 trên desktop. Selector nguồn bán bổ sung và geometry shared field được ghi rõ, không nhận là pixel-identical toàn frame.
+- **Kiểm chứng:** Typecheck ứng dụng/Cypress, ESLint và 4 unit tests qua. Cypress 2 ca gọi BE/PostgreSQL/JWT thật: validate không lưu, reset ward, personal save/edit/reload, shop riêng và không lộ contact qua public shop. Agent-browser MCP kiểm tra lưu/reload và screenshot 1280px/390px, không tràn ngang. Viewport đặt qua CLI cùng session vì MCP core chưa có tool tương ứng.
+- **Giới hạn:** Chỉ cấu hình địa chỉ; chưa carrier registration, availability, quote hoặc shipment. Không dùng Chrome DevTools MCP. Thử headed bị thiếu DISPLAY trong môi trường MCP; quay lại headless theo yêu cầu, không đổi cấu hình MCP toàn cục.
+- **Production:** Build Next 16.4.1 qua; agent-browser mở bản production và sửa/lưu địa chỉ thành công.
+- **Tự review:** Tách cache key personal và shop kể cả khi shop hook bị tắt/chưa chọn shop, tránh hai queryFn khác nhau cùng key. Production build lại qua; 2 E2E chạy lại trên bản production đều qua cho thay đổi này.

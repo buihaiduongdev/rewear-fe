@@ -119,6 +119,12 @@ export function MarketplaceHeader({
                 >
                   Listing packages
                 </Link>
+                <Link
+                  href="/selling/pickup"
+                  className="flex min-h-11 items-center underline underline-offset-4"
+                >
+                  Pickup address
+                </Link>
                 <button
                   type="button"
                   className="min-h-11 cursor-pointer underline underline-offset-4"
