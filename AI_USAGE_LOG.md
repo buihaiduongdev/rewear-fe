@@ -96,3 +96,12 @@ Ghi một mục cho mỗi task có dùng AI. Cập nhật liên kết PR/commit 
 - **Đầu ra:** Dialog thêm địa chỉ dùng API và Zod sinh từ OpenAPI; chọn tỉnh/phường thật, reset phường khi đổi tỉnh, validate và focus trường lỗi, chọn ngay địa chỉ mới từ cache theo tài khoản. Tái sử dụng BaseInputField và token sẵn có; bố cục tham chiếu frame Figma 48:646.
 - **Kiểm chứng:** E2E Chrome gọi backend/PostgreSQL thật, kiểm tra trường bắt buộc/điện thoại, đổi tỉnh, lưu mặc định, tự chọn địa chỉ mới, snapshot checkout và hủy. Đã mở dialog trên Chrome MCP để kiểm tra bố cục.
 - **Giới hạn:** Chỉ địa chỉ Việt Nam; sửa/xóa địa chỉ và màn address book chưa nằm trong PR này. Không sửa contract backend hoặc client sinh tự động.
+
+### 2026-10-30 — Seller khai báo thông số đóng gói
+
+- **Yêu cầu và quyết định:** Seller được chọn khoảng hoặc tự nhập khối lượng/kích thước. Người thực hiện yêu cầu dùng agent-browser MCP để test thay Chrome DevTools; chưa xác nhận tự đọc toàn bộ diff.
+- **Phần AI hỗ trợ:** Form tại /selling/packages, chọn tin thuộc seller, API/Zod sinh qua Orval, preview upper bounds/làm tròn cm, trạng thái lưu/gửi duyệt và khóa tin HELD/SOLD/SUSPENDED. Dùng chung component/logic với CSS responsive.
+- **Thiết kế:** Figwright đọc editor 48:985 và Field 41:30, kiểm tra screenshot Field. Tái sử dụng token/header/input; chưa có frame Figma riêng cho page package, không coi là khớp toàn màn seller editor.
+- **Kiểm chứng:** Agent-browser MCP dùng login seed thật, lưu khoảng/custom, reload, gửi duyệt, khóa tin đã bán và screenshot desktop/mobile. Viewport 390×912 được đặt qua CLI agent-browser cùng session vì MCP core chưa có viewport tool; đo kích thước và thao tác qua MCP. Cypress luồng package với BE/PostgreSQL thật qua, gồm invalid input không gọi save, persistence, DRAFT/PENDING_REVIEW và không tràn ngang.
+- **Giới hạn:** Chưa có quote vận chuyển hoặc gộp kiện; đây là tiện ích package, chưa phải seller editor hoàn chỉnh. Branch gồm dependency checkout-addresses và merge fix/next-security để chạy Next 16.4.1.
+- **Kiểm tra mã:** TypeScript ứng dụng/Cypress, ESLint, 4 unit tests và production build Next 16.4.1 qua. Không chỉnh tay các file API sinh tự động.

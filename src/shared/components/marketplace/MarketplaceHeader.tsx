@@ -113,6 +113,12 @@ export function MarketplaceHeader({
                 <p className="mb-3 max-w-48 truncate">
                   {session.user.fullName}
                 </p>
+                <Link
+                  href="/selling/packages"
+                  className="flex min-h-11 items-center underline underline-offset-4"
+                >
+                  Listing packages
+                </Link>
                 <button
                   type="button"
                   className="min-h-11 cursor-pointer underline underline-offset-4"

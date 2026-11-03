@@ -5,6 +5,7 @@ export * from './categories/categories';
 export * from './checkout/checkout';
 export * from './product-media/product-media';
 export * from './products/products';
+export * from './shipping/shipping';
 export * from './shops/shops';
 export * from './user-addresses/user-addresses';
 export * from './users/users';
