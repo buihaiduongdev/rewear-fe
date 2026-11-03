@@ -8,6 +8,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { CartLink } from '@/modules/cart/components/CartLink';
 import { cartQueryKey, useCart } from '@/modules/cart/hooks/use-cart';
 import { getApiErrorMessage } from '@/shared/api/api-error';
+import type { UserAddressControllerFindAll200 } from '@/shared/api/models';
 import {
   useCheckoutControllerCancel,
   useCheckoutControllerCreate,
@@ -21,6 +22,8 @@ import { formatPrice } from '@/shared/utils/product';
 import { Dialog } from '@base-ui/react/dialog';
 import { useQueryClient } from '@tanstack/react-query';
 import { useSession } from 'next-auth/react';
+
+import { AddDeliveryAddress } from './AddDeliveryAddress';
 
 const actionClass =
   'bg-rewear-accent text-rewear-text flex min-h-[52px] w-full items-center justify-center px-5 text-sm disabled:opacity-50';
@@ -184,11 +187,30 @@ export function CheckoutPage() {
                 ))}
               </select>
             </label>
+            <AddDeliveryAddress
+              disabled={create.isPending || !enabled}
+              onCreated={(address) => {
+                client.setQueryData<UserAddressControllerFindAll200>(
+                  ['/api/user-addresses', session?.user.id],
+                  (previous) => ({
+                    statusCode: 200,
+                    message: previous?.message ?? 'Addresses loaded',
+                    data: [
+                      ...(previous?.data ?? []).map((a) =>
+                        address.isDefault ? { ...a, isDefault: false } : a,
+                      ),
+                      address,
+                    ],
+                  }),
+                );
+                setAddressId(address.id);
+                void client.invalidateQueries({
+                  queryKey: ['/api/user-addresses', session?.user.id],
+                });
+              }}
+            />
             {addresses.data?.data.length === 0 && (
-              <p>
-                No delivery address saved. Add a delivery address before
-                reserving items.
-              </p>
+              <p>No delivery address saved. Add one to reserve your items.</p>
             )}
             <p className="text-[28px] font-semibold">
               {formatPrice(

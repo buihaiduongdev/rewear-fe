@@ -89,3 +89,10 @@ Ghi một mục cho mỗi task có dùng AI. Cập nhật liên kết PR/commit 
 - **Đầu ra:** Chọn món và địa chỉ đã lưu, bắt đầu giữ hàng, URL khôi phục lượt checkout, đồng hồ đếm ngược, hiển thị snapshot theo người bán và xác nhận hủy. Sinh Axios/React Query/Zod bằng Orval từ OpenAPI backend. Khóa lựa chọn khi đang gửi; lưu request ID cho retry mất phản hồi.
 - **Kiểm chứng:** TypeScript, ESLint và build đạt; Cypress Chrome với BE/PostgreSQL thật kiểm tra giữ hàng, tải lại deadline, hủy và giữ lại bằng checkout ID mới. Chrome MCP kiểm tra trực tiếp trạng thái HELD, deadline không đổi sau reload và CANCELLED sau hủy.
 - **Giới hạn:** Chỉ chọn địa chỉ hiện có; chưa có màn tạo địa chỉ, quote shipping hoặc payment. Màn hình dùng cấu trúc/tokens của Figma checkout nhưng không giả lập giá ship hay cổng thanh toán. Next.js phiên bản hiện tại có cảnh báo bảo mật; cần nâng cấp riêng.
+
+### 2026-10-29 — Delivery address during checkout
+
+- **Yêu cầu:** Tiếp tục vòng triển khai, kiểm thử Chrome và PR/review.
+- **Đầu ra:** Dialog thêm địa chỉ dùng API và Zod sinh từ OpenAPI; chọn tỉnh/phường thật, reset phường khi đổi tỉnh, validate và focus trường lỗi, chọn ngay địa chỉ mới từ cache theo tài khoản. Tái sử dụng BaseInputField và token sẵn có; bố cục tham chiếu frame Figma 48:646.
+- **Kiểm chứng:** E2E Chrome gọi backend/PostgreSQL thật, kiểm tra trường bắt buộc/điện thoại, đổi tỉnh, lưu mặc định, tự chọn địa chỉ mới, snapshot checkout và hủy. Đã mở dialog trên Chrome MCP để kiểm tra bố cục.
+- **Giới hạn:** Chỉ địa chỉ Việt Nam; sửa/xóa địa chỉ và màn address book chưa nằm trong PR này. Không sửa contract backend hoặc client sinh tự động.
