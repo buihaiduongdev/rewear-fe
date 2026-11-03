@@ -83,9 +83,9 @@ export function CartPage() {
                   {group.items.map((item) => (
                     <article
                       key={item.productId}
-                      className="flex gap-4 md:flex-wrap md:items-center md:gap-x-6 md:gap-y-1"
+                      className="grid grid-cols-[80px_minmax(0,1fr)] gap-x-4 gap-y-2.5 md:grid-cols-[148px_minmax(0,1fr)] md:items-center md:gap-x-6 md:gap-y-1"
                     >
-                      <div className="bg-rewear-soft relative aspect-[4/5] w-20 shrink-0 self-start md:w-[148px]">
+                      <div className="bg-rewear-soft relative row-span-2 aspect-[4/5] w-20 shrink-0 self-start md:row-span-1 md:w-[148px]">
                         <ProductPhoto
                           url={item.product?.coverUrl ?? null}
                           title={item.product?.title ?? null}
@@ -117,19 +117,6 @@ export function CartPage() {
                             {availabilityLabels[item.availability]}
                           </p>
                         )}
-                        <button
-                          type="button"
-                          disabled={remove.isPending}
-                          onClick={() =>
-                            remove.mutate({ productId: item.productId })
-                          }
-                          className="min-h-11 cursor-pointer text-sm font-semibold disabled:opacity-50 md:hidden"
-                        >
-                          {remove.isPending &&
-                          remove.variables?.productId === item.productId
-                            ? 'Removing…'
-                            : 'Remove'}
-                        </button>
                       </div>
                       <button
                         type="button"
@@ -137,7 +124,7 @@ export function CartPage() {
                         onClick={() =>
                           remove.mutate({ productId: item.productId })
                         }
-                        className="hidden min-h-11 w-full cursor-pointer items-center text-left text-sm font-semibold disabled:opacity-50 md:flex"
+                        className="col-start-2 flex min-h-11 w-full cursor-pointer items-center text-left text-sm font-semibold disabled:opacity-50 md:col-span-2 md:col-start-1"
                       >
                         {remove.isPending &&
                         remove.variables?.productId === item.productId
@@ -171,13 +158,12 @@ export function CartPage() {
               <p className="md:text-rewear-muted text-base leading-6">
                 Shipping calculated at checkout.
               </p>
-              <button
-                type="button"
-                disabled
-                className="bg-rewear-accent text-rewear-text h-[52px] w-full text-sm opacity-60 md:h-12"
+              <Link
+                href="/checkout"
+                className="bg-rewear-accent text-rewear-text flex h-[52px] w-full items-center justify-center text-sm md:h-12"
               >
-                Checkout coming soon
-              </button>
+                Continue to checkout
+              </Link>
               <Link
                 href="/"
                 className="flex min-h-11 items-center justify-center text-sm font-semibold"

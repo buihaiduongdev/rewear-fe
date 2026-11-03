@@ -82,3 +82,10 @@ Ghi một mục cho mỗi task có dùng AI. Cập nhật liên kết PR/commit 
 - **Phạm vi:** Nối API giỏ hàng qua Orval, thêm sản phẩm từ quick view, xem giỏ theo người bán, xử lý trạng thái không khả dụng và xóa sản phẩm. Checkout chưa triển khai.
 - **Kiểm chứng:** TypeScript, ESLint, unit tests và production build; Cypress Chrome đăng nhập bằng tài khoản seed rồi thêm, xem và xóa sản phẩm qua backend và PostgreSQL riêng.
 - **Giới hạn:** Chưa đối chiếu màn Cart với Figma trong phiên này; chưa kiểm thử checkout hoặc thanh toán. Next.js cảnh báo phiên bản hiện tại có lỗ hổng và đề nghị nâng cấp.
+
+### 2026-10-29 — Checkout reservation UI
+
+- **Yêu cầu:** Nối BE/FE checkout, viết test và kiểm tra trực tiếp trên Chrome.
+- **Đầu ra:** Chọn món và địa chỉ đã lưu, bắt đầu giữ hàng, URL khôi phục lượt checkout, đồng hồ đếm ngược, hiển thị snapshot theo người bán và xác nhận hủy. Sinh Axios/React Query/Zod bằng Orval từ OpenAPI backend. Khóa lựa chọn khi đang gửi; lưu request ID cho retry mất phản hồi.
+- **Kiểm chứng:** TypeScript, ESLint và build đạt; Cypress Chrome với BE/PostgreSQL thật kiểm tra giữ hàng, tải lại deadline, hủy và giữ lại bằng checkout ID mới. Chrome MCP kiểm tra trực tiếp trạng thái HELD, deadline không đổi sau reload và CANCELLED sau hủy.
+- **Giới hạn:** Chỉ chọn địa chỉ hiện có; chưa có màn tạo địa chỉ, quote shipping hoặc payment. Màn hình dùng cấu trúc/tokens của Figma checkout nhưng không giả lập giá ship hay cổng thanh toán. Next.js phiên bản hiện tại có cảnh báo bảo mật; cần nâng cấp riêng.

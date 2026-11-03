@@ -516,6 +516,460 @@ export type CartControllerAdd200 = {
   data: CartControllerAdd200Data;
 };
 
+export type CheckoutControllerCreateBody = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  requestId: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  addressId: string;
+  /**
+   * @minItems 1
+   * @maxItems 50
+   * @items.pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+   */
+  productIds: string[];
+};
+
+export type CheckoutControllerCreate200StatusCode =
+  (typeof CheckoutControllerCreate200StatusCode)[keyof typeof CheckoutControllerCreate200StatusCode];
+
+export const CheckoutControllerCreate200StatusCode = {
+  NUMBER_200: 200,
+} as const;
+
+export type CheckoutControllerCreate200DataStatus =
+  (typeof CheckoutControllerCreate200DataStatus)[keyof typeof CheckoutControllerCreate200DataStatus];
+
+export const CheckoutControllerCreate200DataStatus = {
+  HELD: 'HELD',
+  EMPTY: 'EMPTY',
+  CANCELLED: 'CANCELLED',
+  EXPIRED: 'EXPIRED',
+} as const;
+
+export type CheckoutControllerCreate200DataRemovedItemsItem = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  productId: string;
+  reason: string;
+};
+
+export type CheckoutControllerCreate200DataAddress = {
+  recipientName: string;
+  phone: string;
+  addressLine1: string;
+  /** @nullable */
+  addressLine2: string | null;
+  countryCode: string;
+  provinceCode: string;
+  provinceName: string;
+  wardCode: string;
+  wardName: string;
+  /** @nullable */
+  postalCode: string | null;
+  /** @nullable */
+  deliveryInstructions: string | null;
+};
+
+export type CheckoutControllerCreate200DataOrdersItemSourceType =
+  (typeof CheckoutControllerCreate200DataOrdersItemSourceType)[keyof typeof CheckoutControllerCreate200DataOrdersItemSourceType];
+
+export const CheckoutControllerCreate200DataOrdersItemSourceType = {
+  USER: 'USER',
+  SHOP: 'SHOP',
+} as const;
+
+export type CheckoutControllerCreate200DataOrdersItemAddress = {
+  recipientName: string;
+  phone: string;
+  addressLine1: string;
+  /** @nullable */
+  addressLine2: string | null;
+  countryCode: string;
+  provinceCode: string;
+  provinceName: string;
+  wardCode: string;
+  wardName: string;
+  /** @nullable */
+  postalCode: string | null;
+  /** @nullable */
+  deliveryInstructions: string | null;
+};
+
+export type CheckoutControllerCreate200DataOrdersItemItemsItem = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  productId: string;
+  title: string;
+  /**
+   * @minimum -9007199254740991
+   * @maximum 9007199254740991
+   */
+  price: number;
+  /**
+   * @minimum -9007199254740991
+   * @maximum 9007199254740991
+   */
+  revision: number;
+  /** @nullable */
+  size: string | null;
+  condition: string;
+  /** @nullable */
+  coverUrl: string | null;
+};
+
+export type CheckoutControllerCreate200DataOrdersItem = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  sourceType: CheckoutControllerCreate200DataOrdersItemSourceType;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  sourceId: string;
+  sourceName: string;
+  address: CheckoutControllerCreate200DataOrdersItemAddress;
+  items: CheckoutControllerCreate200DataOrdersItemItemsItem[];
+  /**
+   * @minimum -9007199254740991
+   * @maximum 9007199254740991
+   */
+  subtotal: number;
+  /**
+   * @minimum -9007199254740991
+   * @maximum 9007199254740991
+   * @nullable
+   */
+  shippingFee: number | null;
+};
+
+export type CheckoutControllerCreate200DataCurrency =
+  (typeof CheckoutControllerCreate200DataCurrency)[keyof typeof CheckoutControllerCreate200DataCurrency];
+
+export const CheckoutControllerCreate200DataCurrency = {
+  VND: 'VND',
+} as const;
+
+export type CheckoutControllerCreate200Data = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  status: CheckoutControllerCreate200DataStatus;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  expiresAt: string | null;
+  /**
+   * @minimum -9007199254740991
+   * @maximum 9007199254740991
+   */
+  holdSeconds: number;
+  removedItems: CheckoutControllerCreate200DataRemovedItemsItem[];
+  address: CheckoutControllerCreate200DataAddress;
+  orders: CheckoutControllerCreate200DataOrdersItem[];
+  /**
+   * @minimum -9007199254740991
+   * @maximum 9007199254740991
+   */
+  subtotal: number;
+  currency: CheckoutControllerCreate200DataCurrency;
+  paymentReady: false;
+};
+
+export type CheckoutControllerCreate200 = {
+  statusCode: CheckoutControllerCreate200StatusCode;
+  message: string;
+  data: CheckoutControllerCreate200Data;
+};
+
+export type CheckoutControllerFind200StatusCode =
+  (typeof CheckoutControllerFind200StatusCode)[keyof typeof CheckoutControllerFind200StatusCode];
+
+export const CheckoutControllerFind200StatusCode = {
+  NUMBER_200: 200,
+} as const;
+
+export type CheckoutControllerFind200DataStatus =
+  (typeof CheckoutControllerFind200DataStatus)[keyof typeof CheckoutControllerFind200DataStatus];
+
+export const CheckoutControllerFind200DataStatus = {
+  HELD: 'HELD',
+  EMPTY: 'EMPTY',
+  CANCELLED: 'CANCELLED',
+  EXPIRED: 'EXPIRED',
+} as const;
+
+export type CheckoutControllerFind200DataRemovedItemsItem = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  productId: string;
+  reason: string;
+};
+
+export type CheckoutControllerFind200DataAddress = {
+  recipientName: string;
+  phone: string;
+  addressLine1: string;
+  /** @nullable */
+  addressLine2: string | null;
+  countryCode: string;
+  provinceCode: string;
+  provinceName: string;
+  wardCode: string;
+  wardName: string;
+  /** @nullable */
+  postalCode: string | null;
+  /** @nullable */
+  deliveryInstructions: string | null;
+};
+
+export type CheckoutControllerFind200DataOrdersItemSourceType =
+  (typeof CheckoutControllerFind200DataOrdersItemSourceType)[keyof typeof CheckoutControllerFind200DataOrdersItemSourceType];
+
+export const CheckoutControllerFind200DataOrdersItemSourceType = {
+  USER: 'USER',
+  SHOP: 'SHOP',
+} as const;
+
+export type CheckoutControllerFind200DataOrdersItemAddress = {
+  recipientName: string;
+  phone: string;
+  addressLine1: string;
+  /** @nullable */
+  addressLine2: string | null;
+  countryCode: string;
+  provinceCode: string;
+  provinceName: string;
+  wardCode: string;
+  wardName: string;
+  /** @nullable */
+  postalCode: string | null;
+  /** @nullable */
+  deliveryInstructions: string | null;
+};
+
+export type CheckoutControllerFind200DataOrdersItemItemsItem = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  productId: string;
+  title: string;
+  /**
+   * @minimum -9007199254740991
+   * @maximum 9007199254740991
+   */
+  price: number;
+  /**
+   * @minimum -9007199254740991
+   * @maximum 9007199254740991
+   */
+  revision: number;
+  /** @nullable */
+  size: string | null;
+  condition: string;
+  /** @nullable */
+  coverUrl: string | null;
+};
+
+export type CheckoutControllerFind200DataOrdersItem = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  sourceType: CheckoutControllerFind200DataOrdersItemSourceType;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  sourceId: string;
+  sourceName: string;
+  address: CheckoutControllerFind200DataOrdersItemAddress;
+  items: CheckoutControllerFind200DataOrdersItemItemsItem[];
+  /**
+   * @minimum -9007199254740991
+   * @maximum 9007199254740991
+   */
+  subtotal: number;
+  /**
+   * @minimum -9007199254740991
+   * @maximum 9007199254740991
+   * @nullable
+   */
+  shippingFee: number | null;
+};
+
+export type CheckoutControllerFind200DataCurrency =
+  (typeof CheckoutControllerFind200DataCurrency)[keyof typeof CheckoutControllerFind200DataCurrency];
+
+export const CheckoutControllerFind200DataCurrency = {
+  VND: 'VND',
+} as const;
+
+export type CheckoutControllerFind200Data = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  status: CheckoutControllerFind200DataStatus;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  expiresAt: string | null;
+  /**
+   * @minimum -9007199254740991
+   * @maximum 9007199254740991
+   */
+  holdSeconds: number;
+  removedItems: CheckoutControllerFind200DataRemovedItemsItem[];
+  address: CheckoutControllerFind200DataAddress;
+  orders: CheckoutControllerFind200DataOrdersItem[];
+  /**
+   * @minimum -9007199254740991
+   * @maximum 9007199254740991
+   */
+  subtotal: number;
+  currency: CheckoutControllerFind200DataCurrency;
+  paymentReady: false;
+};
+
+export type CheckoutControllerFind200 = {
+  statusCode: CheckoutControllerFind200StatusCode;
+  message: string;
+  data: CheckoutControllerFind200Data;
+};
+
+export type CheckoutControllerCancel200StatusCode =
+  (typeof CheckoutControllerCancel200StatusCode)[keyof typeof CheckoutControllerCancel200StatusCode];
+
+export const CheckoutControllerCancel200StatusCode = {
+  NUMBER_200: 200,
+} as const;
+
+export type CheckoutControllerCancel200DataStatus =
+  (typeof CheckoutControllerCancel200DataStatus)[keyof typeof CheckoutControllerCancel200DataStatus];
+
+export const CheckoutControllerCancel200DataStatus = {
+  HELD: 'HELD',
+  EMPTY: 'EMPTY',
+  CANCELLED: 'CANCELLED',
+  EXPIRED: 'EXPIRED',
+} as const;
+
+export type CheckoutControllerCancel200DataRemovedItemsItem = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  productId: string;
+  reason: string;
+};
+
+export type CheckoutControllerCancel200DataAddress = {
+  recipientName: string;
+  phone: string;
+  addressLine1: string;
+  /** @nullable */
+  addressLine2: string | null;
+  countryCode: string;
+  provinceCode: string;
+  provinceName: string;
+  wardCode: string;
+  wardName: string;
+  /** @nullable */
+  postalCode: string | null;
+  /** @nullable */
+  deliveryInstructions: string | null;
+};
+
+export type CheckoutControllerCancel200DataOrdersItemSourceType =
+  (typeof CheckoutControllerCancel200DataOrdersItemSourceType)[keyof typeof CheckoutControllerCancel200DataOrdersItemSourceType];
+
+export const CheckoutControllerCancel200DataOrdersItemSourceType = {
+  USER: 'USER',
+  SHOP: 'SHOP',
+} as const;
+
+export type CheckoutControllerCancel200DataOrdersItemAddress = {
+  recipientName: string;
+  phone: string;
+  addressLine1: string;
+  /** @nullable */
+  addressLine2: string | null;
+  countryCode: string;
+  provinceCode: string;
+  provinceName: string;
+  wardCode: string;
+  wardName: string;
+  /** @nullable */
+  postalCode: string | null;
+  /** @nullable */
+  deliveryInstructions: string | null;
+};
+
+export type CheckoutControllerCancel200DataOrdersItemItemsItem = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  productId: string;
+  title: string;
+  /**
+   * @minimum -9007199254740991
+   * @maximum 9007199254740991
+   */
+  price: number;
+  /**
+   * @minimum -9007199254740991
+   * @maximum 9007199254740991
+   */
+  revision: number;
+  /** @nullable */
+  size: string | null;
+  condition: string;
+  /** @nullable */
+  coverUrl: string | null;
+};
+
+export type CheckoutControllerCancel200DataOrdersItem = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  sourceType: CheckoutControllerCancel200DataOrdersItemSourceType;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  sourceId: string;
+  sourceName: string;
+  address: CheckoutControllerCancel200DataOrdersItemAddress;
+  items: CheckoutControllerCancel200DataOrdersItemItemsItem[];
+  /**
+   * @minimum -9007199254740991
+   * @maximum 9007199254740991
+   */
+  subtotal: number;
+  /**
+   * @minimum -9007199254740991
+   * @maximum 9007199254740991
+   * @nullable
+   */
+  shippingFee: number | null;
+};
+
+export type CheckoutControllerCancel200DataCurrency =
+  (typeof CheckoutControllerCancel200DataCurrency)[keyof typeof CheckoutControllerCancel200DataCurrency];
+
+export const CheckoutControllerCancel200DataCurrency = {
+  VND: 'VND',
+} as const;
+
+export type CheckoutControllerCancel200Data = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  status: CheckoutControllerCancel200DataStatus;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  expiresAt: string | null;
+  /**
+   * @minimum -9007199254740991
+   * @maximum 9007199254740991
+   */
+  holdSeconds: number;
+  removedItems: CheckoutControllerCancel200DataRemovedItemsItem[];
+  address: CheckoutControllerCancel200DataAddress;
+  orders: CheckoutControllerCancel200DataOrdersItem[];
+  /**
+   * @minimum -9007199254740991
+   * @maximum 9007199254740991
+   */
+  subtotal: number;
+  currency: CheckoutControllerCancel200DataCurrency;
+  paymentReady: false;
+};
+
+export type CheckoutControllerCancel200 = {
+  statusCode: CheckoutControllerCancel200StatusCode;
+  message: string;
+  data: CheckoutControllerCancel200Data;
+};
+
 export type ShopControllerFindAll200StatusCode =
   (typeof ShopControllerFindAll200StatusCode)[keyof typeof ShopControllerFindAll200StatusCode];
 
