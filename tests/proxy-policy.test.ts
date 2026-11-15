@@ -8,7 +8,7 @@ describe('Public marketplace access', () => {
     });
     expect(
       getProxyDecision(
-        new URL('http://localhost:5000/?search=wool&view=all'),
+        new URL('http://localhost:5000/products?search=wool'),
         false,
       ),
     ).toEqual({ action: 'next' });

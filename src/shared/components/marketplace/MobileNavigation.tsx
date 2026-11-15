@@ -22,7 +22,7 @@ export function MobileNavigation({
         Home
       </Link>
       <Link
-        href="/?view=all#new-arrivals"
+        href="/products"
         className="bg-rewear-soft flex min-h-11 items-center justify-center px-3"
       >
         Shop

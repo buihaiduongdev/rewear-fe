@@ -38,15 +38,10 @@ export const ShopControllerFindAllResponse = zod.object({
 
 export const shopControllerCreateBodyNameMax = 100;
 
-export const shopControllerCreateBodyNameRegExp = new RegExp('\\S');
 export const shopControllerCreateBodyDescriptionMax = 1000;
 
 export const ShopControllerCreateBody = zod.strictObject({
-  name: zod
-    .string()
-    .min(1)
-    .max(shopControllerCreateBodyNameMax)
-    .regex(shopControllerCreateBodyNameRegExp),
+  name: zod.string().min(1).max(shopControllerCreateBodyNameMax),
   description: zod
     .string()
     .max(shopControllerCreateBodyDescriptionMax)
@@ -184,16 +179,10 @@ export const ShopControllerUpdateParams = zod.object({
 
 export const shopControllerUpdateBodyNameMax = 100;
 
-export const shopControllerUpdateBodyNameRegExp = new RegExp('\\S');
 export const shopControllerUpdateBodyDescriptionMax = 1000;
 
 export const ShopControllerUpdateBody = zod.strictObject({
-  name: zod
-    .string()
-    .min(1)
-    .max(shopControllerUpdateBodyNameMax)
-    .regex(shopControllerUpdateBodyNameRegExp)
-    .nullish(),
+  name: zod.string().min(1).max(shopControllerUpdateBodyNameMax).nullish(),
   description: zod
     .string()
     .max(shopControllerUpdateBodyDescriptionMax)

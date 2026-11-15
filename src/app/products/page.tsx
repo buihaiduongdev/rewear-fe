@@ -1,0 +1,17 @@
+import { Suspense } from 'react';
+
+import type { Metadata } from 'next';
+
+import { ProductsPage } from '@/features/home/components/ProductsPage';
+
+export const metadata: Metadata = { title: 'Clothing | RE.WEAR' };
+
+export default function Products() {
+  return (
+    <div className="bg-rewear-surface text-rewear-text min-h-dvh [--foreground:var(--color-rewear-text)] [--muted-foreground:var(--color-rewear-muted)]">
+      <Suspense fallback={<p role="status">Loading clothing…</p>}>
+        <ProductsPage />
+      </Suspense>
+    </div>
+  );
+}

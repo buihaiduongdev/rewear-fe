@@ -5,48 +5,21 @@
  * API documentation for Rewear
  * OpenAPI spec version: 1.0
  */
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import type {
-  DataTag,
-  DefinedInitialDataOptions,
-  DefinedUseQueryResult,
   MutationFunction,
   QueryClient,
-  QueryFunction,
-  QueryKey,
-  UndefinedInitialDataOptions,
   UseMutationOptions,
   UseMutationResult,
-  UseQueryOptions,
-  UseQueryResult,
 } from '@tanstack/react-query';
 
 import type {
-  ShippingControllerPackageOptions200,
   ShippingControllerUpdatePackage200,
   ShippingControllerUpdatePackageBody,
 } from '../../models/index';
 import { orvalRequest } from '../../orval-request';
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
-
-const withQueryKey = <T extends object, K>(
-  query: T,
-  queryKey: K,
-): T & { queryKey: K } => {
-  const result = { queryKey } as T & { queryKey: K };
-  for (const key of Object.keys(query)) {
-    // The explicit queryKey always wins, matching the previous
-    // `{ ...query, queryKey }` spread where it was set last.
-    if (key === 'queryKey') continue;
-    Object.defineProperty(result, key, {
-      enumerable: true,
-      configurable: true,
-      get: () => (query as Record<string, unknown>)[key],
-    });
-  }
-  return result;
-};
 
 export const shippingControllerUpdatePackage = (
   id: string,
@@ -143,149 +116,3 @@ export const useShippingControllerUpdatePackage = <
     queryClient,
   );
 };
-export const shippingControllerPackageOptions = (
-  options?: SecondParameter<typeof orvalRequest>,
-  signal?: AbortSignal,
-) => {
-  return orvalRequest<ShippingControllerPackageOptions200>(
-    { url: `/api/shipping/package-options`, method: 'GET', signal },
-    options,
-  );
-};
-
-export const getShippingControllerPackageOptionsQueryKey = () => {
-  return [`/api/shipping/package-options`] as const;
-};
-
-export const getShippingControllerPackageOptionsQueryOptions = <
-  TData = Awaited<ReturnType<typeof shippingControllerPackageOptions>>,
-  TError = unknown,
->(options?: {
-  query?: Partial<
-    UseQueryOptions<
-      Awaited<ReturnType<typeof shippingControllerPackageOptions>>,
-      TError,
-      TData
-    >
-  >;
-  request?: SecondParameter<typeof orvalRequest>;
-}) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {};
-
-  const queryKey =
-    queryOptions?.queryKey ?? getShippingControllerPackageOptionsQueryKey();
-
-  const queryFn: QueryFunction<
-    Awaited<ReturnType<typeof shippingControllerPackageOptions>>
-  > = ({ signal }) => shippingControllerPackageOptions(requestOptions, signal);
-
-  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof shippingControllerPackageOptions>>,
-    TError,
-    TData
-  > & { queryKey: DataTag<QueryKey, TData, TError> };
-};
-
-export type ShippingControllerPackageOptionsQueryResult = NonNullable<
-  Awaited<ReturnType<typeof shippingControllerPackageOptions>>
->;
-export type ShippingControllerPackageOptionsQueryError = unknown;
-
-export function useShippingControllerPackageOptions<
-  TData = Awaited<ReturnType<typeof shippingControllerPackageOptions>>,
-  TError = unknown,
->(
-  options: {
-    query: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof shippingControllerPackageOptions>>,
-        TError,
-        TData
-      >
-    > &
-      Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof shippingControllerPackageOptions>>,
-          TError,
-          Awaited<ReturnType<typeof shippingControllerPackageOptions>>
-        >,
-        'initialData'
-      >;
-    request?: SecondParameter<typeof orvalRequest>;
-  },
-  queryClient?: QueryClient,
-): DefinedUseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>;
-};
-export function useShippingControllerPackageOptions<
-  TData = Awaited<ReturnType<typeof shippingControllerPackageOptions>>,
-  TError = unknown,
->(
-  options?: {
-    query?: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof shippingControllerPackageOptions>>,
-        TError,
-        TData
-      >
-    > &
-      Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof shippingControllerPackageOptions>>,
-          TError,
-          Awaited<ReturnType<typeof shippingControllerPackageOptions>>
-        >,
-        'initialData'
-      >;
-    request?: SecondParameter<typeof orvalRequest>;
-  },
-  queryClient?: QueryClient,
-): UseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>;
-};
-export function useShippingControllerPackageOptions<
-  TData = Awaited<ReturnType<typeof shippingControllerPackageOptions>>,
-  TError = unknown,
->(
-  options?: {
-    query?: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof shippingControllerPackageOptions>>,
-        TError,
-        TData
-      >
-    >;
-    request?: SecondParameter<typeof orvalRequest>;
-  },
-  queryClient?: QueryClient,
-): UseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>;
-};
-
-export function useShippingControllerPackageOptions<
-  TData = Awaited<ReturnType<typeof shippingControllerPackageOptions>>,
-  TError = unknown,
->(
-  options?: {
-    query?: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof shippingControllerPackageOptions>>,
-        TError,
-        TData
-      >
-    >;
-    request?: SecondParameter<typeof orvalRequest>;
-  },
-  queryClient?: QueryClient,
-): UseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>;
-} {
-  const queryOptions = getShippingControllerPackageOptionsQueryOptions(options);
-
-  const query = useQuery(queryOptions, queryClient) as UseQueryResult<
-    TData,
-    TError
-  > & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  return withQueryKey(query, queryOptions.queryKey);
-}

@@ -48,8 +48,6 @@ export function HomePage() {
     search,
     categoryId,
     shopId,
-    page,
-    expanded,
     categories,
     shops,
     products,
@@ -57,18 +55,9 @@ export function HomePage() {
   } = useHomeCatalog();
   const { status: sessionStatus } = useSession();
   const [previewHandle] = useState(() => Dialog.createHandle<HomeProduct>());
-  const items = products.data?.data.items ?? [];
-  const meta = products.data?.data.meta;
+  const items = products.data?.data.data ?? [];
   const shopItems = shops.data?.data.slice(0, 2) ?? [];
-  const activeShop = shops.data?.data.find(({ id }) => id === shopId);
   const hasFilters = Boolean(search || categoryId || shopId);
-  const browseAll = () =>
-    updateFilters({
-      view: 'all',
-      search: undefined,
-      categoryId: undefined,
-      shopId: undefined,
-    });
 
   return (
     <>
@@ -106,7 +95,7 @@ export function HomePage() {
             </p>
             <div className="flex w-full items-center gap-7">
               <Button
-                render={<a href="#new-arrivals" />}
+                render={<Link href="/products" />}
                 nativeButton={false}
                 className={primaryButtonClass}
               >
@@ -144,15 +133,8 @@ export function HomePage() {
               id="arrivals-title"
               className="text-[28px] leading-[34px] font-semibold tracking-[-0.02em] md:text-[40px] md:leading-[46px]"
             >
-              {hasFilters ? 'Find your next piece.' : 'Just landed.'}
+              Just landed.
             </h2>
-            <button
-              type="button"
-              onClick={browseAll}
-              className="hidden min-h-11 shrink-0 cursor-pointer text-sm leading-5 font-semibold hover:underline md:block"
-            >
-              Browse all clothing <span aria-hidden="true">→</span>
-            </button>
           </div>
           <div
             className="flex min-h-11 flex-wrap items-center gap-x-8 gap-y-2 text-sm leading-5 font-semibold"
@@ -187,32 +169,6 @@ export function HomePage() {
               </button>
             )}
           </div>
-          {hasFilters && (
-            <div className="flex flex-wrap items-center gap-4 text-sm">
-              <p role="status">
-                {search && <>Search: “{search}” </>}
-                {activeShop && <>Shop: {activeShop.name} </>}
-                {meta && (
-                  <>
-                    · {meta.total} {meta.total === 1 ? 'piece' : 'pieces'}
-                  </>
-                )}
-              </p>
-              <button
-                type="button"
-                className="min-h-11 cursor-pointer font-semibold underline underline-offset-4"
-                onClick={() =>
-                  updateFilters({
-                    search: undefined,
-                    categoryId: undefined,
-                    shopId: undefined,
-                  })
-                }
-              >
-                Clear filters
-              </button>
-            </div>
-          )}
           <div aria-busy={products.isFetching}>
             {products.isError || products.isPending || items.length === 0 ? (
               <SectionState
@@ -242,39 +198,12 @@ export function HomePage() {
               </div>
             )}
           </div>
-          {expanded && meta && meta.totalPage > 1 && (
-            <nav
-              aria-label="Product pages"
-              className="flex items-center justify-center gap-6 text-sm font-semibold"
-            >
-              <button
-                type="button"
-                disabled={!meta.hasPreviousPage || products.isFetching}
-                onClick={() => updateFilters({ page: String(page - 1) })}
-                className="min-h-11 cursor-pointer disabled:cursor-default disabled:opacity-40"
-              >
-                ← Previous
-              </button>
-              <p aria-live="polite">
-                Page {page} of {meta.totalPage}
-              </p>
-              <button
-                type="button"
-                disabled={!meta.hasNextPage || products.isFetching}
-                onClick={() => updateFilters({ page: String(page + 1) })}
-                className="min-h-11 cursor-pointer disabled:cursor-default disabled:opacity-40"
-              >
-                Next →
-              </button>
-            </nav>
-          )}
-          <button
-            type="button"
-            onClick={browseAll}
-            className="min-h-11 w-fit cursor-pointer text-sm font-semibold hover:underline md:hidden"
+          <Link
+            href="/products"
+            className="min-h-11 w-fit text-sm font-semibold hover:underline"
           >
-            Browse all clothing <span aria-hidden="true">→</span>
-          </button>
+            Browse all clothing →
+          </Link>
         </section>
 
         <section
@@ -363,12 +292,12 @@ export function HomePage() {
         >
           Home
         </Link>
-        <a
-          href="#new-arrivals"
+        <Link
+          href="/products"
           className="bg-rewear-soft flex min-h-11 items-center px-3"
         >
           Shop
-        </a>
+        </Link>
         <CartLink className="bg-rewear-soft flex min-h-11 items-center px-3" />
       </nav>
       <ProductPreview handle={previewHandle} />

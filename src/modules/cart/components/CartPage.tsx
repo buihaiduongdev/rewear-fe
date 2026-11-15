@@ -31,7 +31,7 @@ export function CartPage() {
         cartAction={<CartLink active />}
         search=""
         onSearch={(value) =>
-          router.push(`/?search=${encodeURIComponent(value)}#new-arrivals`)
+          router.push(`/products?search=${encodeURIComponent(value)}`)
         }
       />
       <main
@@ -74,11 +74,11 @@ export function CartPage() {
             <div className="space-y-6 md:space-y-8">
               {data.groups.map((group, index) => (
                 <section
-                  key={group.source?.id ?? `unavailable-${index}`}
+                  key={group.shop?.id ?? `unavailable-${index}`}
                   className="bg-rewear-soft space-y-4 p-4 md:space-y-[18px] md:bg-transparent md:p-0"
                 >
                   <h2 className="text-sm leading-5 font-semibold md:text-[28px] md:leading-[34px] md:tracking-[-0.02em]">
-                    {group.source?.name ?? 'Unavailable items'}
+                    {group.shop?.name ?? 'Unavailable items'}
                   </h2>
                   {group.items.map((item) => (
                     <article

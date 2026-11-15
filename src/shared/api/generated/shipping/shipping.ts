@@ -6,7 +6,6 @@
  * OpenAPI spec version: 1.0
  */
 import type {
-  ShippingControllerPackageOptions200,
   ShippingControllerUpdatePackage200,
   ShippingControllerUpdatePackageBody,
 } from '../../models/index';
@@ -31,19 +30,6 @@ export const shippingControllerUpdatePackage = (
     options,
   );
 };
-export const shippingControllerPackageOptions = (
-  options?: SecondParameter<
-    typeof orvalRequest<ShippingControllerPackageOptions200>
-  >,
-) => {
-  return orvalRequest<ShippingControllerPackageOptions200>(
-    { url: `/api/shipping/package-options`, method: 'GET' },
-    options,
-  );
-};
 export type ShippingControllerUpdatePackageResult = NonNullable<
   Awaited<ReturnType<typeof shippingControllerUpdatePackage>>
->;
-export type ShippingControllerPackageOptionsResult = NonNullable<
-  Awaited<ReturnType<typeof shippingControllerPackageOptions>>
 >;

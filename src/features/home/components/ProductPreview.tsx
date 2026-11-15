@@ -50,12 +50,13 @@ export function ProductPreview({
                     {product.description || 'No additional description.'}
                   </p>
                   <p className="text-sm">
-                    Sold by{' '}
-                    {product.shop?.name ??
-                      product.seller?.fullName ??
-                      'an independent seller'}
+                    Sold by {product.shop?.name ?? 'an independent seller'}
                   </p>
-                  <AddToCartAction product={product} primary />
+                  <AddToCartAction
+                    product={product}
+                    primary
+                    onAdded={() => handle.close()}
+                  />
                   {product.brand && (
                     <p className="text-sm">Brand: {product.brand}</p>
                   )}

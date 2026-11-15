@@ -15,74 +15,41 @@ export const ShippingControllerUpdatePackageParams = zod.object({
   id: zod.uuid().regex(shippingControllerUpdatePackagePathIdRegExp),
 });
 
-export const shippingControllerUpdatePackageBodyWeightTwoGramsExclusiveMin = 0;
-export const shippingControllerUpdatePackageBodyWeightTwoGramsMax = 50000;
+export const shippingControllerUpdatePackageBodyWeightGramsExclusiveMin = 0;
+export const shippingControllerUpdatePackageBodyWeightGramsMax = 50000;
 
-export const shippingControllerUpdatePackageBodySizeTwoLengthCmExclusiveMin = 0;
-export const shippingControllerUpdatePackageBodySizeTwoLengthCmMax = 200;
+export const shippingControllerUpdatePackageBodyLengthCmExclusiveMin = 0;
+export const shippingControllerUpdatePackageBodyLengthCmMax = 200;
 
-export const shippingControllerUpdatePackageBodySizeTwoWidthCmExclusiveMin = 0;
-export const shippingControllerUpdatePackageBodySizeTwoWidthCmMax = 200;
+export const shippingControllerUpdatePackageBodyWidthCmExclusiveMin = 0;
+export const shippingControllerUpdatePackageBodyWidthCmMax = 200;
 
-export const shippingControllerUpdatePackageBodySizeTwoHeightCmExclusiveMin = 0;
-export const shippingControllerUpdatePackageBodySizeTwoHeightCmMax = 200;
+export const shippingControllerUpdatePackageBodyHeightCmExclusiveMin = 0;
+export const shippingControllerUpdatePackageBodyHeightCmMax = 200;
 
 export const ShippingControllerUpdatePackageBody = zod.strictObject({
-  weight: zod.union([
-    zod.strictObject({
-      mode: zod.enum(['RANGE']),
-      preset: zod.enum([
-        'UP_TO_250_G',
-        'UP_TO_500_G',
-        'UP_TO_1000_G',
-        'UP_TO_2000_G',
-        'UP_TO_5000_G',
-      ]),
-    }),
-    zod.strictObject({
-      mode: zod.enum(['CUSTOM']),
-      grams: zod
-        .int()
-        .gt(shippingControllerUpdatePackageBodyWeightTwoGramsExclusiveMin)
-        .max(shippingControllerUpdatePackageBodyWeightTwoGramsMax),
-    }),
-  ]),
-  size: zod.union([
-    zod.strictObject({
-      mode: zod.enum(['RANGE']),
-      preset: zod.enum([
-        'BOX_20_15_10_CM',
-        'BOX_30_20_15_CM',
-        'BOX_40_30_20_CM',
-        'BOX_50_40_30_CM',
-      ]),
-    }),
-    zod.strictObject({
-      mode: zod.enum(['CUSTOM']),
-      lengthCm: zod
-        .number()
-        .gt(shippingControllerUpdatePackageBodySizeTwoLengthCmExclusiveMin)
-        .max(shippingControllerUpdatePackageBodySizeTwoLengthCmMax),
-      widthCm: zod
-        .number()
-        .gt(shippingControllerUpdatePackageBodySizeTwoWidthCmExclusiveMin)
-        .max(shippingControllerUpdatePackageBodySizeTwoWidthCmMax),
-      heightCm: zod
-        .number()
-        .gt(shippingControllerUpdatePackageBodySizeTwoHeightCmExclusiveMin)
-        .max(shippingControllerUpdatePackageBodySizeTwoHeightCmMax),
-    }),
-  ]),
+  weightGrams: zod
+    .int()
+    .gt(shippingControllerUpdatePackageBodyWeightGramsExclusiveMin)
+    .max(shippingControllerUpdatePackageBodyWeightGramsMax),
+  lengthCm: zod
+    .number()
+    .gt(shippingControllerUpdatePackageBodyLengthCmExclusiveMin)
+    .max(shippingControllerUpdatePackageBodyLengthCmMax),
+  widthCm: zod
+    .number()
+    .gt(shippingControllerUpdatePackageBodyWidthCmExclusiveMin)
+    .max(shippingControllerUpdatePackageBodyWidthCmMax),
+  heightCm: zod
+    .number()
+    .gt(shippingControllerUpdatePackageBodyHeightCmExclusiveMin)
+    .max(shippingControllerUpdatePackageBodyHeightCmMax),
 });
 
 export const shippingControllerUpdatePackageResponseDataIdRegExp = new RegExp(
   '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
 );
 export const shippingControllerUpdatePackageResponseDataCategoryIdRegExp =
-  new RegExp(
-    '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
-  );
-export const shippingControllerUpdatePackageResponseDataSellerUserIdRegExp =
   new RegExp(
     '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
   );
@@ -114,17 +81,17 @@ export const shippingControllerUpdatePackageResponseDataMeasurementsSleeveMax = 
 export const shippingControllerUpdatePackageResponseDataMeasurementsInseamExclusiveMin = 0;
 export const shippingControllerUpdatePackageResponseDataMeasurementsInseamMax = 500;
 
-export const shippingControllerUpdatePackageResponseDataShippingPackageWeightTwoGramsExclusiveMin = 0;
-export const shippingControllerUpdatePackageResponseDataShippingPackageWeightTwoGramsMax = 50000;
+export const shippingControllerUpdatePackageResponseDataShippingPackageWeightGramsExclusiveMin = 0;
+export const shippingControllerUpdatePackageResponseDataShippingPackageWeightGramsMax = 50000;
 
-export const shippingControllerUpdatePackageResponseDataShippingPackageSizeTwoLengthCmExclusiveMin = 0;
-export const shippingControllerUpdatePackageResponseDataShippingPackageSizeTwoLengthCmMax = 200;
+export const shippingControllerUpdatePackageResponseDataShippingPackageLengthCmExclusiveMin = 0;
+export const shippingControllerUpdatePackageResponseDataShippingPackageLengthCmMax = 200;
 
-export const shippingControllerUpdatePackageResponseDataShippingPackageSizeTwoWidthCmExclusiveMin = 0;
-export const shippingControllerUpdatePackageResponseDataShippingPackageSizeTwoWidthCmMax = 200;
+export const shippingControllerUpdatePackageResponseDataShippingPackageWidthCmExclusiveMin = 0;
+export const shippingControllerUpdatePackageResponseDataShippingPackageWidthCmMax = 200;
 
-export const shippingControllerUpdatePackageResponseDataShippingPackageSizeTwoHeightCmExclusiveMin = 0;
-export const shippingControllerUpdatePackageResponseDataShippingPackageSizeTwoHeightCmMax = 200;
+export const shippingControllerUpdatePackageResponseDataShippingPackageHeightCmExclusiveMin = 0;
+export const shippingControllerUpdatePackageResponseDataShippingPackageHeightCmMax = 200;
 
 export const shippingControllerUpdatePackageResponseDataShippingPackageDefault =
   null;
@@ -135,12 +102,6 @@ export const shippingControllerUpdatePackageResponseDataDefectsItemMediaIdsItemR
     '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
   );
 export const shippingControllerUpdatePackageResponseDataDefectsItemMediaIdsMax = 10;
-
-export const shippingControllerUpdatePackageResponseDataRevisionExclusiveMin = 0;
-export const shippingControllerUpdatePackageResponseDataRevisionMax = 9007199254740991;
-
-export const shippingControllerUpdatePackageResponseDataApprovedRevisionExclusiveMin = 0;
-export const shippingControllerUpdatePackageResponseDataApprovedRevisionMax = 9007199254740991;
 
 export const shippingControllerUpdatePackageResponseDataMediaCountMin = 0;
 export const shippingControllerUpdatePackageResponseDataMediaCountMax = 9007199254740991;
@@ -169,10 +130,6 @@ export const shippingControllerUpdatePackageResponseDataCategoryIdRegExpOne =
   new RegExp(
     '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
   );
-export const shippingControllerUpdatePackageResponseDataSellerIdRegExp =
-  new RegExp(
-    '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
-  );
 export const shippingControllerUpdatePackageResponseDataShopIdRegExpOne =
   new RegExp(
     '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
@@ -187,14 +144,9 @@ export const ShippingControllerUpdatePackageResponse = zod.object({
       .uuid()
       .regex(shippingControllerUpdatePackageResponseDataCategoryIdRegExp)
       .nullable(),
-    sellerUserId: zod
-      .uuid()
-      .regex(shippingControllerUpdatePackageResponseDataSellerUserIdRegExp)
-      .nullable(),
     shopId: zod
       .uuid()
-      .regex(shippingControllerUpdatePackageResponseDataShopIdRegExp)
-      .nullable(),
+      .regex(shippingControllerUpdatePackageResponseDataShopIdRegExp),
     title: zod.string().nullable(),
     description: zod.string().nullable(),
     condition: zod
@@ -267,67 +219,38 @@ export const ShippingControllerUpdatePackageResponse = zod.object({
     }),
     shippingPackage: zod
       .object({
-        weight: zod.union([
-          zod.object({
-            mode: zod.enum(['RANGE']),
-            preset: zod.enum([
-              'UP_TO_250_G',
-              'UP_TO_500_G',
-              'UP_TO_1000_G',
-              'UP_TO_2000_G',
-              'UP_TO_5000_G',
-            ]),
-          }),
-          zod.object({
-            mode: zod.enum(['CUSTOM']),
-            grams: zod
-              .int()
-              .gt(
-                shippingControllerUpdatePackageResponseDataShippingPackageWeightTwoGramsExclusiveMin,
-              )
-              .max(
-                shippingControllerUpdatePackageResponseDataShippingPackageWeightTwoGramsMax,
-              ),
-          }),
-        ]),
-        size: zod.union([
-          zod.object({
-            mode: zod.enum(['RANGE']),
-            preset: zod.enum([
-              'BOX_20_15_10_CM',
-              'BOX_30_20_15_CM',
-              'BOX_40_30_20_CM',
-              'BOX_50_40_30_CM',
-            ]),
-          }),
-          zod.object({
-            mode: zod.enum(['CUSTOM']),
-            lengthCm: zod
-              .number()
-              .gt(
-                shippingControllerUpdatePackageResponseDataShippingPackageSizeTwoLengthCmExclusiveMin,
-              )
-              .max(
-                shippingControllerUpdatePackageResponseDataShippingPackageSizeTwoLengthCmMax,
-              ),
-            widthCm: zod
-              .number()
-              .gt(
-                shippingControllerUpdatePackageResponseDataShippingPackageSizeTwoWidthCmExclusiveMin,
-              )
-              .max(
-                shippingControllerUpdatePackageResponseDataShippingPackageSizeTwoWidthCmMax,
-              ),
-            heightCm: zod
-              .number()
-              .gt(
-                shippingControllerUpdatePackageResponseDataShippingPackageSizeTwoHeightCmExclusiveMin,
-              )
-              .max(
-                shippingControllerUpdatePackageResponseDataShippingPackageSizeTwoHeightCmMax,
-              ),
-          }),
-        ]),
+        weightGrams: zod
+          .int()
+          .gt(
+            shippingControllerUpdatePackageResponseDataShippingPackageWeightGramsExclusiveMin,
+          )
+          .max(
+            shippingControllerUpdatePackageResponseDataShippingPackageWeightGramsMax,
+          ),
+        lengthCm: zod
+          .number()
+          .gt(
+            shippingControllerUpdatePackageResponseDataShippingPackageLengthCmExclusiveMin,
+          )
+          .max(
+            shippingControllerUpdatePackageResponseDataShippingPackageLengthCmMax,
+          ),
+        widthCm: zod
+          .number()
+          .gt(
+            shippingControllerUpdatePackageResponseDataShippingPackageWidthCmExclusiveMin,
+          )
+          .max(
+            shippingControllerUpdatePackageResponseDataShippingPackageWidthCmMax,
+          ),
+        heightCm: zod
+          .number()
+          .gt(
+            shippingControllerUpdatePackageResponseDataShippingPackageHeightCmExclusiveMin,
+          )
+          .max(
+            shippingControllerUpdatePackageResponseDataShippingPackageHeightCmMax,
+          ),
       })
       .nullable()
       .default(
@@ -356,17 +279,6 @@ export const ShippingControllerUpdatePackageResponse = zod.object({
           ),
       }),
     ),
-    revision: zod
-      .int()
-      .gt(shippingControllerUpdatePackageResponseDataRevisionExclusiveMin)
-      .max(shippingControllerUpdatePackageResponseDataRevisionMax),
-    approvedRevision: zod
-      .int()
-      .gt(
-        shippingControllerUpdatePackageResponseDataApprovedRevisionExclusiveMin,
-      )
-      .max(shippingControllerUpdatePackageResponseDataApprovedRevisionMax)
-      .nullable(),
     coverUrl: zod.url().nullable(),
     mediaCount: zod
       .int()
@@ -411,114 +323,11 @@ export const ShippingControllerUpdatePackageResponse = zod.object({
         slug: zod.string(),
       })
       .nullable(),
-    seller: zod
-      .object({
-        id: zod
-          .uuid()
-          .regex(shippingControllerUpdatePackageResponseDataSellerIdRegExp),
-        fullName: zod.string(),
-      })
-      .nullable(),
-    shop: zod
-      .object({
-        id: zod
-          .uuid()
-          .regex(shippingControllerUpdatePackageResponseDataShopIdRegExpOne),
-        name: zod.string(),
-      })
-      .nullable(),
-  }),
-});
-
-export const shippingControllerPackageOptionsResponseDataWeightPresetsItemUpperGramsMin =
-  -9007199254740991;
-export const shippingControllerPackageOptionsResponseDataWeightPresetsItemUpperGramsMax = 9007199254740991;
-
-export const shippingControllerPackageOptionsResponseDataSizePresetsItemLengthCmMin =
-  -9007199254740991;
-export const shippingControllerPackageOptionsResponseDataSizePresetsItemLengthCmMax = 9007199254740991;
-
-export const shippingControllerPackageOptionsResponseDataSizePresetsItemWidthCmMin =
-  -9007199254740991;
-export const shippingControllerPackageOptionsResponseDataSizePresetsItemWidthCmMax = 9007199254740991;
-
-export const shippingControllerPackageOptionsResponseDataSizePresetsItemHeightCmMin =
-  -9007199254740991;
-export const shippingControllerPackageOptionsResponseDataSizePresetsItemHeightCmMax = 9007199254740991;
-
-export const shippingControllerPackageOptionsResponseDataCustomLimitsMaxWeightGramsMin =
-  -9007199254740991;
-export const shippingControllerPackageOptionsResponseDataCustomLimitsMaxWeightGramsMax = 9007199254740991;
-
-export const shippingControllerPackageOptionsResponseDataCustomLimitsMaxDimensionCmMin =
-  -9007199254740991;
-export const shippingControllerPackageOptionsResponseDataCustomLimitsMaxDimensionCmMax = 9007199254740991;
-
-export const ShippingControllerPackageOptionsResponse = zod.object({
-  statusCode: zod.literal(200),
-  message: zod.string(),
-  data: zod.object({
-    weightPresets: zod.array(
-      zod.object({
-        id: zod.string(),
-        label: zod.string(),
-        upperGrams: zod
-          .int()
-          .min(
-            shippingControllerPackageOptionsResponseDataWeightPresetsItemUpperGramsMin,
-          )
-          .max(
-            shippingControllerPackageOptionsResponseDataWeightPresetsItemUpperGramsMax,
-          ),
-      }),
-    ),
-    sizePresets: zod.array(
-      zod.object({
-        id: zod.string(),
-        label: zod.string(),
-        lengthCm: zod
-          .int()
-          .min(
-            shippingControllerPackageOptionsResponseDataSizePresetsItemLengthCmMin,
-          )
-          .max(
-            shippingControllerPackageOptionsResponseDataSizePresetsItemLengthCmMax,
-          ),
-        widthCm: zod
-          .int()
-          .min(
-            shippingControllerPackageOptionsResponseDataSizePresetsItemWidthCmMin,
-          )
-          .max(
-            shippingControllerPackageOptionsResponseDataSizePresetsItemWidthCmMax,
-          ),
-        heightCm: zod
-          .int()
-          .min(
-            shippingControllerPackageOptionsResponseDataSizePresetsItemHeightCmMin,
-          )
-          .max(
-            shippingControllerPackageOptionsResponseDataSizePresetsItemHeightCmMax,
-          ),
-      }),
-    ),
-    customLimits: zod.object({
-      maxWeightGrams: zod
-        .int()
-        .min(
-          shippingControllerPackageOptionsResponseDataCustomLimitsMaxWeightGramsMin,
-        )
-        .max(
-          shippingControllerPackageOptionsResponseDataCustomLimitsMaxWeightGramsMax,
-        ),
-      maxDimensionCm: zod
-        .int()
-        .min(
-          shippingControllerPackageOptionsResponseDataCustomLimitsMaxDimensionCmMin,
-        )
-        .max(
-          shippingControllerPackageOptionsResponseDataCustomLimitsMaxDimensionCmMax,
-        ),
+    shop: zod.object({
+      id: zod
+        .uuid()
+        .regex(shippingControllerUpdatePackageResponseDataShopIdRegExpOne),
+      name: zod.string(),
     }),
   }),
 });

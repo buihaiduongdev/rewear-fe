@@ -1,6 +1,6 @@
-import type { ProductControllerFindAll200DataItemsItem } from '@/shared/api/models';
+import type { ProductControllerFindAll200DataDataItem } from '@/shared/api/models';
 
-type Product = ProductControllerFindAll200DataItemsItem;
+type Product = ProductControllerFindAll200DataDataItem;
 
 export const PRODUCT_CONDITION_LABELS: Record<
   NonNullable<Product['condition']>,

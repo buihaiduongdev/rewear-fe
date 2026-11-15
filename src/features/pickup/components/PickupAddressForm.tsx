@@ -4,25 +4,22 @@ import { useState } from 'react';
 import type { FormEvent } from 'react';
 
 import { getApiErrorMessage } from '@/shared/api/api-error';
-import type { PickupLocationControllerSavePersonal200 } from '@/shared/api/models';
+import type { PickupLocationControllerSaveShop200 } from '@/shared/api/models';
 import {
   useAdministrativeDivisionControllerFindAllProvinces,
   useAdministrativeDivisionControllerFindWardsByProvinceCode,
 } from '@/shared/api/query-generated/administrative-divisions/administrative-divisions';
-import {
-  usePickupLocationControllerSavePersonal,
-  usePickupLocationControllerSaveShop,
-} from '@/shared/api/query-generated/pickup-locations/pickup-locations';
-import { PickupLocationControllerSavePersonalBody } from '@/shared/api/zod-generated/pickup-locations/pickup-locations';
+import { usePickupLocationControllerSaveShop } from '@/shared/api/query-generated/pickup-locations/pickup-locations';
+import { PickupLocationControllerSaveShopBody } from '@/shared/api/zod-generated/pickup-locations/pickup-locations';
 import { Button } from '@/shared/components/ui/button';
 import { BaseInputField } from '@/shared/components/ui/input/BaseInputField';
 
 type Props = {
-  initial: PickupLocationControllerSavePersonal200['data']['location'];
+  initial: PickupLocationControllerSaveShop200['data']['location'];
   shopId: string;
   onBeforeSave: () => Promise<void>;
   onSaving: (saving: boolean) => void;
-  onSaved: (response: PickupLocationControllerSavePersonal200) => void;
+  onSaved: (response: PickupLocationControllerSaveShop200) => void;
 };
 
 export function PickupAddressForm({
@@ -47,25 +44,20 @@ export function PickupAddressForm({
       meta: { skipErrorToast: true, skipSuccessToast: true },
     },
   };
-  const personalSave = usePickupLocationControllerSavePersonal(config);
   const shopSave = usePickupLocationControllerSaveShop(config);
-  const saving = personalSave.isPending || shopSave.isPending;
+  const saving = shopSave.isPending;
   const apiError =
-    provinces.error ||
-    (provinceCode ? wards.error : null) ||
-    personalSave.error ||
-    shopSave.error;
+    provinces.error || (provinceCode ? wards.error : null) || shopSave.error;
   const clear = () => {
     setErrors({});
     setMessage('');
-    personalSave.reset();
     shopSave.reset();
   };
   const submit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (saving) return;
     const fields = new FormData(event.currentTarget);
-    const result = PickupLocationControllerSavePersonalBody.safeParse({
+    const result = PickupLocationControllerSaveShopBody.safeParse({
       contactName: String(fields.get('contactName') ?? '').trim(),
       phone: String(fields.get('phone') ?? '').trim(),
       addressLine1: String(fields.get('addressLine1') ?? '').trim(),
@@ -96,7 +88,7 @@ export function PickupAddressForm({
     setMessage('');
     onSaving(true);
     const callbacks = {
-      onSuccess: (response: PickupLocationControllerSavePersonal200) => {
+      onSuccess: (response: PickupLocationControllerSaveShop200) => {
         onSaved(response);
         setMessage(
           'Pickup address saved. Shipping availability has not been checked yet.',
@@ -104,8 +96,7 @@ export function PickupAddressForm({
       },
       onSettled: () => onSaving(false),
     };
-    if (shopId) shopSave.mutate({ shopId, data: result.data }, callbacks);
-    else personalSave.mutate({ data: result.data }, callbacks);
+    shopSave.mutate({ shopId, data: result.data }, callbacks);
   };
   return (
     <form

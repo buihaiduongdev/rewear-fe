@@ -103,16 +103,8 @@ export type CategoryControllerCreateBody = {
   /**
    * @minLength 1
    * @maxLength 100
-   * @pattern \S
    */
   name: string;
-  /**
-   * @minLength 1
-   * @maxLength 120
-   * @nullable
-   * @pattern ^[a-z0-9]+(?:-[a-z0-9]+)*$
-   */
-  slug?: string | null;
   /** @maxItems 7 */
   requiredMeasurements?: CategoryControllerCreateBodyRequiredMeasurementsItem[];
   /** @nullable */
@@ -217,16 +209,8 @@ export type CategoryControllerUpdateBody = {
    * @minLength 1
    * @maxLength 100
    * @nullable
-   * @pattern \S
    */
   name?: string | null;
-  /**
-   * @minLength 1
-   * @maxLength 120
-   * @nullable
-   * @pattern ^[a-z0-9]+(?:-[a-z0-9]+)*$
-   */
-  slug?: string | null;
   /** @maxItems 7 */
   requiredMeasurements?: CategoryControllerUpdateBodyRequiredMeasurementsItem[];
   /** @nullable */
@@ -280,19 +264,10 @@ export const CartControllerFindMine200StatusCode = {
   NUMBER_200: 200,
 } as const;
 
-export type CartControllerFindMine200DataGroupsItemSourceType =
-  (typeof CartControllerFindMine200DataGroupsItemSourceType)[keyof typeof CartControllerFindMine200DataGroupsItemSourceType];
-
-export const CartControllerFindMine200DataGroupsItemSourceType = {
-  USER: 'USER',
-  SHOP: 'SHOP',
-} as const;
-
 /**
  * @nullable
  */
-export type CartControllerFindMine200DataGroupsItemSource = {
-  type: CartControllerFindMine200DataGroupsItemSourceType;
+export type CartControllerFindMine200DataGroupsItemShop = {
   /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
   id: string;
   name: string;
@@ -353,7 +328,7 @@ export type CartControllerFindMine200DataGroupsItemItemsItem = {
 
 export type CartControllerFindMine200DataGroupsItem = {
   /** @nullable */
-  source: CartControllerFindMine200DataGroupsItemSource;
+  shop: CartControllerFindMine200DataGroupsItemShop;
   items: CartControllerFindMine200DataGroupsItemItemsItem[];
 };
 
@@ -403,19 +378,10 @@ export const CartControllerAdd200StatusCode = {
   NUMBER_200: 200,
 } as const;
 
-export type CartControllerAdd200DataGroupsItemSourceType =
-  (typeof CartControllerAdd200DataGroupsItemSourceType)[keyof typeof CartControllerAdd200DataGroupsItemSourceType];
-
-export const CartControllerAdd200DataGroupsItemSourceType = {
-  USER: 'USER',
-  SHOP: 'SHOP',
-} as const;
-
 /**
  * @nullable
  */
-export type CartControllerAdd200DataGroupsItemSource = {
-  type: CartControllerAdd200DataGroupsItemSourceType;
+export type CartControllerAdd200DataGroupsItemShop = {
   /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
   id: string;
   name: string;
@@ -475,7 +441,7 @@ export type CartControllerAdd200DataGroupsItemItemsItem = {
 
 export type CartControllerAdd200DataGroupsItem = {
   /** @nullable */
-  source: CartControllerAdd200DataGroupsItemSource;
+  shop: CartControllerAdd200DataGroupsItemShop;
   items: CartControllerAdd200DataGroupsItemItemsItem[];
 };
 
@@ -529,12 +495,9 @@ export type CheckoutControllerQuote200DataStatus =
   (typeof CheckoutControllerQuote200DataStatus)[keyof typeof CheckoutControllerQuote200DataStatus];
 
 export const CheckoutControllerQuote200DataStatus = {
-  FETCHING: 'FETCHING',
   READY: 'READY',
   PARTIAL: 'PARTIAL',
   UNAVAILABLE: 'UNAVAILABLE',
-  EXPIRED: 'EXPIRED',
-  INVALIDATED: 'INVALIDATED',
 } as const;
 
 export type CheckoutControllerQuote200DataEnvironment =
@@ -556,14 +519,6 @@ export type CheckoutControllerQuote200DataParcelMethod =
 
 export const CheckoutControllerQuote200DataParcelMethod = {
   BOUNDING_STACK_V1: 'BOUNDING_STACK_V1',
-} as const;
-
-export type CheckoutControllerQuote200DataOrdersItemSourceType =
-  (typeof CheckoutControllerQuote200DataOrdersItemSourceType)[keyof typeof CheckoutControllerQuote200DataOrdersItemSourceType];
-
-export const CheckoutControllerQuote200DataOrdersItemSourceType = {
-  USER: 'USER',
-  SHOP: 'SHOP',
 } as const;
 
 /**
@@ -628,9 +583,8 @@ export const CheckoutControllerQuote200DataOrdersItemReason = {
 export type CheckoutControllerQuote200DataOrdersItem = {
   /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
   orderId: string;
-  sourceType: CheckoutControllerQuote200DataOrdersItemSourceType;
   /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
-  sourceId: string;
+  shopId: string;
   /** @nullable */
   parcel: CheckoutControllerQuote200DataOrdersItemParcel;
   parcelCount: CheckoutControllerQuote200DataOrdersItemParcelCount;
@@ -660,14 +614,11 @@ export const CheckoutControllerQuote200DataCurrency = {
 } as const;
 
 export type CheckoutControllerQuote200Data = {
-  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
-  id: string;
   status: CheckoutControllerQuote200DataStatus;
   environment: CheckoutControllerQuote200DataEnvironment;
   carrier: CheckoutControllerQuote200DataCarrier;
   parcelMethod: CheckoutControllerQuote200DataParcelMethod;
   quotedAt: string;
-  expiresAt: string;
   orders: CheckoutControllerQuote200DataOrdersItem[];
   /**
    * @minimum 0
@@ -711,171 +662,6 @@ export const CheckoutControllerCreate200StatusCode = {
   NUMBER_200: 200,
 } as const;
 
-export type CheckoutControllerCreate200DataShippingQuoteStatus =
-  (typeof CheckoutControllerCreate200DataShippingQuoteStatus)[keyof typeof CheckoutControllerCreate200DataShippingQuoteStatus];
-
-export const CheckoutControllerCreate200DataShippingQuoteStatus = {
-  FETCHING: 'FETCHING',
-  READY: 'READY',
-  PARTIAL: 'PARTIAL',
-  UNAVAILABLE: 'UNAVAILABLE',
-  EXPIRED: 'EXPIRED',
-  INVALIDATED: 'INVALIDATED',
-} as const;
-
-export type CheckoutControllerCreate200DataShippingQuoteEnvironment =
-  (typeof CheckoutControllerCreate200DataShippingQuoteEnvironment)[keyof typeof CheckoutControllerCreate200DataShippingQuoteEnvironment];
-
-export const CheckoutControllerCreate200DataShippingQuoteEnvironment = {
-  SANDBOX: 'SANDBOX',
-} as const;
-
-export type CheckoutControllerCreate200DataShippingQuoteCarrier =
-  (typeof CheckoutControllerCreate200DataShippingQuoteCarrier)[keyof typeof CheckoutControllerCreate200DataShippingQuoteCarrier];
-
-export const CheckoutControllerCreate200DataShippingQuoteCarrier = {
-  GHN: 'GHN',
-} as const;
-
-export type CheckoutControllerCreate200DataShippingQuoteParcelMethod =
-  (typeof CheckoutControllerCreate200DataShippingQuoteParcelMethod)[keyof typeof CheckoutControllerCreate200DataShippingQuoteParcelMethod];
-
-export const CheckoutControllerCreate200DataShippingQuoteParcelMethod = {
-  BOUNDING_STACK_V1: 'BOUNDING_STACK_V1',
-} as const;
-
-export type CheckoutControllerCreate200DataShippingQuoteOrdersItemSourceType =
-  (typeof CheckoutControllerCreate200DataShippingQuoteOrdersItemSourceType)[keyof typeof CheckoutControllerCreate200DataShippingQuoteOrdersItemSourceType];
-
-export const CheckoutControllerCreate200DataShippingQuoteOrdersItemSourceType =
-  {
-    USER: 'USER',
-    SHOP: 'SHOP',
-  } as const;
-
-/**
- * @nullable
- */
-export type CheckoutControllerCreate200DataShippingQuoteOrdersItemParcel = {
-  /**
-   * @maximum 9007199254740991
-   * @exclusiveMinimum 0
-   */
-  weightGrams: number;
-  /**
-   * @maximum 9007199254740991
-   * @exclusiveMinimum 0
-   */
-  lengthCm: number;
-  /**
-   * @maximum 9007199254740991
-   * @exclusiveMinimum 0
-   */
-  widthCm: number;
-  /**
-   * @maximum 9007199254740991
-   * @exclusiveMinimum 0
-   */
-  heightCm: number;
-} | null;
-
-export type CheckoutControllerCreate200DataShippingQuoteOrdersItemParcelCount =
-  (typeof CheckoutControllerCreate200DataShippingQuoteOrdersItemParcelCount)[keyof typeof CheckoutControllerCreate200DataShippingQuoteOrdersItemParcelCount];
-
-export const CheckoutControllerCreate200DataShippingQuoteOrdersItemParcelCount =
-  {
-    NUMBER_1: 1,
-  } as const;
-
-export type CheckoutControllerCreate200DataShippingQuoteOrdersItemStatus =
-  (typeof CheckoutControllerCreate200DataShippingQuoteOrdersItemStatus)[keyof typeof CheckoutControllerCreate200DataShippingQuoteOrdersItemStatus];
-
-export const CheckoutControllerCreate200DataShippingQuoteOrdersItemStatus = {
-  QUOTED: 'QUOTED',
-  UNAVAILABLE: 'UNAVAILABLE',
-} as const;
-
-/**
- * @nullable
- */
-export type CheckoutControllerCreate200DataShippingQuoteOrdersItemReason =
-  | (typeof CheckoutControllerCreate200DataShippingQuoteOrdersItemReason)[keyof typeof CheckoutControllerCreate200DataShippingQuoteOrdersItemReason]
-  | null;
-
-export const CheckoutControllerCreate200DataShippingQuoteOrdersItemReason = {
-  PACKAGE_REQUIRED: 'PACKAGE_REQUIRED',
-  PARCEL_LIMIT_EXCEEDED: 'PARCEL_LIMIT_EXCEEDED',
-  PICKUP_REQUIRED: 'PICKUP_REQUIRED',
-  DECLARED_VALUE_LIMIT: 'DECLARED_VALUE_LIMIT',
-  ADDRESS_MAPPING_UNAVAILABLE: 'ADDRESS_MAPPING_UNAVAILABLE',
-  CARRIER_NOT_CONFIGURED: 'CARRIER_NOT_CONFIGURED',
-  CARRIER_REJECTED: 'CARRIER_REJECTED',
-  CARRIER_UNAVAILABLE: 'CARRIER_UNAVAILABLE',
-} as const;
-
-export type CheckoutControllerCreate200DataShippingQuoteOrdersItem = {
-  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
-  orderId: string;
-  sourceType: CheckoutControllerCreate200DataShippingQuoteOrdersItemSourceType;
-  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
-  sourceId: string;
-  /** @nullable */
-  parcel: CheckoutControllerCreate200DataShippingQuoteOrdersItemParcel;
-  parcelCount: CheckoutControllerCreate200DataShippingQuoteOrdersItemParcelCount;
-  /**
-   * @maximum 9007199254740991
-   * @exclusiveMinimum 0
-   */
-  itemCount: number;
-  status: CheckoutControllerCreate200DataShippingQuoteOrdersItemStatus;
-  /** @nullable */
-  reason: CheckoutControllerCreate200DataShippingQuoteOrdersItemReason;
-  /**
-   * @minimum 0
-   * @maximum 9007199254740991
-   * @nullable
-   */
-  fee: number | null;
-  /** @nullable */
-  estimatedDeliveryAt: string | null;
-};
-
-export type CheckoutControllerCreate200DataShippingQuoteCurrency =
-  (typeof CheckoutControllerCreate200DataShippingQuoteCurrency)[keyof typeof CheckoutControllerCreate200DataShippingQuoteCurrency];
-
-export const CheckoutControllerCreate200DataShippingQuoteCurrency = {
-  VND: 'VND',
-} as const;
-
-/**
- * @nullable
- */
-export type CheckoutControllerCreate200DataShippingQuote = {
-  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
-  id: string;
-  status: CheckoutControllerCreate200DataShippingQuoteStatus;
-  environment: CheckoutControllerCreate200DataShippingQuoteEnvironment;
-  carrier: CheckoutControllerCreate200DataShippingQuoteCarrier;
-  parcelMethod: CheckoutControllerCreate200DataShippingQuoteParcelMethod;
-  quotedAt: string;
-  expiresAt: string;
-  orders: CheckoutControllerCreate200DataShippingQuoteOrdersItem[];
-  /**
-   * @minimum 0
-   * @maximum 9007199254740991
-   * @nullable
-   */
-  totalShippingFee: number | null;
-  /**
-   * @minimum 0
-   * @maximum 9007199254740991
-   * @nullable
-   */
-  grandTotal: number | null;
-  currency: CheckoutControllerCreate200DataShippingQuoteCurrency;
-  paymentReady: false;
-} | null;
-
 export type CheckoutControllerCreate200DataStatus =
   (typeof CheckoutControllerCreate200DataStatus)[keyof typeof CheckoutControllerCreate200DataStatus];
 
@@ -884,6 +670,7 @@ export const CheckoutControllerCreate200DataStatus = {
   EMPTY: 'EMPTY',
   CANCELLED: 'CANCELLED',
   EXPIRED: 'EXPIRED',
+  PAID: 'PAID',
 } as const;
 
 export type CheckoutControllerCreate200DataRemovedItemsItem = {
@@ -908,14 +695,6 @@ export type CheckoutControllerCreate200DataAddress = {
   /** @nullable */
   deliveryInstructions: string | null;
 };
-
-export type CheckoutControllerCreate200DataOrdersItemSourceType =
-  (typeof CheckoutControllerCreate200DataOrdersItemSourceType)[keyof typeof CheckoutControllerCreate200DataOrdersItemSourceType];
-
-export const CheckoutControllerCreate200DataOrdersItemSourceType = {
-  USER: 'USER',
-  SHOP: 'SHOP',
-} as const;
 
 export type CheckoutControllerCreate200DataOrdersItemAddress = {
   recipientName: string;
@@ -972,11 +751,6 @@ export type CheckoutControllerCreate200DataOrdersItemItemsItem = {
    * @maximum 9007199254740991
    */
   price: number;
-  /**
-   * @minimum -9007199254740991
-   * @maximum 9007199254740991
-   */
-  revision: number;
   /** @nullable */
   size: string | null;
   condition: string;
@@ -987,10 +761,9 @@ export type CheckoutControllerCreate200DataOrdersItemItemsItem = {
 export type CheckoutControllerCreate200DataOrdersItem = {
   /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
   id: string;
-  sourceType: CheckoutControllerCreate200DataOrdersItemSourceType;
   /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
-  sourceId: string;
-  sourceName: string;
+  shopId: string;
+  shopName: string;
   address: CheckoutControllerCreate200DataOrdersItemAddress;
   items: CheckoutControllerCreate200DataOrdersItemItemsItem[];
   /**
@@ -1016,8 +789,6 @@ export const CheckoutControllerCreate200DataCurrency = {
 export type CheckoutControllerCreate200Data = {
   /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
   id: string;
-  /** @nullable */
-  shippingQuote: CheckoutControllerCreate200DataShippingQuote;
   status: CheckoutControllerCreate200DataStatus;
   /**
    * @nullable
@@ -1054,169 +825,6 @@ export const CheckoutControllerFind200StatusCode = {
   NUMBER_200: 200,
 } as const;
 
-export type CheckoutControllerFind200DataShippingQuoteStatus =
-  (typeof CheckoutControllerFind200DataShippingQuoteStatus)[keyof typeof CheckoutControllerFind200DataShippingQuoteStatus];
-
-export const CheckoutControllerFind200DataShippingQuoteStatus = {
-  FETCHING: 'FETCHING',
-  READY: 'READY',
-  PARTIAL: 'PARTIAL',
-  UNAVAILABLE: 'UNAVAILABLE',
-  EXPIRED: 'EXPIRED',
-  INVALIDATED: 'INVALIDATED',
-} as const;
-
-export type CheckoutControllerFind200DataShippingQuoteEnvironment =
-  (typeof CheckoutControllerFind200DataShippingQuoteEnvironment)[keyof typeof CheckoutControllerFind200DataShippingQuoteEnvironment];
-
-export const CheckoutControllerFind200DataShippingQuoteEnvironment = {
-  SANDBOX: 'SANDBOX',
-} as const;
-
-export type CheckoutControllerFind200DataShippingQuoteCarrier =
-  (typeof CheckoutControllerFind200DataShippingQuoteCarrier)[keyof typeof CheckoutControllerFind200DataShippingQuoteCarrier];
-
-export const CheckoutControllerFind200DataShippingQuoteCarrier = {
-  GHN: 'GHN',
-} as const;
-
-export type CheckoutControllerFind200DataShippingQuoteParcelMethod =
-  (typeof CheckoutControllerFind200DataShippingQuoteParcelMethod)[keyof typeof CheckoutControllerFind200DataShippingQuoteParcelMethod];
-
-export const CheckoutControllerFind200DataShippingQuoteParcelMethod = {
-  BOUNDING_STACK_V1: 'BOUNDING_STACK_V1',
-} as const;
-
-export type CheckoutControllerFind200DataShippingQuoteOrdersItemSourceType =
-  (typeof CheckoutControllerFind200DataShippingQuoteOrdersItemSourceType)[keyof typeof CheckoutControllerFind200DataShippingQuoteOrdersItemSourceType];
-
-export const CheckoutControllerFind200DataShippingQuoteOrdersItemSourceType = {
-  USER: 'USER',
-  SHOP: 'SHOP',
-} as const;
-
-/**
- * @nullable
- */
-export type CheckoutControllerFind200DataShippingQuoteOrdersItemParcel = {
-  /**
-   * @maximum 9007199254740991
-   * @exclusiveMinimum 0
-   */
-  weightGrams: number;
-  /**
-   * @maximum 9007199254740991
-   * @exclusiveMinimum 0
-   */
-  lengthCm: number;
-  /**
-   * @maximum 9007199254740991
-   * @exclusiveMinimum 0
-   */
-  widthCm: number;
-  /**
-   * @maximum 9007199254740991
-   * @exclusiveMinimum 0
-   */
-  heightCm: number;
-} | null;
-
-export type CheckoutControllerFind200DataShippingQuoteOrdersItemParcelCount =
-  (typeof CheckoutControllerFind200DataShippingQuoteOrdersItemParcelCount)[keyof typeof CheckoutControllerFind200DataShippingQuoteOrdersItemParcelCount];
-
-export const CheckoutControllerFind200DataShippingQuoteOrdersItemParcelCount = {
-  NUMBER_1: 1,
-} as const;
-
-export type CheckoutControllerFind200DataShippingQuoteOrdersItemStatus =
-  (typeof CheckoutControllerFind200DataShippingQuoteOrdersItemStatus)[keyof typeof CheckoutControllerFind200DataShippingQuoteOrdersItemStatus];
-
-export const CheckoutControllerFind200DataShippingQuoteOrdersItemStatus = {
-  QUOTED: 'QUOTED',
-  UNAVAILABLE: 'UNAVAILABLE',
-} as const;
-
-/**
- * @nullable
- */
-export type CheckoutControllerFind200DataShippingQuoteOrdersItemReason =
-  | (typeof CheckoutControllerFind200DataShippingQuoteOrdersItemReason)[keyof typeof CheckoutControllerFind200DataShippingQuoteOrdersItemReason]
-  | null;
-
-export const CheckoutControllerFind200DataShippingQuoteOrdersItemReason = {
-  PACKAGE_REQUIRED: 'PACKAGE_REQUIRED',
-  PARCEL_LIMIT_EXCEEDED: 'PARCEL_LIMIT_EXCEEDED',
-  PICKUP_REQUIRED: 'PICKUP_REQUIRED',
-  DECLARED_VALUE_LIMIT: 'DECLARED_VALUE_LIMIT',
-  ADDRESS_MAPPING_UNAVAILABLE: 'ADDRESS_MAPPING_UNAVAILABLE',
-  CARRIER_NOT_CONFIGURED: 'CARRIER_NOT_CONFIGURED',
-  CARRIER_REJECTED: 'CARRIER_REJECTED',
-  CARRIER_UNAVAILABLE: 'CARRIER_UNAVAILABLE',
-} as const;
-
-export type CheckoutControllerFind200DataShippingQuoteOrdersItem = {
-  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
-  orderId: string;
-  sourceType: CheckoutControllerFind200DataShippingQuoteOrdersItemSourceType;
-  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
-  sourceId: string;
-  /** @nullable */
-  parcel: CheckoutControllerFind200DataShippingQuoteOrdersItemParcel;
-  parcelCount: CheckoutControllerFind200DataShippingQuoteOrdersItemParcelCount;
-  /**
-   * @maximum 9007199254740991
-   * @exclusiveMinimum 0
-   */
-  itemCount: number;
-  status: CheckoutControllerFind200DataShippingQuoteOrdersItemStatus;
-  /** @nullable */
-  reason: CheckoutControllerFind200DataShippingQuoteOrdersItemReason;
-  /**
-   * @minimum 0
-   * @maximum 9007199254740991
-   * @nullable
-   */
-  fee: number | null;
-  /** @nullable */
-  estimatedDeliveryAt: string | null;
-};
-
-export type CheckoutControllerFind200DataShippingQuoteCurrency =
-  (typeof CheckoutControllerFind200DataShippingQuoteCurrency)[keyof typeof CheckoutControllerFind200DataShippingQuoteCurrency];
-
-export const CheckoutControllerFind200DataShippingQuoteCurrency = {
-  VND: 'VND',
-} as const;
-
-/**
- * @nullable
- */
-export type CheckoutControllerFind200DataShippingQuote = {
-  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
-  id: string;
-  status: CheckoutControllerFind200DataShippingQuoteStatus;
-  environment: CheckoutControllerFind200DataShippingQuoteEnvironment;
-  carrier: CheckoutControllerFind200DataShippingQuoteCarrier;
-  parcelMethod: CheckoutControllerFind200DataShippingQuoteParcelMethod;
-  quotedAt: string;
-  expiresAt: string;
-  orders: CheckoutControllerFind200DataShippingQuoteOrdersItem[];
-  /**
-   * @minimum 0
-   * @maximum 9007199254740991
-   * @nullable
-   */
-  totalShippingFee: number | null;
-  /**
-   * @minimum 0
-   * @maximum 9007199254740991
-   * @nullable
-   */
-  grandTotal: number | null;
-  currency: CheckoutControllerFind200DataShippingQuoteCurrency;
-  paymentReady: false;
-} | null;
-
 export type CheckoutControllerFind200DataStatus =
   (typeof CheckoutControllerFind200DataStatus)[keyof typeof CheckoutControllerFind200DataStatus];
 
@@ -1225,6 +833,7 @@ export const CheckoutControllerFind200DataStatus = {
   EMPTY: 'EMPTY',
   CANCELLED: 'CANCELLED',
   EXPIRED: 'EXPIRED',
+  PAID: 'PAID',
 } as const;
 
 export type CheckoutControllerFind200DataRemovedItemsItem = {
@@ -1249,14 +858,6 @@ export type CheckoutControllerFind200DataAddress = {
   /** @nullable */
   deliveryInstructions: string | null;
 };
-
-export type CheckoutControllerFind200DataOrdersItemSourceType =
-  (typeof CheckoutControllerFind200DataOrdersItemSourceType)[keyof typeof CheckoutControllerFind200DataOrdersItemSourceType];
-
-export const CheckoutControllerFind200DataOrdersItemSourceType = {
-  USER: 'USER',
-  SHOP: 'SHOP',
-} as const;
 
 export type CheckoutControllerFind200DataOrdersItemAddress = {
   recipientName: string;
@@ -1312,11 +913,6 @@ export type CheckoutControllerFind200DataOrdersItemItemsItem = {
    * @maximum 9007199254740991
    */
   price: number;
-  /**
-   * @minimum -9007199254740991
-   * @maximum 9007199254740991
-   */
-  revision: number;
   /** @nullable */
   size: string | null;
   condition: string;
@@ -1327,10 +923,9 @@ export type CheckoutControllerFind200DataOrdersItemItemsItem = {
 export type CheckoutControllerFind200DataOrdersItem = {
   /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
   id: string;
-  sourceType: CheckoutControllerFind200DataOrdersItemSourceType;
   /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
-  sourceId: string;
-  sourceName: string;
+  shopId: string;
+  shopName: string;
   address: CheckoutControllerFind200DataOrdersItemAddress;
   items: CheckoutControllerFind200DataOrdersItemItemsItem[];
   /**
@@ -1356,8 +951,6 @@ export const CheckoutControllerFind200DataCurrency = {
 export type CheckoutControllerFind200Data = {
   /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
   id: string;
-  /** @nullable */
-  shippingQuote: CheckoutControllerFind200DataShippingQuote;
   status: CheckoutControllerFind200DataStatus;
   /**
    * @nullable
@@ -1394,171 +987,6 @@ export const CheckoutControllerCancel200StatusCode = {
   NUMBER_200: 200,
 } as const;
 
-export type CheckoutControllerCancel200DataShippingQuoteStatus =
-  (typeof CheckoutControllerCancel200DataShippingQuoteStatus)[keyof typeof CheckoutControllerCancel200DataShippingQuoteStatus];
-
-export const CheckoutControllerCancel200DataShippingQuoteStatus = {
-  FETCHING: 'FETCHING',
-  READY: 'READY',
-  PARTIAL: 'PARTIAL',
-  UNAVAILABLE: 'UNAVAILABLE',
-  EXPIRED: 'EXPIRED',
-  INVALIDATED: 'INVALIDATED',
-} as const;
-
-export type CheckoutControllerCancel200DataShippingQuoteEnvironment =
-  (typeof CheckoutControllerCancel200DataShippingQuoteEnvironment)[keyof typeof CheckoutControllerCancel200DataShippingQuoteEnvironment];
-
-export const CheckoutControllerCancel200DataShippingQuoteEnvironment = {
-  SANDBOX: 'SANDBOX',
-} as const;
-
-export type CheckoutControllerCancel200DataShippingQuoteCarrier =
-  (typeof CheckoutControllerCancel200DataShippingQuoteCarrier)[keyof typeof CheckoutControllerCancel200DataShippingQuoteCarrier];
-
-export const CheckoutControllerCancel200DataShippingQuoteCarrier = {
-  GHN: 'GHN',
-} as const;
-
-export type CheckoutControllerCancel200DataShippingQuoteParcelMethod =
-  (typeof CheckoutControllerCancel200DataShippingQuoteParcelMethod)[keyof typeof CheckoutControllerCancel200DataShippingQuoteParcelMethod];
-
-export const CheckoutControllerCancel200DataShippingQuoteParcelMethod = {
-  BOUNDING_STACK_V1: 'BOUNDING_STACK_V1',
-} as const;
-
-export type CheckoutControllerCancel200DataShippingQuoteOrdersItemSourceType =
-  (typeof CheckoutControllerCancel200DataShippingQuoteOrdersItemSourceType)[keyof typeof CheckoutControllerCancel200DataShippingQuoteOrdersItemSourceType];
-
-export const CheckoutControllerCancel200DataShippingQuoteOrdersItemSourceType =
-  {
-    USER: 'USER',
-    SHOP: 'SHOP',
-  } as const;
-
-/**
- * @nullable
- */
-export type CheckoutControllerCancel200DataShippingQuoteOrdersItemParcel = {
-  /**
-   * @maximum 9007199254740991
-   * @exclusiveMinimum 0
-   */
-  weightGrams: number;
-  /**
-   * @maximum 9007199254740991
-   * @exclusiveMinimum 0
-   */
-  lengthCm: number;
-  /**
-   * @maximum 9007199254740991
-   * @exclusiveMinimum 0
-   */
-  widthCm: number;
-  /**
-   * @maximum 9007199254740991
-   * @exclusiveMinimum 0
-   */
-  heightCm: number;
-} | null;
-
-export type CheckoutControllerCancel200DataShippingQuoteOrdersItemParcelCount =
-  (typeof CheckoutControllerCancel200DataShippingQuoteOrdersItemParcelCount)[keyof typeof CheckoutControllerCancel200DataShippingQuoteOrdersItemParcelCount];
-
-export const CheckoutControllerCancel200DataShippingQuoteOrdersItemParcelCount =
-  {
-    NUMBER_1: 1,
-  } as const;
-
-export type CheckoutControllerCancel200DataShippingQuoteOrdersItemStatus =
-  (typeof CheckoutControllerCancel200DataShippingQuoteOrdersItemStatus)[keyof typeof CheckoutControllerCancel200DataShippingQuoteOrdersItemStatus];
-
-export const CheckoutControllerCancel200DataShippingQuoteOrdersItemStatus = {
-  QUOTED: 'QUOTED',
-  UNAVAILABLE: 'UNAVAILABLE',
-} as const;
-
-/**
- * @nullable
- */
-export type CheckoutControllerCancel200DataShippingQuoteOrdersItemReason =
-  | (typeof CheckoutControllerCancel200DataShippingQuoteOrdersItemReason)[keyof typeof CheckoutControllerCancel200DataShippingQuoteOrdersItemReason]
-  | null;
-
-export const CheckoutControllerCancel200DataShippingQuoteOrdersItemReason = {
-  PACKAGE_REQUIRED: 'PACKAGE_REQUIRED',
-  PARCEL_LIMIT_EXCEEDED: 'PARCEL_LIMIT_EXCEEDED',
-  PICKUP_REQUIRED: 'PICKUP_REQUIRED',
-  DECLARED_VALUE_LIMIT: 'DECLARED_VALUE_LIMIT',
-  ADDRESS_MAPPING_UNAVAILABLE: 'ADDRESS_MAPPING_UNAVAILABLE',
-  CARRIER_NOT_CONFIGURED: 'CARRIER_NOT_CONFIGURED',
-  CARRIER_REJECTED: 'CARRIER_REJECTED',
-  CARRIER_UNAVAILABLE: 'CARRIER_UNAVAILABLE',
-} as const;
-
-export type CheckoutControllerCancel200DataShippingQuoteOrdersItem = {
-  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
-  orderId: string;
-  sourceType: CheckoutControllerCancel200DataShippingQuoteOrdersItemSourceType;
-  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
-  sourceId: string;
-  /** @nullable */
-  parcel: CheckoutControllerCancel200DataShippingQuoteOrdersItemParcel;
-  parcelCount: CheckoutControllerCancel200DataShippingQuoteOrdersItemParcelCount;
-  /**
-   * @maximum 9007199254740991
-   * @exclusiveMinimum 0
-   */
-  itemCount: number;
-  status: CheckoutControllerCancel200DataShippingQuoteOrdersItemStatus;
-  /** @nullable */
-  reason: CheckoutControllerCancel200DataShippingQuoteOrdersItemReason;
-  /**
-   * @minimum 0
-   * @maximum 9007199254740991
-   * @nullable
-   */
-  fee: number | null;
-  /** @nullable */
-  estimatedDeliveryAt: string | null;
-};
-
-export type CheckoutControllerCancel200DataShippingQuoteCurrency =
-  (typeof CheckoutControllerCancel200DataShippingQuoteCurrency)[keyof typeof CheckoutControllerCancel200DataShippingQuoteCurrency];
-
-export const CheckoutControllerCancel200DataShippingQuoteCurrency = {
-  VND: 'VND',
-} as const;
-
-/**
- * @nullable
- */
-export type CheckoutControllerCancel200DataShippingQuote = {
-  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
-  id: string;
-  status: CheckoutControllerCancel200DataShippingQuoteStatus;
-  environment: CheckoutControllerCancel200DataShippingQuoteEnvironment;
-  carrier: CheckoutControllerCancel200DataShippingQuoteCarrier;
-  parcelMethod: CheckoutControllerCancel200DataShippingQuoteParcelMethod;
-  quotedAt: string;
-  expiresAt: string;
-  orders: CheckoutControllerCancel200DataShippingQuoteOrdersItem[];
-  /**
-   * @minimum 0
-   * @maximum 9007199254740991
-   * @nullable
-   */
-  totalShippingFee: number | null;
-  /**
-   * @minimum 0
-   * @maximum 9007199254740991
-   * @nullable
-   */
-  grandTotal: number | null;
-  currency: CheckoutControllerCancel200DataShippingQuoteCurrency;
-  paymentReady: false;
-} | null;
-
 export type CheckoutControllerCancel200DataStatus =
   (typeof CheckoutControllerCancel200DataStatus)[keyof typeof CheckoutControllerCancel200DataStatus];
 
@@ -1567,6 +995,7 @@ export const CheckoutControllerCancel200DataStatus = {
   EMPTY: 'EMPTY',
   CANCELLED: 'CANCELLED',
   EXPIRED: 'EXPIRED',
+  PAID: 'PAID',
 } as const;
 
 export type CheckoutControllerCancel200DataRemovedItemsItem = {
@@ -1591,14 +1020,6 @@ export type CheckoutControllerCancel200DataAddress = {
   /** @nullable */
   deliveryInstructions: string | null;
 };
-
-export type CheckoutControllerCancel200DataOrdersItemSourceType =
-  (typeof CheckoutControllerCancel200DataOrdersItemSourceType)[keyof typeof CheckoutControllerCancel200DataOrdersItemSourceType];
-
-export const CheckoutControllerCancel200DataOrdersItemSourceType = {
-  USER: 'USER',
-  SHOP: 'SHOP',
-} as const;
 
 export type CheckoutControllerCancel200DataOrdersItemAddress = {
   recipientName: string;
@@ -1655,11 +1076,6 @@ export type CheckoutControllerCancel200DataOrdersItemItemsItem = {
    * @maximum 9007199254740991
    */
   price: number;
-  /**
-   * @minimum -9007199254740991
-   * @maximum 9007199254740991
-   */
-  revision: number;
   /** @nullable */
   size: string | null;
   condition: string;
@@ -1670,10 +1086,9 @@ export type CheckoutControllerCancel200DataOrdersItemItemsItem = {
 export type CheckoutControllerCancel200DataOrdersItem = {
   /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
   id: string;
-  sourceType: CheckoutControllerCancel200DataOrdersItemSourceType;
   /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
-  sourceId: string;
-  sourceName: string;
+  shopId: string;
+  shopName: string;
   address: CheckoutControllerCancel200DataOrdersItemAddress;
   items: CheckoutControllerCancel200DataOrdersItemItemsItem[];
   /**
@@ -1699,8 +1114,6 @@ export const CheckoutControllerCancel200DataCurrency = {
 export type CheckoutControllerCancel200Data = {
   /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
   id: string;
-  /** @nullable */
-  shippingQuote: CheckoutControllerCancel200DataShippingQuote;
   status: CheckoutControllerCancel200DataStatus;
   /**
    * @nullable
@@ -1728,6 +1141,314 @@ export type CheckoutControllerCancel200 = {
   statusCode: CheckoutControllerCancel200StatusCode;
   message: string;
   data: CheckoutControllerCancel200Data;
+};
+
+export type PaymentControllerCreateBody = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  requestId: string;
+};
+
+export type PaymentControllerCreate200StatusCode =
+  (typeof PaymentControllerCreate200StatusCode)[keyof typeof PaymentControllerCreate200StatusCode];
+
+export const PaymentControllerCreate200StatusCode = {
+  NUMBER_200: 200,
+} as const;
+
+export type PaymentControllerCreate200DataState =
+  (typeof PaymentControllerCreate200DataState)[keyof typeof PaymentControllerCreate200DataState];
+
+export const PaymentControllerCreate200DataState = {
+  CREATING: 'CREATING',
+  PENDING: 'PENDING',
+  UNKNOWN: 'UNKNOWN',
+  FAILED: 'FAILED',
+  PAID: 'PAID',
+  REFUND_REQUIRED: 'REFUND_REQUIRED',
+  REFUNDED: 'REFUNDED',
+} as const;
+
+export type PaymentControllerCreate200DataRefundsItemState =
+  (typeof PaymentControllerCreate200DataRefundsItemState)[keyof typeof PaymentControllerCreate200DataRefundsItemState];
+
+export const PaymentControllerCreate200DataRefundsItemState = {
+  QUEUED: 'QUEUED',
+  UNKNOWN: 'UNKNOWN',
+  COMPLETED: 'COMPLETED',
+  REVIEW_REQUIRED: 'REVIEW_REQUIRED',
+} as const;
+
+export type PaymentControllerCreate200DataRefundsItem = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  /**
+   * @minimum -9007199254740991
+   * @maximum 9007199254740991
+   */
+  amount: number;
+  state: PaymentControllerCreate200DataRefundsItemState;
+};
+
+export type PaymentControllerCreate200Data = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  checkoutId: string;
+  /**
+   * @minimum -9007199254740991
+   * @maximum 9007199254740991
+   */
+  amount: number;
+  state: PaymentControllerCreate200DataState;
+  /** @nullable */
+  payUrl: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  paidAt: string | null;
+  refunds: PaymentControllerCreate200DataRefundsItem[];
+};
+
+export type PaymentControllerCreate200 = {
+  statusCode: PaymentControllerCreate200StatusCode;
+  message: string;
+  data: PaymentControllerCreate200Data;
+};
+
+export type PaymentControllerFind200StatusCode =
+  (typeof PaymentControllerFind200StatusCode)[keyof typeof PaymentControllerFind200StatusCode];
+
+export const PaymentControllerFind200StatusCode = {
+  NUMBER_200: 200,
+} as const;
+
+export type PaymentControllerFind200DataState =
+  (typeof PaymentControllerFind200DataState)[keyof typeof PaymentControllerFind200DataState];
+
+export const PaymentControllerFind200DataState = {
+  CREATING: 'CREATING',
+  PENDING: 'PENDING',
+  UNKNOWN: 'UNKNOWN',
+  FAILED: 'FAILED',
+  PAID: 'PAID',
+  REFUND_REQUIRED: 'REFUND_REQUIRED',
+  REFUNDED: 'REFUNDED',
+} as const;
+
+export type PaymentControllerFind200DataRefundsItemState =
+  (typeof PaymentControllerFind200DataRefundsItemState)[keyof typeof PaymentControllerFind200DataRefundsItemState];
+
+export const PaymentControllerFind200DataRefundsItemState = {
+  QUEUED: 'QUEUED',
+  UNKNOWN: 'UNKNOWN',
+  COMPLETED: 'COMPLETED',
+  REVIEW_REQUIRED: 'REVIEW_REQUIRED',
+} as const;
+
+export type PaymentControllerFind200DataRefundsItem = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  /**
+   * @minimum -9007199254740991
+   * @maximum 9007199254740991
+   */
+  amount: number;
+  state: PaymentControllerFind200DataRefundsItemState;
+};
+
+export type PaymentControllerFind200Data = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  checkoutId: string;
+  /**
+   * @minimum -9007199254740991
+   * @maximum 9007199254740991
+   */
+  amount: number;
+  state: PaymentControllerFind200DataState;
+  /** @nullable */
+  payUrl: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  paidAt: string | null;
+  refunds: PaymentControllerFind200DataRefundsItem[];
+};
+
+export type PaymentControllerFind200 = {
+  statusCode: PaymentControllerFind200StatusCode;
+  message: string;
+  data: PaymentControllerFind200Data;
+};
+
+export type PaymentControllerReconcile200StatusCode =
+  (typeof PaymentControllerReconcile200StatusCode)[keyof typeof PaymentControllerReconcile200StatusCode];
+
+export const PaymentControllerReconcile200StatusCode = {
+  NUMBER_200: 200,
+} as const;
+
+export type PaymentControllerReconcile200DataState =
+  (typeof PaymentControllerReconcile200DataState)[keyof typeof PaymentControllerReconcile200DataState];
+
+export const PaymentControllerReconcile200DataState = {
+  CREATING: 'CREATING',
+  PENDING: 'PENDING',
+  UNKNOWN: 'UNKNOWN',
+  FAILED: 'FAILED',
+  PAID: 'PAID',
+  REFUND_REQUIRED: 'REFUND_REQUIRED',
+  REFUNDED: 'REFUNDED',
+} as const;
+
+export type PaymentControllerReconcile200DataRefundsItemState =
+  (typeof PaymentControllerReconcile200DataRefundsItemState)[keyof typeof PaymentControllerReconcile200DataRefundsItemState];
+
+export const PaymentControllerReconcile200DataRefundsItemState = {
+  QUEUED: 'QUEUED',
+  UNKNOWN: 'UNKNOWN',
+  COMPLETED: 'COMPLETED',
+  REVIEW_REQUIRED: 'REVIEW_REQUIRED',
+} as const;
+
+export type PaymentControllerReconcile200DataRefundsItem = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  /**
+   * @minimum -9007199254740991
+   * @maximum 9007199254740991
+   */
+  amount: number;
+  state: PaymentControllerReconcile200DataRefundsItemState;
+};
+
+export type PaymentControllerReconcile200Data = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  checkoutId: string;
+  /**
+   * @minimum -9007199254740991
+   * @maximum 9007199254740991
+   */
+  amount: number;
+  state: PaymentControllerReconcile200DataState;
+  /** @nullable */
+  payUrl: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  paidAt: string | null;
+  refunds: PaymentControllerReconcile200DataRefundsItem[];
+};
+
+export type PaymentControllerReconcile200 = {
+  statusCode: PaymentControllerReconcile200StatusCode;
+  message: string;
+  data: PaymentControllerReconcile200Data;
+};
+
+export type PaymentControllerOrders200StatusCode =
+  (typeof PaymentControllerOrders200StatusCode)[keyof typeof PaymentControllerOrders200StatusCode];
+
+export const PaymentControllerOrders200StatusCode = {
+  NUMBER_200: 200,
+} as const;
+
+export type PaymentControllerOrders200DataItemStatus =
+  (typeof PaymentControllerOrders200DataItemStatus)[keyof typeof PaymentControllerOrders200DataItemStatus];
+
+export const PaymentControllerOrders200DataItemStatus = {
+  pending: 'pending',
+} as const;
+
+export type PaymentControllerOrders200DataItemAddress = {
+  [key: string]: unknown;
+};
+
+export type PaymentControllerOrders200DataItemItemsItem = {
+  [key: string]: unknown;
+};
+
+export type PaymentControllerOrders200DataItem = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  paymentId: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  shopId: string;
+  shopName: string;
+  status: PaymentControllerOrders200DataItemStatus;
+  /**
+   * @minimum -9007199254740991
+   * @maximum 9007199254740991
+   */
+  subtotal: number;
+  /**
+   * @minimum -9007199254740991
+   * @maximum 9007199254740991
+   */
+  shippingFee: number;
+  /**
+   * @minimum -9007199254740991
+   * @maximum 9007199254740991
+   */
+  total: number;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  sellerConfirmBy: string;
+  address: PaymentControllerOrders200DataItemAddress;
+  items: PaymentControllerOrders200DataItemItemsItem[];
+};
+
+export type PaymentControllerOrders200 = {
+  statusCode: PaymentControllerOrders200StatusCode;
+  message: string;
+  data: PaymentControllerOrders200DataItem[];
+};
+
+export type PaymentControllerIpnBody = {
+  /** @maxLength 50 */
+  partnerCode: string;
+  /** @maxLength 200 */
+  orderId: string;
+  /** @maxLength 50 */
+  requestId: string;
+  /**
+   * @minimum 0
+   * @maximum 9007199254740991
+   */
+  amount: number;
+  /**
+   * @minimum 0
+   * @maximum 9007199254740991
+   */
+  transId: number;
+  /**
+   * @minimum 0
+   * @maximum 9007199254740991
+   */
+  resultCode: number;
+  /**
+   * @minimum 0
+   * @maximum 9007199254740991
+   */
+  responseTime: number;
+  /** @maxLength 1000 */
+  message: string;
+  /** @maxLength 255 */
+  orderInfo: string;
+  /** @maxLength 50 */
+  orderType: string;
+  /** @maxLength 50 */
+  payType: string;
+  /** @maxLength 1000 */
+  extraData: string;
+  /** @pattern ^[a-f0-9]{64}$ */
+  signature: string;
 };
 
 export type ShopControllerFindAll200StatusCode =
@@ -1768,7 +1489,6 @@ export type ShopControllerCreateBody = {
   /**
    * @minLength 1
    * @maxLength 100
-   * @pattern \S
    */
   name: string;
   /**
@@ -1927,7 +1647,6 @@ export type ShopControllerUpdateBody = {
    * @minLength 1
    * @maxLength 100
    * @nullable
-   * @pattern \S
    */
   name?: string | null;
   /**
@@ -2155,56 +1874,27 @@ export type ShopControllerUpdateStaff200 = {
   data: ShopControllerUpdateStaff200Data;
 };
 
-export type ShippingControllerUpdatePackageBodyWeight =
-  | {
-      mode: 'RANGE';
-      preset:
-        | 'UP_TO_250_G'
-        | 'UP_TO_500_G'
-        | 'UP_TO_1000_G'
-        | 'UP_TO_2000_G'
-        | 'UP_TO_5000_G';
-    }
-  | {
-      mode: 'CUSTOM';
-      /**
-       * @maximum 50000
-       * @exclusiveMinimum 0
-       */
-      grams: number;
-    };
-
-export type ShippingControllerUpdatePackageBodySize =
-  | {
-      mode: 'RANGE';
-      preset:
-        | 'BOX_20_15_10_CM'
-        | 'BOX_30_20_15_CM'
-        | 'BOX_40_30_20_CM'
-        | 'BOX_50_40_30_CM';
-    }
-  | {
-      mode: 'CUSTOM';
-      /**
-       * @maximum 200
-       * @exclusiveMinimum 0
-       */
-      lengthCm: number;
-      /**
-       * @maximum 200
-       * @exclusiveMinimum 0
-       */
-      widthCm: number;
-      /**
-       * @maximum 200
-       * @exclusiveMinimum 0
-       */
-      heightCm: number;
-    };
-
 export type ShippingControllerUpdatePackageBody = {
-  weight: ShippingControllerUpdatePackageBodyWeight;
-  size: ShippingControllerUpdatePackageBodySize;
+  /**
+   * @maximum 50000
+   * @exclusiveMinimum 0
+   */
+  weightGrams: number;
+  /**
+   * @maximum 200
+   * @exclusiveMinimum 0
+   */
+  lengthCm: number;
+  /**
+   * @maximum 200
+   * @exclusiveMinimum 0
+   */
+  widthCm: number;
+  /**
+   * @maximum 200
+   * @exclusiveMinimum 0
+   */
+  heightCm: number;
 };
 
 export type ShippingControllerUpdatePackage200StatusCode =
@@ -2266,59 +1956,30 @@ export type ShippingControllerUpdatePackage200DataMeasurements = {
   inseam?: number;
 };
 
-export type ShippingControllerUpdatePackage200DataShippingPackageWeight =
-  | {
-      mode: 'RANGE';
-      preset:
-        | 'UP_TO_250_G'
-        | 'UP_TO_500_G'
-        | 'UP_TO_1000_G'
-        | 'UP_TO_2000_G'
-        | 'UP_TO_5000_G';
-    }
-  | {
-      mode: 'CUSTOM';
-      /**
-       * @maximum 50000
-       * @exclusiveMinimum 0
-       */
-      grams: number;
-    };
-
-export type ShippingControllerUpdatePackage200DataShippingPackageSize =
-  | {
-      mode: 'RANGE';
-      preset:
-        | 'BOX_20_15_10_CM'
-        | 'BOX_30_20_15_CM'
-        | 'BOX_40_30_20_CM'
-        | 'BOX_50_40_30_CM';
-    }
-  | {
-      mode: 'CUSTOM';
-      /**
-       * @maximum 200
-       * @exclusiveMinimum 0
-       */
-      lengthCm: number;
-      /**
-       * @maximum 200
-       * @exclusiveMinimum 0
-       */
-      widthCm: number;
-      /**
-       * @maximum 200
-       * @exclusiveMinimum 0
-       */
-      heightCm: number;
-    };
-
 /**
  * @nullable
  */
 export type ShippingControllerUpdatePackage200DataShippingPackage = {
-  weight: ShippingControllerUpdatePackage200DataShippingPackageWeight;
-  size: ShippingControllerUpdatePackage200DataShippingPackageSize;
+  /**
+   * @maximum 50000
+   * @exclusiveMinimum 0
+   */
+  weightGrams: number;
+  /**
+   * @maximum 200
+   * @exclusiveMinimum 0
+   */
+  lengthCm: number;
+  /**
+   * @maximum 200
+   * @exclusiveMinimum 0
+   */
+  widthCm: number;
+  /**
+   * @maximum 200
+   * @exclusiveMinimum 0
+   */
+  heightCm: number;
 } | null;
 
 export type ShippingControllerUpdatePackage200DataDefectsItem = {
@@ -2359,23 +2020,11 @@ export type ShippingControllerUpdatePackage200DataCategory = {
   slug: string;
 } | null;
 
-/**
- * @nullable
- */
-export type ShippingControllerUpdatePackage200DataSeller = {
-  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
-  id: string;
-  fullName: string;
-} | null;
-
-/**
- * @nullable
- */
 export type ShippingControllerUpdatePackage200DataShop = {
   /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
   id: string;
   name: string;
-} | null;
+};
 
 export type ShippingControllerUpdatePackage200Data = {
   /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
@@ -2385,16 +2034,8 @@ export type ShippingControllerUpdatePackage200Data = {
    * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
    */
   categoryId: string | null;
-  /**
-   * @nullable
-   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
-   */
-  sellerUserId: string | null;
-  /**
-   * @nullable
-   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
-   */
-  shopId: string | null;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  shopId: string;
   /** @nullable */
   title: string | null;
   /** @nullable */
@@ -2419,17 +2060,6 @@ export type ShippingControllerUpdatePackage200Data = {
   /** @nullable */
   repairs: string | null;
   defects: ShippingControllerUpdatePackage200DataDefectsItem[];
-  /**
-   * @maximum 9007199254740991
-   * @exclusiveMinimum 0
-   */
-  revision: number;
-  /**
-   * @maximum 9007199254740991
-   * @exclusiveMinimum 0
-   * @nullable
-   */
-  approvedRevision: number | null;
   /** @nullable */
   coverUrl: string | null;
   /**
@@ -2459,9 +2089,6 @@ export type ShippingControllerUpdatePackage200Data = {
   updatedAt: string;
   /** @nullable */
   category: ShippingControllerUpdatePackage200DataCategory;
-  /** @nullable */
-  seller: ShippingControllerUpdatePackage200DataSeller;
-  /** @nullable */
   shop: ShippingControllerUpdatePackage200DataShop;
 };
 
@@ -2469,177 +2096,6 @@ export type ShippingControllerUpdatePackage200 = {
   statusCode: ShippingControllerUpdatePackage200StatusCode;
   message: string;
   data: ShippingControllerUpdatePackage200Data;
-};
-
-export type ShippingControllerPackageOptions200StatusCode =
-  (typeof ShippingControllerPackageOptions200StatusCode)[keyof typeof ShippingControllerPackageOptions200StatusCode];
-
-export const ShippingControllerPackageOptions200StatusCode = {
-  NUMBER_200: 200,
-} as const;
-
-export type ShippingControllerPackageOptions200DataWeightPresetsItem = {
-  id: string;
-  label: string;
-  /**
-   * @minimum -9007199254740991
-   * @maximum 9007199254740991
-   */
-  upperGrams: number;
-};
-
-export type ShippingControllerPackageOptions200DataSizePresetsItem = {
-  id: string;
-  label: string;
-  /**
-   * @minimum -9007199254740991
-   * @maximum 9007199254740991
-   */
-  lengthCm: number;
-  /**
-   * @minimum -9007199254740991
-   * @maximum 9007199254740991
-   */
-  widthCm: number;
-  /**
-   * @minimum -9007199254740991
-   * @maximum 9007199254740991
-   */
-  heightCm: number;
-};
-
-export type ShippingControllerPackageOptions200DataCustomLimits = {
-  /**
-   * @minimum -9007199254740991
-   * @maximum 9007199254740991
-   */
-  maxWeightGrams: number;
-  /**
-   * @minimum -9007199254740991
-   * @maximum 9007199254740991
-   */
-  maxDimensionCm: number;
-};
-
-export type ShippingControllerPackageOptions200Data = {
-  weightPresets: ShippingControllerPackageOptions200DataWeightPresetsItem[];
-  sizePresets: ShippingControllerPackageOptions200DataSizePresetsItem[];
-  customLimits: ShippingControllerPackageOptions200DataCustomLimits;
-};
-
-export type ShippingControllerPackageOptions200 = {
-  statusCode: ShippingControllerPackageOptions200StatusCode;
-  message: string;
-  data: ShippingControllerPackageOptions200Data;
-};
-
-export type PickupLocationControllerFindPersonal200StatusCode =
-  (typeof PickupLocationControllerFindPersonal200StatusCode)[keyof typeof PickupLocationControllerFindPersonal200StatusCode];
-
-export const PickupLocationControllerFindPersonal200StatusCode = {
-  NUMBER_200: 200,
-} as const;
-
-export type PickupLocationControllerFindPersonal200DataLocationCountryCode =
-  (typeof PickupLocationControllerFindPersonal200DataLocationCountryCode)[keyof typeof PickupLocationControllerFindPersonal200DataLocationCountryCode];
-
-export const PickupLocationControllerFindPersonal200DataLocationCountryCode = {
-  VN: 'VN',
-} as const;
-
-/**
- * @nullable
- */
-export type PickupLocationControllerFindPersonal200DataLocation = {
-  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
-  id: string;
-  contactName: string;
-  phone: string;
-  addressLine1: string;
-  countryCode: PickupLocationControllerFindPersonal200DataLocationCountryCode;
-  provinceCode: string;
-  provinceName: string;
-  wardCode: string;
-  wardName: string;
-  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
-  createdAt: string;
-  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
-  updatedAt: string;
-} | null;
-
-export type PickupLocationControllerFindPersonal200Data = {
-  /** @nullable */
-  location: PickupLocationControllerFindPersonal200DataLocation;
-};
-
-export type PickupLocationControllerFindPersonal200 = {
-  statusCode: PickupLocationControllerFindPersonal200StatusCode;
-  message: string;
-  data: PickupLocationControllerFindPersonal200Data;
-};
-
-export type PickupLocationControllerSavePersonalBody = {
-  /** @pattern ^\+?[0-9]{8,15}$ */
-  phone: string;
-  /**
-   * @minLength 1
-   * @maxLength 255
-   */
-  addressLine1: string;
-  /** @pattern ^\d{2}$ */
-  provinceCode: string;
-  /** @pattern ^\d{5}$ */
-  wardCode: string;
-  /**
-   * @minLength 1
-   * @maxLength 100
-   */
-  contactName: string;
-};
-
-export type PickupLocationControllerSavePersonal200StatusCode =
-  (typeof PickupLocationControllerSavePersonal200StatusCode)[keyof typeof PickupLocationControllerSavePersonal200StatusCode];
-
-export const PickupLocationControllerSavePersonal200StatusCode = {
-  NUMBER_200: 200,
-} as const;
-
-export type PickupLocationControllerSavePersonal200DataLocationCountryCode =
-  (typeof PickupLocationControllerSavePersonal200DataLocationCountryCode)[keyof typeof PickupLocationControllerSavePersonal200DataLocationCountryCode];
-
-export const PickupLocationControllerSavePersonal200DataLocationCountryCode = {
-  VN: 'VN',
-} as const;
-
-/**
- * @nullable
- */
-export type PickupLocationControllerSavePersonal200DataLocation = {
-  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
-  id: string;
-  contactName: string;
-  phone: string;
-  addressLine1: string;
-  countryCode: PickupLocationControllerSavePersonal200DataLocationCountryCode;
-  provinceCode: string;
-  provinceName: string;
-  wardCode: string;
-  wardName: string;
-  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
-  createdAt: string;
-  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
-  updatedAt: string;
-} | null;
-
-export type PickupLocationControllerSavePersonal200Data = {
-  /** @nullable */
-  location: PickupLocationControllerSavePersonal200DataLocation;
-};
-
-export type PickupLocationControllerSavePersonal200 = {
-  statusCode: PickupLocationControllerSavePersonal200StatusCode;
-  message: string;
-  data: PickupLocationControllerSavePersonal200Data;
 };
 
 export type PickupLocationControllerFindShop200StatusCode =
@@ -2752,63 +2208,232 @@ export type PickupLocationControllerSaveShop200 = {
 };
 
 export type ProductControllerFindAllParams = {
-  page?: string | number;
-  pageSize?: string | number;
-  order?: ProductControllerFindAllOrder;
-  sortBy?: string;
   /**
-   * @minLength 1
-   * @maxLength 150
+   * Page number to retrieve. If you provide invalid value the default page number will applied
+   *
+   * **Example:** 1
+   *
+   *
+   * **Default Value:** 1
+   */
+  page?: number;
+  /**
+   * Number of records per page.
+   *
+   *
+   * **Example:** 20
+   *
+   *
+   *
+   * **Default Value:** 10
+   *
+   *
+   *
+   * **Max Value:** 100
+   *
+   *
+   * If provided value is greater than max value, max value will be applied.
+   */
+  limit?: number;
+  /**
+   * Filter by categoryId query param.
+   *
+   * **Format:** filter.categoryId={$not}:OPERATION:VALUE
+   *
+   *
+   *
+   * **Example:** filter.categoryId=$eq:John Doe
+   *
+   * **Available Operations**
+   * - $eq
+   *
+   * - $and
+   *
+   * - $or
+   */
+  'filter.categoryId'?: string[];
+  /**
+   * Filter by shopId query param.
+   *
+   * **Format:** filter.shopId={$not}:OPERATION:VALUE
+   *
+   *
+   *
+   * **Example:** filter.shopId=$eq:John Doe
+   *
+   * **Available Operations**
+   * - $eq
+   *
+   * - $and
+   *
+   * - $or
+   */
+  'filter.shopId'?: string[];
+  /**
+   * Filter by condition query param.
+   *
+   * **Format:** filter.condition={$not}:OPERATION:VALUE
+   *
+   *
+   *
+   * **Example:** filter.condition=$eq:John Doe
+   *
+   * **Available Operations**
+   * - $eq
+   *
+   * - $and
+   *
+   * - $or
+   */
+  'filter.condition'?: string[];
+  /**
+   * Filter by status query param.
+   *
+   * **Format:** filter.status={$not}:OPERATION:VALUE
+   *
+   *
+   *
+   * **Example:** filter.status=$eq:John Doe
+   *
+   * **Available Operations**
+   * - $eq
+   *
+   * - $and
+   *
+   * - $or
+   */
+  'filter.status'?: string[];
+  /**
+   * Filter by size query param.
+   *
+   * **Format:** filter.size={$not}:OPERATION:VALUE
+   *
+   *
+   *
+   * **Example:** filter.size=$ilike:John Doe
+   *
+   * **Available Operations**
+   * - $ilike
+   *
+   * - $and
+   *
+   * - $or
+   */
+  'filter.size'?: string[];
+  /**
+   * Filter by color query param.
+   *
+   * **Format:** filter.color={$not}:OPERATION:VALUE
+   *
+   *
+   *
+   * **Example:** filter.color=$ilike:John Doe
+   *
+   * **Available Operations**
+   * - $ilike
+   *
+   * - $and
+   *
+   * - $or
+   */
+  'filter.color'?: string[];
+  /**
+   * Filter by brand query param.
+   *
+   * **Format:** filter.brand={$not}:OPERATION:VALUE
+   *
+   *
+   *
+   * **Example:** filter.brand=$ilike:John Doe
+   *
+   * **Available Operations**
+   * - $ilike
+   *
+   * - $and
+   *
+   * - $or
+   */
+  'filter.brand'?: string[];
+  /**
+   * Filter by price query param.
+   *
+   * **Format:** filter.price={$not}:OPERATION:VALUE
+   *
+   *
+   *
+   * **Example:** filter.price=$gte:John Doe&filter.price=$lte:John Doe
+   *
+   * **Available Operations**
+   * - $gte
+   *
+   * - $lte
+   *
+   * - $and
+   *
+   * - $or
+   */
+  'filter.price'?: string[];
+  /**
+   * Parameter to sort by.
+   * To sort by multiple fields, just provide query param multiple types. The order in url defines an order of sorting
+   *
+   * **Format:** {fieldName}:{DIRECTION}
+   *
+   *
+   * **Example:** sortBy=createdAt:DESC&sortBy=price:DESC
+   *
+   *
+   * **Default Value:** createdAt:DESC,id:DESC
+   *
+   * **Available Fields**
+   * - createdAt
+   *
+   * - price
+   *
+   * - publishedAt
+   *
+   * - id
+   */
+  sortBy?: ProductControllerFindAllSortByItem[];
+  /**
+   * Search term to filter result values
+   *
+   * **Example:** John
+   *
+   *
+   * **Default Value:** No default value
    */
   search?: string;
   /**
-   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+   * List of fields to search by term to filter result values
+   *
+   * **Example:** title,description,brand
+   *
+   *
+   * **Default Value:** By default all fields mentioned below will be used to search by term
+   *
+   * **Available Fields**
+   * - title
+   *
+   * - description
+   *
+   * - brand
    */
-  categoryId?: string;
-  /**
-   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
-   */
-  shopId?: string;
-  /**
-   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
-   */
-  sellerUserId?: string;
-  condition?: ProductControllerFindAllCondition;
-  /**
-   * @minLength 1
-   * @maxLength 50
-   */
-  size?: string;
-  /**
-   * @minLength 1
-   * @maxLength 50
-   */
-  color?: string;
-  /**
-   * @minLength 1
-   * @maxLength 100
-   */
-  brand?: string;
-  minPrice?: string | number;
-  maxPrice?: string | number;
+  searchBy?: string[];
 };
 
-export type ProductControllerFindAllOrder =
-  (typeof ProductControllerFindAllOrder)[keyof typeof ProductControllerFindAllOrder];
+export type ProductControllerFindAllSortByItem =
+  (typeof ProductControllerFindAllSortByItem)[keyof typeof ProductControllerFindAllSortByItem];
 
-export const ProductControllerFindAllOrder = {
-  ASC: 'ASC',
-  DESC: 'DESC',
-} as const;
-
-export type ProductControllerFindAllCondition =
-  (typeof ProductControllerFindAllCondition)[keyof typeof ProductControllerFindAllCondition];
-
-export const ProductControllerFindAllCondition = {
-  FAIR: 'FAIR',
-  GOOD: 'GOOD',
-  EXCELLENT: 'EXCELLENT',
-  PRISTINE: 'PRISTINE',
+export const ProductControllerFindAllSortByItem = {
+  'createdAt:ASC': 'createdAt:ASC',
+  'createdAt:DESC': 'createdAt:DESC',
+  'price:ASC': 'price:ASC',
+  'price:DESC': 'price:DESC',
+  'publishedAt:ASC': 'publishedAt:ASC',
+  'publishedAt:DESC': 'publishedAt:DESC',
+  'id:ASC': 'id:ASC',
+  'id:DESC': 'id:DESC',
 } as const;
 
 export type ProductControllerFindAll200StatusCode =
@@ -2821,18 +2446,18 @@ export const ProductControllerFindAll200StatusCode = {
 /**
  * @nullable
  */
-export type ProductControllerFindAll200DataItemsItemCondition =
-  | (typeof ProductControllerFindAll200DataItemsItemCondition)[keyof typeof ProductControllerFindAll200DataItemsItemCondition]
+export type ProductControllerFindAll200DataDataItemCondition =
+  | (typeof ProductControllerFindAll200DataDataItemCondition)[keyof typeof ProductControllerFindAll200DataDataItemCondition]
   | null;
 
-export const ProductControllerFindAll200DataItemsItemCondition = {
+export const ProductControllerFindAll200DataDataItemCondition = {
   FAIR: 'FAIR',
   GOOD: 'GOOD',
   EXCELLENT: 'EXCELLENT',
   PRISTINE: 'PRISTINE',
 } as const;
 
-export type ProductControllerFindAll200DataItemsItemMeasurements = {
+export type ProductControllerFindAll200DataDataItemMeasurements = {
   /**
    * @maximum 500
    * @exclusiveMinimum 0
@@ -2870,62 +2495,33 @@ export type ProductControllerFindAll200DataItemsItemMeasurements = {
   inseam?: number;
 };
 
-export type ProductControllerFindAll200DataItemsItemShippingPackageWeight =
-  | {
-      mode: 'RANGE';
-      preset:
-        | 'UP_TO_250_G'
-        | 'UP_TO_500_G'
-        | 'UP_TO_1000_G'
-        | 'UP_TO_2000_G'
-        | 'UP_TO_5000_G';
-    }
-  | {
-      mode: 'CUSTOM';
-      /**
-       * @maximum 50000
-       * @exclusiveMinimum 0
-       */
-      grams: number;
-    };
-
-export type ProductControllerFindAll200DataItemsItemShippingPackageSize =
-  | {
-      mode: 'RANGE';
-      preset:
-        | 'BOX_20_15_10_CM'
-        | 'BOX_30_20_15_CM'
-        | 'BOX_40_30_20_CM'
-        | 'BOX_50_40_30_CM';
-    }
-  | {
-      mode: 'CUSTOM';
-      /**
-       * @maximum 200
-       * @exclusiveMinimum 0
-       */
-      lengthCm: number;
-      /**
-       * @maximum 200
-       * @exclusiveMinimum 0
-       */
-      widthCm: number;
-      /**
-       * @maximum 200
-       * @exclusiveMinimum 0
-       */
-      heightCm: number;
-    };
-
 /**
  * @nullable
  */
-export type ProductControllerFindAll200DataItemsItemShippingPackage = {
-  weight: ProductControllerFindAll200DataItemsItemShippingPackageWeight;
-  size: ProductControllerFindAll200DataItemsItemShippingPackageSize;
+export type ProductControllerFindAll200DataDataItemShippingPackage = {
+  /**
+   * @maximum 50000
+   * @exclusiveMinimum 0
+   */
+  weightGrams: number;
+  /**
+   * @maximum 200
+   * @exclusiveMinimum 0
+   */
+  lengthCm: number;
+  /**
+   * @maximum 200
+   * @exclusiveMinimum 0
+   */
+  widthCm: number;
+  /**
+   * @maximum 200
+   * @exclusiveMinimum 0
+   */
+  heightCm: number;
 } | null;
 
-export type ProductControllerFindAll200DataItemsItemDefectsItem = {
+export type ProductControllerFindAll200DataDataItemDefectsItem = {
   /**
    * @minLength 1
    * @maxLength 1000
@@ -2939,10 +2535,10 @@ export type ProductControllerFindAll200DataItemsItemDefectsItem = {
   mediaIds: string[];
 };
 
-export type ProductControllerFindAll200DataItemsItemStatus =
-  (typeof ProductControllerFindAll200DataItemsItemStatus)[keyof typeof ProductControllerFindAll200DataItemsItemStatus];
+export type ProductControllerFindAll200DataDataItemStatus =
+  (typeof ProductControllerFindAll200DataDataItemStatus)[keyof typeof ProductControllerFindAll200DataDataItemStatus];
 
-export const ProductControllerFindAll200DataItemsItemStatus = {
+export const ProductControllerFindAll200DataDataItemStatus = {
   DRAFT: 'DRAFT',
   PENDING_REVIEW: 'PENDING_REVIEW',
   REJECTED: 'REJECTED',
@@ -2956,32 +2552,20 @@ export const ProductControllerFindAll200DataItemsItemStatus = {
 /**
  * @nullable
  */
-export type ProductControllerFindAll200DataItemsItemCategory = {
+export type ProductControllerFindAll200DataDataItemCategory = {
   /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
   id: string;
   name: string;
   slug: string;
 } | null;
 
-/**
- * @nullable
- */
-export type ProductControllerFindAll200DataItemsItemSeller = {
-  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
-  id: string;
-  fullName: string;
-} | null;
-
-/**
- * @nullable
- */
-export type ProductControllerFindAll200DataItemsItemShop = {
+export type ProductControllerFindAll200DataDataItemShop = {
   /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
   id: string;
   name: string;
-} | null;
+};
 
-export type ProductControllerFindAll200DataItemsItem = {
+export type ProductControllerFindAll200DataDataItem = {
   /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
   id: string;
   /**
@@ -2989,22 +2573,14 @@ export type ProductControllerFindAll200DataItemsItem = {
    * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
    */
   categoryId: string | null;
-  /**
-   * @nullable
-   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
-   */
-  sellerUserId: string | null;
-  /**
-   * @nullable
-   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
-   */
-  shopId: string | null;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  shopId: string;
   /** @nullable */
   title: string | null;
   /** @nullable */
   description: string | null;
   /** @nullable */
-  condition: ProductControllerFindAll200DataItemsItemCondition;
+  condition: ProductControllerFindAll200DataDataItemCondition;
   /** @nullable */
   size: string | null;
   /** @nullable */
@@ -3017,23 +2593,12 @@ export type ProductControllerFindAll200DataItemsItem = {
    * @nullable
    */
   price: number | null;
-  measurements: ProductControllerFindAll200DataItemsItemMeasurements;
+  measurements: ProductControllerFindAll200DataDataItemMeasurements;
   /** @nullable */
-  shippingPackage: ProductControllerFindAll200DataItemsItemShippingPackage;
+  shippingPackage: ProductControllerFindAll200DataDataItemShippingPackage;
   /** @nullable */
   repairs: string | null;
-  defects: ProductControllerFindAll200DataItemsItemDefectsItem[];
-  /**
-   * @maximum 9007199254740991
-   * @exclusiveMinimum 0
-   */
-  revision: number;
-  /**
-   * @maximum 9007199254740991
-   * @exclusiveMinimum 0
-   * @nullable
-   */
-  approvedRevision: number | null;
+  defects: ProductControllerFindAll200DataDataItemDefectsItem[];
   /** @nullable */
   coverUrl: string | null;
   /**
@@ -3041,7 +2606,7 @@ export type ProductControllerFindAll200DataItemsItem = {
    * @maximum 9007199254740991
    */
   mediaCount: number;
-  status: ProductControllerFindAll200DataItemsItemStatus;
+  status: ProductControllerFindAll200DataDataItemStatus;
   /**
    * @nullable
    * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
@@ -3062,41 +2627,43 @@ export type ProductControllerFindAll200DataItemsItem = {
   /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
   updatedAt: string;
   /** @nullable */
-  category: ProductControllerFindAll200DataItemsItemCategory;
-  /** @nullable */
-  seller: ProductControllerFindAll200DataItemsItemSeller;
-  /** @nullable */
-  shop: ProductControllerFindAll200DataItemsItemShop;
+  category: ProductControllerFindAll200DataDataItemCategory;
+  shop: ProductControllerFindAll200DataDataItemShop;
+};
+
+export type ProductControllerFindAll200DataMetaFilter = {
+  [key: string]: string | string[];
 };
 
 export type ProductControllerFindAll200DataMeta = {
+  itemsPerPage: number;
+  totalItems?: number;
+  currentPage?: number;
+  totalPages?: number;
   /**
-   * @minimum 1
-   * @maximum 9007199254740991
+   * @items.minItems 2
+   * @items.maxItems 2
    */
-  page: number;
-  /**
-   * @minimum 1
-   * @maximum 9007199254740991
-   */
-  pageSize: number;
-  /**
-   * @minimum 0
-   * @maximum 9007199254740991
-   */
-  total: number;
-  /**
-   * @minimum 0
-   * @maximum 9007199254740991
-   */
-  totalPage: number;
-  hasNextPage: boolean;
-  hasPreviousPage: boolean;
+  sortBy: (string | string[])[][];
+  searchBy?: string[];
+  search?: string;
+  select?: string[];
+  filter?: ProductControllerFindAll200DataMetaFilter;
+  cursor?: string;
+};
+
+export type ProductControllerFindAll200DataLinks = {
+  first?: string;
+  previous?: string;
+  current: string;
+  next?: string;
+  last?: string;
 };
 
 export type ProductControllerFindAll200Data = {
-  items: ProductControllerFindAll200DataItemsItem[];
+  data: ProductControllerFindAll200DataDataItem[];
   meta: ProductControllerFindAll200DataMeta;
+  links: ProductControllerFindAll200DataLinks;
 };
 
 export type ProductControllerFindAll200 = {
@@ -3157,59 +2724,30 @@ export type ProductControllerCreateBodyMeasurements = {
   inseam?: number;
 };
 
-export type ProductControllerCreateBodyShippingPackageWeight =
-  | {
-      mode: 'RANGE';
-      preset:
-        | 'UP_TO_250_G'
-        | 'UP_TO_500_G'
-        | 'UP_TO_1000_G'
-        | 'UP_TO_2000_G'
-        | 'UP_TO_5000_G';
-    }
-  | {
-      mode: 'CUSTOM';
-      /**
-       * @maximum 50000
-       * @exclusiveMinimum 0
-       */
-      grams: number;
-    };
-
-export type ProductControllerCreateBodyShippingPackageSize =
-  | {
-      mode: 'RANGE';
-      preset:
-        | 'BOX_20_15_10_CM'
-        | 'BOX_30_20_15_CM'
-        | 'BOX_40_30_20_CM'
-        | 'BOX_50_40_30_CM';
-    }
-  | {
-      mode: 'CUSTOM';
-      /**
-       * @maximum 200
-       * @exclusiveMinimum 0
-       */
-      lengthCm: number;
-      /**
-       * @maximum 200
-       * @exclusiveMinimum 0
-       */
-      widthCm: number;
-      /**
-       * @maximum 200
-       * @exclusiveMinimum 0
-       */
-      heightCm: number;
-    };
-
 /**
  * @nullable
  */
 export type ProductControllerCreateBodyShippingPackage = {
-  weight: ProductControllerCreateBodyShippingPackageWeight;
-  size: ProductControllerCreateBodyShippingPackageSize;
+  /**
+   * @maximum 50000
+   * @exclusiveMinimum 0
+   */
+  weightGrams: number;
+  /**
+   * @maximum 200
+   * @exclusiveMinimum 0
+   */
+  lengthCm: number;
+  /**
+   * @maximum 200
+   * @exclusiveMinimum 0
+   */
+  widthCm: number;
+  /**
+   * @maximum 200
+   * @exclusiveMinimum 0
+   */
+  heightCm: number;
 } | null;
 
 export type ProductControllerCreateBodyDefectsItem = {
@@ -3232,11 +2770,8 @@ export type ProductControllerCreateBody = {
    * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
    */
   categoryId?: string | null;
-  /**
-   * @nullable
-   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
-   */
-  shopId?: string | null;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  shopId: string;
   /**
    * @minLength 1
    * @maxLength 150
@@ -3342,59 +2877,30 @@ export type ProductControllerCreate201DataMeasurements = {
   inseam?: number;
 };
 
-export type ProductControllerCreate201DataShippingPackageWeight =
-  | {
-      mode: 'RANGE';
-      preset:
-        | 'UP_TO_250_G'
-        | 'UP_TO_500_G'
-        | 'UP_TO_1000_G'
-        | 'UP_TO_2000_G'
-        | 'UP_TO_5000_G';
-    }
-  | {
-      mode: 'CUSTOM';
-      /**
-       * @maximum 50000
-       * @exclusiveMinimum 0
-       */
-      grams: number;
-    };
-
-export type ProductControllerCreate201DataShippingPackageSize =
-  | {
-      mode: 'RANGE';
-      preset:
-        | 'BOX_20_15_10_CM'
-        | 'BOX_30_20_15_CM'
-        | 'BOX_40_30_20_CM'
-        | 'BOX_50_40_30_CM';
-    }
-  | {
-      mode: 'CUSTOM';
-      /**
-       * @maximum 200
-       * @exclusiveMinimum 0
-       */
-      lengthCm: number;
-      /**
-       * @maximum 200
-       * @exclusiveMinimum 0
-       */
-      widthCm: number;
-      /**
-       * @maximum 200
-       * @exclusiveMinimum 0
-       */
-      heightCm: number;
-    };
-
 /**
  * @nullable
  */
 export type ProductControllerCreate201DataShippingPackage = {
-  weight: ProductControllerCreate201DataShippingPackageWeight;
-  size: ProductControllerCreate201DataShippingPackageSize;
+  /**
+   * @maximum 50000
+   * @exclusiveMinimum 0
+   */
+  weightGrams: number;
+  /**
+   * @maximum 200
+   * @exclusiveMinimum 0
+   */
+  lengthCm: number;
+  /**
+   * @maximum 200
+   * @exclusiveMinimum 0
+   */
+  widthCm: number;
+  /**
+   * @maximum 200
+   * @exclusiveMinimum 0
+   */
+  heightCm: number;
 } | null;
 
 export type ProductControllerCreate201DataDefectsItem = {
@@ -3435,23 +2941,11 @@ export type ProductControllerCreate201DataCategory = {
   slug: string;
 } | null;
 
-/**
- * @nullable
- */
-export type ProductControllerCreate201DataSeller = {
-  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
-  id: string;
-  fullName: string;
-} | null;
-
-/**
- * @nullable
- */
 export type ProductControllerCreate201DataShop = {
   /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
   id: string;
   name: string;
-} | null;
+};
 
 export type ProductControllerCreate201Data = {
   /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
@@ -3461,16 +2955,8 @@ export type ProductControllerCreate201Data = {
    * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
    */
   categoryId: string | null;
-  /**
-   * @nullable
-   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
-   */
-  sellerUserId: string | null;
-  /**
-   * @nullable
-   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
-   */
-  shopId: string | null;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  shopId: string;
   /** @nullable */
   title: string | null;
   /** @nullable */
@@ -3495,17 +2981,6 @@ export type ProductControllerCreate201Data = {
   /** @nullable */
   repairs: string | null;
   defects: ProductControllerCreate201DataDefectsItem[];
-  /**
-   * @maximum 9007199254740991
-   * @exclusiveMinimum 0
-   */
-  revision: number;
-  /**
-   * @maximum 9007199254740991
-   * @exclusiveMinimum 0
-   * @nullable
-   */
-  approvedRevision: number | null;
   /** @nullable */
   coverUrl: string | null;
   /**
@@ -3535,9 +3010,6 @@ export type ProductControllerCreate201Data = {
   updatedAt: string;
   /** @nullable */
   category: ProductControllerCreate201DataCategory;
-  /** @nullable */
-  seller: ProductControllerCreate201DataSeller;
-  /** @nullable */
   shop: ProductControllerCreate201DataShop;
 };
 
@@ -3548,78 +3020,232 @@ export type ProductControllerCreate201 = {
 };
 
 export type ProductControllerFindMineParams = {
-  page?: string | number;
-  pageSize?: string | number;
-  order?: ProductControllerFindMineOrder;
-  sortBy?: string;
   /**
-   * @minLength 1
-   * @maxLength 150
+   * Page number to retrieve. If you provide invalid value the default page number will applied
+   *
+   * **Example:** 1
+   *
+   *
+   * **Default Value:** 1
+   */
+  page?: number;
+  /**
+   * Number of records per page.
+   *
+   *
+   * **Example:** 20
+   *
+   *
+   *
+   * **Default Value:** 10
+   *
+   *
+   *
+   * **Max Value:** 100
+   *
+   *
+   * If provided value is greater than max value, max value will be applied.
+   */
+  limit?: number;
+  /**
+   * Filter by categoryId query param.
+   *
+   * **Format:** filter.categoryId={$not}:OPERATION:VALUE
+   *
+   *
+   *
+   * **Example:** filter.categoryId=$eq:John Doe
+   *
+   * **Available Operations**
+   * - $eq
+   *
+   * - $and
+   *
+   * - $or
+   */
+  'filter.categoryId'?: string[];
+  /**
+   * Filter by shopId query param.
+   *
+   * **Format:** filter.shopId={$not}:OPERATION:VALUE
+   *
+   *
+   *
+   * **Example:** filter.shopId=$eq:John Doe
+   *
+   * **Available Operations**
+   * - $eq
+   *
+   * - $and
+   *
+   * - $or
+   */
+  'filter.shopId'?: string[];
+  /**
+   * Filter by condition query param.
+   *
+   * **Format:** filter.condition={$not}:OPERATION:VALUE
+   *
+   *
+   *
+   * **Example:** filter.condition=$eq:John Doe
+   *
+   * **Available Operations**
+   * - $eq
+   *
+   * - $and
+   *
+   * - $or
+   */
+  'filter.condition'?: string[];
+  /**
+   * Filter by status query param.
+   *
+   * **Format:** filter.status={$not}:OPERATION:VALUE
+   *
+   *
+   *
+   * **Example:** filter.status=$eq:John Doe
+   *
+   * **Available Operations**
+   * - $eq
+   *
+   * - $and
+   *
+   * - $or
+   */
+  'filter.status'?: string[];
+  /**
+   * Filter by size query param.
+   *
+   * **Format:** filter.size={$not}:OPERATION:VALUE
+   *
+   *
+   *
+   * **Example:** filter.size=$ilike:John Doe
+   *
+   * **Available Operations**
+   * - $ilike
+   *
+   * - $and
+   *
+   * - $or
+   */
+  'filter.size'?: string[];
+  /**
+   * Filter by color query param.
+   *
+   * **Format:** filter.color={$not}:OPERATION:VALUE
+   *
+   *
+   *
+   * **Example:** filter.color=$ilike:John Doe
+   *
+   * **Available Operations**
+   * - $ilike
+   *
+   * - $and
+   *
+   * - $or
+   */
+  'filter.color'?: string[];
+  /**
+   * Filter by brand query param.
+   *
+   * **Format:** filter.brand={$not}:OPERATION:VALUE
+   *
+   *
+   *
+   * **Example:** filter.brand=$ilike:John Doe
+   *
+   * **Available Operations**
+   * - $ilike
+   *
+   * - $and
+   *
+   * - $or
+   */
+  'filter.brand'?: string[];
+  /**
+   * Filter by price query param.
+   *
+   * **Format:** filter.price={$not}:OPERATION:VALUE
+   *
+   *
+   *
+   * **Example:** filter.price=$gte:John Doe&filter.price=$lte:John Doe
+   *
+   * **Available Operations**
+   * - $gte
+   *
+   * - $lte
+   *
+   * - $and
+   *
+   * - $or
+   */
+  'filter.price'?: string[];
+  /**
+   * Parameter to sort by.
+   * To sort by multiple fields, just provide query param multiple types. The order in url defines an order of sorting
+   *
+   * **Format:** {fieldName}:{DIRECTION}
+   *
+   *
+   * **Example:** sortBy=createdAt:DESC&sortBy=price:DESC
+   *
+   *
+   * **Default Value:** createdAt:DESC,id:DESC
+   *
+   * **Available Fields**
+   * - createdAt
+   *
+   * - price
+   *
+   * - publishedAt
+   *
+   * - id
+   */
+  sortBy?: ProductControllerFindMineSortByItem[];
+  /**
+   * Search term to filter result values
+   *
+   * **Example:** John
+   *
+   *
+   * **Default Value:** No default value
    */
   search?: string;
   /**
-   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+   * List of fields to search by term to filter result values
+   *
+   * **Example:** title,description,brand
+   *
+   *
+   * **Default Value:** By default all fields mentioned below will be used to search by term
+   *
+   * **Available Fields**
+   * - title
+   *
+   * - description
+   *
+   * - brand
    */
-  categoryId?: string;
-  /**
-   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
-   */
-  shopId?: string;
-  /**
-   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
-   */
-  sellerUserId?: string;
-  condition?: ProductControllerFindMineCondition;
-  /**
-   * @minLength 1
-   * @maxLength 50
-   */
-  size?: string;
-  /**
-   * @minLength 1
-   * @maxLength 50
-   */
-  color?: string;
-  /**
-   * @minLength 1
-   * @maxLength 100
-   */
-  brand?: string;
-  minPrice?: string | number;
-  maxPrice?: string | number;
-  status?: ProductControllerFindMineStatus;
+  searchBy?: string[];
 };
 
-export type ProductControllerFindMineOrder =
-  (typeof ProductControllerFindMineOrder)[keyof typeof ProductControllerFindMineOrder];
+export type ProductControllerFindMineSortByItem =
+  (typeof ProductControllerFindMineSortByItem)[keyof typeof ProductControllerFindMineSortByItem];
 
-export const ProductControllerFindMineOrder = {
-  ASC: 'ASC',
-  DESC: 'DESC',
-} as const;
-
-export type ProductControllerFindMineCondition =
-  (typeof ProductControllerFindMineCondition)[keyof typeof ProductControllerFindMineCondition];
-
-export const ProductControllerFindMineCondition = {
-  FAIR: 'FAIR',
-  GOOD: 'GOOD',
-  EXCELLENT: 'EXCELLENT',
-  PRISTINE: 'PRISTINE',
-} as const;
-
-export type ProductControllerFindMineStatus =
-  (typeof ProductControllerFindMineStatus)[keyof typeof ProductControllerFindMineStatus];
-
-export const ProductControllerFindMineStatus = {
-  DRAFT: 'DRAFT',
-  PENDING_REVIEW: 'PENDING_REVIEW',
-  REJECTED: 'REJECTED',
-  SUSPENDED: 'SUSPENDED',
-  ACTIVE: 'ACTIVE',
-  HELD: 'HELD',
-  SOLD: 'SOLD',
-  HIDDEN: 'HIDDEN',
+export const ProductControllerFindMineSortByItem = {
+  'createdAt:ASC': 'createdAt:ASC',
+  'createdAt:DESC': 'createdAt:DESC',
+  'price:ASC': 'price:ASC',
+  'price:DESC': 'price:DESC',
+  'publishedAt:ASC': 'publishedAt:ASC',
+  'publishedAt:DESC': 'publishedAt:DESC',
+  'id:ASC': 'id:ASC',
+  'id:DESC': 'id:DESC',
 } as const;
 
 export type ProductControllerFindMine200StatusCode =
@@ -3632,18 +3258,18 @@ export const ProductControllerFindMine200StatusCode = {
 /**
  * @nullable
  */
-export type ProductControllerFindMine200DataItemsItemCondition =
-  | (typeof ProductControllerFindMine200DataItemsItemCondition)[keyof typeof ProductControllerFindMine200DataItemsItemCondition]
+export type ProductControllerFindMine200DataDataItemCondition =
+  | (typeof ProductControllerFindMine200DataDataItemCondition)[keyof typeof ProductControllerFindMine200DataDataItemCondition]
   | null;
 
-export const ProductControllerFindMine200DataItemsItemCondition = {
+export const ProductControllerFindMine200DataDataItemCondition = {
   FAIR: 'FAIR',
   GOOD: 'GOOD',
   EXCELLENT: 'EXCELLENT',
   PRISTINE: 'PRISTINE',
 } as const;
 
-export type ProductControllerFindMine200DataItemsItemMeasurements = {
+export type ProductControllerFindMine200DataDataItemMeasurements = {
   /**
    * @maximum 500
    * @exclusiveMinimum 0
@@ -3681,62 +3307,33 @@ export type ProductControllerFindMine200DataItemsItemMeasurements = {
   inseam?: number;
 };
 
-export type ProductControllerFindMine200DataItemsItemShippingPackageWeight =
-  | {
-      mode: 'RANGE';
-      preset:
-        | 'UP_TO_250_G'
-        | 'UP_TO_500_G'
-        | 'UP_TO_1000_G'
-        | 'UP_TO_2000_G'
-        | 'UP_TO_5000_G';
-    }
-  | {
-      mode: 'CUSTOM';
-      /**
-       * @maximum 50000
-       * @exclusiveMinimum 0
-       */
-      grams: number;
-    };
-
-export type ProductControllerFindMine200DataItemsItemShippingPackageSize =
-  | {
-      mode: 'RANGE';
-      preset:
-        | 'BOX_20_15_10_CM'
-        | 'BOX_30_20_15_CM'
-        | 'BOX_40_30_20_CM'
-        | 'BOX_50_40_30_CM';
-    }
-  | {
-      mode: 'CUSTOM';
-      /**
-       * @maximum 200
-       * @exclusiveMinimum 0
-       */
-      lengthCm: number;
-      /**
-       * @maximum 200
-       * @exclusiveMinimum 0
-       */
-      widthCm: number;
-      /**
-       * @maximum 200
-       * @exclusiveMinimum 0
-       */
-      heightCm: number;
-    };
-
 /**
  * @nullable
  */
-export type ProductControllerFindMine200DataItemsItemShippingPackage = {
-  weight: ProductControllerFindMine200DataItemsItemShippingPackageWeight;
-  size: ProductControllerFindMine200DataItemsItemShippingPackageSize;
+export type ProductControllerFindMine200DataDataItemShippingPackage = {
+  /**
+   * @maximum 50000
+   * @exclusiveMinimum 0
+   */
+  weightGrams: number;
+  /**
+   * @maximum 200
+   * @exclusiveMinimum 0
+   */
+  lengthCm: number;
+  /**
+   * @maximum 200
+   * @exclusiveMinimum 0
+   */
+  widthCm: number;
+  /**
+   * @maximum 200
+   * @exclusiveMinimum 0
+   */
+  heightCm: number;
 } | null;
 
-export type ProductControllerFindMine200DataItemsItemDefectsItem = {
+export type ProductControllerFindMine200DataDataItemDefectsItem = {
   /**
    * @minLength 1
    * @maxLength 1000
@@ -3750,10 +3347,10 @@ export type ProductControllerFindMine200DataItemsItemDefectsItem = {
   mediaIds: string[];
 };
 
-export type ProductControllerFindMine200DataItemsItemStatus =
-  (typeof ProductControllerFindMine200DataItemsItemStatus)[keyof typeof ProductControllerFindMine200DataItemsItemStatus];
+export type ProductControllerFindMine200DataDataItemStatus =
+  (typeof ProductControllerFindMine200DataDataItemStatus)[keyof typeof ProductControllerFindMine200DataDataItemStatus];
 
-export const ProductControllerFindMine200DataItemsItemStatus = {
+export const ProductControllerFindMine200DataDataItemStatus = {
   DRAFT: 'DRAFT',
   PENDING_REVIEW: 'PENDING_REVIEW',
   REJECTED: 'REJECTED',
@@ -3767,32 +3364,20 @@ export const ProductControllerFindMine200DataItemsItemStatus = {
 /**
  * @nullable
  */
-export type ProductControllerFindMine200DataItemsItemCategory = {
+export type ProductControllerFindMine200DataDataItemCategory = {
   /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
   id: string;
   name: string;
   slug: string;
 } | null;
 
-/**
- * @nullable
- */
-export type ProductControllerFindMine200DataItemsItemSeller = {
-  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
-  id: string;
-  fullName: string;
-} | null;
-
-/**
- * @nullable
- */
-export type ProductControllerFindMine200DataItemsItemShop = {
+export type ProductControllerFindMine200DataDataItemShop = {
   /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
   id: string;
   name: string;
-} | null;
+};
 
-export type ProductControllerFindMine200DataItemsItem = {
+export type ProductControllerFindMine200DataDataItem = {
   /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
   id: string;
   /**
@@ -3800,22 +3385,14 @@ export type ProductControllerFindMine200DataItemsItem = {
    * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
    */
   categoryId: string | null;
-  /**
-   * @nullable
-   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
-   */
-  sellerUserId: string | null;
-  /**
-   * @nullable
-   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
-   */
-  shopId: string | null;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  shopId: string;
   /** @nullable */
   title: string | null;
   /** @nullable */
   description: string | null;
   /** @nullable */
-  condition: ProductControllerFindMine200DataItemsItemCondition;
+  condition: ProductControllerFindMine200DataDataItemCondition;
   /** @nullable */
   size: string | null;
   /** @nullable */
@@ -3828,23 +3405,12 @@ export type ProductControllerFindMine200DataItemsItem = {
    * @nullable
    */
   price: number | null;
-  measurements: ProductControllerFindMine200DataItemsItemMeasurements;
+  measurements: ProductControllerFindMine200DataDataItemMeasurements;
   /** @nullable */
-  shippingPackage: ProductControllerFindMine200DataItemsItemShippingPackage;
+  shippingPackage: ProductControllerFindMine200DataDataItemShippingPackage;
   /** @nullable */
   repairs: string | null;
-  defects: ProductControllerFindMine200DataItemsItemDefectsItem[];
-  /**
-   * @maximum 9007199254740991
-   * @exclusiveMinimum 0
-   */
-  revision: number;
-  /**
-   * @maximum 9007199254740991
-   * @exclusiveMinimum 0
-   * @nullable
-   */
-  approvedRevision: number | null;
+  defects: ProductControllerFindMine200DataDataItemDefectsItem[];
   /** @nullable */
   coverUrl: string | null;
   /**
@@ -3852,7 +3418,7 @@ export type ProductControllerFindMine200DataItemsItem = {
    * @maximum 9007199254740991
    */
   mediaCount: number;
-  status: ProductControllerFindMine200DataItemsItemStatus;
+  status: ProductControllerFindMine200DataDataItemStatus;
   /**
    * @nullable
    * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
@@ -3873,41 +3439,43 @@ export type ProductControllerFindMine200DataItemsItem = {
   /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
   updatedAt: string;
   /** @nullable */
-  category: ProductControllerFindMine200DataItemsItemCategory;
-  /** @nullable */
-  seller: ProductControllerFindMine200DataItemsItemSeller;
-  /** @nullable */
-  shop: ProductControllerFindMine200DataItemsItemShop;
+  category: ProductControllerFindMine200DataDataItemCategory;
+  shop: ProductControllerFindMine200DataDataItemShop;
+};
+
+export type ProductControllerFindMine200DataMetaFilter = {
+  [key: string]: string | string[];
 };
 
 export type ProductControllerFindMine200DataMeta = {
+  itemsPerPage: number;
+  totalItems?: number;
+  currentPage?: number;
+  totalPages?: number;
   /**
-   * @minimum 1
-   * @maximum 9007199254740991
+   * @items.minItems 2
+   * @items.maxItems 2
    */
-  page: number;
-  /**
-   * @minimum 1
-   * @maximum 9007199254740991
-   */
-  pageSize: number;
-  /**
-   * @minimum 0
-   * @maximum 9007199254740991
-   */
-  total: number;
-  /**
-   * @minimum 0
-   * @maximum 9007199254740991
-   */
-  totalPage: number;
-  hasNextPage: boolean;
-  hasPreviousPage: boolean;
+  sortBy: (string | string[])[][];
+  searchBy?: string[];
+  search?: string;
+  select?: string[];
+  filter?: ProductControllerFindMine200DataMetaFilter;
+  cursor?: string;
+};
+
+export type ProductControllerFindMine200DataLinks = {
+  first?: string;
+  previous?: string;
+  current: string;
+  next?: string;
+  last?: string;
 };
 
 export type ProductControllerFindMine200Data = {
-  items: ProductControllerFindMine200DataItemsItem[];
+  data: ProductControllerFindMine200DataDataItem[];
   meta: ProductControllerFindMine200DataMeta;
+  links: ProductControllerFindMine200DataLinks;
 };
 
 export type ProductControllerFindMine200 = {
@@ -3975,59 +3543,30 @@ export type ProductControllerFindManaged200DataMeasurements = {
   inseam?: number;
 };
 
-export type ProductControllerFindManaged200DataShippingPackageWeight =
-  | {
-      mode: 'RANGE';
-      preset:
-        | 'UP_TO_250_G'
-        | 'UP_TO_500_G'
-        | 'UP_TO_1000_G'
-        | 'UP_TO_2000_G'
-        | 'UP_TO_5000_G';
-    }
-  | {
-      mode: 'CUSTOM';
-      /**
-       * @maximum 50000
-       * @exclusiveMinimum 0
-       */
-      grams: number;
-    };
-
-export type ProductControllerFindManaged200DataShippingPackageSize =
-  | {
-      mode: 'RANGE';
-      preset:
-        | 'BOX_20_15_10_CM'
-        | 'BOX_30_20_15_CM'
-        | 'BOX_40_30_20_CM'
-        | 'BOX_50_40_30_CM';
-    }
-  | {
-      mode: 'CUSTOM';
-      /**
-       * @maximum 200
-       * @exclusiveMinimum 0
-       */
-      lengthCm: number;
-      /**
-       * @maximum 200
-       * @exclusiveMinimum 0
-       */
-      widthCm: number;
-      /**
-       * @maximum 200
-       * @exclusiveMinimum 0
-       */
-      heightCm: number;
-    };
-
 /**
  * @nullable
  */
 export type ProductControllerFindManaged200DataShippingPackage = {
-  weight: ProductControllerFindManaged200DataShippingPackageWeight;
-  size: ProductControllerFindManaged200DataShippingPackageSize;
+  /**
+   * @maximum 50000
+   * @exclusiveMinimum 0
+   */
+  weightGrams: number;
+  /**
+   * @maximum 200
+   * @exclusiveMinimum 0
+   */
+  lengthCm: number;
+  /**
+   * @maximum 200
+   * @exclusiveMinimum 0
+   */
+  widthCm: number;
+  /**
+   * @maximum 200
+   * @exclusiveMinimum 0
+   */
+  heightCm: number;
 } | null;
 
 export type ProductControllerFindManaged200DataDefectsItem = {
@@ -4068,23 +3607,11 @@ export type ProductControllerFindManaged200DataCategory = {
   slug: string;
 } | null;
 
-/**
- * @nullable
- */
-export type ProductControllerFindManaged200DataSeller = {
-  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
-  id: string;
-  fullName: string;
-} | null;
-
-/**
- * @nullable
- */
 export type ProductControllerFindManaged200DataShop = {
   /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
   id: string;
   name: string;
-} | null;
+};
 
 export type ProductControllerFindManaged200Data = {
   /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
@@ -4094,16 +3621,8 @@ export type ProductControllerFindManaged200Data = {
    * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
    */
   categoryId: string | null;
-  /**
-   * @nullable
-   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
-   */
-  sellerUserId: string | null;
-  /**
-   * @nullable
-   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
-   */
-  shopId: string | null;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  shopId: string;
   /** @nullable */
   title: string | null;
   /** @nullable */
@@ -4128,17 +3647,6 @@ export type ProductControllerFindManaged200Data = {
   /** @nullable */
   repairs: string | null;
   defects: ProductControllerFindManaged200DataDefectsItem[];
-  /**
-   * @maximum 9007199254740991
-   * @exclusiveMinimum 0
-   */
-  revision: number;
-  /**
-   * @maximum 9007199254740991
-   * @exclusiveMinimum 0
-   * @nullable
-   */
-  approvedRevision: number | null;
   /** @nullable */
   coverUrl: string | null;
   /**
@@ -4168,9 +3676,6 @@ export type ProductControllerFindManaged200Data = {
   updatedAt: string;
   /** @nullable */
   category: ProductControllerFindManaged200DataCategory;
-  /** @nullable */
-  seller: ProductControllerFindManaged200DataSeller;
-  /** @nullable */
   shop: ProductControllerFindManaged200DataShop;
 };
 
@@ -4180,138 +3685,271 @@ export type ProductControllerFindManaged200 = {
   data: ProductControllerFindManaged200Data;
 };
 
-export type ProductControllerRevisions200StatusCode =
-  (typeof ProductControllerRevisions200StatusCode)[keyof typeof ProductControllerRevisions200StatusCode];
+export type ProductControllerModerationForOwner200StatusCode =
+  (typeof ProductControllerModerationForOwner200StatusCode)[keyof typeof ProductControllerModerationForOwner200StatusCode];
 
-export const ProductControllerRevisions200StatusCode = {
+export const ProductControllerModerationForOwner200StatusCode = {
   NUMBER_200: 200,
 } as const;
 
-export type ProductControllerRevisions200DataItemSnapshot = {
-  [key: string]: unknown;
-};
+export type ProductControllerModerationForOwner200DataStatus =
+  (typeof ProductControllerModerationForOwner200DataStatus)[keyof typeof ProductControllerModerationForOwner200DataStatus];
 
-export type ProductControllerRevisions200DataItemDecision =
-  (typeof ProductControllerRevisions200DataItemDecision)[keyof typeof ProductControllerRevisions200DataItemDecision];
-
-export const ProductControllerRevisions200DataItemDecision = {
+export const ProductControllerModerationForOwner200DataStatus = {
+  DRAFT: 'DRAFT',
   PENDING: 'PENDING',
   APPROVED: 'APPROVED',
   REJECTED: 'REJECTED',
-  SUPERSEDED: 'SUPERSEDED',
+  CANCELLED: 'CANCELLED',
+  SUSPENDED: 'SUSPENDED',
 } as const;
 
-export type ProductControllerRevisions200DataItem = {
-  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
-  id: string;
+export type ProductControllerModerationForOwner200Data = {
   /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
   productId: string;
+  status: ProductControllerModerationForOwner200DataStatus;
   /**
-   * @minimum -9007199254740991
    * @maximum 9007199254740991
+   * @exclusiveMinimum 0
    */
-  revision: number;
-  snapshot: ProductControllerRevisions200DataItemSnapshot;
-  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
-  submittedById: string;
-  decision: ProductControllerRevisions200DataItemDecision;
-  /**
-   * @nullable
-   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
-   */
-  reviewedById: string | null;
+  version: number;
   /** @nullable */
   reason: string | null;
-  /**
-   * @nullable
-   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
-   */
-  reviewedAt: string | null;
-  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
-  createdAt: string;
-  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
-  updatedAt: string;
 };
 
-export type ProductControllerRevisions200 = {
-  statusCode: ProductControllerRevisions200StatusCode;
+export type ProductControllerModerationForOwner200 = {
+  statusCode: ProductControllerModerationForOwner200StatusCode;
   message: string;
-  data: ProductControllerRevisions200DataItem[];
+  data: ProductControllerModerationForOwner200Data;
 };
 
 export type ProductControllerReviewQueueParams = {
-  page?: string | number;
-  pageSize?: string | number;
-  order?: ProductControllerReviewQueueOrder;
-  sortBy?: string;
   /**
-   * @minLength 1
-   * @maxLength 150
+   * Page number to retrieve. If you provide invalid value the default page number will applied
+   *
+   * **Example:** 1
+   *
+   *
+   * **Default Value:** 1
+   */
+  page?: number;
+  /**
+   * Number of records per page.
+   *
+   *
+   * **Example:** 20
+   *
+   *
+   *
+   * **Default Value:** 10
+   *
+   *
+   *
+   * **Max Value:** 100
+   *
+   *
+   * If provided value is greater than max value, max value will be applied.
+   */
+  limit?: number;
+  /**
+   * Filter by categoryId query param.
+   *
+   * **Format:** filter.categoryId={$not}:OPERATION:VALUE
+   *
+   *
+   *
+   * **Example:** filter.categoryId=$eq:John Doe
+   *
+   * **Available Operations**
+   * - $eq
+   *
+   * - $and
+   *
+   * - $or
+   */
+  'filter.categoryId'?: string[];
+  /**
+   * Filter by shopId query param.
+   *
+   * **Format:** filter.shopId={$not}:OPERATION:VALUE
+   *
+   *
+   *
+   * **Example:** filter.shopId=$eq:John Doe
+   *
+   * **Available Operations**
+   * - $eq
+   *
+   * - $and
+   *
+   * - $or
+   */
+  'filter.shopId'?: string[];
+  /**
+   * Filter by condition query param.
+   *
+   * **Format:** filter.condition={$not}:OPERATION:VALUE
+   *
+   *
+   *
+   * **Example:** filter.condition=$eq:John Doe
+   *
+   * **Available Operations**
+   * - $eq
+   *
+   * - $and
+   *
+   * - $or
+   */
+  'filter.condition'?: string[];
+  /**
+   * Filter by status query param.
+   *
+   * **Format:** filter.status={$not}:OPERATION:VALUE
+   *
+   *
+   *
+   * **Example:** filter.status=$eq:John Doe
+   *
+   * **Available Operations**
+   * - $eq
+   *
+   * - $and
+   *
+   * - $or
+   */
+  'filter.status'?: string[];
+  /**
+   * Filter by size query param.
+   *
+   * **Format:** filter.size={$not}:OPERATION:VALUE
+   *
+   *
+   *
+   * **Example:** filter.size=$ilike:John Doe
+   *
+   * **Available Operations**
+   * - $ilike
+   *
+   * - $and
+   *
+   * - $or
+   */
+  'filter.size'?: string[];
+  /**
+   * Filter by color query param.
+   *
+   * **Format:** filter.color={$not}:OPERATION:VALUE
+   *
+   *
+   *
+   * **Example:** filter.color=$ilike:John Doe
+   *
+   * **Available Operations**
+   * - $ilike
+   *
+   * - $and
+   *
+   * - $or
+   */
+  'filter.color'?: string[];
+  /**
+   * Filter by brand query param.
+   *
+   * **Format:** filter.brand={$not}:OPERATION:VALUE
+   *
+   *
+   *
+   * **Example:** filter.brand=$ilike:John Doe
+   *
+   * **Available Operations**
+   * - $ilike
+   *
+   * - $and
+   *
+   * - $or
+   */
+  'filter.brand'?: string[];
+  /**
+   * Filter by price query param.
+   *
+   * **Format:** filter.price={$not}:OPERATION:VALUE
+   *
+   *
+   *
+   * **Example:** filter.price=$gte:John Doe&filter.price=$lte:John Doe
+   *
+   * **Available Operations**
+   * - $gte
+   *
+   * - $lte
+   *
+   * - $and
+   *
+   * - $or
+   */
+  'filter.price'?: string[];
+  /**
+   * Parameter to sort by.
+   * To sort by multiple fields, just provide query param multiple types. The order in url defines an order of sorting
+   *
+   * **Format:** {fieldName}:{DIRECTION}
+   *
+   *
+   * **Example:** sortBy=createdAt:DESC&sortBy=price:DESC
+   *
+   *
+   * **Default Value:** createdAt:DESC,id:DESC
+   *
+   * **Available Fields**
+   * - createdAt
+   *
+   * - price
+   *
+   * - publishedAt
+   *
+   * - id
+   */
+  sortBy?: ProductControllerReviewQueueSortByItem[];
+  /**
+   * Search term to filter result values
+   *
+   * **Example:** John
+   *
+   *
+   * **Default Value:** No default value
    */
   search?: string;
   /**
-   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+   * List of fields to search by term to filter result values
+   *
+   * **Example:** title,description,brand
+   *
+   *
+   * **Default Value:** By default all fields mentioned below will be used to search by term
+   *
+   * **Available Fields**
+   * - title
+   *
+   * - description
+   *
+   * - brand
    */
-  categoryId?: string;
-  /**
-   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
-   */
-  shopId?: string;
-  /**
-   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
-   */
-  sellerUserId?: string;
-  condition?: ProductControllerReviewQueueCondition;
-  /**
-   * @minLength 1
-   * @maxLength 50
-   */
-  size?: string;
-  /**
-   * @minLength 1
-   * @maxLength 50
-   */
-  color?: string;
-  /**
-   * @minLength 1
-   * @maxLength 100
-   */
-  brand?: string;
-  minPrice?: string | number;
-  maxPrice?: string | number;
-  status?: ProductControllerReviewQueueStatus;
+  searchBy?: string[];
 };
 
-export type ProductControllerReviewQueueOrder =
-  (typeof ProductControllerReviewQueueOrder)[keyof typeof ProductControllerReviewQueueOrder];
+export type ProductControllerReviewQueueSortByItem =
+  (typeof ProductControllerReviewQueueSortByItem)[keyof typeof ProductControllerReviewQueueSortByItem];
 
-export const ProductControllerReviewQueueOrder = {
-  ASC: 'ASC',
-  DESC: 'DESC',
-} as const;
-
-export type ProductControllerReviewQueueCondition =
-  (typeof ProductControllerReviewQueueCondition)[keyof typeof ProductControllerReviewQueueCondition];
-
-export const ProductControllerReviewQueueCondition = {
-  FAIR: 'FAIR',
-  GOOD: 'GOOD',
-  EXCELLENT: 'EXCELLENT',
-  PRISTINE: 'PRISTINE',
-} as const;
-
-export type ProductControllerReviewQueueStatus =
-  (typeof ProductControllerReviewQueueStatus)[keyof typeof ProductControllerReviewQueueStatus];
-
-export const ProductControllerReviewQueueStatus = {
-  DRAFT: 'DRAFT',
-  PENDING_REVIEW: 'PENDING_REVIEW',
-  REJECTED: 'REJECTED',
-  SUSPENDED: 'SUSPENDED',
-  ACTIVE: 'ACTIVE',
-  HELD: 'HELD',
-  SOLD: 'SOLD',
-  HIDDEN: 'HIDDEN',
+export const ProductControllerReviewQueueSortByItem = {
+  'createdAt:ASC': 'createdAt:ASC',
+  'createdAt:DESC': 'createdAt:DESC',
+  'price:ASC': 'price:ASC',
+  'price:DESC': 'price:DESC',
+  'publishedAt:ASC': 'publishedAt:ASC',
+  'publishedAt:DESC': 'publishedAt:DESC',
+  'id:ASC': 'id:ASC',
+  'id:DESC': 'id:DESC',
 } as const;
 
 export type ProductControllerReviewQueue200StatusCode =
@@ -4324,18 +3962,18 @@ export const ProductControllerReviewQueue200StatusCode = {
 /**
  * @nullable
  */
-export type ProductControllerReviewQueue200DataItemsItemCondition =
-  | (typeof ProductControllerReviewQueue200DataItemsItemCondition)[keyof typeof ProductControllerReviewQueue200DataItemsItemCondition]
+export type ProductControllerReviewQueue200DataDataItemCondition =
+  | (typeof ProductControllerReviewQueue200DataDataItemCondition)[keyof typeof ProductControllerReviewQueue200DataDataItemCondition]
   | null;
 
-export const ProductControllerReviewQueue200DataItemsItemCondition = {
+export const ProductControllerReviewQueue200DataDataItemCondition = {
   FAIR: 'FAIR',
   GOOD: 'GOOD',
   EXCELLENT: 'EXCELLENT',
   PRISTINE: 'PRISTINE',
 } as const;
 
-export type ProductControllerReviewQueue200DataItemsItemMeasurements = {
+export type ProductControllerReviewQueue200DataDataItemMeasurements = {
   /**
    * @maximum 500
    * @exclusiveMinimum 0
@@ -4373,62 +4011,33 @@ export type ProductControllerReviewQueue200DataItemsItemMeasurements = {
   inseam?: number;
 };
 
-export type ProductControllerReviewQueue200DataItemsItemShippingPackageWeight =
-  | {
-      mode: 'RANGE';
-      preset:
-        | 'UP_TO_250_G'
-        | 'UP_TO_500_G'
-        | 'UP_TO_1000_G'
-        | 'UP_TO_2000_G'
-        | 'UP_TO_5000_G';
-    }
-  | {
-      mode: 'CUSTOM';
-      /**
-       * @maximum 50000
-       * @exclusiveMinimum 0
-       */
-      grams: number;
-    };
-
-export type ProductControllerReviewQueue200DataItemsItemShippingPackageSize =
-  | {
-      mode: 'RANGE';
-      preset:
-        | 'BOX_20_15_10_CM'
-        | 'BOX_30_20_15_CM'
-        | 'BOX_40_30_20_CM'
-        | 'BOX_50_40_30_CM';
-    }
-  | {
-      mode: 'CUSTOM';
-      /**
-       * @maximum 200
-       * @exclusiveMinimum 0
-       */
-      lengthCm: number;
-      /**
-       * @maximum 200
-       * @exclusiveMinimum 0
-       */
-      widthCm: number;
-      /**
-       * @maximum 200
-       * @exclusiveMinimum 0
-       */
-      heightCm: number;
-    };
-
 /**
  * @nullable
  */
-export type ProductControllerReviewQueue200DataItemsItemShippingPackage = {
-  weight: ProductControllerReviewQueue200DataItemsItemShippingPackageWeight;
-  size: ProductControllerReviewQueue200DataItemsItemShippingPackageSize;
+export type ProductControllerReviewQueue200DataDataItemShippingPackage = {
+  /**
+   * @maximum 50000
+   * @exclusiveMinimum 0
+   */
+  weightGrams: number;
+  /**
+   * @maximum 200
+   * @exclusiveMinimum 0
+   */
+  lengthCm: number;
+  /**
+   * @maximum 200
+   * @exclusiveMinimum 0
+   */
+  widthCm: number;
+  /**
+   * @maximum 200
+   * @exclusiveMinimum 0
+   */
+  heightCm: number;
 } | null;
 
-export type ProductControllerReviewQueue200DataItemsItemDefectsItem = {
+export type ProductControllerReviewQueue200DataDataItemDefectsItem = {
   /**
    * @minLength 1
    * @maxLength 1000
@@ -4442,10 +4051,10 @@ export type ProductControllerReviewQueue200DataItemsItemDefectsItem = {
   mediaIds: string[];
 };
 
-export type ProductControllerReviewQueue200DataItemsItemStatus =
-  (typeof ProductControllerReviewQueue200DataItemsItemStatus)[keyof typeof ProductControllerReviewQueue200DataItemsItemStatus];
+export type ProductControllerReviewQueue200DataDataItemStatus =
+  (typeof ProductControllerReviewQueue200DataDataItemStatus)[keyof typeof ProductControllerReviewQueue200DataDataItemStatus];
 
-export const ProductControllerReviewQueue200DataItemsItemStatus = {
+export const ProductControllerReviewQueue200DataDataItemStatus = {
   DRAFT: 'DRAFT',
   PENDING_REVIEW: 'PENDING_REVIEW',
   REJECTED: 'REJECTED',
@@ -4459,32 +4068,20 @@ export const ProductControllerReviewQueue200DataItemsItemStatus = {
 /**
  * @nullable
  */
-export type ProductControllerReviewQueue200DataItemsItemCategory = {
+export type ProductControllerReviewQueue200DataDataItemCategory = {
   /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
   id: string;
   name: string;
   slug: string;
 } | null;
 
-/**
- * @nullable
- */
-export type ProductControllerReviewQueue200DataItemsItemSeller = {
-  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
-  id: string;
-  fullName: string;
-} | null;
-
-/**
- * @nullable
- */
-export type ProductControllerReviewQueue200DataItemsItemShop = {
+export type ProductControllerReviewQueue200DataDataItemShop = {
   /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
   id: string;
   name: string;
-} | null;
+};
 
-export type ProductControllerReviewQueue200DataItemsItem = {
+export type ProductControllerReviewQueue200DataDataItem = {
   /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
   id: string;
   /**
@@ -4492,22 +4089,14 @@ export type ProductControllerReviewQueue200DataItemsItem = {
    * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
    */
   categoryId: string | null;
-  /**
-   * @nullable
-   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
-   */
-  sellerUserId: string | null;
-  /**
-   * @nullable
-   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
-   */
-  shopId: string | null;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  shopId: string;
   /** @nullable */
   title: string | null;
   /** @nullable */
   description: string | null;
   /** @nullable */
-  condition: ProductControllerReviewQueue200DataItemsItemCondition;
+  condition: ProductControllerReviewQueue200DataDataItemCondition;
   /** @nullable */
   size: string | null;
   /** @nullable */
@@ -4520,23 +4109,12 @@ export type ProductControllerReviewQueue200DataItemsItem = {
    * @nullable
    */
   price: number | null;
-  measurements: ProductControllerReviewQueue200DataItemsItemMeasurements;
+  measurements: ProductControllerReviewQueue200DataDataItemMeasurements;
   /** @nullable */
-  shippingPackage: ProductControllerReviewQueue200DataItemsItemShippingPackage;
+  shippingPackage: ProductControllerReviewQueue200DataDataItemShippingPackage;
   /** @nullable */
   repairs: string | null;
-  defects: ProductControllerReviewQueue200DataItemsItemDefectsItem[];
-  /**
-   * @maximum 9007199254740991
-   * @exclusiveMinimum 0
-   */
-  revision: number;
-  /**
-   * @maximum 9007199254740991
-   * @exclusiveMinimum 0
-   * @nullable
-   */
-  approvedRevision: number | null;
+  defects: ProductControllerReviewQueue200DataDataItemDefectsItem[];
   /** @nullable */
   coverUrl: string | null;
   /**
@@ -4544,7 +4122,7 @@ export type ProductControllerReviewQueue200DataItemsItem = {
    * @maximum 9007199254740991
    */
   mediaCount: number;
-  status: ProductControllerReviewQueue200DataItemsItemStatus;
+  status: ProductControllerReviewQueue200DataDataItemStatus;
   /**
    * @nullable
    * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
@@ -4565,41 +4143,43 @@ export type ProductControllerReviewQueue200DataItemsItem = {
   /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
   updatedAt: string;
   /** @nullable */
-  category: ProductControllerReviewQueue200DataItemsItemCategory;
-  /** @nullable */
-  seller: ProductControllerReviewQueue200DataItemsItemSeller;
-  /** @nullable */
-  shop: ProductControllerReviewQueue200DataItemsItemShop;
+  category: ProductControllerReviewQueue200DataDataItemCategory;
+  shop: ProductControllerReviewQueue200DataDataItemShop;
+};
+
+export type ProductControllerReviewQueue200DataMetaFilter = {
+  [key: string]: string | string[];
 };
 
 export type ProductControllerReviewQueue200DataMeta = {
+  itemsPerPage: number;
+  totalItems?: number;
+  currentPage?: number;
+  totalPages?: number;
   /**
-   * @minimum 1
-   * @maximum 9007199254740991
+   * @items.minItems 2
+   * @items.maxItems 2
    */
-  page: number;
-  /**
-   * @minimum 1
-   * @maximum 9007199254740991
-   */
-  pageSize: number;
-  /**
-   * @minimum 0
-   * @maximum 9007199254740991
-   */
-  total: number;
-  /**
-   * @minimum 0
-   * @maximum 9007199254740991
-   */
-  totalPage: number;
-  hasNextPage: boolean;
-  hasPreviousPage: boolean;
+  sortBy: (string | string[])[][];
+  searchBy?: string[];
+  search?: string;
+  select?: string[];
+  filter?: ProductControllerReviewQueue200DataMetaFilter;
+  cursor?: string;
+};
+
+export type ProductControllerReviewQueue200DataLinks = {
+  first?: string;
+  previous?: string;
+  current: string;
+  next?: string;
+  last?: string;
 };
 
 export type ProductControllerReviewQueue200Data = {
-  items: ProductControllerReviewQueue200DataItemsItem[];
+  data: ProductControllerReviewQueue200DataDataItem[];
   meta: ProductControllerReviewQueue200DataMeta;
+  links: ProductControllerReviewQueue200DataLinks;
 };
 
 export type ProductControllerReviewQueue200 = {
@@ -4667,59 +4247,30 @@ export type ProductControllerReviewDetail200DataMeasurements = {
   inseam?: number;
 };
 
-export type ProductControllerReviewDetail200DataShippingPackageWeight =
-  | {
-      mode: 'RANGE';
-      preset:
-        | 'UP_TO_250_G'
-        | 'UP_TO_500_G'
-        | 'UP_TO_1000_G'
-        | 'UP_TO_2000_G'
-        | 'UP_TO_5000_G';
-    }
-  | {
-      mode: 'CUSTOM';
-      /**
-       * @maximum 50000
-       * @exclusiveMinimum 0
-       */
-      grams: number;
-    };
-
-export type ProductControllerReviewDetail200DataShippingPackageSize =
-  | {
-      mode: 'RANGE';
-      preset:
-        | 'BOX_20_15_10_CM'
-        | 'BOX_30_20_15_CM'
-        | 'BOX_40_30_20_CM'
-        | 'BOX_50_40_30_CM';
-    }
-  | {
-      mode: 'CUSTOM';
-      /**
-       * @maximum 200
-       * @exclusiveMinimum 0
-       */
-      lengthCm: number;
-      /**
-       * @maximum 200
-       * @exclusiveMinimum 0
-       */
-      widthCm: number;
-      /**
-       * @maximum 200
-       * @exclusiveMinimum 0
-       */
-      heightCm: number;
-    };
-
 /**
  * @nullable
  */
 export type ProductControllerReviewDetail200DataShippingPackage = {
-  weight: ProductControllerReviewDetail200DataShippingPackageWeight;
-  size: ProductControllerReviewDetail200DataShippingPackageSize;
+  /**
+   * @maximum 50000
+   * @exclusiveMinimum 0
+   */
+  weightGrams: number;
+  /**
+   * @maximum 200
+   * @exclusiveMinimum 0
+   */
+  lengthCm: number;
+  /**
+   * @maximum 200
+   * @exclusiveMinimum 0
+   */
+  widthCm: number;
+  /**
+   * @maximum 200
+   * @exclusiveMinimum 0
+   */
+  heightCm: number;
 } | null;
 
 export type ProductControllerReviewDetail200DataDefectsItem = {
@@ -4760,23 +4311,11 @@ export type ProductControllerReviewDetail200DataCategory = {
   slug: string;
 } | null;
 
-/**
- * @nullable
- */
-export type ProductControllerReviewDetail200DataSeller = {
-  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
-  id: string;
-  fullName: string;
-} | null;
-
-/**
- * @nullable
- */
 export type ProductControllerReviewDetail200DataShop = {
   /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
   id: string;
   name: string;
-} | null;
+};
 
 export type ProductControllerReviewDetail200Data = {
   /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
@@ -4786,16 +4325,8 @@ export type ProductControllerReviewDetail200Data = {
    * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
    */
   categoryId: string | null;
-  /**
-   * @nullable
-   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
-   */
-  sellerUserId: string | null;
-  /**
-   * @nullable
-   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
-   */
-  shopId: string | null;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  shopId: string;
   /** @nullable */
   title: string | null;
   /** @nullable */
@@ -4820,17 +4351,6 @@ export type ProductControllerReviewDetail200Data = {
   /** @nullable */
   repairs: string | null;
   defects: ProductControllerReviewDetail200DataDefectsItem[];
-  /**
-   * @maximum 9007199254740991
-   * @exclusiveMinimum 0
-   */
-  revision: number;
-  /**
-   * @maximum 9007199254740991
-   * @exclusiveMinimum 0
-   * @nullable
-   */
-  approvedRevision: number | null;
   /** @nullable */
   coverUrl: string | null;
   /**
@@ -4860,9 +4380,6 @@ export type ProductControllerReviewDetail200Data = {
   updatedAt: string;
   /** @nullable */
   category: ProductControllerReviewDetail200DataCategory;
-  /** @nullable */
-  seller: ProductControllerReviewDetail200DataSeller;
-  /** @nullable */
   shop: ProductControllerReviewDetail200DataShop;
 };
 
@@ -4872,327 +4389,42 @@ export type ProductControllerReviewDetail200 = {
   data: ProductControllerReviewDetail200Data;
 };
 
-export type ProductControllerReviewHistory200StatusCode =
-  (typeof ProductControllerReviewHistory200StatusCode)[keyof typeof ProductControllerReviewHistory200StatusCode];
+export type ProductControllerModerationForAdmin200StatusCode =
+  (typeof ProductControllerModerationForAdmin200StatusCode)[keyof typeof ProductControllerModerationForAdmin200StatusCode];
 
-export const ProductControllerReviewHistory200StatusCode = {
+export const ProductControllerModerationForAdmin200StatusCode = {
   NUMBER_200: 200,
 } as const;
 
-export type ProductControllerReviewHistory200DataItemSnapshot = {
-  [key: string]: unknown;
-};
+export type ProductControllerModerationForAdmin200DataStatus =
+  (typeof ProductControllerModerationForAdmin200DataStatus)[keyof typeof ProductControllerModerationForAdmin200DataStatus];
 
-export type ProductControllerReviewHistory200DataItemDecision =
-  (typeof ProductControllerReviewHistory200DataItemDecision)[keyof typeof ProductControllerReviewHistory200DataItemDecision];
-
-export const ProductControllerReviewHistory200DataItemDecision = {
+export const ProductControllerModerationForAdmin200DataStatus = {
+  DRAFT: 'DRAFT',
   PENDING: 'PENDING',
   APPROVED: 'APPROVED',
   REJECTED: 'REJECTED',
-  SUPERSEDED: 'SUPERSEDED',
+  CANCELLED: 'CANCELLED',
+  SUSPENDED: 'SUSPENDED',
 } as const;
 
-export type ProductControllerReviewHistory200DataItem = {
-  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
-  id: string;
+export type ProductControllerModerationForAdmin200Data = {
   /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
   productId: string;
+  status: ProductControllerModerationForAdmin200DataStatus;
   /**
-   * @minimum -9007199254740991
    * @maximum 9007199254740991
+   * @exclusiveMinimum 0
    */
-  revision: number;
-  snapshot: ProductControllerReviewHistory200DataItemSnapshot;
-  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
-  submittedById: string;
-  decision: ProductControllerReviewHistory200DataItemDecision;
-  /**
-   * @nullable
-   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
-   */
-  reviewedById: string | null;
+  version: number;
   /** @nullable */
   reason: string | null;
-  /**
-   * @nullable
-   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
-   */
-  reviewedAt: string | null;
-  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
-  createdAt: string;
-  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
-  updatedAt: string;
 };
 
-export type ProductControllerReviewHistory200 = {
-  statusCode: ProductControllerReviewHistory200StatusCode;
+export type ProductControllerModerationForAdmin200 = {
+  statusCode: ProductControllerModerationForAdmin200StatusCode;
   message: string;
-  data: ProductControllerReviewHistory200DataItem[];
-};
-
-export type ProductControllerSubmit200StatusCode =
-  (typeof ProductControllerSubmit200StatusCode)[keyof typeof ProductControllerSubmit200StatusCode];
-
-export const ProductControllerSubmit200StatusCode = {
-  NUMBER_200: 200,
-} as const;
-
-/**
- * @nullable
- */
-export type ProductControllerSubmit200DataCondition =
-  | (typeof ProductControllerSubmit200DataCondition)[keyof typeof ProductControllerSubmit200DataCondition]
-  | null;
-
-export const ProductControllerSubmit200DataCondition = {
-  FAIR: 'FAIR',
-  GOOD: 'GOOD',
-  EXCELLENT: 'EXCELLENT',
-  PRISTINE: 'PRISTINE',
-} as const;
-
-export type ProductControllerSubmit200DataMeasurements = {
-  /**
-   * @maximum 500
-   * @exclusiveMinimum 0
-   */
-  chest?: number;
-  /**
-   * @maximum 500
-   * @exclusiveMinimum 0
-   */
-  waist?: number;
-  /**
-   * @maximum 500
-   * @exclusiveMinimum 0
-   */
-  hip?: number;
-  /**
-   * @maximum 500
-   * @exclusiveMinimum 0
-   */
-  length?: number;
-  /**
-   * @maximum 500
-   * @exclusiveMinimum 0
-   */
-  shoulder?: number;
-  /**
-   * @maximum 500
-   * @exclusiveMinimum 0
-   */
-  sleeve?: number;
-  /**
-   * @maximum 500
-   * @exclusiveMinimum 0
-   */
-  inseam?: number;
-};
-
-export type ProductControllerSubmit200DataShippingPackageWeight =
-  | {
-      mode: 'RANGE';
-      preset:
-        | 'UP_TO_250_G'
-        | 'UP_TO_500_G'
-        | 'UP_TO_1000_G'
-        | 'UP_TO_2000_G'
-        | 'UP_TO_5000_G';
-    }
-  | {
-      mode: 'CUSTOM';
-      /**
-       * @maximum 50000
-       * @exclusiveMinimum 0
-       */
-      grams: number;
-    };
-
-export type ProductControllerSubmit200DataShippingPackageSize =
-  | {
-      mode: 'RANGE';
-      preset:
-        | 'BOX_20_15_10_CM'
-        | 'BOX_30_20_15_CM'
-        | 'BOX_40_30_20_CM'
-        | 'BOX_50_40_30_CM';
-    }
-  | {
-      mode: 'CUSTOM';
-      /**
-       * @maximum 200
-       * @exclusiveMinimum 0
-       */
-      lengthCm: number;
-      /**
-       * @maximum 200
-       * @exclusiveMinimum 0
-       */
-      widthCm: number;
-      /**
-       * @maximum 200
-       * @exclusiveMinimum 0
-       */
-      heightCm: number;
-    };
-
-/**
- * @nullable
- */
-export type ProductControllerSubmit200DataShippingPackage = {
-  weight: ProductControllerSubmit200DataShippingPackageWeight;
-  size: ProductControllerSubmit200DataShippingPackageSize;
-} | null;
-
-export type ProductControllerSubmit200DataDefectsItem = {
-  /**
-   * @minLength 1
-   * @maxLength 1000
-   */
-  description: string;
-  /**
-   * @minItems 1
-   * @maxItems 10
-   * @items.pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
-   */
-  mediaIds: string[];
-};
-
-export type ProductControllerSubmit200DataStatus =
-  (typeof ProductControllerSubmit200DataStatus)[keyof typeof ProductControllerSubmit200DataStatus];
-
-export const ProductControllerSubmit200DataStatus = {
-  DRAFT: 'DRAFT',
-  PENDING_REVIEW: 'PENDING_REVIEW',
-  REJECTED: 'REJECTED',
-  SUSPENDED: 'SUSPENDED',
-  ACTIVE: 'ACTIVE',
-  HELD: 'HELD',
-  SOLD: 'SOLD',
-  HIDDEN: 'HIDDEN',
-} as const;
-
-/**
- * @nullable
- */
-export type ProductControllerSubmit200DataCategory = {
-  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
-  id: string;
-  name: string;
-  slug: string;
-} | null;
-
-/**
- * @nullable
- */
-export type ProductControllerSubmit200DataSeller = {
-  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
-  id: string;
-  fullName: string;
-} | null;
-
-/**
- * @nullable
- */
-export type ProductControllerSubmit200DataShop = {
-  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
-  id: string;
-  name: string;
-} | null;
-
-export type ProductControllerSubmit200Data = {
-  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
-  id: string;
-  /**
-   * @nullable
-   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
-   */
-  categoryId: string | null;
-  /**
-   * @nullable
-   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
-   */
-  sellerUserId: string | null;
-  /**
-   * @nullable
-   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
-   */
-  shopId: string | null;
-  /** @nullable */
-  title: string | null;
-  /** @nullable */
-  description: string | null;
-  /** @nullable */
-  condition: ProductControllerSubmit200DataCondition;
-  /** @nullable */
-  size: string | null;
-  /** @nullable */
-  color: string | null;
-  /** @nullable */
-  brand: string | null;
-  /**
-   * @minimum 0
-   * @maximum 9007199254740991
-   * @nullable
-   */
-  price: number | null;
-  measurements: ProductControllerSubmit200DataMeasurements;
-  /** @nullable */
-  shippingPackage: ProductControllerSubmit200DataShippingPackage;
-  /** @nullable */
-  repairs: string | null;
-  defects: ProductControllerSubmit200DataDefectsItem[];
-  /**
-   * @maximum 9007199254740991
-   * @exclusiveMinimum 0
-   */
-  revision: number;
-  /**
-   * @maximum 9007199254740991
-   * @exclusiveMinimum 0
-   * @nullable
-   */
-  approvedRevision: number | null;
-  /** @nullable */
-  coverUrl: string | null;
-  /**
-   * @minimum 0
-   * @maximum 9007199254740991
-   */
-  mediaCount: number;
-  status: ProductControllerSubmit200DataStatus;
-  /**
-   * @nullable
-   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
-   */
-  publishedAt: string | null;
-  /**
-   * @nullable
-   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
-   */
-  heldUntil: string | null;
-  /**
-   * @nullable
-   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
-   */
-  soldAt: string | null;
-  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
-  createdAt: string;
-  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
-  updatedAt: string;
-  /** @nullable */
-  category: ProductControllerSubmit200DataCategory;
-  /** @nullable */
-  seller: ProductControllerSubmit200DataSeller;
-  /** @nullable */
-  shop: ProductControllerSubmit200DataShop;
-};
-
-export type ProductControllerSubmit200 = {
-  statusCode: ProductControllerSubmit200StatusCode;
-  message: string;
-  data: ProductControllerSubmit200Data;
+  data: ProductControllerModerationForAdmin200Data;
 };
 
 export type ProductControllerModerateBodyDecision =
@@ -5208,7 +4440,7 @@ export type ProductControllerModerateBody = {
    * @maximum 9007199254740991
    * @exclusiveMinimum 0
    */
-  revision: number;
+  version: number;
   decision: ProductControllerModerateBodyDecision;
   /**
    * @minLength 1
@@ -5276,59 +4508,30 @@ export type ProductControllerModerate200DataMeasurements = {
   inseam?: number;
 };
 
-export type ProductControllerModerate200DataShippingPackageWeight =
-  | {
-      mode: 'RANGE';
-      preset:
-        | 'UP_TO_250_G'
-        | 'UP_TO_500_G'
-        | 'UP_TO_1000_G'
-        | 'UP_TO_2000_G'
-        | 'UP_TO_5000_G';
-    }
-  | {
-      mode: 'CUSTOM';
-      /**
-       * @maximum 50000
-       * @exclusiveMinimum 0
-       */
-      grams: number;
-    };
-
-export type ProductControllerModerate200DataShippingPackageSize =
-  | {
-      mode: 'RANGE';
-      preset:
-        | 'BOX_20_15_10_CM'
-        | 'BOX_30_20_15_CM'
-        | 'BOX_40_30_20_CM'
-        | 'BOX_50_40_30_CM';
-    }
-  | {
-      mode: 'CUSTOM';
-      /**
-       * @maximum 200
-       * @exclusiveMinimum 0
-       */
-      lengthCm: number;
-      /**
-       * @maximum 200
-       * @exclusiveMinimum 0
-       */
-      widthCm: number;
-      /**
-       * @maximum 200
-       * @exclusiveMinimum 0
-       */
-      heightCm: number;
-    };
-
 /**
  * @nullable
  */
 export type ProductControllerModerate200DataShippingPackage = {
-  weight: ProductControllerModerate200DataShippingPackageWeight;
-  size: ProductControllerModerate200DataShippingPackageSize;
+  /**
+   * @maximum 50000
+   * @exclusiveMinimum 0
+   */
+  weightGrams: number;
+  /**
+   * @maximum 200
+   * @exclusiveMinimum 0
+   */
+  lengthCm: number;
+  /**
+   * @maximum 200
+   * @exclusiveMinimum 0
+   */
+  widthCm: number;
+  /**
+   * @maximum 200
+   * @exclusiveMinimum 0
+   */
+  heightCm: number;
 } | null;
 
 export type ProductControllerModerate200DataDefectsItem = {
@@ -5369,23 +4572,11 @@ export type ProductControllerModerate200DataCategory = {
   slug: string;
 } | null;
 
-/**
- * @nullable
- */
-export type ProductControllerModerate200DataSeller = {
-  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
-  id: string;
-  fullName: string;
-} | null;
-
-/**
- * @nullable
- */
 export type ProductControllerModerate200DataShop = {
   /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
   id: string;
   name: string;
-} | null;
+};
 
 export type ProductControllerModerate200Data = {
   /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
@@ -5395,16 +4586,8 @@ export type ProductControllerModerate200Data = {
    * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
    */
   categoryId: string | null;
-  /**
-   * @nullable
-   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
-   */
-  sellerUserId: string | null;
-  /**
-   * @nullable
-   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
-   */
-  shopId: string | null;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  shopId: string;
   /** @nullable */
   title: string | null;
   /** @nullable */
@@ -5429,17 +4612,6 @@ export type ProductControllerModerate200Data = {
   /** @nullable */
   repairs: string | null;
   defects: ProductControllerModerate200DataDefectsItem[];
-  /**
-   * @maximum 9007199254740991
-   * @exclusiveMinimum 0
-   */
-  revision: number;
-  /**
-   * @maximum 9007199254740991
-   * @exclusiveMinimum 0
-   * @nullable
-   */
-  approvedRevision: number | null;
   /** @nullable */
   coverUrl: string | null;
   /**
@@ -5469,9 +4641,6 @@ export type ProductControllerModerate200Data = {
   updatedAt: string;
   /** @nullable */
   category: ProductControllerModerate200DataCategory;
-  /** @nullable */
-  seller: ProductControllerModerate200DataSeller;
-  /** @nullable */
   shop: ProductControllerModerate200DataShop;
 };
 
@@ -5479,6 +4648,408 @@ export type ProductControllerModerate200 = {
   statusCode: ProductControllerModerate200StatusCode;
   message: string;
   data: ProductControllerModerate200Data;
+};
+
+export type ProductControllerSubmit200StatusCode =
+  (typeof ProductControllerSubmit200StatusCode)[keyof typeof ProductControllerSubmit200StatusCode];
+
+export const ProductControllerSubmit200StatusCode = {
+  NUMBER_200: 200,
+} as const;
+
+/**
+ * @nullable
+ */
+export type ProductControllerSubmit200DataCondition =
+  | (typeof ProductControllerSubmit200DataCondition)[keyof typeof ProductControllerSubmit200DataCondition]
+  | null;
+
+export const ProductControllerSubmit200DataCondition = {
+  FAIR: 'FAIR',
+  GOOD: 'GOOD',
+  EXCELLENT: 'EXCELLENT',
+  PRISTINE: 'PRISTINE',
+} as const;
+
+export type ProductControllerSubmit200DataMeasurements = {
+  /**
+   * @maximum 500
+   * @exclusiveMinimum 0
+   */
+  chest?: number;
+  /**
+   * @maximum 500
+   * @exclusiveMinimum 0
+   */
+  waist?: number;
+  /**
+   * @maximum 500
+   * @exclusiveMinimum 0
+   */
+  hip?: number;
+  /**
+   * @maximum 500
+   * @exclusiveMinimum 0
+   */
+  length?: number;
+  /**
+   * @maximum 500
+   * @exclusiveMinimum 0
+   */
+  shoulder?: number;
+  /**
+   * @maximum 500
+   * @exclusiveMinimum 0
+   */
+  sleeve?: number;
+  /**
+   * @maximum 500
+   * @exclusiveMinimum 0
+   */
+  inseam?: number;
+};
+
+/**
+ * @nullable
+ */
+export type ProductControllerSubmit200DataShippingPackage = {
+  /**
+   * @maximum 50000
+   * @exclusiveMinimum 0
+   */
+  weightGrams: number;
+  /**
+   * @maximum 200
+   * @exclusiveMinimum 0
+   */
+  lengthCm: number;
+  /**
+   * @maximum 200
+   * @exclusiveMinimum 0
+   */
+  widthCm: number;
+  /**
+   * @maximum 200
+   * @exclusiveMinimum 0
+   */
+  heightCm: number;
+} | null;
+
+export type ProductControllerSubmit200DataDefectsItem = {
+  /**
+   * @minLength 1
+   * @maxLength 1000
+   */
+  description: string;
+  /**
+   * @minItems 1
+   * @maxItems 10
+   * @items.pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+   */
+  mediaIds: string[];
+};
+
+export type ProductControllerSubmit200DataStatus =
+  (typeof ProductControllerSubmit200DataStatus)[keyof typeof ProductControllerSubmit200DataStatus];
+
+export const ProductControllerSubmit200DataStatus = {
+  DRAFT: 'DRAFT',
+  PENDING_REVIEW: 'PENDING_REVIEW',
+  REJECTED: 'REJECTED',
+  SUSPENDED: 'SUSPENDED',
+  ACTIVE: 'ACTIVE',
+  HELD: 'HELD',
+  SOLD: 'SOLD',
+  HIDDEN: 'HIDDEN',
+} as const;
+
+/**
+ * @nullable
+ */
+export type ProductControllerSubmit200DataCategory = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  name: string;
+  slug: string;
+} | null;
+
+export type ProductControllerSubmit200DataShop = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  name: string;
+};
+
+export type ProductControllerSubmit200Data = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  /**
+   * @nullable
+   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+   */
+  categoryId: string | null;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  shopId: string;
+  /** @nullable */
+  title: string | null;
+  /** @nullable */
+  description: string | null;
+  /** @nullable */
+  condition: ProductControllerSubmit200DataCondition;
+  /** @nullable */
+  size: string | null;
+  /** @nullable */
+  color: string | null;
+  /** @nullable */
+  brand: string | null;
+  /**
+   * @minimum 0
+   * @maximum 9007199254740991
+   * @nullable
+   */
+  price: number | null;
+  measurements: ProductControllerSubmit200DataMeasurements;
+  /** @nullable */
+  shippingPackage: ProductControllerSubmit200DataShippingPackage;
+  /** @nullable */
+  repairs: string | null;
+  defects: ProductControllerSubmit200DataDefectsItem[];
+  /** @nullable */
+  coverUrl: string | null;
+  /**
+   * @minimum 0
+   * @maximum 9007199254740991
+   */
+  mediaCount: number;
+  status: ProductControllerSubmit200DataStatus;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  publishedAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  heldUntil: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  soldAt: string | null;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  createdAt: string;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  updatedAt: string;
+  /** @nullable */
+  category: ProductControllerSubmit200DataCategory;
+  shop: ProductControllerSubmit200DataShop;
+};
+
+export type ProductControllerSubmit200 = {
+  statusCode: ProductControllerSubmit200StatusCode;
+  message: string;
+  data: ProductControllerSubmit200Data;
+};
+
+export type ProductControllerCancelSubmission200StatusCode =
+  (typeof ProductControllerCancelSubmission200StatusCode)[keyof typeof ProductControllerCancelSubmission200StatusCode];
+
+export const ProductControllerCancelSubmission200StatusCode = {
+  NUMBER_200: 200,
+} as const;
+
+/**
+ * @nullable
+ */
+export type ProductControllerCancelSubmission200DataCondition =
+  | (typeof ProductControllerCancelSubmission200DataCondition)[keyof typeof ProductControllerCancelSubmission200DataCondition]
+  | null;
+
+export const ProductControllerCancelSubmission200DataCondition = {
+  FAIR: 'FAIR',
+  GOOD: 'GOOD',
+  EXCELLENT: 'EXCELLENT',
+  PRISTINE: 'PRISTINE',
+} as const;
+
+export type ProductControllerCancelSubmission200DataMeasurements = {
+  /**
+   * @maximum 500
+   * @exclusiveMinimum 0
+   */
+  chest?: number;
+  /**
+   * @maximum 500
+   * @exclusiveMinimum 0
+   */
+  waist?: number;
+  /**
+   * @maximum 500
+   * @exclusiveMinimum 0
+   */
+  hip?: number;
+  /**
+   * @maximum 500
+   * @exclusiveMinimum 0
+   */
+  length?: number;
+  /**
+   * @maximum 500
+   * @exclusiveMinimum 0
+   */
+  shoulder?: number;
+  /**
+   * @maximum 500
+   * @exclusiveMinimum 0
+   */
+  sleeve?: number;
+  /**
+   * @maximum 500
+   * @exclusiveMinimum 0
+   */
+  inseam?: number;
+};
+
+/**
+ * @nullable
+ */
+export type ProductControllerCancelSubmission200DataShippingPackage = {
+  /**
+   * @maximum 50000
+   * @exclusiveMinimum 0
+   */
+  weightGrams: number;
+  /**
+   * @maximum 200
+   * @exclusiveMinimum 0
+   */
+  lengthCm: number;
+  /**
+   * @maximum 200
+   * @exclusiveMinimum 0
+   */
+  widthCm: number;
+  /**
+   * @maximum 200
+   * @exclusiveMinimum 0
+   */
+  heightCm: number;
+} | null;
+
+export type ProductControllerCancelSubmission200DataDefectsItem = {
+  /**
+   * @minLength 1
+   * @maxLength 1000
+   */
+  description: string;
+  /**
+   * @minItems 1
+   * @maxItems 10
+   * @items.pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+   */
+  mediaIds: string[];
+};
+
+export type ProductControllerCancelSubmission200DataStatus =
+  (typeof ProductControllerCancelSubmission200DataStatus)[keyof typeof ProductControllerCancelSubmission200DataStatus];
+
+export const ProductControllerCancelSubmission200DataStatus = {
+  DRAFT: 'DRAFT',
+  PENDING_REVIEW: 'PENDING_REVIEW',
+  REJECTED: 'REJECTED',
+  SUSPENDED: 'SUSPENDED',
+  ACTIVE: 'ACTIVE',
+  HELD: 'HELD',
+  SOLD: 'SOLD',
+  HIDDEN: 'HIDDEN',
+} as const;
+
+/**
+ * @nullable
+ */
+export type ProductControllerCancelSubmission200DataCategory = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  name: string;
+  slug: string;
+} | null;
+
+export type ProductControllerCancelSubmission200DataShop = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  name: string;
+};
+
+export type ProductControllerCancelSubmission200Data = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  /**
+   * @nullable
+   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+   */
+  categoryId: string | null;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  shopId: string;
+  /** @nullable */
+  title: string | null;
+  /** @nullable */
+  description: string | null;
+  /** @nullable */
+  condition: ProductControllerCancelSubmission200DataCondition;
+  /** @nullable */
+  size: string | null;
+  /** @nullable */
+  color: string | null;
+  /** @nullable */
+  brand: string | null;
+  /**
+   * @minimum 0
+   * @maximum 9007199254740991
+   * @nullable
+   */
+  price: number | null;
+  measurements: ProductControllerCancelSubmission200DataMeasurements;
+  /** @nullable */
+  shippingPackage: ProductControllerCancelSubmission200DataShippingPackage;
+  /** @nullable */
+  repairs: string | null;
+  defects: ProductControllerCancelSubmission200DataDefectsItem[];
+  /** @nullable */
+  coverUrl: string | null;
+  /**
+   * @minimum 0
+   * @maximum 9007199254740991
+   */
+  mediaCount: number;
+  status: ProductControllerCancelSubmission200DataStatus;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  publishedAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  heldUntil: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  soldAt: string | null;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  createdAt: string;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  updatedAt: string;
+  /** @nullable */
+  category: ProductControllerCancelSubmission200DataCategory;
+  shop: ProductControllerCancelSubmission200DataShop;
+};
+
+export type ProductControllerCancelSubmission200 = {
+  statusCode: ProductControllerCancelSubmission200StatusCode;
+  message: string;
+  data: ProductControllerCancelSubmission200Data;
 };
 
 export type ProductControllerSuspendBody = {
@@ -5548,59 +5119,30 @@ export type ProductControllerSuspend200DataMeasurements = {
   inseam?: number;
 };
 
-export type ProductControllerSuspend200DataShippingPackageWeight =
-  | {
-      mode: 'RANGE';
-      preset:
-        | 'UP_TO_250_G'
-        | 'UP_TO_500_G'
-        | 'UP_TO_1000_G'
-        | 'UP_TO_2000_G'
-        | 'UP_TO_5000_G';
-    }
-  | {
-      mode: 'CUSTOM';
-      /**
-       * @maximum 50000
-       * @exclusiveMinimum 0
-       */
-      grams: number;
-    };
-
-export type ProductControllerSuspend200DataShippingPackageSize =
-  | {
-      mode: 'RANGE';
-      preset:
-        | 'BOX_20_15_10_CM'
-        | 'BOX_30_20_15_CM'
-        | 'BOX_40_30_20_CM'
-        | 'BOX_50_40_30_CM';
-    }
-  | {
-      mode: 'CUSTOM';
-      /**
-       * @maximum 200
-       * @exclusiveMinimum 0
-       */
-      lengthCm: number;
-      /**
-       * @maximum 200
-       * @exclusiveMinimum 0
-       */
-      widthCm: number;
-      /**
-       * @maximum 200
-       * @exclusiveMinimum 0
-       */
-      heightCm: number;
-    };
-
 /**
  * @nullable
  */
 export type ProductControllerSuspend200DataShippingPackage = {
-  weight: ProductControllerSuspend200DataShippingPackageWeight;
-  size: ProductControllerSuspend200DataShippingPackageSize;
+  /**
+   * @maximum 50000
+   * @exclusiveMinimum 0
+   */
+  weightGrams: number;
+  /**
+   * @maximum 200
+   * @exclusiveMinimum 0
+   */
+  lengthCm: number;
+  /**
+   * @maximum 200
+   * @exclusiveMinimum 0
+   */
+  widthCm: number;
+  /**
+   * @maximum 200
+   * @exclusiveMinimum 0
+   */
+  heightCm: number;
 } | null;
 
 export type ProductControllerSuspend200DataDefectsItem = {
@@ -5641,23 +5183,11 @@ export type ProductControllerSuspend200DataCategory = {
   slug: string;
 } | null;
 
-/**
- * @nullable
- */
-export type ProductControllerSuspend200DataSeller = {
-  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
-  id: string;
-  fullName: string;
-} | null;
-
-/**
- * @nullable
- */
 export type ProductControllerSuspend200DataShop = {
   /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
   id: string;
   name: string;
-} | null;
+};
 
 export type ProductControllerSuspend200Data = {
   /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
@@ -5667,16 +5197,8 @@ export type ProductControllerSuspend200Data = {
    * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
    */
   categoryId: string | null;
-  /**
-   * @nullable
-   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
-   */
-  sellerUserId: string | null;
-  /**
-   * @nullable
-   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
-   */
-  shopId: string | null;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  shopId: string;
   /** @nullable */
   title: string | null;
   /** @nullable */
@@ -5701,17 +5223,6 @@ export type ProductControllerSuspend200Data = {
   /** @nullable */
   repairs: string | null;
   defects: ProductControllerSuspend200DataDefectsItem[];
-  /**
-   * @maximum 9007199254740991
-   * @exclusiveMinimum 0
-   */
-  revision: number;
-  /**
-   * @maximum 9007199254740991
-   * @exclusiveMinimum 0
-   * @nullable
-   */
-  approvedRevision: number | null;
   /** @nullable */
   coverUrl: string | null;
   /**
@@ -5741,9 +5252,6 @@ export type ProductControllerSuspend200Data = {
   updatedAt: string;
   /** @nullable */
   category: ProductControllerSuspend200DataCategory;
-  /** @nullable */
-  seller: ProductControllerSuspend200DataSeller;
-  /** @nullable */
   shop: ProductControllerSuspend200DataShop;
 };
 
@@ -5812,59 +5320,30 @@ export type ProductControllerFindOne200DataMeasurements = {
   inseam?: number;
 };
 
-export type ProductControllerFindOne200DataShippingPackageWeight =
-  | {
-      mode: 'RANGE';
-      preset:
-        | 'UP_TO_250_G'
-        | 'UP_TO_500_G'
-        | 'UP_TO_1000_G'
-        | 'UP_TO_2000_G'
-        | 'UP_TO_5000_G';
-    }
-  | {
-      mode: 'CUSTOM';
-      /**
-       * @maximum 50000
-       * @exclusiveMinimum 0
-       */
-      grams: number;
-    };
-
-export type ProductControllerFindOne200DataShippingPackageSize =
-  | {
-      mode: 'RANGE';
-      preset:
-        | 'BOX_20_15_10_CM'
-        | 'BOX_30_20_15_CM'
-        | 'BOX_40_30_20_CM'
-        | 'BOX_50_40_30_CM';
-    }
-  | {
-      mode: 'CUSTOM';
-      /**
-       * @maximum 200
-       * @exclusiveMinimum 0
-       */
-      lengthCm: number;
-      /**
-       * @maximum 200
-       * @exclusiveMinimum 0
-       */
-      widthCm: number;
-      /**
-       * @maximum 200
-       * @exclusiveMinimum 0
-       */
-      heightCm: number;
-    };
-
 /**
  * @nullable
  */
 export type ProductControllerFindOne200DataShippingPackage = {
-  weight: ProductControllerFindOne200DataShippingPackageWeight;
-  size: ProductControllerFindOne200DataShippingPackageSize;
+  /**
+   * @maximum 50000
+   * @exclusiveMinimum 0
+   */
+  weightGrams: number;
+  /**
+   * @maximum 200
+   * @exclusiveMinimum 0
+   */
+  lengthCm: number;
+  /**
+   * @maximum 200
+   * @exclusiveMinimum 0
+   */
+  widthCm: number;
+  /**
+   * @maximum 200
+   * @exclusiveMinimum 0
+   */
+  heightCm: number;
 } | null;
 
 export type ProductControllerFindOne200DataDefectsItem = {
@@ -5905,23 +5384,11 @@ export type ProductControllerFindOne200DataCategory = {
   slug: string;
 } | null;
 
-/**
- * @nullable
- */
-export type ProductControllerFindOne200DataSeller = {
-  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
-  id: string;
-  fullName: string;
-} | null;
-
-/**
- * @nullable
- */
 export type ProductControllerFindOne200DataShop = {
   /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
   id: string;
   name: string;
-} | null;
+};
 
 export type ProductControllerFindOne200Data = {
   /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
@@ -5931,16 +5398,8 @@ export type ProductControllerFindOne200Data = {
    * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
    */
   categoryId: string | null;
-  /**
-   * @nullable
-   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
-   */
-  sellerUserId: string | null;
-  /**
-   * @nullable
-   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
-   */
-  shopId: string | null;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  shopId: string;
   /** @nullable */
   title: string | null;
   /** @nullable */
@@ -5965,17 +5424,6 @@ export type ProductControllerFindOne200Data = {
   /** @nullable */
   repairs: string | null;
   defects: ProductControllerFindOne200DataDefectsItem[];
-  /**
-   * @maximum 9007199254740991
-   * @exclusiveMinimum 0
-   */
-  revision: number;
-  /**
-   * @maximum 9007199254740991
-   * @exclusiveMinimum 0
-   * @nullable
-   */
-  approvedRevision: number | null;
   /** @nullable */
   coverUrl: string | null;
   /**
@@ -6005,9 +5453,6 @@ export type ProductControllerFindOne200Data = {
   updatedAt: string;
   /** @nullable */
   category: ProductControllerFindOne200DataCategory;
-  /** @nullable */
-  seller: ProductControllerFindOne200DataSeller;
-  /** @nullable */
   shop: ProductControllerFindOne200DataShop;
 };
 
@@ -6069,59 +5514,30 @@ export type ProductControllerUpdateBodyMeasurements = {
   inseam?: number;
 };
 
-export type ProductControllerUpdateBodyShippingPackageWeight =
-  | {
-      mode: 'RANGE';
-      preset:
-        | 'UP_TO_250_G'
-        | 'UP_TO_500_G'
-        | 'UP_TO_1000_G'
-        | 'UP_TO_2000_G'
-        | 'UP_TO_5000_G';
-    }
-  | {
-      mode: 'CUSTOM';
-      /**
-       * @maximum 50000
-       * @exclusiveMinimum 0
-       */
-      grams: number;
-    };
-
-export type ProductControllerUpdateBodyShippingPackageSize =
-  | {
-      mode: 'RANGE';
-      preset:
-        | 'BOX_20_15_10_CM'
-        | 'BOX_30_20_15_CM'
-        | 'BOX_40_30_20_CM'
-        | 'BOX_50_40_30_CM';
-    }
-  | {
-      mode: 'CUSTOM';
-      /**
-       * @maximum 200
-       * @exclusiveMinimum 0
-       */
-      lengthCm: number;
-      /**
-       * @maximum 200
-       * @exclusiveMinimum 0
-       */
-      widthCm: number;
-      /**
-       * @maximum 200
-       * @exclusiveMinimum 0
-       */
-      heightCm: number;
-    };
-
 /**
  * @nullable
  */
 export type ProductControllerUpdateBodyShippingPackage = {
-  weight: ProductControllerUpdateBodyShippingPackageWeight;
-  size: ProductControllerUpdateBodyShippingPackageSize;
+  /**
+   * @maximum 50000
+   * @exclusiveMinimum 0
+   */
+  weightGrams: number;
+  /**
+   * @maximum 200
+   * @exclusiveMinimum 0
+   */
+  lengthCm: number;
+  /**
+   * @maximum 200
+   * @exclusiveMinimum 0
+   */
+  widthCm: number;
+  /**
+   * @maximum 200
+   * @exclusiveMinimum 0
+   */
+  heightCm: number;
 } | null;
 
 export type ProductControllerUpdateBodyDefectsItem = {
@@ -6249,59 +5665,30 @@ export type ProductControllerUpdate200DataMeasurements = {
   inseam?: number;
 };
 
-export type ProductControllerUpdate200DataShippingPackageWeight =
-  | {
-      mode: 'RANGE';
-      preset:
-        | 'UP_TO_250_G'
-        | 'UP_TO_500_G'
-        | 'UP_TO_1000_G'
-        | 'UP_TO_2000_G'
-        | 'UP_TO_5000_G';
-    }
-  | {
-      mode: 'CUSTOM';
-      /**
-       * @maximum 50000
-       * @exclusiveMinimum 0
-       */
-      grams: number;
-    };
-
-export type ProductControllerUpdate200DataShippingPackageSize =
-  | {
-      mode: 'RANGE';
-      preset:
-        | 'BOX_20_15_10_CM'
-        | 'BOX_30_20_15_CM'
-        | 'BOX_40_30_20_CM'
-        | 'BOX_50_40_30_CM';
-    }
-  | {
-      mode: 'CUSTOM';
-      /**
-       * @maximum 200
-       * @exclusiveMinimum 0
-       */
-      lengthCm: number;
-      /**
-       * @maximum 200
-       * @exclusiveMinimum 0
-       */
-      widthCm: number;
-      /**
-       * @maximum 200
-       * @exclusiveMinimum 0
-       */
-      heightCm: number;
-    };
-
 /**
  * @nullable
  */
 export type ProductControllerUpdate200DataShippingPackage = {
-  weight: ProductControllerUpdate200DataShippingPackageWeight;
-  size: ProductControllerUpdate200DataShippingPackageSize;
+  /**
+   * @maximum 50000
+   * @exclusiveMinimum 0
+   */
+  weightGrams: number;
+  /**
+   * @maximum 200
+   * @exclusiveMinimum 0
+   */
+  lengthCm: number;
+  /**
+   * @maximum 200
+   * @exclusiveMinimum 0
+   */
+  widthCm: number;
+  /**
+   * @maximum 200
+   * @exclusiveMinimum 0
+   */
+  heightCm: number;
 } | null;
 
 export type ProductControllerUpdate200DataDefectsItem = {
@@ -6342,23 +5729,11 @@ export type ProductControllerUpdate200DataCategory = {
   slug: string;
 } | null;
 
-/**
- * @nullable
- */
-export type ProductControllerUpdate200DataSeller = {
-  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
-  id: string;
-  fullName: string;
-} | null;
-
-/**
- * @nullable
- */
 export type ProductControllerUpdate200DataShop = {
   /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
   id: string;
   name: string;
-} | null;
+};
 
 export type ProductControllerUpdate200Data = {
   /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
@@ -6368,16 +5743,8 @@ export type ProductControllerUpdate200Data = {
    * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
    */
   categoryId: string | null;
-  /**
-   * @nullable
-   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
-   */
-  sellerUserId: string | null;
-  /**
-   * @nullable
-   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
-   */
-  shopId: string | null;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  shopId: string;
   /** @nullable */
   title: string | null;
   /** @nullable */
@@ -6402,17 +5769,6 @@ export type ProductControllerUpdate200Data = {
   /** @nullable */
   repairs: string | null;
   defects: ProductControllerUpdate200DataDefectsItem[];
-  /**
-   * @maximum 9007199254740991
-   * @exclusiveMinimum 0
-   */
-  revision: number;
-  /**
-   * @maximum 9007199254740991
-   * @exclusiveMinimum 0
-   * @nullable
-   */
-  approvedRevision: number | null;
   /** @nullable */
   coverUrl: string | null;
   /**
@@ -6442,9 +5798,6 @@ export type ProductControllerUpdate200Data = {
   updatedAt: string;
   /** @nullable */
   category: ProductControllerUpdate200DataCategory;
-  /** @nullable */
-  seller: ProductControllerUpdate200DataSeller;
-  /** @nullable */
   shop: ProductControllerUpdate200DataShop;
 };
 
@@ -6525,59 +5878,30 @@ export type ProductControllerUpdateStatus200DataMeasurements = {
   inseam?: number;
 };
 
-export type ProductControllerUpdateStatus200DataShippingPackageWeight =
-  | {
-      mode: 'RANGE';
-      preset:
-        | 'UP_TO_250_G'
-        | 'UP_TO_500_G'
-        | 'UP_TO_1000_G'
-        | 'UP_TO_2000_G'
-        | 'UP_TO_5000_G';
-    }
-  | {
-      mode: 'CUSTOM';
-      /**
-       * @maximum 50000
-       * @exclusiveMinimum 0
-       */
-      grams: number;
-    };
-
-export type ProductControllerUpdateStatus200DataShippingPackageSize =
-  | {
-      mode: 'RANGE';
-      preset:
-        | 'BOX_20_15_10_CM'
-        | 'BOX_30_20_15_CM'
-        | 'BOX_40_30_20_CM'
-        | 'BOX_50_40_30_CM';
-    }
-  | {
-      mode: 'CUSTOM';
-      /**
-       * @maximum 200
-       * @exclusiveMinimum 0
-       */
-      lengthCm: number;
-      /**
-       * @maximum 200
-       * @exclusiveMinimum 0
-       */
-      widthCm: number;
-      /**
-       * @maximum 200
-       * @exclusiveMinimum 0
-       */
-      heightCm: number;
-    };
-
 /**
  * @nullable
  */
 export type ProductControllerUpdateStatus200DataShippingPackage = {
-  weight: ProductControllerUpdateStatus200DataShippingPackageWeight;
-  size: ProductControllerUpdateStatus200DataShippingPackageSize;
+  /**
+   * @maximum 50000
+   * @exclusiveMinimum 0
+   */
+  weightGrams: number;
+  /**
+   * @maximum 200
+   * @exclusiveMinimum 0
+   */
+  lengthCm: number;
+  /**
+   * @maximum 200
+   * @exclusiveMinimum 0
+   */
+  widthCm: number;
+  /**
+   * @maximum 200
+   * @exclusiveMinimum 0
+   */
+  heightCm: number;
 } | null;
 
 export type ProductControllerUpdateStatus200DataDefectsItem = {
@@ -6618,23 +5942,11 @@ export type ProductControllerUpdateStatus200DataCategory = {
   slug: string;
 } | null;
 
-/**
- * @nullable
- */
-export type ProductControllerUpdateStatus200DataSeller = {
-  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
-  id: string;
-  fullName: string;
-} | null;
-
-/**
- * @nullable
- */
 export type ProductControllerUpdateStatus200DataShop = {
   /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
   id: string;
   name: string;
-} | null;
+};
 
 export type ProductControllerUpdateStatus200Data = {
   /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
@@ -6644,16 +5956,8 @@ export type ProductControllerUpdateStatus200Data = {
    * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
    */
   categoryId: string | null;
-  /**
-   * @nullable
-   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
-   */
-  sellerUserId: string | null;
-  /**
-   * @nullable
-   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
-   */
-  shopId: string | null;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  shopId: string;
   /** @nullable */
   title: string | null;
   /** @nullable */
@@ -6678,17 +5982,6 @@ export type ProductControllerUpdateStatus200Data = {
   /** @nullable */
   repairs: string | null;
   defects: ProductControllerUpdateStatus200DataDefectsItem[];
-  /**
-   * @maximum 9007199254740991
-   * @exclusiveMinimum 0
-   */
-  revision: number;
-  /**
-   * @maximum 9007199254740991
-   * @exclusiveMinimum 0
-   * @nullable
-   */
-  approvedRevision: number | null;
   /** @nullable */
   coverUrl: string | null;
   /**
@@ -6718,9 +6011,6 @@ export type ProductControllerUpdateStatus200Data = {
   updatedAt: string;
   /** @nullable */
   category: ProductControllerUpdateStatus200DataCategory;
-  /** @nullable */
-  seller: ProductControllerUpdateStatus200DataSeller;
-  /** @nullable */
   shop: ProductControllerUpdateStatus200DataShop;
 };
 
@@ -7262,37 +6552,126 @@ export type UserControllerUpdateMe200 = {
 };
 
 export type UserControllerFindAllParams = {
-  page?: string | number;
-  pageSize?: string | number;
-  order?: UserControllerFindAllOrder;
-  sortBy?: string;
+  /**
+   * Page number to retrieve. If you provide invalid value the default page number will applied
+   *
+   * **Example:** 1
+   *
+   *
+   * **Default Value:** 1
+   */
+  page?: number;
+  /**
+   * Number of records per page.
+   *
+   *
+   * **Example:** 20
+   *
+   *
+   *
+   * **Default Value:** 10
+   *
+   *
+   *
+   * **Max Value:** 100
+   *
+   *
+   * If provided value is greater than max value, max value will be applied.
+   */
+  limit?: number;
+  /**
+   * Filter by role query param.
+   *
+   * **Format:** filter.role={$not}:OPERATION:VALUE
+   *
+   *
+   *
+   * **Example:** filter.role=$eq:John Doe
+   *
+   * **Available Operations**
+   * - $eq
+   *
+   * - $and
+   *
+   * - $or
+   */
+  'filter.role'?: string[];
+  /**
+   * Filter by status query param.
+   *
+   * **Format:** filter.status={$not}:OPERATION:VALUE
+   *
+   *
+   *
+   * **Example:** filter.status=$eq:John Doe
+   *
+   * **Available Operations**
+   * - $eq
+   *
+   * - $and
+   *
+   * - $or
+   */
+  'filter.status'?: string[];
+  /**
+   * Parameter to sort by.
+   * To sort by multiple fields, just provide query param multiple types. The order in url defines an order of sorting
+   *
+   * **Format:** {fieldName}:{DIRECTION}
+   *
+   *
+   * **Example:** sortBy=createdAt:DESC&sortBy=email:DESC
+   *
+   *
+   * **Default Value:** createdAt:DESC,id:DESC
+   *
+   * **Available Fields**
+   * - createdAt
+   *
+   * - email
+   *
+   * - fullName
+   *
+   * - id
+   */
+  sortBy?: UserControllerFindAllSortByItem[];
+  /**
+   * Search term to filter result values
+   *
+   * **Example:** John
+   *
+   *
+   * **Default Value:** No default value
+   */
   search?: string;
-  role?: UserControllerFindAllRole;
-  status?: UserControllerFindAllStatus;
+  /**
+   * List of fields to search by term to filter result values
+   *
+   * **Example:** fullName,email
+   *
+   *
+   * **Default Value:** By default all fields mentioned below will be used to search by term
+   *
+   * **Available Fields**
+   * - fullName
+   *
+   * - email
+   */
+  searchBy?: string[];
 };
 
-export type UserControllerFindAllOrder =
-  (typeof UserControllerFindAllOrder)[keyof typeof UserControllerFindAllOrder];
+export type UserControllerFindAllSortByItem =
+  (typeof UserControllerFindAllSortByItem)[keyof typeof UserControllerFindAllSortByItem];
 
-export const UserControllerFindAllOrder = {
-  ASC: 'ASC',
-  DESC: 'DESC',
-} as const;
-
-export type UserControllerFindAllRole =
-  (typeof UserControllerFindAllRole)[keyof typeof UserControllerFindAllRole];
-
-export const UserControllerFindAllRole = {
-  USER: 'USER',
-  ADMIN: 'ADMIN',
-} as const;
-
-export type UserControllerFindAllStatus =
-  (typeof UserControllerFindAllStatus)[keyof typeof UserControllerFindAllStatus];
-
-export const UserControllerFindAllStatus = {
-  ACTIVE: 'ACTIVE',
-  INACTIVE: 'INACTIVE',
+export const UserControllerFindAllSortByItem = {
+  'createdAt:ASC': 'createdAt:ASC',
+  'createdAt:DESC': 'createdAt:DESC',
+  'email:ASC': 'email:ASC',
+  'email:DESC': 'email:DESC',
+  'fullName:ASC': 'fullName:ASC',
+  'fullName:DESC': 'fullName:DESC',
+  'id:ASC': 'id:ASC',
+  'id:DESC': 'id:DESC',
 } as const;
 
 export type UserControllerFindAll200StatusCode =
@@ -7302,73 +6681,78 @@ export const UserControllerFindAll200StatusCode = {
   NUMBER_200: 200,
 } as const;
 
-export type UserControllerFindAll200DataItemsItemProvider =
-  (typeof UserControllerFindAll200DataItemsItemProvider)[keyof typeof UserControllerFindAll200DataItemsItemProvider];
+export type UserControllerFindAll200DataDataItemProvider =
+  (typeof UserControllerFindAll200DataDataItemProvider)[keyof typeof UserControllerFindAll200DataDataItemProvider];
 
-export const UserControllerFindAll200DataItemsItemProvider = {
+export const UserControllerFindAll200DataDataItemProvider = {
   credentials: 'credentials',
   google: 'google',
 } as const;
 
-export type UserControllerFindAll200DataItemsItemRole =
-  (typeof UserControllerFindAll200DataItemsItemRole)[keyof typeof UserControllerFindAll200DataItemsItemRole];
+export type UserControllerFindAll200DataDataItemRole =
+  (typeof UserControllerFindAll200DataDataItemRole)[keyof typeof UserControllerFindAll200DataDataItemRole];
 
-export const UserControllerFindAll200DataItemsItemRole = {
+export const UserControllerFindAll200DataDataItemRole = {
   USER: 'USER',
   ADMIN: 'ADMIN',
 } as const;
 
-export type UserControllerFindAll200DataItemsItemStatus =
-  (typeof UserControllerFindAll200DataItemsItemStatus)[keyof typeof UserControllerFindAll200DataItemsItemStatus];
+export type UserControllerFindAll200DataDataItemStatus =
+  (typeof UserControllerFindAll200DataDataItemStatus)[keyof typeof UserControllerFindAll200DataDataItemStatus];
 
-export const UserControllerFindAll200DataItemsItemStatus = {
+export const UserControllerFindAll200DataDataItemStatus = {
   ACTIVE: 'ACTIVE',
   INACTIVE: 'INACTIVE',
 } as const;
 
-export type UserControllerFindAll200DataItemsItem = {
+export type UserControllerFindAll200DataDataItem = {
   /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
   id: string;
   /** @pattern ^(?!\.)(?!.*\.\.)([A-Za-z0-9_'+\-\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\-]*\.)+[A-Za-z]{2,}$ */
   email: string;
   fullName: string;
-  provider: UserControllerFindAll200DataItemsItemProvider;
-  role: UserControllerFindAll200DataItemsItemRole;
-  status: UserControllerFindAll200DataItemsItemStatus;
+  provider: UserControllerFindAll200DataDataItemProvider;
+  role: UserControllerFindAll200DataDataItemRole;
+  status: UserControllerFindAll200DataDataItemStatus;
   /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
   createdAt: string;
   /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
   updatedAt: string;
 };
 
+export type UserControllerFindAll200DataMetaFilter = {
+  [key: string]: string | string[];
+};
+
 export type UserControllerFindAll200DataMeta = {
+  itemsPerPage: number;
+  totalItems?: number;
+  currentPage?: number;
+  totalPages?: number;
   /**
-   * @minimum 1
-   * @maximum 9007199254740991
+   * @items.minItems 2
+   * @items.maxItems 2
    */
-  page: number;
-  /**
-   * @minimum 1
-   * @maximum 9007199254740991
-   */
-  pageSize: number;
-  /**
-   * @minimum 0
-   * @maximum 9007199254740991
-   */
-  total: number;
-  /**
-   * @minimum 0
-   * @maximum 9007199254740991
-   */
-  totalPage: number;
-  hasNextPage: boolean;
-  hasPreviousPage: boolean;
+  sortBy: (string | string[])[][];
+  searchBy?: string[];
+  search?: string;
+  select?: string[];
+  filter?: UserControllerFindAll200DataMetaFilter;
+  cursor?: string;
+};
+
+export type UserControllerFindAll200DataLinks = {
+  first?: string;
+  previous?: string;
+  current: string;
+  next?: string;
+  last?: string;
 };
 
 export type UserControllerFindAll200Data = {
-  items: UserControllerFindAll200DataItemsItem[];
+  data: UserControllerFindAll200DataDataItem[];
   meta: UserControllerFindAll200DataMeta;
+  links: UserControllerFindAll200DataLinks;
 };
 
 export type UserControllerFindAll200 = {

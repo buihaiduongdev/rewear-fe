@@ -20,7 +20,12 @@ export const getProxyDecision = (
     };
   }
 
-  if (url.pathname !== '/' && !authRoute && !isLoggedIn) {
+  if (
+    url.pathname !== '/' &&
+    url.pathname !== '/products' &&
+    !authRoute &&
+    !isLoggedIn
+  ) {
     const loginUrl = new URL(AUTH_ROUTES.LOGIN, url);
     loginUrl.searchParams.set('callbackUrl', `${url.pathname}${url.search}`);
 
