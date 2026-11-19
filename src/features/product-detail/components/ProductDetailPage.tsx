@@ -23,6 +23,7 @@ import { formatCondition, formatPrice } from '@/shared/utils/product';
 import { Button } from '@/shared/components/ui/button';
 import { TOAST_DURATION_MS } from '@/shared/constants/toast';
 import { useToastStore } from '@/shared/stores/toast.store';
+import { ProductDetailSkeleton } from './ProductDetailSkeleton';
 
 export function ProductDetailPage({ id }: { id: string }) {
   const addToast = useToastStore((s) => s.addToast);
@@ -66,27 +67,7 @@ export function ProductDetailPage({ id }: { id: string }) {
   };
 
   if (isLoading) {
-    return (
-      <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-        <div className="h-6 w-32 animate-pulse rounded bg-rewear-soft mb-8" />
-        <div className="grid grid-cols-1 gap-12 lg:grid-cols-2">
-          <div className="space-y-4">
-            <div className="aspect-[3/4] w-full animate-pulse rounded bg-rewear-soft" />
-            <div className="flex gap-3">
-              {[1, 2, 3].map((i) => (
-                <div key={i} className="size-20 animate-pulse rounded bg-rewear-soft" />
-              ))}
-            </div>
-          </div>
-          <div className="space-y-6">
-            <div className="h-8 w-3/4 animate-pulse rounded bg-rewear-soft" />
-            <div className="h-6 w-1/4 animate-pulse rounded bg-rewear-soft" />
-            <div className="h-24 w-full animate-pulse rounded bg-rewear-soft" />
-            <div className="h-12 w-full animate-pulse rounded bg-rewear-soft" />
-          </div>
-        </div>
-      </div>
-    );
+    return <ProductDetailSkeleton />;
   }
 
   if (isError || !product) {
