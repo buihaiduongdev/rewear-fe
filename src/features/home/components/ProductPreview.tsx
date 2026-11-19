@@ -3,16 +3,18 @@
 import Link from 'next/link';
 import { AddToCartAction } from '@/modules/cart/components/AddToCartAction';
 import { ProductPhoto } from '@/shared/components/marketplace/ProductPhoto';
-import { formatCondition, formatPrice } from '@/shared/utils/product';
+import {
+  formatCondition,
+  formatPrice,
+  type Product,
+} from '@/shared/utils/product';
 import { Dialog } from '@base-ui/react/dialog';
 import { X } from 'lucide-react';
-
-import type { HomeProduct } from '../lib/product';
 
 export function ProductPreview({
   handle,
 }: {
-  handle: Dialog.Handle<HomeProduct>;
+  handle: Dialog.Handle<Product>;
 }) {
   return (
     <Dialog.Root handle={handle}>

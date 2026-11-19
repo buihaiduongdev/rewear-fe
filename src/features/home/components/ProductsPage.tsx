@@ -8,8 +8,8 @@ import { MarketplaceHeader } from '@/shared/components/marketplace/MarketplaceHe
 import { MobileNavigation } from '@/shared/components/marketplace/MobileNavigation';
 import { Dialog } from '@base-ui/react/dialog';
 
+import type { Product } from '@/shared/utils/product';
 import { useHomeCatalog } from '../hooks/use-home-catalog';
-import type { HomeProduct } from '../lib/product';
 import { ProductCard } from './ProductCard';
 import { ProductPreview } from './ProductPreview';
 import { SectionState } from './SectionState';
@@ -25,7 +25,7 @@ export function ProductsPage() {
     products,
     updateFilters,
   } = useHomeCatalog(true);
-  const [previewHandle] = useState(() => Dialog.createHandle<HomeProduct>());
+  const [previewHandle] = useState(() => Dialog.createHandle<Product>());
   const items = products.data?.data.data ?? [];
   const meta = products.data?.data.meta;
   const activeShop = shops.data?.data.find(({ id }) => id === shopId);

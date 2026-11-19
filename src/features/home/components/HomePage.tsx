@@ -12,8 +12,8 @@ import { Button } from '@/shared/components/ui/button';
 import { Dialog } from '@base-ui/react/dialog';
 import { useSession } from 'next-auth/react';
 
+import type { Product } from '@/shared/utils/product';
 import { useHomeCatalog } from '../hooks/use-home-catalog';
-import type { HomeProduct } from '../lib/product';
 import { ProductCard } from './ProductCard';
 import { ProductPreview } from './ProductPreview';
 import { SectionState } from './SectionState';
@@ -54,7 +54,7 @@ export function HomePage() {
     updateFilters,
   } = useHomeCatalog();
   const { status: sessionStatus } = useSession();
-  const [previewHandle] = useState(() => Dialog.createHandle<HomeProduct>());
+  const [previewHandle] = useState(() => Dialog.createHandle<Product>());
   const items = products.data?.data.data ?? [];
   const shopItems = shops.data?.data.slice(0, 2) ?? [];
   const hasFilters = Boolean(search || categoryId || shopId);
