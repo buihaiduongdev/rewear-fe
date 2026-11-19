@@ -55,26 +55,10 @@ export const CategoryControllerFindAllResponse = zod.object({
 
 export const categoryControllerCreateBodyNameMax = 100;
 
-export const categoryControllerCreateBodyNameRegExp = new RegExp('\\S');
-export const categoryControllerCreateBodySlugMax = 120;
-
-export const categoryControllerCreateBodySlugRegExp = new RegExp(
-  '^[a-z0-9]+(?:-[a-z0-9]+)*$',
-);
 export const categoryControllerCreateBodyRequiredMeasurementsMax = 7;
 
 export const CategoryControllerCreateBody = zod.strictObject({
-  name: zod
-    .string()
-    .min(1)
-    .max(categoryControllerCreateBodyNameMax)
-    .regex(categoryControllerCreateBodyNameRegExp),
-  slug: zod
-    .string()
-    .min(1)
-    .max(categoryControllerCreateBodySlugMax)
-    .regex(categoryControllerCreateBodySlugRegExp)
-    .nullish(),
+  name: zod.string().min(1).max(categoryControllerCreateBodyNameMax),
   requiredMeasurements: zod
     .array(
       zod.enum([
@@ -194,27 +178,10 @@ export const CategoryControllerUpdateParams = zod.object({
 
 export const categoryControllerUpdateBodyNameMax = 100;
 
-export const categoryControllerUpdateBodyNameRegExp = new RegExp('\\S');
-export const categoryControllerUpdateBodySlugMax = 120;
-
-export const categoryControllerUpdateBodySlugRegExp = new RegExp(
-  '^[a-z0-9]+(?:-[a-z0-9]+)*$',
-);
 export const categoryControllerUpdateBodyRequiredMeasurementsMax = 7;
 
 export const CategoryControllerUpdateBody = zod.strictObject({
-  name: zod
-    .string()
-    .min(1)
-    .max(categoryControllerUpdateBodyNameMax)
-    .regex(categoryControllerUpdateBodyNameRegExp)
-    .nullish(),
-  slug: zod
-    .string()
-    .min(1)
-    .max(categoryControllerUpdateBodySlugMax)
-    .regex(categoryControllerUpdateBodySlugRegExp)
-    .nullish(),
+  name: zod.string().min(1).max(categoryControllerUpdateBodyNameMax).nullish(),
   requiredMeasurements: zod
     .array(
       zod.enum([

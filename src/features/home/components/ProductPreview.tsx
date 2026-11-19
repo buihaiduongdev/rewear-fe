@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { AddToCartAction } from '@/modules/cart/components/AddToCartAction';
 import { ProductPhoto } from '@/shared/components/marketplace/ProductPhoto';
 import { formatCondition, formatPrice } from '@/shared/utils/product';
@@ -50,12 +51,22 @@ export function ProductPreview({
                     {product.description || 'No additional description.'}
                   </p>
                   <p className="text-sm">
-                    Sold by{' '}
-                    {product.shop?.name ??
-                      product.seller?.fullName ??
-                      'an independent seller'}
+                    Sold by {product.shop?.name ?? 'an independent seller'}
                   </p>
-                  <AddToCartAction product={product} primary />
+                  <div className="flex flex-col gap-2.5">
+                    <AddToCartAction
+                      product={product}
+                      primary
+                      onAdded={() => handle.close()}
+                    />
+                    <Link
+                      href={`/products/${product.id}`}
+                      className="flex h-11 w-full items-center justify-center border border-rewear-border text-sm font-medium text-rewear-text hover:bg-rewear-soft transition-colors"
+                      onClick={() => handle.close()}
+                    >
+                      Xem trang chi tiết đầy đủ
+                    </Link>
+                  </div>
                   {product.brand && (
                     <p className="text-sm">Brand: {product.brand}</p>
                   )}

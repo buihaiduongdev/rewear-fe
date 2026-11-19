@@ -1,54 +1,28 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-
 import { getApiErrorMessage } from '@/shared/api/api-error';
-import type { CheckoutControllerFind200 } from '@/shared/api/models';
+import type {
+  CheckoutControllerFind200,
+  CheckoutControllerQuote200Data,
+} from '@/shared/api/models';
 import { useCheckoutControllerQuote } from '@/shared/api/query-generated/checkout/checkout';
 import { Button } from '@/shared/components/ui/button';
 import { formatPrice } from '@/shared/utils/product';
 
 type Checkout = CheckoutControllerFind200['data'];
 export function useShippingEstimateState(
-  quote: Checkout['shippingQuote'] | undefined,
+  quote: CheckoutControllerQuote200Data | undefined,
   status: Checkout['status'],
 ) {
-  const [now, setNow] = useState(() => Date.now());
-  useEffect(() => {
-    if (!quote || ['EXPIRED', 'INVALIDATED'].includes(quote.status)) return;
-    // A quote may arrive long after mount. Catch up before the first second tick.
-    const update = () => setNow(Date.now());
-    const initial = setTimeout(update, 0);
-    const timer = setInterval(update, 1000);
-    return () => {
-      clearTimeout(initial);
-      clearInterval(timer);
-    };
-  }, [quote]);
-  const seconds = quote
-    ? Math.max(
-        0,
-        Math.ceil(
-          (Date.parse(quote.expiresAt) -
-            Math.max(now, Date.parse(quote.quotedAt))) /
-            1000,
-        ),
-      )
-    : 0;
-  const expired = !!quote && (quote.status === 'EXPIRED' || seconds === 0);
-  const invalid =
-    !!quote && (quote.status === 'INVALIDATED' || status !== 'HELD');
+  const invalid = !!quote && status !== 'HELD';
   const fresh =
-    !!quote &&
-    !expired &&
-    !invalid &&
-    ['READY', 'PARTIAL'].includes(quote.status);
-  const complete = fresh && quote?.status === 'READY';
-  const pending =
-    status === 'HELD' &&
-    quote?.status === 'FETCHING' &&
-    now - Date.parse(quote.quotedAt) < 10000;
-  return { fresh, complete, pending, expired, invalid, seconds };
+    !!quote && !invalid && ['READY', 'PARTIAL'].includes(quote.status);
+  return {
+    fresh,
+    complete: fresh && quote?.status === 'READY',
+    pending: false,
+    invalid,
+  };
 }
 type State = ReturnType<typeof useShippingEstimateState>;
 const reasons: Record<string, string> = {
@@ -69,7 +43,7 @@ export function ShippingEstimateForOrder({
   state,
   orderId,
 }: {
-  quote: Checkout['shippingQuote'];
+  quote: CheckoutControllerQuote200Data | undefined;
   state: State;
   orderId: string;
 }) {
@@ -92,7 +66,7 @@ export function ShippingEstimateForOrder({
           {quoted ? formatPrice(order.fee) : 'Not available'}
         </span>
       </div>
-      {!state.expired && !state.invalid && order?.reason && (
+      {!state.invalid && order?.reason && (
         <p className="text-rewear-muted text-sm">
           {reasons[order.reason] ?? 'Shipping estimate is unavailable.'}
         </p>
@@ -102,23 +76,19 @@ export function ShippingEstimateForOrder({
 }
 export function ShippingEstimateSummary({
   checkout,
+  quote,
   state,
-  onRefresh,
+  onQuote,
 }: {
   checkout: Checkout;
   state: State;
-  onRefresh: () => Promise<unknown>;
+  quote: CheckoutControllerQuote200Data | undefined;
+  onQuote: (quote: CheckoutControllerQuote200Data) => void;
 }) {
-  const quote = checkout.shippingQuote;
   const refresh = useCheckoutControllerQuote({
     mutation: {
       meta: { skipSuccessToast: true, skipErrorToast: true },
-      onSuccess: async () => {
-        await onRefresh();
-      },
-      onError: () => {
-        void onRefresh();
-      },
+      onSuccess: (response) => onQuote(response.data),
     },
   });
   return (
@@ -140,8 +110,7 @@ export function ShippingEstimateSummary({
             {formatPrice(quote!.grandTotal)}
           </p>
           <p className="text-sm">
-            GHN sandbox estimate · valid for {state.seconds}s. This is not a
-            payable total.
+            GHN sandbox estimate. This is not a payable total.
           </p>
         </>
       ) : (
@@ -159,8 +128,7 @@ export function ShippingEstimateSummary({
         One parcel per seller or shop. Parcel dimensions are a conservative
         estimate from the declared item boxes; actual packing may differ.
       </p>
-      {state.expired && <p role="status">Shipping estimate expired.</p>}
-      {state.invalid && !state.expired && (
+      {state.invalid && (
         <p role="status">
           Shipping details changed or this reservation is no longer active.
           Refresh before using an estimate.

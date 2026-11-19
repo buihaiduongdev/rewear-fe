@@ -8,7 +8,10 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { CartLink } from '@/modules/cart/components/CartLink';
 import { cartQueryKey, useCart } from '@/modules/cart/hooks/use-cart';
 import { getApiErrorMessage } from '@/shared/api/api-error';
-import type { UserAddressControllerFindAll200 } from '@/shared/api/models';
+import type {
+  CheckoutControllerQuote200Data,
+  UserAddressControllerFindAll200,
+} from '@/shared/api/models';
 import {
   useCheckoutControllerCancel,
   useCheckoutControllerCreate,
@@ -82,6 +85,11 @@ export function CheckoutPage() {
   const cancel = useCheckoutControllerCancel({
     mutation: { meta: { skipSuccessToast: true, skipErrorToast: true } },
   });
+  const [lastQuote, setLastQuote] = useState<{
+    checkoutId: string;
+    data: CheckoutControllerQuote200Data;
+  }>();
+  const quote = lastQuote?.checkoutId === id ? lastQuote.data : undefined;
   const [addressId, setAddressId] = useState('');
   const [cancelOpen, setCancelOpen] = useState(false);
   const [excluded, setExcluded] = useState<string[]>([]);
@@ -97,7 +105,7 @@ export function CheckoutPage() {
     '';
   const data = checkout.data?.data;
   const shippingState = useShippingEstimateState(
-    data?.shippingQuote,
+    quote,
     data?.status ?? 'EMPTY',
   );
   const error =
@@ -132,7 +140,7 @@ export function CheckoutPage() {
         cartAction={<CartLink />}
         search=""
         onSearch={(v) =>
-          router.push(`/?search=${encodeURIComponent(v)}#new-arrivals`)
+          router.push(`/products?search=${encodeURIComponent(v)}`)
         }
       />
       <main
@@ -275,9 +283,7 @@ export function CheckoutPage() {
                 </section>
                 {data.orders.map((order) => (
                   <section key={order.id} className="space-y-4">
-                    <h2 className="text-sm font-semibold">
-                      {order.sourceName}
-                    </h2>
+                    <h2 className="text-sm font-semibold">{order.shopName}</h2>
                     {order.items.map((item) => (
                       <article key={item.productId} className="flex gap-4">
                         <div className="bg-rewear-soft relative h-20 w-16 shrink-0">
@@ -297,7 +303,7 @@ export function CheckoutPage() {
                       </article>
                     ))}
                     <ShippingEstimateForOrder
-                      quote={data.shippingQuote}
+                      quote={quote}
                       state={shippingState}
                       orderId={order.id}
                     />
@@ -316,7 +322,8 @@ export function CheckoutPage() {
                   key={data.id}
                   checkout={data}
                   state={shippingState}
-                  onRefresh={() => checkout.refetch()}
+                  quote={quote}
+                  onQuote={(data) => setLastQuote({ checkoutId: id, data })}
                 />
                 <button disabled className={actionClass}>
                   Payment unavailable

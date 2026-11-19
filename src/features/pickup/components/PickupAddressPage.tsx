@@ -6,10 +6,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 import { getApiErrorMessage } from '@/shared/api/api-error';
-import {
-  usePickupLocationControllerFindPersonal,
-  usePickupLocationControllerFindShop,
-} from '@/shared/api/query-generated/pickup-locations/pickup-locations';
+import { usePickupLocationControllerFindShop } from '@/shared/api/query-generated/pickup-locations/pickup-locations';
 import { useShopControllerFindMine } from '@/shared/api/query-generated/shops/shops';
 import { useQueryClient } from '@tanstack/react-query';
 import { useSession } from 'next-auth/react';
@@ -22,17 +19,8 @@ export function PickupAddressPage() {
   const [shopId, setShopId] = useState('');
   const [saving, setSaving] = useState(false);
   const enabled = status === 'authenticated' && !session?.error;
-  const personalKey = ['pickup-location', session?.user.id, 'personal'];
   const shopKey = ['pickup-location', session?.user.id, 'shop', shopId];
-  const key = shopId ? shopKey : personalKey;
-  const personal = usePickupLocationControllerFindPersonal({
-    query: {
-      enabled: enabled && !shopId,
-      queryKey: personalKey,
-      retry: false,
-      refetchOnWindowFocus: false,
-    },
-  });
+  const key = shopKey;
   const shop = usePickupLocationControllerFindShop(shopId, {
     query: {
       enabled: enabled && !!shopId,
@@ -44,7 +32,7 @@ export function PickupAddressPage() {
   const memberships = useShopControllerFindMine({
     query: { enabled, queryKey: ['pickup-shop-memberships', session?.user.id] },
   });
-  const selected = shopId ? shop : personal;
+  const selected = shop;
   const error = selected.error || memberships.error;
   return (
     <div className="bg-rewear-surface text-rewear-text min-h-dvh">
@@ -92,7 +80,7 @@ export function PickupAddressPage() {
             disabled={saving || memberships.isPending}
             onChange={(e) => setShopId(e.target.value)}
           >
-            <option value="">Personal seller</option>
+            <option value="">Choose a shop</option>
             {memberships.data?.data
               .filter((m) => m.memberRole === 'OWNER' && m.status === 'ACTIVE')
               .map((m) => (
@@ -119,8 +107,10 @@ export function PickupAddressPage() {
             </button>
           </div>
         )}
-        {selected.isPending && <p role="status">Loading pickup address…</p>}
-        {enabled && !selected.error && selected.data && (
+        {shopId && selected.isPending && (
+          <p role="status">Loading pickup address…</p>
+        )}
+        {enabled && !!shopId && !selected.error && selected.data && (
           <PickupAddressForm
             key={`${session?.user.id}:${shopId}`}
             initial={selected.data.data.location}

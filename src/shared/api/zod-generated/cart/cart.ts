@@ -7,7 +7,7 @@
  */
 import * as zod from 'zod';
 
-export const cartControllerFindMineResponseDataGroupsItemSourceIdRegExp =
+export const cartControllerFindMineResponseDataGroupsItemShopIdRegExp =
   new RegExp(
     '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
   );
@@ -41,14 +41,11 @@ export const CartControllerFindMineResponse = zod.object({
   data: zod.object({
     groups: zod.array(
       zod.object({
-        source: zod
+        shop: zod
           .object({
-            type: zod.enum(['USER', 'SHOP']),
             id: zod
               .uuid()
-              .regex(
-                cartControllerFindMineResponseDataGroupsItemSourceIdRegExp,
-              ),
+              .regex(cartControllerFindMineResponseDataGroupsItemShopIdRegExp),
             name: zod.string(),
           })
           .nullable(),
@@ -129,7 +126,7 @@ export const CartControllerAddBody = zod
   .strictObject({})
   .default(cartControllerAddBodyDefault);
 
-export const cartControllerAddResponseDataGroupsItemSourceIdRegExp = new RegExp(
+export const cartControllerAddResponseDataGroupsItemShopIdRegExp = new RegExp(
   '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
 );
 export const cartControllerAddResponseDataGroupsItemItemsItemProductIdRegExp =
@@ -162,12 +159,11 @@ export const CartControllerAddResponse = zod.object({
   data: zod.object({
     groups: zod.array(
       zod.object({
-        source: zod
+        shop: zod
           .object({
-            type: zod.enum(['USER', 'SHOP']),
             id: zod
               .uuid()
-              .regex(cartControllerAddResponseDataGroupsItemSourceIdRegExp),
+              .regex(cartControllerAddResponseDataGroupsItemShopIdRegExp),
             name: zod.string(),
           })
           .nullable(),

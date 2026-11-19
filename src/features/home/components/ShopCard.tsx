@@ -12,12 +12,12 @@ export function ShopCard({
   onExplore: (shopId: string) => void;
 }) {
   const products = useProductControllerFindAll(
-    { shopId: shop.id, pageSize: 3 },
+    { 'filter.shopId': [shop.id], limit: 3 },
     {
       query: { meta: { skipErrorToast: true } },
     },
   );
-  const items = products.data?.data.items ?? [];
+  const items = products.data?.data.data ?? [];
 
   return (
     <article className="flex min-w-0 flex-col gap-3 md:gap-5">

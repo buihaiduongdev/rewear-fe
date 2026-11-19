@@ -1,3 +1,3 @@
-import type { ProductControllerFindAll200DataItemsItem } from '@/shared/api/models';
+import type { ProductControllerFindAll200DataDataItem } from '@/shared/api/models';
 
-export type HomeProduct = ProductControllerFindAll200DataItemsItem;
+export type HomeProduct = ProductControllerFindAll200DataDataItem;

@@ -12,7 +12,6 @@ import {
   useProductControllerFindMine,
   useProductControllerSubmit,
 } from '@/shared/api/query-generated/products/products';
-import { useShippingControllerPackageOptions } from '@/shared/api/query-generated/shipping/shipping';
 import { MarketplaceHeader } from '@/shared/components/marketplace/MarketplaceHeader';
 import { useQueryClient } from '@tanstack/react-query';
 import { useSession } from 'next-auth/react';
@@ -40,7 +39,7 @@ export function ShippingPackagesPage() {
   const [message, setMessage] = useState('');
   const enabled = status === 'authenticated' && !session?.error;
   const listings = useProductControllerFindMine(
-    { page, pageSize: 20 },
+    { page, limit: 20 },
     {
       query: { enabled, queryKey: ['seller-listings', session?.user.id, page] },
     },
@@ -49,7 +48,6 @@ export function ShippingPackagesPage() {
   const details = useProductControllerFindManaged(id, {
     query: { enabled: enabled && !!id, queryKey: detailKey, retry: false },
   });
-  const options = useShippingControllerPackageOptions({ query: { enabled } });
   const submit = useProductControllerSubmit({
     mutation: {
       onMutate: () => client.cancelQueries({ queryKey: detailKey }),
@@ -60,8 +58,7 @@ export function ShippingPackagesPage() {
     },
   });
   const product = details.data?.data;
-  const error =
-    listings.error || details.error || options.error || submit.error;
+  const error = listings.error || details.error || submit.error;
   const select = (next: string) => {
     setId(next);
     setDirty(false);
@@ -74,7 +71,7 @@ export function ShippingPackagesPage() {
         search=""
         cartAction={<CartLink />}
         onSearch={(value) =>
-          router.push(`/?search=${encodeURIComponent(value)}#new-arrivals`)
+          router.push(`/products?search=${encodeURIComponent(value)}`)
         }
       />
       <main
@@ -102,7 +99,6 @@ export function ShippingPackagesPage() {
               className="min-h-11 underline"
               onClick={() => {
                 void listings.refetch();
-                void options.refetch();
                 if (id) void details.refetch();
               }}
             >
@@ -111,7 +107,7 @@ export function ShippingPackagesPage() {
           </div>
         )}
         {listings.isPending && <p role="status">Loading your listings…</p>}
-        {listings.data?.data.items.length === 0 && (
+        {listings.data?.data.data.length === 0 && (
           <p>No listings on this page.</p>
         )}
         <label className="bg-rewear-soft block space-y-2 rounded-lg px-4 py-3">
@@ -124,7 +120,7 @@ export function ShippingPackagesPage() {
             disabled={saving || submit.isPending || listings.isPending}
           >
             <option value="">Choose a listing</option>
-            {listings.data?.data.items.map((item) => (
+            {listings.data?.data.data.map((item) => (
               <option key={item.id} value={item.id}>
                 {item.title ?? 'Untitled listing'} · {labels[item.status]}
               </option>
@@ -136,11 +132,7 @@ export function ShippingPackagesPage() {
             <button
               type="button"
               className="min-h-11 font-semibold disabled:opacity-40"
-              disabled={
-                saving ||
-                submit.isPending ||
-                !listings.data.data.meta.hasPreviousPage
-              }
+              disabled={saving || submit.isPending || page <= 1}
               onClick={() => {
                 select('');
                 setPage(page - 1);
@@ -149,7 +141,8 @@ export function ShippingPackagesPage() {
               Previous
             </button>
             <span>
-              Page {page} of {Math.max(1, listings.data.data.meta.totalPage)}
+              Page {page} of{' '}
+              {Math.max(1, listings.data.data.meta.totalPages ?? 1)}
             </span>
             <button
               type="button"
@@ -157,7 +150,7 @@ export function ShippingPackagesPage() {
               disabled={
                 saving ||
                 submit.isPending ||
-                !listings.data.data.meta.hasNextPage
+                page >= (listings.data.data.meta.totalPages ?? 1)
               }
               onClick={() => {
                 select('');
@@ -172,7 +165,7 @@ export function ShippingPackagesPage() {
         {id && details.isPending && (
           <p role="status">Loading package details…</p>
         )}
-        {product && options.data && (
+        {product && (
           <section className="space-y-6">
             <div>
               <h2 className="text-[28px] leading-[34px] font-semibold tracking-[-0.02em]">
@@ -181,9 +174,8 @@ export function ShippingPackagesPage() {
               <p className="mt-2">Status: {labels[product.status]}</p>
             </div>
             <PackageForm
-              key={`${product.id}:${product.revision}:${product.status}`}
+              key={`${product.id}:${product.status}`}
               product={product}
-              options={options.data.data}
               onDirty={() => {
                 setDirty(true);
                 setMessage('');

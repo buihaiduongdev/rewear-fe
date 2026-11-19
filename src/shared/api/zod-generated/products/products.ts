@@ -7,234 +7,205 @@
  */
 import * as zod from 'zod';
 
-export const productControllerFindAllQueryPageOneRegExp = new RegExp('^\\d+$');
-export const productControllerFindAllQueryPageSizeOneRegExp = new RegExp(
-  '^\\d+$',
-);
-export const productControllerFindAllQueryOrderDefault = `DESC`;
-export const productControllerFindAllQuerySearchMax = 150;
-
-export const productControllerFindAllQueryCategoryIdRegExp = new RegExp(
-  '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
-);
-export const productControllerFindAllQueryShopIdRegExp = new RegExp(
-  '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
-);
-export const productControllerFindAllQuerySellerUserIdRegExp = new RegExp(
-  '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
-);
-export const productControllerFindAllQuerySizeMax = 50;
-
-export const productControllerFindAllQueryColorMax = 50;
-
-export const productControllerFindAllQueryBrandMax = 100;
-
-export const productControllerFindAllQueryMinPriceOneRegExp = new RegExp(
-  '^\\d+$',
-);
-export const productControllerFindAllQueryMaxPriceOneRegExp = new RegExp(
-  '^\\d+$',
-);
-
 export const ProductControllerFindAllQueryParams = zod.object({
   page: zod
-    .union([
-      zod.string().regex(productControllerFindAllQueryPageOneRegExp),
-      zod.number(),
-    ])
-    .optional(),
-  pageSize: zod
-    .union([
-      zod.string().regex(productControllerFindAllQueryPageSizeOneRegExp),
-      zod.number(),
-    ])
-    .optional(),
-  order: zod
-    .enum(['ASC', 'DESC'])
-    .default(productControllerFindAllQueryOrderDefault),
-  sortBy: zod.string().optional(),
+    .number()
+    .optional()
+    .describe(
+      'Page number to retrieve. If you provide invalid value the default page number will applied\n\n**Example:** 1\n\n\n**Default Value:** 1\n\n',
+    ),
+  limit: zod
+    .number()
+    .optional()
+    .describe(
+      'Number of records per page.\n\n\n**Example:** 20\n\n\n\n**Default Value:** 10\n\n\n\n**Max Value:** 100\n\n\nIf provided value is greater than max value, max value will be applied.\n',
+    ),
+  'filter.categoryId': zod
+    .array(zod.string())
+    .optional()
+    .describe(
+      'Filter by categoryId query param.\n\n**Format:** filter.categoryId={$not}:OPERATION:VALUE\n\n\n\n**Example:** filter.categoryId=$eq:John Doe\n\n**Available Operations**\n- $eq\n\n- $and\n\n- $or',
+    ),
+  'filter.shopId': zod
+    .array(zod.string())
+    .optional()
+    .describe(
+      'Filter by shopId query param.\n\n**Format:** filter.shopId={$not}:OPERATION:VALUE\n\n\n\n**Example:** filter.shopId=$eq:John Doe\n\n**Available Operations**\n- $eq\n\n- $and\n\n- $or',
+    ),
+  'filter.condition': zod
+    .array(zod.string())
+    .optional()
+    .describe(
+      'Filter by condition query param.\n\n**Format:** filter.condition={$not}:OPERATION:VALUE\n\n\n\n**Example:** filter.condition=$eq:John Doe\n\n**Available Operations**\n- $eq\n\n- $and\n\n- $or',
+    ),
+  'filter.status': zod
+    .array(zod.string())
+    .optional()
+    .describe(
+      'Filter by status query param.\n\n**Format:** filter.status={$not}:OPERATION:VALUE\n\n\n\n**Example:** filter.status=$eq:John Doe\n\n**Available Operations**\n- $eq\n\n- $and\n\n- $or',
+    ),
+  'filter.size': zod
+    .array(zod.string())
+    .optional()
+    .describe(
+      'Filter by size query param.\n\n**Format:** filter.size={$not}:OPERATION:VALUE\n\n\n\n**Example:** filter.size=$ilike:John Doe\n\n**Available Operations**\n- $ilike\n\n- $and\n\n- $or',
+    ),
+  'filter.color': zod
+    .array(zod.string())
+    .optional()
+    .describe(
+      'Filter by color query param.\n\n**Format:** filter.color={$not}:OPERATION:VALUE\n\n\n\n**Example:** filter.color=$ilike:John Doe\n\n**Available Operations**\n- $ilike\n\n- $and\n\n- $or',
+    ),
+  'filter.brand': zod
+    .array(zod.string())
+    .optional()
+    .describe(
+      'Filter by brand query param.\n\n**Format:** filter.brand={$not}:OPERATION:VALUE\n\n\n\n**Example:** filter.brand=$ilike:John Doe\n\n**Available Operations**\n- $ilike\n\n- $and\n\n- $or',
+    ),
+  'filter.price': zod
+    .array(zod.string())
+    .optional()
+    .describe(
+      'Filter by price query param.\n\n**Format:** filter.price={$not}:OPERATION:VALUE\n\n\n\n**Example:** filter.price=$gte:John Doe&filter.price=$lte:John Doe\n\n**Available Operations**\n- $gte\n\n- $lte\n\n- $and\n\n- $or',
+    ),
+  sortBy: zod
+    .array(
+      zod.enum([
+        'createdAt:ASC',
+        'createdAt:DESC',
+        'price:ASC',
+        'price:DESC',
+        'publishedAt:ASC',
+        'publishedAt:DESC',
+        'id:ASC',
+        'id:DESC',
+      ]),
+    )
+    .optional()
+    .describe(
+      'Parameter to sort by.\nTo sort by multiple fields, just provide query param multiple types. The order in url defines an order of sorting\n\n**Format:** {fieldName}:{DIRECTION}\n\n\n**Example:** sortBy=createdAt:DESC&sortBy=price:DESC\n\n\n**Default Value:** createdAt:DESC,id:DESC\n\n**Available Fields**\n- createdAt\n\n- price\n\n- publishedAt\n\n- id\n',
+    ),
   search: zod
     .string()
-    .min(1)
-    .max(productControllerFindAllQuerySearchMax)
-    .optional(),
-  categoryId: zod
-    .uuid()
-    .regex(productControllerFindAllQueryCategoryIdRegExp)
-    .optional(),
-  shopId: zod
-    .uuid()
-    .regex(productControllerFindAllQueryShopIdRegExp)
-    .optional(),
-  sellerUserId: zod
-    .uuid()
-    .regex(productControllerFindAllQuerySellerUserIdRegExp)
-    .optional(),
-  condition: zod.enum(['FAIR', 'GOOD', 'EXCELLENT', 'PRISTINE']).optional(),
-  size: zod
-    .string()
-    .min(1)
-    .max(productControllerFindAllQuerySizeMax)
-    .optional(),
-  color: zod
-    .string()
-    .min(1)
-    .max(productControllerFindAllQueryColorMax)
-    .optional(),
-  brand: zod
-    .string()
-    .min(1)
-    .max(productControllerFindAllQueryBrandMax)
-    .optional(),
-  minPrice: zod
-    .union([
-      zod.string().regex(productControllerFindAllQueryMinPriceOneRegExp),
-      zod.number(),
-    ])
-    .optional(),
-  maxPrice: zod
-    .union([
-      zod.string().regex(productControllerFindAllQueryMaxPriceOneRegExp),
-      zod.number(),
-    ])
-    .optional(),
+    .optional()
+    .describe(
+      'Search term to filter result values\n\n**Example:** John\n\n\n**Default Value:** No default value\n\n',
+    ),
+  searchBy: zod
+    .array(zod.string())
+    .optional()
+    .describe(
+      'List of fields to search by term to filter result values\n\n**Example:** title,description,brand\n\n\n**Default Value:** By default all fields mentioned below will be used to search by term\n\n**Available Fields**\n- title\n\n- description\n\n- brand\n',
+    ),
 });
 
-export const productControllerFindAllResponseDataItemsItemIdRegExp = new RegExp(
+export const productControllerFindAllResponseDataDataItemIdRegExp = new RegExp(
   '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
 );
-export const productControllerFindAllResponseDataItemsItemCategoryIdRegExp =
+export const productControllerFindAllResponseDataDataItemCategoryIdRegExp =
   new RegExp(
     '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
   );
-export const productControllerFindAllResponseDataItemsItemSellerUserIdRegExp =
+export const productControllerFindAllResponseDataDataItemShopIdRegExp =
   new RegExp(
     '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
   );
-export const productControllerFindAllResponseDataItemsItemShopIdRegExp =
-  new RegExp(
-    '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
-  );
-export const productControllerFindAllResponseDataItemsItemPriceMin = 0;
-export const productControllerFindAllResponseDataItemsItemPriceMax = 9007199254740991;
+export const productControllerFindAllResponseDataDataItemPriceMin = 0;
+export const productControllerFindAllResponseDataDataItemPriceMax = 9007199254740991;
 
-export const productControllerFindAllResponseDataItemsItemMeasurementsChestExclusiveMin = 0;
-export const productControllerFindAllResponseDataItemsItemMeasurementsChestMax = 500;
+export const productControllerFindAllResponseDataDataItemMeasurementsChestExclusiveMin = 0;
+export const productControllerFindAllResponseDataDataItemMeasurementsChestMax = 500;
 
-export const productControllerFindAllResponseDataItemsItemMeasurementsWaistExclusiveMin = 0;
-export const productControllerFindAllResponseDataItemsItemMeasurementsWaistMax = 500;
+export const productControllerFindAllResponseDataDataItemMeasurementsWaistExclusiveMin = 0;
+export const productControllerFindAllResponseDataDataItemMeasurementsWaistMax = 500;
 
-export const productControllerFindAllResponseDataItemsItemMeasurementsHipExclusiveMin = 0;
-export const productControllerFindAllResponseDataItemsItemMeasurementsHipMax = 500;
+export const productControllerFindAllResponseDataDataItemMeasurementsHipExclusiveMin = 0;
+export const productControllerFindAllResponseDataDataItemMeasurementsHipMax = 500;
 
-export const productControllerFindAllResponseDataItemsItemMeasurementsLengthExclusiveMin = 0;
-export const productControllerFindAllResponseDataItemsItemMeasurementsLengthMax = 500;
+export const productControllerFindAllResponseDataDataItemMeasurementsLengthExclusiveMin = 0;
+export const productControllerFindAllResponseDataDataItemMeasurementsLengthMax = 500;
 
-export const productControllerFindAllResponseDataItemsItemMeasurementsShoulderExclusiveMin = 0;
-export const productControllerFindAllResponseDataItemsItemMeasurementsShoulderMax = 500;
+export const productControllerFindAllResponseDataDataItemMeasurementsShoulderExclusiveMin = 0;
+export const productControllerFindAllResponseDataDataItemMeasurementsShoulderMax = 500;
 
-export const productControllerFindAllResponseDataItemsItemMeasurementsSleeveExclusiveMin = 0;
-export const productControllerFindAllResponseDataItemsItemMeasurementsSleeveMax = 500;
+export const productControllerFindAllResponseDataDataItemMeasurementsSleeveExclusiveMin = 0;
+export const productControllerFindAllResponseDataDataItemMeasurementsSleeveMax = 500;
 
-export const productControllerFindAllResponseDataItemsItemMeasurementsInseamExclusiveMin = 0;
-export const productControllerFindAllResponseDataItemsItemMeasurementsInseamMax = 500;
+export const productControllerFindAllResponseDataDataItemMeasurementsInseamExclusiveMin = 0;
+export const productControllerFindAllResponseDataDataItemMeasurementsInseamMax = 500;
 
-export const productControllerFindAllResponseDataItemsItemShippingPackageWeightTwoGramsExclusiveMin = 0;
-export const productControllerFindAllResponseDataItemsItemShippingPackageWeightTwoGramsMax = 50000;
+export const productControllerFindAllResponseDataDataItemShippingPackageWeightGramsExclusiveMin = 0;
+export const productControllerFindAllResponseDataDataItemShippingPackageWeightGramsMax = 50000;
 
-export const productControllerFindAllResponseDataItemsItemShippingPackageSizeTwoLengthCmExclusiveMin = 0;
-export const productControllerFindAllResponseDataItemsItemShippingPackageSizeTwoLengthCmMax = 200;
+export const productControllerFindAllResponseDataDataItemShippingPackageLengthCmExclusiveMin = 0;
+export const productControllerFindAllResponseDataDataItemShippingPackageLengthCmMax = 200;
 
-export const productControllerFindAllResponseDataItemsItemShippingPackageSizeTwoWidthCmExclusiveMin = 0;
-export const productControllerFindAllResponseDataItemsItemShippingPackageSizeTwoWidthCmMax = 200;
+export const productControllerFindAllResponseDataDataItemShippingPackageWidthCmExclusiveMin = 0;
+export const productControllerFindAllResponseDataDataItemShippingPackageWidthCmMax = 200;
 
-export const productControllerFindAllResponseDataItemsItemShippingPackageSizeTwoHeightCmExclusiveMin = 0;
-export const productControllerFindAllResponseDataItemsItemShippingPackageSizeTwoHeightCmMax = 200;
+export const productControllerFindAllResponseDataDataItemShippingPackageHeightCmExclusiveMin = 0;
+export const productControllerFindAllResponseDataDataItemShippingPackageHeightCmMax = 200;
 
-export const productControllerFindAllResponseDataItemsItemShippingPackageDefault =
+export const productControllerFindAllResponseDataDataItemShippingPackageDefault =
   null;
-export const productControllerFindAllResponseDataItemsItemDefectsItemDescriptionMax = 1000;
+export const productControllerFindAllResponseDataDataItemDefectsItemDescriptionMax = 1000;
 
-export const productControllerFindAllResponseDataItemsItemDefectsItemMediaIdsItemRegExp =
+export const productControllerFindAllResponseDataDataItemDefectsItemMediaIdsItemRegExp =
   new RegExp(
     '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
   );
-export const productControllerFindAllResponseDataItemsItemDefectsItemMediaIdsMax = 10;
+export const productControllerFindAllResponseDataDataItemDefectsItemMediaIdsMax = 10;
 
-export const productControllerFindAllResponseDataItemsItemRevisionExclusiveMin = 0;
-export const productControllerFindAllResponseDataItemsItemRevisionMax = 9007199254740991;
+export const productControllerFindAllResponseDataDataItemMediaCountMin = 0;
+export const productControllerFindAllResponseDataDataItemMediaCountMax = 9007199254740991;
 
-export const productControllerFindAllResponseDataItemsItemApprovedRevisionExclusiveMin = 0;
-export const productControllerFindAllResponseDataItemsItemApprovedRevisionMax = 9007199254740991;
-
-export const productControllerFindAllResponseDataItemsItemMediaCountMin = 0;
-export const productControllerFindAllResponseDataItemsItemMediaCountMax = 9007199254740991;
-
-export const productControllerFindAllResponseDataItemsItemPublishedAtRegExp =
+export const productControllerFindAllResponseDataDataItemPublishedAtRegExp =
   new RegExp(
     '^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$',
   );
-export const productControllerFindAllResponseDataItemsItemHeldUntilRegExp =
+export const productControllerFindAllResponseDataDataItemHeldUntilRegExp =
   new RegExp(
     '^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$',
   );
-export const productControllerFindAllResponseDataItemsItemSoldAtRegExp =
+export const productControllerFindAllResponseDataDataItemSoldAtRegExp =
   new RegExp(
     '^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$',
   );
-export const productControllerFindAllResponseDataItemsItemCreatedAtRegExp =
+export const productControllerFindAllResponseDataDataItemCreatedAtRegExp =
   new RegExp(
     '^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$',
   );
-export const productControllerFindAllResponseDataItemsItemUpdatedAtRegExp =
+export const productControllerFindAllResponseDataDataItemUpdatedAtRegExp =
   new RegExp(
     '^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$',
   );
-export const productControllerFindAllResponseDataItemsItemCategoryIdRegExpOne =
+export const productControllerFindAllResponseDataDataItemCategoryIdRegExpOne =
   new RegExp(
     '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
   );
-export const productControllerFindAllResponseDataItemsItemSellerIdRegExp =
+export const productControllerFindAllResponseDataDataItemShopIdRegExpOne =
   new RegExp(
     '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
   );
-export const productControllerFindAllResponseDataItemsItemShopIdRegExpOne =
-  new RegExp(
-    '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
-  );
-export const productControllerFindAllResponseDataMetaPageMax = 9007199254740991;
-
-export const productControllerFindAllResponseDataMetaPageSizeMax = 9007199254740991;
-
-export const productControllerFindAllResponseDataMetaTotalMin = 0;
-export const productControllerFindAllResponseDataMetaTotalMax = 9007199254740991;
-
-export const productControllerFindAllResponseDataMetaTotalPageMin = 0;
-export const productControllerFindAllResponseDataMetaTotalPageMax = 9007199254740991;
+export const productControllerFindAllResponseDataMetaSortByItemMin = 2;
+export const productControllerFindAllResponseDataMetaSortByItemMax = 2;
 
 export const ProductControllerFindAllResponse = zod.object({
   statusCode: zod.literal(200),
   message: zod.string(),
   data: zod.object({
-    items: zod.array(
+    data: zod.array(
       zod.object({
         id: zod
           .uuid()
-          .regex(productControllerFindAllResponseDataItemsItemIdRegExp),
+          .regex(productControllerFindAllResponseDataDataItemIdRegExp),
         categoryId: zod
           .uuid()
-          .regex(productControllerFindAllResponseDataItemsItemCategoryIdRegExp)
-          .nullable(),
-        sellerUserId: zod
-          .uuid()
-          .regex(
-            productControllerFindAllResponseDataItemsItemSellerUserIdRegExp,
-          )
+          .regex(productControllerFindAllResponseDataDataItemCategoryIdRegExp)
           .nullable(),
         shopId: zod
           .uuid()
-          .regex(productControllerFindAllResponseDataItemsItemShopIdRegExp)
-          .nullable(),
+          .regex(productControllerFindAllResponseDataDataItemShopIdRegExp),
         title: zod.string().nullable(),
         description: zod.string().nullable(),
         condition: zod
@@ -251,141 +222,110 @@ export const ProductControllerFindAllResponse = zod.object({
         brand: zod.string().nullable(),
         price: zod
           .int()
-          .min(productControllerFindAllResponseDataItemsItemPriceMin)
-          .max(productControllerFindAllResponseDataItemsItemPriceMax)
+          .min(productControllerFindAllResponseDataDataItemPriceMin)
+          .max(productControllerFindAllResponseDataDataItemPriceMax)
           .nullable(),
         measurements: zod.object({
           chest: zod
             .number()
             .gt(
-              productControllerFindAllResponseDataItemsItemMeasurementsChestExclusiveMin,
+              productControllerFindAllResponseDataDataItemMeasurementsChestExclusiveMin,
             )
             .max(
-              productControllerFindAllResponseDataItemsItemMeasurementsChestMax,
+              productControllerFindAllResponseDataDataItemMeasurementsChestMax,
             )
             .optional(),
           waist: zod
             .number()
             .gt(
-              productControllerFindAllResponseDataItemsItemMeasurementsWaistExclusiveMin,
+              productControllerFindAllResponseDataDataItemMeasurementsWaistExclusiveMin,
             )
             .max(
-              productControllerFindAllResponseDataItemsItemMeasurementsWaistMax,
+              productControllerFindAllResponseDataDataItemMeasurementsWaistMax,
             )
             .optional(),
           hip: zod
             .number()
             .gt(
-              productControllerFindAllResponseDataItemsItemMeasurementsHipExclusiveMin,
+              productControllerFindAllResponseDataDataItemMeasurementsHipExclusiveMin,
             )
-            .max(
-              productControllerFindAllResponseDataItemsItemMeasurementsHipMax,
-            )
+            .max(productControllerFindAllResponseDataDataItemMeasurementsHipMax)
             .optional(),
           length: zod
             .number()
             .gt(
-              productControllerFindAllResponseDataItemsItemMeasurementsLengthExclusiveMin,
+              productControllerFindAllResponseDataDataItemMeasurementsLengthExclusiveMin,
             )
             .max(
-              productControllerFindAllResponseDataItemsItemMeasurementsLengthMax,
+              productControllerFindAllResponseDataDataItemMeasurementsLengthMax,
             )
             .optional(),
           shoulder: zod
             .number()
             .gt(
-              productControllerFindAllResponseDataItemsItemMeasurementsShoulderExclusiveMin,
+              productControllerFindAllResponseDataDataItemMeasurementsShoulderExclusiveMin,
             )
             .max(
-              productControllerFindAllResponseDataItemsItemMeasurementsShoulderMax,
+              productControllerFindAllResponseDataDataItemMeasurementsShoulderMax,
             )
             .optional(),
           sleeve: zod
             .number()
             .gt(
-              productControllerFindAllResponseDataItemsItemMeasurementsSleeveExclusiveMin,
+              productControllerFindAllResponseDataDataItemMeasurementsSleeveExclusiveMin,
             )
             .max(
-              productControllerFindAllResponseDataItemsItemMeasurementsSleeveMax,
+              productControllerFindAllResponseDataDataItemMeasurementsSleeveMax,
             )
             .optional(),
           inseam: zod
             .number()
             .gt(
-              productControllerFindAllResponseDataItemsItemMeasurementsInseamExclusiveMin,
+              productControllerFindAllResponseDataDataItemMeasurementsInseamExclusiveMin,
             )
             .max(
-              productControllerFindAllResponseDataItemsItemMeasurementsInseamMax,
+              productControllerFindAllResponseDataDataItemMeasurementsInseamMax,
             )
             .optional(),
         }),
         shippingPackage: zod
           .object({
-            weight: zod.union([
-              zod.object({
-                mode: zod.enum(['RANGE']),
-                preset: zod.enum([
-                  'UP_TO_250_G',
-                  'UP_TO_500_G',
-                  'UP_TO_1000_G',
-                  'UP_TO_2000_G',
-                  'UP_TO_5000_G',
-                ]),
-              }),
-              zod.object({
-                mode: zod.enum(['CUSTOM']),
-                grams: zod
-                  .int()
-                  .gt(
-                    productControllerFindAllResponseDataItemsItemShippingPackageWeightTwoGramsExclusiveMin,
-                  )
-                  .max(
-                    productControllerFindAllResponseDataItemsItemShippingPackageWeightTwoGramsMax,
-                  ),
-              }),
-            ]),
-            size: zod.union([
-              zod.object({
-                mode: zod.enum(['RANGE']),
-                preset: zod.enum([
-                  'BOX_20_15_10_CM',
-                  'BOX_30_20_15_CM',
-                  'BOX_40_30_20_CM',
-                  'BOX_50_40_30_CM',
-                ]),
-              }),
-              zod.object({
-                mode: zod.enum(['CUSTOM']),
-                lengthCm: zod
-                  .number()
-                  .gt(
-                    productControllerFindAllResponseDataItemsItemShippingPackageSizeTwoLengthCmExclusiveMin,
-                  )
-                  .max(
-                    productControllerFindAllResponseDataItemsItemShippingPackageSizeTwoLengthCmMax,
-                  ),
-                widthCm: zod
-                  .number()
-                  .gt(
-                    productControllerFindAllResponseDataItemsItemShippingPackageSizeTwoWidthCmExclusiveMin,
-                  )
-                  .max(
-                    productControllerFindAllResponseDataItemsItemShippingPackageSizeTwoWidthCmMax,
-                  ),
-                heightCm: zod
-                  .number()
-                  .gt(
-                    productControllerFindAllResponseDataItemsItemShippingPackageSizeTwoHeightCmExclusiveMin,
-                  )
-                  .max(
-                    productControllerFindAllResponseDataItemsItemShippingPackageSizeTwoHeightCmMax,
-                  ),
-              }),
-            ]),
+            weightGrams: zod
+              .int()
+              .gt(
+                productControllerFindAllResponseDataDataItemShippingPackageWeightGramsExclusiveMin,
+              )
+              .max(
+                productControllerFindAllResponseDataDataItemShippingPackageWeightGramsMax,
+              ),
+            lengthCm: zod
+              .number()
+              .gt(
+                productControllerFindAllResponseDataDataItemShippingPackageLengthCmExclusiveMin,
+              )
+              .max(
+                productControllerFindAllResponseDataDataItemShippingPackageLengthCmMax,
+              ),
+            widthCm: zod
+              .number()
+              .gt(
+                productControllerFindAllResponseDataDataItemShippingPackageWidthCmExclusiveMin,
+              )
+              .max(
+                productControllerFindAllResponseDataDataItemShippingPackageWidthCmMax,
+              ),
+            heightCm: zod
+              .number()
+              .gt(
+                productControllerFindAllResponseDataDataItemShippingPackageHeightCmExclusiveMin,
+              )
+              .max(
+                productControllerFindAllResponseDataDataItemShippingPackageHeightCmMax,
+              ),
           })
           .nullable()
           .default(
-            productControllerFindAllResponseDataItemsItemShippingPackageDefault,
+            productControllerFindAllResponseDataDataItemShippingPackageDefault,
           ),
         repairs: zod.string().nullable(),
         defects: zod.array(
@@ -394,38 +334,27 @@ export const ProductControllerFindAllResponse = zod.object({
               .string()
               .min(1)
               .max(
-                productControllerFindAllResponseDataItemsItemDefectsItemDescriptionMax,
+                productControllerFindAllResponseDataDataItemDefectsItemDescriptionMax,
               ),
             mediaIds: zod
               .array(
                 zod
                   .uuid()
                   .regex(
-                    productControllerFindAllResponseDataItemsItemDefectsItemMediaIdsItemRegExp,
+                    productControllerFindAllResponseDataDataItemDefectsItemMediaIdsItemRegExp,
                   ),
               )
               .min(1)
               .max(
-                productControllerFindAllResponseDataItemsItemDefectsItemMediaIdsMax,
+                productControllerFindAllResponseDataDataItemDefectsItemMediaIdsMax,
               ),
           }),
         ),
-        revision: zod
-          .int()
-          .gt(productControllerFindAllResponseDataItemsItemRevisionExclusiveMin)
-          .max(productControllerFindAllResponseDataItemsItemRevisionMax),
-        approvedRevision: zod
-          .int()
-          .gt(
-            productControllerFindAllResponseDataItemsItemApprovedRevisionExclusiveMin,
-          )
-          .max(productControllerFindAllResponseDataItemsItemApprovedRevisionMax)
-          .nullable(),
         coverUrl: zod.url().nullable(),
         mediaCount: zod
           .int()
-          .min(productControllerFindAllResponseDataItemsItemMediaCountMin)
-          .max(productControllerFindAllResponseDataItemsItemMediaCountMax),
+          .min(productControllerFindAllResponseDataDataItemMediaCountMin)
+          .max(productControllerFindAllResponseDataDataItemMediaCountMax),
         status: zod.enum([
           'DRAFT',
           'PENDING_REVIEW',
@@ -438,74 +367,74 @@ export const ProductControllerFindAllResponse = zod.object({
         ]),
         publishedAt: zod.iso
           .datetime({ offset: true })
-          .regex(productControllerFindAllResponseDataItemsItemPublishedAtRegExp)
+          .regex(productControllerFindAllResponseDataDataItemPublishedAtRegExp)
           .nullable(),
         heldUntil: zod.iso
           .datetime({ offset: true })
-          .regex(productControllerFindAllResponseDataItemsItemHeldUntilRegExp)
+          .regex(productControllerFindAllResponseDataDataItemHeldUntilRegExp)
           .nullable(),
         soldAt: zod.iso
           .datetime({ offset: true })
-          .regex(productControllerFindAllResponseDataItemsItemSoldAtRegExp)
+          .regex(productControllerFindAllResponseDataDataItemSoldAtRegExp)
           .nullable(),
         createdAt: zod.iso
           .datetime({ offset: true })
-          .regex(productControllerFindAllResponseDataItemsItemCreatedAtRegExp),
+          .regex(productControllerFindAllResponseDataDataItemCreatedAtRegExp),
         updatedAt: zod.iso
           .datetime({ offset: true })
-          .regex(productControllerFindAllResponseDataItemsItemUpdatedAtRegExp),
+          .regex(productControllerFindAllResponseDataDataItemUpdatedAtRegExp),
         category: zod
           .object({
             id: zod
               .uuid()
               .regex(
-                productControllerFindAllResponseDataItemsItemCategoryIdRegExpOne,
+                productControllerFindAllResponseDataDataItemCategoryIdRegExpOne,
               ),
             name: zod.string(),
             slug: zod.string(),
           })
           .nullable(),
-        seller: zod
-          .object({
-            id: zod
-              .uuid()
-              .regex(
-                productControllerFindAllResponseDataItemsItemSellerIdRegExp,
-              ),
-            fullName: zod.string(),
-          })
-          .nullable(),
-        shop: zod
-          .object({
-            id: zod
-              .uuid()
-              .regex(
-                productControllerFindAllResponseDataItemsItemShopIdRegExpOne,
-              ),
-            name: zod.string(),
-          })
-          .nullable(),
+        shop: zod.object({
+          id: zod
+            .uuid()
+            .regex(productControllerFindAllResponseDataDataItemShopIdRegExpOne),
+          name: zod.string(),
+        }),
       }),
     ),
     meta: zod.object({
-      page: zod
-        .int()
-        .min(1)
-        .max(productControllerFindAllResponseDataMetaPageMax),
-      pageSize: zod
-        .int()
-        .min(1)
-        .max(productControllerFindAllResponseDataMetaPageSizeMax),
-      total: zod
-        .int()
-        .min(productControllerFindAllResponseDataMetaTotalMin)
-        .max(productControllerFindAllResponseDataMetaTotalMax),
-      totalPage: zod
-        .int()
-        .min(productControllerFindAllResponseDataMetaTotalPageMin)
-        .max(productControllerFindAllResponseDataMetaTotalPageMax),
-      hasNextPage: zod.boolean(),
-      hasPreviousPage: zod.boolean(),
+      itemsPerPage: zod.number(),
+      totalItems: zod.number().optional(),
+      currentPage: zod.number().optional(),
+      totalPages: zod.number().optional(),
+      sortBy: zod.array(
+        zod
+          .array(
+            zod.union([
+              zod.union([zod.string(), zod.array(zod.string())]),
+              zod.string(),
+            ]),
+          )
+          .min(productControllerFindAllResponseDataMetaSortByItemMin)
+          .max(productControllerFindAllResponseDataMetaSortByItemMax),
+      ),
+      searchBy: zod.array(zod.string()).optional(),
+      search: zod.string().optional(),
+      select: zod.array(zod.string()).optional(),
+      filter: zod
+        .record(
+          zod.string(),
+          zod.union([zod.string(), zod.array(zod.string())]),
+        )
+        .optional(),
+      cursor: zod.string().optional(),
+    }),
+    links: zod.object({
+      first: zod.string().optional(),
+      previous: zod.string().optional(),
+      current: zod.string(),
+      next: zod.string().optional(),
+      last: zod.string().optional(),
     }),
   }),
 });
@@ -550,17 +479,17 @@ export const productControllerCreateBodyMeasurementsSleeveMax = 500;
 export const productControllerCreateBodyMeasurementsInseamExclusiveMin = 0;
 export const productControllerCreateBodyMeasurementsInseamMax = 500;
 
-export const productControllerCreateBodyShippingPackageWeightTwoGramsExclusiveMin = 0;
-export const productControllerCreateBodyShippingPackageWeightTwoGramsMax = 50000;
+export const productControllerCreateBodyShippingPackageWeightGramsExclusiveMin = 0;
+export const productControllerCreateBodyShippingPackageWeightGramsMax = 50000;
 
-export const productControllerCreateBodyShippingPackageSizeTwoLengthCmExclusiveMin = 0;
-export const productControllerCreateBodyShippingPackageSizeTwoLengthCmMax = 200;
+export const productControllerCreateBodyShippingPackageLengthCmExclusiveMin = 0;
+export const productControllerCreateBodyShippingPackageLengthCmMax = 200;
 
-export const productControllerCreateBodyShippingPackageSizeTwoWidthCmExclusiveMin = 0;
-export const productControllerCreateBodyShippingPackageSizeTwoWidthCmMax = 200;
+export const productControllerCreateBodyShippingPackageWidthCmExclusiveMin = 0;
+export const productControllerCreateBodyShippingPackageWidthCmMax = 200;
 
-export const productControllerCreateBodyShippingPackageSizeTwoHeightCmExclusiveMin = 0;
-export const productControllerCreateBodyShippingPackageSizeTwoHeightCmMax = 200;
+export const productControllerCreateBodyShippingPackageHeightCmExclusiveMin = 0;
+export const productControllerCreateBodyShippingPackageHeightCmMax = 200;
 
 export const productControllerCreateBodyRepairsMax = 2000;
 
@@ -579,7 +508,7 @@ export const ProductControllerCreateBody = zod.strictObject({
     .uuid()
     .regex(productControllerCreateBodyCategoryIdRegExp)
     .nullish(),
-  shopId: zod.uuid().regex(productControllerCreateBodyShopIdRegExp).nullish(),
+  shopId: zod.uuid().regex(productControllerCreateBodyShopIdRegExp),
   title: zod.string().min(1).max(productControllerCreateBodyTitleMax).nullish(),
   description: zod
     .string()
@@ -643,59 +572,22 @@ export const ProductControllerCreateBody = zod.strictObject({
     .optional(),
   shippingPackage: zod
     .strictObject({
-      weight: zod.union([
-        zod.strictObject({
-          mode: zod.enum(['RANGE']),
-          preset: zod.enum([
-            'UP_TO_250_G',
-            'UP_TO_500_G',
-            'UP_TO_1000_G',
-            'UP_TO_2000_G',
-            'UP_TO_5000_G',
-          ]),
-        }),
-        zod.strictObject({
-          mode: zod.enum(['CUSTOM']),
-          grams: zod
-            .int()
-            .gt(
-              productControllerCreateBodyShippingPackageWeightTwoGramsExclusiveMin,
-            )
-            .max(productControllerCreateBodyShippingPackageWeightTwoGramsMax),
-        }),
-      ]),
-      size: zod.union([
-        zod.strictObject({
-          mode: zod.enum(['RANGE']),
-          preset: zod.enum([
-            'BOX_20_15_10_CM',
-            'BOX_30_20_15_CM',
-            'BOX_40_30_20_CM',
-            'BOX_50_40_30_CM',
-          ]),
-        }),
-        zod.strictObject({
-          mode: zod.enum(['CUSTOM']),
-          lengthCm: zod
-            .number()
-            .gt(
-              productControllerCreateBodyShippingPackageSizeTwoLengthCmExclusiveMin,
-            )
-            .max(productControllerCreateBodyShippingPackageSizeTwoLengthCmMax),
-          widthCm: zod
-            .number()
-            .gt(
-              productControllerCreateBodyShippingPackageSizeTwoWidthCmExclusiveMin,
-            )
-            .max(productControllerCreateBodyShippingPackageSizeTwoWidthCmMax),
-          heightCm: zod
-            .number()
-            .gt(
-              productControllerCreateBodyShippingPackageSizeTwoHeightCmExclusiveMin,
-            )
-            .max(productControllerCreateBodyShippingPackageSizeTwoHeightCmMax),
-        }),
-      ]),
+      weightGrams: zod
+        .int()
+        .gt(productControllerCreateBodyShippingPackageWeightGramsExclusiveMin)
+        .max(productControllerCreateBodyShippingPackageWeightGramsMax),
+      lengthCm: zod
+        .number()
+        .gt(productControllerCreateBodyShippingPackageLengthCmExclusiveMin)
+        .max(productControllerCreateBodyShippingPackageLengthCmMax),
+      widthCm: zod
+        .number()
+        .gt(productControllerCreateBodyShippingPackageWidthCmExclusiveMin)
+        .max(productControllerCreateBodyShippingPackageWidthCmMax),
+      heightCm: zod
+        .number()
+        .gt(productControllerCreateBodyShippingPackageHeightCmExclusiveMin)
+        .max(productControllerCreateBodyShippingPackageHeightCmMax),
     })
     .nullish(),
   repairs: zod.string().max(productControllerCreateBodyRepairsMax).nullish(),
@@ -726,9 +618,6 @@ export const productControllerCreateResponseDataIdRegExp = new RegExp(
 export const productControllerCreateResponseDataCategoryIdRegExp = new RegExp(
   '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
 );
-export const productControllerCreateResponseDataSellerUserIdRegExp = new RegExp(
-  '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
-);
 export const productControllerCreateResponseDataShopIdRegExp = new RegExp(
   '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
 );
@@ -756,17 +645,17 @@ export const productControllerCreateResponseDataMeasurementsSleeveMax = 500;
 export const productControllerCreateResponseDataMeasurementsInseamExclusiveMin = 0;
 export const productControllerCreateResponseDataMeasurementsInseamMax = 500;
 
-export const productControllerCreateResponseDataShippingPackageWeightTwoGramsExclusiveMin = 0;
-export const productControllerCreateResponseDataShippingPackageWeightTwoGramsMax = 50000;
+export const productControllerCreateResponseDataShippingPackageWeightGramsExclusiveMin = 0;
+export const productControllerCreateResponseDataShippingPackageWeightGramsMax = 50000;
 
-export const productControllerCreateResponseDataShippingPackageSizeTwoLengthCmExclusiveMin = 0;
-export const productControllerCreateResponseDataShippingPackageSizeTwoLengthCmMax = 200;
+export const productControllerCreateResponseDataShippingPackageLengthCmExclusiveMin = 0;
+export const productControllerCreateResponseDataShippingPackageLengthCmMax = 200;
 
-export const productControllerCreateResponseDataShippingPackageSizeTwoWidthCmExclusiveMin = 0;
-export const productControllerCreateResponseDataShippingPackageSizeTwoWidthCmMax = 200;
+export const productControllerCreateResponseDataShippingPackageWidthCmExclusiveMin = 0;
+export const productControllerCreateResponseDataShippingPackageWidthCmMax = 200;
 
-export const productControllerCreateResponseDataShippingPackageSizeTwoHeightCmExclusiveMin = 0;
-export const productControllerCreateResponseDataShippingPackageSizeTwoHeightCmMax = 200;
+export const productControllerCreateResponseDataShippingPackageHeightCmExclusiveMin = 0;
+export const productControllerCreateResponseDataShippingPackageHeightCmMax = 200;
 
 export const productControllerCreateResponseDataShippingPackageDefault = null;
 export const productControllerCreateResponseDataDefectsItemDescriptionMax = 1000;
@@ -776,12 +665,6 @@ export const productControllerCreateResponseDataDefectsItemMediaIdsItemRegExp =
     '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
   );
 export const productControllerCreateResponseDataDefectsItemMediaIdsMax = 10;
-
-export const productControllerCreateResponseDataRevisionExclusiveMin = 0;
-export const productControllerCreateResponseDataRevisionMax = 9007199254740991;
-
-export const productControllerCreateResponseDataApprovedRevisionExclusiveMin = 0;
-export const productControllerCreateResponseDataApprovedRevisionMax = 9007199254740991;
 
 export const productControllerCreateResponseDataMediaCountMin = 0;
 export const productControllerCreateResponseDataMediaCountMax = 9007199254740991;
@@ -805,9 +688,6 @@ export const productControllerCreateResponseDataCategoryIdRegExpOne =
   new RegExp(
     '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
   );
-export const productControllerCreateResponseDataSellerIdRegExp = new RegExp(
-  '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
-);
 export const productControllerCreateResponseDataShopIdRegExpOne = new RegExp(
   '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
 );
@@ -821,14 +701,7 @@ export const ProductControllerCreateResponse = zod.object({
       .uuid()
       .regex(productControllerCreateResponseDataCategoryIdRegExp)
       .nullable(),
-    sellerUserId: zod
-      .uuid()
-      .regex(productControllerCreateResponseDataSellerUserIdRegExp)
-      .nullable(),
-    shopId: zod
-      .uuid()
-      .regex(productControllerCreateResponseDataShopIdRegExp)
-      .nullable(),
+    shopId: zod.uuid().regex(productControllerCreateResponseDataShopIdRegExp),
     title: zod.string().nullable(),
     description: zod.string().nullable(),
     condition: zod
@@ -887,67 +760,32 @@ export const ProductControllerCreateResponse = zod.object({
     }),
     shippingPackage: zod
       .object({
-        weight: zod.union([
-          zod.object({
-            mode: zod.enum(['RANGE']),
-            preset: zod.enum([
-              'UP_TO_250_G',
-              'UP_TO_500_G',
-              'UP_TO_1000_G',
-              'UP_TO_2000_G',
-              'UP_TO_5000_G',
-            ]),
-          }),
-          zod.object({
-            mode: zod.enum(['CUSTOM']),
-            grams: zod
-              .int()
-              .gt(
-                productControllerCreateResponseDataShippingPackageWeightTwoGramsExclusiveMin,
-              )
-              .max(
-                productControllerCreateResponseDataShippingPackageWeightTwoGramsMax,
-              ),
-          }),
-        ]),
-        size: zod.union([
-          zod.object({
-            mode: zod.enum(['RANGE']),
-            preset: zod.enum([
-              'BOX_20_15_10_CM',
-              'BOX_30_20_15_CM',
-              'BOX_40_30_20_CM',
-              'BOX_50_40_30_CM',
-            ]),
-          }),
-          zod.object({
-            mode: zod.enum(['CUSTOM']),
-            lengthCm: zod
-              .number()
-              .gt(
-                productControllerCreateResponseDataShippingPackageSizeTwoLengthCmExclusiveMin,
-              )
-              .max(
-                productControllerCreateResponseDataShippingPackageSizeTwoLengthCmMax,
-              ),
-            widthCm: zod
-              .number()
-              .gt(
-                productControllerCreateResponseDataShippingPackageSizeTwoWidthCmExclusiveMin,
-              )
-              .max(
-                productControllerCreateResponseDataShippingPackageSizeTwoWidthCmMax,
-              ),
-            heightCm: zod
-              .number()
-              .gt(
-                productControllerCreateResponseDataShippingPackageSizeTwoHeightCmExclusiveMin,
-              )
-              .max(
-                productControllerCreateResponseDataShippingPackageSizeTwoHeightCmMax,
-              ),
-          }),
-        ]),
+        weightGrams: zod
+          .int()
+          .gt(
+            productControllerCreateResponseDataShippingPackageWeightGramsExclusiveMin,
+          )
+          .max(
+            productControllerCreateResponseDataShippingPackageWeightGramsMax,
+          ),
+        lengthCm: zod
+          .number()
+          .gt(
+            productControllerCreateResponseDataShippingPackageLengthCmExclusiveMin,
+          )
+          .max(productControllerCreateResponseDataShippingPackageLengthCmMax),
+        widthCm: zod
+          .number()
+          .gt(
+            productControllerCreateResponseDataShippingPackageWidthCmExclusiveMin,
+          )
+          .max(productControllerCreateResponseDataShippingPackageWidthCmMax),
+        heightCm: zod
+          .number()
+          .gt(
+            productControllerCreateResponseDataShippingPackageHeightCmExclusiveMin,
+          )
+          .max(productControllerCreateResponseDataShippingPackageHeightCmMax),
       })
       .nullable()
       .default(productControllerCreateResponseDataShippingPackageDefault),
@@ -970,15 +808,6 @@ export const ProductControllerCreateResponse = zod.object({
           .max(productControllerCreateResponseDataDefectsItemMediaIdsMax),
       }),
     ),
-    revision: zod
-      .int()
-      .gt(productControllerCreateResponseDataRevisionExclusiveMin)
-      .max(productControllerCreateResponseDataRevisionMax),
-    approvedRevision: zod
-      .int()
-      .gt(productControllerCreateResponseDataApprovedRevisionExclusiveMin)
-      .max(productControllerCreateResponseDataApprovedRevisionMax)
-      .nullable(),
     coverUrl: zod.url().nullable(),
     mediaCount: zod
       .int()
@@ -1021,264 +850,212 @@ export const ProductControllerCreateResponse = zod.object({
         slug: zod.string(),
       })
       .nullable(),
-    seller: zod
-      .object({
-        id: zod.uuid().regex(productControllerCreateResponseDataSellerIdRegExp),
-        fullName: zod.string(),
-      })
-      .nullable(),
-    shop: zod
-      .object({
-        id: zod
-          .uuid()
-          .regex(productControllerCreateResponseDataShopIdRegExpOne),
-        name: zod.string(),
-      })
-      .nullable(),
+    shop: zod.object({
+      id: zod.uuid().regex(productControllerCreateResponseDataShopIdRegExpOne),
+      name: zod.string(),
+    }),
   }),
 });
 
-export const productControllerFindMineQueryPageOneRegExp = new RegExp('^\\d+$');
-export const productControllerFindMineQueryPageSizeOneRegExp = new RegExp(
-  '^\\d+$',
-);
-export const productControllerFindMineQueryOrderDefault = `DESC`;
-export const productControllerFindMineQuerySearchMax = 150;
-
-export const productControllerFindMineQueryCategoryIdRegExp = new RegExp(
-  '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
-);
-export const productControllerFindMineQueryShopIdRegExp = new RegExp(
-  '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
-);
-export const productControllerFindMineQuerySellerUserIdRegExp = new RegExp(
-  '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
-);
-export const productControllerFindMineQuerySizeMax = 50;
-
-export const productControllerFindMineQueryColorMax = 50;
-
-export const productControllerFindMineQueryBrandMax = 100;
-
-export const productControllerFindMineQueryMinPriceOneRegExp = new RegExp(
-  '^\\d+$',
-);
-export const productControllerFindMineQueryMaxPriceOneRegExp = new RegExp(
-  '^\\d+$',
-);
-
 export const ProductControllerFindMineQueryParams = zod.object({
   page: zod
-    .union([
-      zod.string().regex(productControllerFindMineQueryPageOneRegExp),
-      zod.number(),
-    ])
-    .optional(),
-  pageSize: zod
-    .union([
-      zod.string().regex(productControllerFindMineQueryPageSizeOneRegExp),
-      zod.number(),
-    ])
-    .optional(),
-  order: zod
-    .enum(['ASC', 'DESC'])
-    .default(productControllerFindMineQueryOrderDefault),
-  sortBy: zod.string().optional(),
+    .number()
+    .optional()
+    .describe(
+      'Page number to retrieve. If you provide invalid value the default page number will applied\n\n**Example:** 1\n\n\n**Default Value:** 1\n\n',
+    ),
+  limit: zod
+    .number()
+    .optional()
+    .describe(
+      'Number of records per page.\n\n\n**Example:** 20\n\n\n\n**Default Value:** 10\n\n\n\n**Max Value:** 100\n\n\nIf provided value is greater than max value, max value will be applied.\n',
+    ),
+  'filter.categoryId': zod
+    .array(zod.string())
+    .optional()
+    .describe(
+      'Filter by categoryId query param.\n\n**Format:** filter.categoryId={$not}:OPERATION:VALUE\n\n\n\n**Example:** filter.categoryId=$eq:John Doe\n\n**Available Operations**\n- $eq\n\n- $and\n\n- $or',
+    ),
+  'filter.shopId': zod
+    .array(zod.string())
+    .optional()
+    .describe(
+      'Filter by shopId query param.\n\n**Format:** filter.shopId={$not}:OPERATION:VALUE\n\n\n\n**Example:** filter.shopId=$eq:John Doe\n\n**Available Operations**\n- $eq\n\n- $and\n\n- $or',
+    ),
+  'filter.condition': zod
+    .array(zod.string())
+    .optional()
+    .describe(
+      'Filter by condition query param.\n\n**Format:** filter.condition={$not}:OPERATION:VALUE\n\n\n\n**Example:** filter.condition=$eq:John Doe\n\n**Available Operations**\n- $eq\n\n- $and\n\n- $or',
+    ),
+  'filter.status': zod
+    .array(zod.string())
+    .optional()
+    .describe(
+      'Filter by status query param.\n\n**Format:** filter.status={$not}:OPERATION:VALUE\n\n\n\n**Example:** filter.status=$eq:John Doe\n\n**Available Operations**\n- $eq\n\n- $and\n\n- $or',
+    ),
+  'filter.size': zod
+    .array(zod.string())
+    .optional()
+    .describe(
+      'Filter by size query param.\n\n**Format:** filter.size={$not}:OPERATION:VALUE\n\n\n\n**Example:** filter.size=$ilike:John Doe\n\n**Available Operations**\n- $ilike\n\n- $and\n\n- $or',
+    ),
+  'filter.color': zod
+    .array(zod.string())
+    .optional()
+    .describe(
+      'Filter by color query param.\n\n**Format:** filter.color={$not}:OPERATION:VALUE\n\n\n\n**Example:** filter.color=$ilike:John Doe\n\n**Available Operations**\n- $ilike\n\n- $and\n\n- $or',
+    ),
+  'filter.brand': zod
+    .array(zod.string())
+    .optional()
+    .describe(
+      'Filter by brand query param.\n\n**Format:** filter.brand={$not}:OPERATION:VALUE\n\n\n\n**Example:** filter.brand=$ilike:John Doe\n\n**Available Operations**\n- $ilike\n\n- $and\n\n- $or',
+    ),
+  'filter.price': zod
+    .array(zod.string())
+    .optional()
+    .describe(
+      'Filter by price query param.\n\n**Format:** filter.price={$not}:OPERATION:VALUE\n\n\n\n**Example:** filter.price=$gte:John Doe&filter.price=$lte:John Doe\n\n**Available Operations**\n- $gte\n\n- $lte\n\n- $and\n\n- $or',
+    ),
+  sortBy: zod
+    .array(
+      zod.enum([
+        'createdAt:ASC',
+        'createdAt:DESC',
+        'price:ASC',
+        'price:DESC',
+        'publishedAt:ASC',
+        'publishedAt:DESC',
+        'id:ASC',
+        'id:DESC',
+      ]),
+    )
+    .optional()
+    .describe(
+      'Parameter to sort by.\nTo sort by multiple fields, just provide query param multiple types. The order in url defines an order of sorting\n\n**Format:** {fieldName}:{DIRECTION}\n\n\n**Example:** sortBy=createdAt:DESC&sortBy=price:DESC\n\n\n**Default Value:** createdAt:DESC,id:DESC\n\n**Available Fields**\n- createdAt\n\n- price\n\n- publishedAt\n\n- id\n',
+    ),
   search: zod
     .string()
-    .min(1)
-    .max(productControllerFindMineQuerySearchMax)
-    .optional(),
-  categoryId: zod
-    .uuid()
-    .regex(productControllerFindMineQueryCategoryIdRegExp)
-    .optional(),
-  shopId: zod
-    .uuid()
-    .regex(productControllerFindMineQueryShopIdRegExp)
-    .optional(),
-  sellerUserId: zod
-    .uuid()
-    .regex(productControllerFindMineQuerySellerUserIdRegExp)
-    .optional(),
-  condition: zod.enum(['FAIR', 'GOOD', 'EXCELLENT', 'PRISTINE']).optional(),
-  size: zod
-    .string()
-    .min(1)
-    .max(productControllerFindMineQuerySizeMax)
-    .optional(),
-  color: zod
-    .string()
-    .min(1)
-    .max(productControllerFindMineQueryColorMax)
-    .optional(),
-  brand: zod
-    .string()
-    .min(1)
-    .max(productControllerFindMineQueryBrandMax)
-    .optional(),
-  minPrice: zod
-    .union([
-      zod.string().regex(productControllerFindMineQueryMinPriceOneRegExp),
-      zod.number(),
-    ])
-    .optional(),
-  maxPrice: zod
-    .union([
-      zod.string().regex(productControllerFindMineQueryMaxPriceOneRegExp),
-      zod.number(),
-    ])
-    .optional(),
-  status: zod
-    .enum([
-      'DRAFT',
-      'PENDING_REVIEW',
-      'REJECTED',
-      'SUSPENDED',
-      'ACTIVE',
-      'HELD',
-      'SOLD',
-      'HIDDEN',
-    ])
-    .optional(),
+    .optional()
+    .describe(
+      'Search term to filter result values\n\n**Example:** John\n\n\n**Default Value:** No default value\n\n',
+    ),
+  searchBy: zod
+    .array(zod.string())
+    .optional()
+    .describe(
+      'List of fields to search by term to filter result values\n\n**Example:** title,description,brand\n\n\n**Default Value:** By default all fields mentioned below will be used to search by term\n\n**Available Fields**\n- title\n\n- description\n\n- brand\n',
+    ),
 });
 
-export const productControllerFindMineResponseDataItemsItemIdRegExp =
+export const productControllerFindMineResponseDataDataItemIdRegExp = new RegExp(
+  '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
+);
+export const productControllerFindMineResponseDataDataItemCategoryIdRegExp =
   new RegExp(
     '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
   );
-export const productControllerFindMineResponseDataItemsItemCategoryIdRegExp =
+export const productControllerFindMineResponseDataDataItemShopIdRegExp =
   new RegExp(
     '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
   );
-export const productControllerFindMineResponseDataItemsItemSellerUserIdRegExp =
-  new RegExp(
-    '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
-  );
-export const productControllerFindMineResponseDataItemsItemShopIdRegExp =
-  new RegExp(
-    '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
-  );
-export const productControllerFindMineResponseDataItemsItemPriceMin = 0;
-export const productControllerFindMineResponseDataItemsItemPriceMax = 9007199254740991;
+export const productControllerFindMineResponseDataDataItemPriceMin = 0;
+export const productControllerFindMineResponseDataDataItemPriceMax = 9007199254740991;
 
-export const productControllerFindMineResponseDataItemsItemMeasurementsChestExclusiveMin = 0;
-export const productControllerFindMineResponseDataItemsItemMeasurementsChestMax = 500;
+export const productControllerFindMineResponseDataDataItemMeasurementsChestExclusiveMin = 0;
+export const productControllerFindMineResponseDataDataItemMeasurementsChestMax = 500;
 
-export const productControllerFindMineResponseDataItemsItemMeasurementsWaistExclusiveMin = 0;
-export const productControllerFindMineResponseDataItemsItemMeasurementsWaistMax = 500;
+export const productControllerFindMineResponseDataDataItemMeasurementsWaistExclusiveMin = 0;
+export const productControllerFindMineResponseDataDataItemMeasurementsWaistMax = 500;
 
-export const productControllerFindMineResponseDataItemsItemMeasurementsHipExclusiveMin = 0;
-export const productControllerFindMineResponseDataItemsItemMeasurementsHipMax = 500;
+export const productControllerFindMineResponseDataDataItemMeasurementsHipExclusiveMin = 0;
+export const productControllerFindMineResponseDataDataItemMeasurementsHipMax = 500;
 
-export const productControllerFindMineResponseDataItemsItemMeasurementsLengthExclusiveMin = 0;
-export const productControllerFindMineResponseDataItemsItemMeasurementsLengthMax = 500;
+export const productControllerFindMineResponseDataDataItemMeasurementsLengthExclusiveMin = 0;
+export const productControllerFindMineResponseDataDataItemMeasurementsLengthMax = 500;
 
-export const productControllerFindMineResponseDataItemsItemMeasurementsShoulderExclusiveMin = 0;
-export const productControllerFindMineResponseDataItemsItemMeasurementsShoulderMax = 500;
+export const productControllerFindMineResponseDataDataItemMeasurementsShoulderExclusiveMin = 0;
+export const productControllerFindMineResponseDataDataItemMeasurementsShoulderMax = 500;
 
-export const productControllerFindMineResponseDataItemsItemMeasurementsSleeveExclusiveMin = 0;
-export const productControllerFindMineResponseDataItemsItemMeasurementsSleeveMax = 500;
+export const productControllerFindMineResponseDataDataItemMeasurementsSleeveExclusiveMin = 0;
+export const productControllerFindMineResponseDataDataItemMeasurementsSleeveMax = 500;
 
-export const productControllerFindMineResponseDataItemsItemMeasurementsInseamExclusiveMin = 0;
-export const productControllerFindMineResponseDataItemsItemMeasurementsInseamMax = 500;
+export const productControllerFindMineResponseDataDataItemMeasurementsInseamExclusiveMin = 0;
+export const productControllerFindMineResponseDataDataItemMeasurementsInseamMax = 500;
 
-export const productControllerFindMineResponseDataItemsItemShippingPackageWeightTwoGramsExclusiveMin = 0;
-export const productControllerFindMineResponseDataItemsItemShippingPackageWeightTwoGramsMax = 50000;
+export const productControllerFindMineResponseDataDataItemShippingPackageWeightGramsExclusiveMin = 0;
+export const productControllerFindMineResponseDataDataItemShippingPackageWeightGramsMax = 50000;
 
-export const productControllerFindMineResponseDataItemsItemShippingPackageSizeTwoLengthCmExclusiveMin = 0;
-export const productControllerFindMineResponseDataItemsItemShippingPackageSizeTwoLengthCmMax = 200;
+export const productControllerFindMineResponseDataDataItemShippingPackageLengthCmExclusiveMin = 0;
+export const productControllerFindMineResponseDataDataItemShippingPackageLengthCmMax = 200;
 
-export const productControllerFindMineResponseDataItemsItemShippingPackageSizeTwoWidthCmExclusiveMin = 0;
-export const productControllerFindMineResponseDataItemsItemShippingPackageSizeTwoWidthCmMax = 200;
+export const productControllerFindMineResponseDataDataItemShippingPackageWidthCmExclusiveMin = 0;
+export const productControllerFindMineResponseDataDataItemShippingPackageWidthCmMax = 200;
 
-export const productControllerFindMineResponseDataItemsItemShippingPackageSizeTwoHeightCmExclusiveMin = 0;
-export const productControllerFindMineResponseDataItemsItemShippingPackageSizeTwoHeightCmMax = 200;
+export const productControllerFindMineResponseDataDataItemShippingPackageHeightCmExclusiveMin = 0;
+export const productControllerFindMineResponseDataDataItemShippingPackageHeightCmMax = 200;
 
-export const productControllerFindMineResponseDataItemsItemShippingPackageDefault =
+export const productControllerFindMineResponseDataDataItemShippingPackageDefault =
   null;
-export const productControllerFindMineResponseDataItemsItemDefectsItemDescriptionMax = 1000;
+export const productControllerFindMineResponseDataDataItemDefectsItemDescriptionMax = 1000;
 
-export const productControllerFindMineResponseDataItemsItemDefectsItemMediaIdsItemRegExp =
+export const productControllerFindMineResponseDataDataItemDefectsItemMediaIdsItemRegExp =
   new RegExp(
     '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
   );
-export const productControllerFindMineResponseDataItemsItemDefectsItemMediaIdsMax = 10;
+export const productControllerFindMineResponseDataDataItemDefectsItemMediaIdsMax = 10;
 
-export const productControllerFindMineResponseDataItemsItemRevisionExclusiveMin = 0;
-export const productControllerFindMineResponseDataItemsItemRevisionMax = 9007199254740991;
+export const productControllerFindMineResponseDataDataItemMediaCountMin = 0;
+export const productControllerFindMineResponseDataDataItemMediaCountMax = 9007199254740991;
 
-export const productControllerFindMineResponseDataItemsItemApprovedRevisionExclusiveMin = 0;
-export const productControllerFindMineResponseDataItemsItemApprovedRevisionMax = 9007199254740991;
-
-export const productControllerFindMineResponseDataItemsItemMediaCountMin = 0;
-export const productControllerFindMineResponseDataItemsItemMediaCountMax = 9007199254740991;
-
-export const productControllerFindMineResponseDataItemsItemPublishedAtRegExp =
+export const productControllerFindMineResponseDataDataItemPublishedAtRegExp =
   new RegExp(
     '^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$',
   );
-export const productControllerFindMineResponseDataItemsItemHeldUntilRegExp =
+export const productControllerFindMineResponseDataDataItemHeldUntilRegExp =
   new RegExp(
     '^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$',
   );
-export const productControllerFindMineResponseDataItemsItemSoldAtRegExp =
+export const productControllerFindMineResponseDataDataItemSoldAtRegExp =
   new RegExp(
     '^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$',
   );
-export const productControllerFindMineResponseDataItemsItemCreatedAtRegExp =
+export const productControllerFindMineResponseDataDataItemCreatedAtRegExp =
   new RegExp(
     '^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$',
   );
-export const productControllerFindMineResponseDataItemsItemUpdatedAtRegExp =
+export const productControllerFindMineResponseDataDataItemUpdatedAtRegExp =
   new RegExp(
     '^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$',
   );
-export const productControllerFindMineResponseDataItemsItemCategoryIdRegExpOne =
+export const productControllerFindMineResponseDataDataItemCategoryIdRegExpOne =
   new RegExp(
     '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
   );
-export const productControllerFindMineResponseDataItemsItemSellerIdRegExp =
+export const productControllerFindMineResponseDataDataItemShopIdRegExpOne =
   new RegExp(
     '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
   );
-export const productControllerFindMineResponseDataItemsItemShopIdRegExpOne =
-  new RegExp(
-    '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
-  );
-export const productControllerFindMineResponseDataMetaPageMax = 9007199254740991;
-
-export const productControllerFindMineResponseDataMetaPageSizeMax = 9007199254740991;
-
-export const productControllerFindMineResponseDataMetaTotalMin = 0;
-export const productControllerFindMineResponseDataMetaTotalMax = 9007199254740991;
-
-export const productControllerFindMineResponseDataMetaTotalPageMin = 0;
-export const productControllerFindMineResponseDataMetaTotalPageMax = 9007199254740991;
+export const productControllerFindMineResponseDataMetaSortByItemMin = 2;
+export const productControllerFindMineResponseDataMetaSortByItemMax = 2;
 
 export const ProductControllerFindMineResponse = zod.object({
   statusCode: zod.literal(200),
   message: zod.string(),
   data: zod.object({
-    items: zod.array(
+    data: zod.array(
       zod.object({
         id: zod
           .uuid()
-          .regex(productControllerFindMineResponseDataItemsItemIdRegExp),
+          .regex(productControllerFindMineResponseDataDataItemIdRegExp),
         categoryId: zod
           .uuid()
-          .regex(productControllerFindMineResponseDataItemsItemCategoryIdRegExp)
-          .nullable(),
-        sellerUserId: zod
-          .uuid()
-          .regex(
-            productControllerFindMineResponseDataItemsItemSellerUserIdRegExp,
-          )
+          .regex(productControllerFindMineResponseDataDataItemCategoryIdRegExp)
           .nullable(),
         shopId: zod
           .uuid()
-          .regex(productControllerFindMineResponseDataItemsItemShopIdRegExp)
-          .nullable(),
+          .regex(productControllerFindMineResponseDataDataItemShopIdRegExp),
         title: zod.string().nullable(),
         description: zod.string().nullable(),
         condition: zod
@@ -1295,141 +1072,112 @@ export const ProductControllerFindMineResponse = zod.object({
         brand: zod.string().nullable(),
         price: zod
           .int()
-          .min(productControllerFindMineResponseDataItemsItemPriceMin)
-          .max(productControllerFindMineResponseDataItemsItemPriceMax)
+          .min(productControllerFindMineResponseDataDataItemPriceMin)
+          .max(productControllerFindMineResponseDataDataItemPriceMax)
           .nullable(),
         measurements: zod.object({
           chest: zod
             .number()
             .gt(
-              productControllerFindMineResponseDataItemsItemMeasurementsChestExclusiveMin,
+              productControllerFindMineResponseDataDataItemMeasurementsChestExclusiveMin,
             )
             .max(
-              productControllerFindMineResponseDataItemsItemMeasurementsChestMax,
+              productControllerFindMineResponseDataDataItemMeasurementsChestMax,
             )
             .optional(),
           waist: zod
             .number()
             .gt(
-              productControllerFindMineResponseDataItemsItemMeasurementsWaistExclusiveMin,
+              productControllerFindMineResponseDataDataItemMeasurementsWaistExclusiveMin,
             )
             .max(
-              productControllerFindMineResponseDataItemsItemMeasurementsWaistMax,
+              productControllerFindMineResponseDataDataItemMeasurementsWaistMax,
             )
             .optional(),
           hip: zod
             .number()
             .gt(
-              productControllerFindMineResponseDataItemsItemMeasurementsHipExclusiveMin,
+              productControllerFindMineResponseDataDataItemMeasurementsHipExclusiveMin,
             )
             .max(
-              productControllerFindMineResponseDataItemsItemMeasurementsHipMax,
+              productControllerFindMineResponseDataDataItemMeasurementsHipMax,
             )
             .optional(),
           length: zod
             .number()
             .gt(
-              productControllerFindMineResponseDataItemsItemMeasurementsLengthExclusiveMin,
+              productControllerFindMineResponseDataDataItemMeasurementsLengthExclusiveMin,
             )
             .max(
-              productControllerFindMineResponseDataItemsItemMeasurementsLengthMax,
+              productControllerFindMineResponseDataDataItemMeasurementsLengthMax,
             )
             .optional(),
           shoulder: zod
             .number()
             .gt(
-              productControllerFindMineResponseDataItemsItemMeasurementsShoulderExclusiveMin,
+              productControllerFindMineResponseDataDataItemMeasurementsShoulderExclusiveMin,
             )
             .max(
-              productControllerFindMineResponseDataItemsItemMeasurementsShoulderMax,
+              productControllerFindMineResponseDataDataItemMeasurementsShoulderMax,
             )
             .optional(),
           sleeve: zod
             .number()
             .gt(
-              productControllerFindMineResponseDataItemsItemMeasurementsSleeveExclusiveMin,
+              productControllerFindMineResponseDataDataItemMeasurementsSleeveExclusiveMin,
             )
             .max(
-              productControllerFindMineResponseDataItemsItemMeasurementsSleeveMax,
+              productControllerFindMineResponseDataDataItemMeasurementsSleeveMax,
             )
             .optional(),
           inseam: zod
             .number()
             .gt(
-              productControllerFindMineResponseDataItemsItemMeasurementsInseamExclusiveMin,
+              productControllerFindMineResponseDataDataItemMeasurementsInseamExclusiveMin,
             )
             .max(
-              productControllerFindMineResponseDataItemsItemMeasurementsInseamMax,
+              productControllerFindMineResponseDataDataItemMeasurementsInseamMax,
             )
             .optional(),
         }),
         shippingPackage: zod
           .object({
-            weight: zod.union([
-              zod.object({
-                mode: zod.enum(['RANGE']),
-                preset: zod.enum([
-                  'UP_TO_250_G',
-                  'UP_TO_500_G',
-                  'UP_TO_1000_G',
-                  'UP_TO_2000_G',
-                  'UP_TO_5000_G',
-                ]),
-              }),
-              zod.object({
-                mode: zod.enum(['CUSTOM']),
-                grams: zod
-                  .int()
-                  .gt(
-                    productControllerFindMineResponseDataItemsItemShippingPackageWeightTwoGramsExclusiveMin,
-                  )
-                  .max(
-                    productControllerFindMineResponseDataItemsItemShippingPackageWeightTwoGramsMax,
-                  ),
-              }),
-            ]),
-            size: zod.union([
-              zod.object({
-                mode: zod.enum(['RANGE']),
-                preset: zod.enum([
-                  'BOX_20_15_10_CM',
-                  'BOX_30_20_15_CM',
-                  'BOX_40_30_20_CM',
-                  'BOX_50_40_30_CM',
-                ]),
-              }),
-              zod.object({
-                mode: zod.enum(['CUSTOM']),
-                lengthCm: zod
-                  .number()
-                  .gt(
-                    productControllerFindMineResponseDataItemsItemShippingPackageSizeTwoLengthCmExclusiveMin,
-                  )
-                  .max(
-                    productControllerFindMineResponseDataItemsItemShippingPackageSizeTwoLengthCmMax,
-                  ),
-                widthCm: zod
-                  .number()
-                  .gt(
-                    productControllerFindMineResponseDataItemsItemShippingPackageSizeTwoWidthCmExclusiveMin,
-                  )
-                  .max(
-                    productControllerFindMineResponseDataItemsItemShippingPackageSizeTwoWidthCmMax,
-                  ),
-                heightCm: zod
-                  .number()
-                  .gt(
-                    productControllerFindMineResponseDataItemsItemShippingPackageSizeTwoHeightCmExclusiveMin,
-                  )
-                  .max(
-                    productControllerFindMineResponseDataItemsItemShippingPackageSizeTwoHeightCmMax,
-                  ),
-              }),
-            ]),
+            weightGrams: zod
+              .int()
+              .gt(
+                productControllerFindMineResponseDataDataItemShippingPackageWeightGramsExclusiveMin,
+              )
+              .max(
+                productControllerFindMineResponseDataDataItemShippingPackageWeightGramsMax,
+              ),
+            lengthCm: zod
+              .number()
+              .gt(
+                productControllerFindMineResponseDataDataItemShippingPackageLengthCmExclusiveMin,
+              )
+              .max(
+                productControllerFindMineResponseDataDataItemShippingPackageLengthCmMax,
+              ),
+            widthCm: zod
+              .number()
+              .gt(
+                productControllerFindMineResponseDataDataItemShippingPackageWidthCmExclusiveMin,
+              )
+              .max(
+                productControllerFindMineResponseDataDataItemShippingPackageWidthCmMax,
+              ),
+            heightCm: zod
+              .number()
+              .gt(
+                productControllerFindMineResponseDataDataItemShippingPackageHeightCmExclusiveMin,
+              )
+              .max(
+                productControllerFindMineResponseDataDataItemShippingPackageHeightCmMax,
+              ),
           })
           .nullable()
           .default(
-            productControllerFindMineResponseDataItemsItemShippingPackageDefault,
+            productControllerFindMineResponseDataDataItemShippingPackageDefault,
           ),
         repairs: zod.string().nullable(),
         defects: zod.array(
@@ -1438,42 +1186,27 @@ export const ProductControllerFindMineResponse = zod.object({
               .string()
               .min(1)
               .max(
-                productControllerFindMineResponseDataItemsItemDefectsItemDescriptionMax,
+                productControllerFindMineResponseDataDataItemDefectsItemDescriptionMax,
               ),
             mediaIds: zod
               .array(
                 zod
                   .uuid()
                   .regex(
-                    productControllerFindMineResponseDataItemsItemDefectsItemMediaIdsItemRegExp,
+                    productControllerFindMineResponseDataDataItemDefectsItemMediaIdsItemRegExp,
                   ),
               )
               .min(1)
               .max(
-                productControllerFindMineResponseDataItemsItemDefectsItemMediaIdsMax,
+                productControllerFindMineResponseDataDataItemDefectsItemMediaIdsMax,
               ),
           }),
         ),
-        revision: zod
-          .int()
-          .gt(
-            productControllerFindMineResponseDataItemsItemRevisionExclusiveMin,
-          )
-          .max(productControllerFindMineResponseDataItemsItemRevisionMax),
-        approvedRevision: zod
-          .int()
-          .gt(
-            productControllerFindMineResponseDataItemsItemApprovedRevisionExclusiveMin,
-          )
-          .max(
-            productControllerFindMineResponseDataItemsItemApprovedRevisionMax,
-          )
-          .nullable(),
         coverUrl: zod.url().nullable(),
         mediaCount: zod
           .int()
-          .min(productControllerFindMineResponseDataItemsItemMediaCountMin)
-          .max(productControllerFindMineResponseDataItemsItemMediaCountMax),
+          .min(productControllerFindMineResponseDataDataItemMediaCountMin)
+          .max(productControllerFindMineResponseDataDataItemMediaCountMax),
         status: zod.enum([
           'DRAFT',
           'PENDING_REVIEW',
@@ -1486,76 +1219,76 @@ export const ProductControllerFindMineResponse = zod.object({
         ]),
         publishedAt: zod.iso
           .datetime({ offset: true })
-          .regex(
-            productControllerFindMineResponseDataItemsItemPublishedAtRegExp,
-          )
+          .regex(productControllerFindMineResponseDataDataItemPublishedAtRegExp)
           .nullable(),
         heldUntil: zod.iso
           .datetime({ offset: true })
-          .regex(productControllerFindMineResponseDataItemsItemHeldUntilRegExp)
+          .regex(productControllerFindMineResponseDataDataItemHeldUntilRegExp)
           .nullable(),
         soldAt: zod.iso
           .datetime({ offset: true })
-          .regex(productControllerFindMineResponseDataItemsItemSoldAtRegExp)
+          .regex(productControllerFindMineResponseDataDataItemSoldAtRegExp)
           .nullable(),
         createdAt: zod.iso
           .datetime({ offset: true })
-          .regex(productControllerFindMineResponseDataItemsItemCreatedAtRegExp),
+          .regex(productControllerFindMineResponseDataDataItemCreatedAtRegExp),
         updatedAt: zod.iso
           .datetime({ offset: true })
-          .regex(productControllerFindMineResponseDataItemsItemUpdatedAtRegExp),
+          .regex(productControllerFindMineResponseDataDataItemUpdatedAtRegExp),
         category: zod
           .object({
             id: zod
               .uuid()
               .regex(
-                productControllerFindMineResponseDataItemsItemCategoryIdRegExpOne,
+                productControllerFindMineResponseDataDataItemCategoryIdRegExpOne,
               ),
             name: zod.string(),
             slug: zod.string(),
           })
           .nullable(),
-        seller: zod
-          .object({
-            id: zod
-              .uuid()
-              .regex(
-                productControllerFindMineResponseDataItemsItemSellerIdRegExp,
-              ),
-            fullName: zod.string(),
-          })
-          .nullable(),
-        shop: zod
-          .object({
-            id: zod
-              .uuid()
-              .regex(
-                productControllerFindMineResponseDataItemsItemShopIdRegExpOne,
-              ),
-            name: zod.string(),
-          })
-          .nullable(),
+        shop: zod.object({
+          id: zod
+            .uuid()
+            .regex(
+              productControllerFindMineResponseDataDataItemShopIdRegExpOne,
+            ),
+          name: zod.string(),
+        }),
       }),
     ),
     meta: zod.object({
-      page: zod
-        .int()
-        .min(1)
-        .max(productControllerFindMineResponseDataMetaPageMax),
-      pageSize: zod
-        .int()
-        .min(1)
-        .max(productControllerFindMineResponseDataMetaPageSizeMax),
-      total: zod
-        .int()
-        .min(productControllerFindMineResponseDataMetaTotalMin)
-        .max(productControllerFindMineResponseDataMetaTotalMax),
-      totalPage: zod
-        .int()
-        .min(productControllerFindMineResponseDataMetaTotalPageMin)
-        .max(productControllerFindMineResponseDataMetaTotalPageMax),
-      hasNextPage: zod.boolean(),
-      hasPreviousPage: zod.boolean(),
+      itemsPerPage: zod.number(),
+      totalItems: zod.number().optional(),
+      currentPage: zod.number().optional(),
+      totalPages: zod.number().optional(),
+      sortBy: zod.array(
+        zod
+          .array(
+            zod.union([
+              zod.union([zod.string(), zod.array(zod.string())]),
+              zod.string(),
+            ]),
+          )
+          .min(productControllerFindMineResponseDataMetaSortByItemMin)
+          .max(productControllerFindMineResponseDataMetaSortByItemMax),
+      ),
+      searchBy: zod.array(zod.string()).optional(),
+      search: zod.string().optional(),
+      select: zod.array(zod.string()).optional(),
+      filter: zod
+        .record(
+          zod.string(),
+          zod.union([zod.string(), zod.array(zod.string())]),
+        )
+        .optional(),
+      cursor: zod.string().optional(),
+    }),
+    links: zod.object({
+      first: zod.string().optional(),
+      previous: zod.string().optional(),
+      current: zod.string(),
+      next: zod.string().optional(),
+      last: zod.string().optional(),
     }),
   }),
 });
@@ -1572,10 +1305,6 @@ export const productControllerFindManagedResponseDataIdRegExp = new RegExp(
   '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
 );
 export const productControllerFindManagedResponseDataCategoryIdRegExp =
-  new RegExp(
-    '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
-  );
-export const productControllerFindManagedResponseDataSellerUserIdRegExp =
   new RegExp(
     '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
   );
@@ -1606,17 +1335,17 @@ export const productControllerFindManagedResponseDataMeasurementsSleeveMax = 500
 export const productControllerFindManagedResponseDataMeasurementsInseamExclusiveMin = 0;
 export const productControllerFindManagedResponseDataMeasurementsInseamMax = 500;
 
-export const productControllerFindManagedResponseDataShippingPackageWeightTwoGramsExclusiveMin = 0;
-export const productControllerFindManagedResponseDataShippingPackageWeightTwoGramsMax = 50000;
+export const productControllerFindManagedResponseDataShippingPackageWeightGramsExclusiveMin = 0;
+export const productControllerFindManagedResponseDataShippingPackageWeightGramsMax = 50000;
 
-export const productControllerFindManagedResponseDataShippingPackageSizeTwoLengthCmExclusiveMin = 0;
-export const productControllerFindManagedResponseDataShippingPackageSizeTwoLengthCmMax = 200;
+export const productControllerFindManagedResponseDataShippingPackageLengthCmExclusiveMin = 0;
+export const productControllerFindManagedResponseDataShippingPackageLengthCmMax = 200;
 
-export const productControllerFindManagedResponseDataShippingPackageSizeTwoWidthCmExclusiveMin = 0;
-export const productControllerFindManagedResponseDataShippingPackageSizeTwoWidthCmMax = 200;
+export const productControllerFindManagedResponseDataShippingPackageWidthCmExclusiveMin = 0;
+export const productControllerFindManagedResponseDataShippingPackageWidthCmMax = 200;
 
-export const productControllerFindManagedResponseDataShippingPackageSizeTwoHeightCmExclusiveMin = 0;
-export const productControllerFindManagedResponseDataShippingPackageSizeTwoHeightCmMax = 200;
+export const productControllerFindManagedResponseDataShippingPackageHeightCmExclusiveMin = 0;
+export const productControllerFindManagedResponseDataShippingPackageHeightCmMax = 200;
 
 export const productControllerFindManagedResponseDataShippingPackageDefault =
   null;
@@ -1627,12 +1356,6 @@ export const productControllerFindManagedResponseDataDefectsItemMediaIdsItemRegE
     '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
   );
 export const productControllerFindManagedResponseDataDefectsItemMediaIdsMax = 10;
-
-export const productControllerFindManagedResponseDataRevisionExclusiveMin = 0;
-export const productControllerFindManagedResponseDataRevisionMax = 9007199254740991;
-
-export const productControllerFindManagedResponseDataApprovedRevisionExclusiveMin = 0;
-export const productControllerFindManagedResponseDataApprovedRevisionMax = 9007199254740991;
 
 export const productControllerFindManagedResponseDataMediaCountMin = 0;
 export const productControllerFindManagedResponseDataMediaCountMax = 9007199254740991;
@@ -1660,10 +1383,6 @@ export const productControllerFindManagedResponseDataCategoryIdRegExpOne =
   new RegExp(
     '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
   );
-export const productControllerFindManagedResponseDataSellerIdRegExp =
-  new RegExp(
-    '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
-  );
 export const productControllerFindManagedResponseDataShopIdRegExpOne =
   new RegExp(
     '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
@@ -1678,14 +1397,9 @@ export const ProductControllerFindManagedResponse = zod.object({
       .uuid()
       .regex(productControllerFindManagedResponseDataCategoryIdRegExp)
       .nullable(),
-    sellerUserId: zod
-      .uuid()
-      .regex(productControllerFindManagedResponseDataSellerUserIdRegExp)
-      .nullable(),
     shopId: zod
       .uuid()
-      .regex(productControllerFindManagedResponseDataShopIdRegExp)
-      .nullable(),
+      .regex(productControllerFindManagedResponseDataShopIdRegExp),
     title: zod.string().nullable(),
     description: zod.string().nullable(),
     condition: zod
@@ -1756,67 +1470,38 @@ export const ProductControllerFindManagedResponse = zod.object({
     }),
     shippingPackage: zod
       .object({
-        weight: zod.union([
-          zod.object({
-            mode: zod.enum(['RANGE']),
-            preset: zod.enum([
-              'UP_TO_250_G',
-              'UP_TO_500_G',
-              'UP_TO_1000_G',
-              'UP_TO_2000_G',
-              'UP_TO_5000_G',
-            ]),
-          }),
-          zod.object({
-            mode: zod.enum(['CUSTOM']),
-            grams: zod
-              .int()
-              .gt(
-                productControllerFindManagedResponseDataShippingPackageWeightTwoGramsExclusiveMin,
-              )
-              .max(
-                productControllerFindManagedResponseDataShippingPackageWeightTwoGramsMax,
-              ),
-          }),
-        ]),
-        size: zod.union([
-          zod.object({
-            mode: zod.enum(['RANGE']),
-            preset: zod.enum([
-              'BOX_20_15_10_CM',
-              'BOX_30_20_15_CM',
-              'BOX_40_30_20_CM',
-              'BOX_50_40_30_CM',
-            ]),
-          }),
-          zod.object({
-            mode: zod.enum(['CUSTOM']),
-            lengthCm: zod
-              .number()
-              .gt(
-                productControllerFindManagedResponseDataShippingPackageSizeTwoLengthCmExclusiveMin,
-              )
-              .max(
-                productControllerFindManagedResponseDataShippingPackageSizeTwoLengthCmMax,
-              ),
-            widthCm: zod
-              .number()
-              .gt(
-                productControllerFindManagedResponseDataShippingPackageSizeTwoWidthCmExclusiveMin,
-              )
-              .max(
-                productControllerFindManagedResponseDataShippingPackageSizeTwoWidthCmMax,
-              ),
-            heightCm: zod
-              .number()
-              .gt(
-                productControllerFindManagedResponseDataShippingPackageSizeTwoHeightCmExclusiveMin,
-              )
-              .max(
-                productControllerFindManagedResponseDataShippingPackageSizeTwoHeightCmMax,
-              ),
-          }),
-        ]),
+        weightGrams: zod
+          .int()
+          .gt(
+            productControllerFindManagedResponseDataShippingPackageWeightGramsExclusiveMin,
+          )
+          .max(
+            productControllerFindManagedResponseDataShippingPackageWeightGramsMax,
+          ),
+        lengthCm: zod
+          .number()
+          .gt(
+            productControllerFindManagedResponseDataShippingPackageLengthCmExclusiveMin,
+          )
+          .max(
+            productControllerFindManagedResponseDataShippingPackageLengthCmMax,
+          ),
+        widthCm: zod
+          .number()
+          .gt(
+            productControllerFindManagedResponseDataShippingPackageWidthCmExclusiveMin,
+          )
+          .max(
+            productControllerFindManagedResponseDataShippingPackageWidthCmMax,
+          ),
+        heightCm: zod
+          .number()
+          .gt(
+            productControllerFindManagedResponseDataShippingPackageHeightCmExclusiveMin,
+          )
+          .max(
+            productControllerFindManagedResponseDataShippingPackageHeightCmMax,
+          ),
       })
       .nullable()
       .default(productControllerFindManagedResponseDataShippingPackageDefault),
@@ -1841,15 +1526,6 @@ export const ProductControllerFindManagedResponse = zod.object({
           .max(productControllerFindManagedResponseDataDefectsItemMediaIdsMax),
       }),
     ),
-    revision: zod
-      .int()
-      .gt(productControllerFindManagedResponseDataRevisionExclusiveMin)
-      .max(productControllerFindManagedResponseDataRevisionMax),
-    approvedRevision: zod
-      .int()
-      .gt(productControllerFindManagedResponseDataApprovedRevisionExclusiveMin)
-      .max(productControllerFindManagedResponseDataApprovedRevisionMax)
-      .nullable(),
     coverUrl: zod.url().nullable(),
     mediaCount: zod
       .int()
@@ -1892,347 +1568,255 @@ export const ProductControllerFindManagedResponse = zod.object({
         slug: zod.string(),
       })
       .nullable(),
-    seller: zod
-      .object({
-        id: zod
-          .uuid()
-          .regex(productControllerFindManagedResponseDataSellerIdRegExp),
-        fullName: zod.string(),
-      })
-      .nullable(),
-    shop: zod
-      .object({
-        id: zod
-          .uuid()
-          .regex(productControllerFindManagedResponseDataShopIdRegExpOne),
-        name: zod.string(),
-      })
-      .nullable(),
+    shop: zod.object({
+      id: zod
+        .uuid()
+        .regex(productControllerFindManagedResponseDataShopIdRegExpOne),
+      name: zod.string(),
+    }),
   }),
 });
 
-export const productControllerRevisionsPathIdRegExp = new RegExp(
+export const productControllerModerationForOwnerPathIdRegExp = new RegExp(
   '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
 );
 
-export const ProductControllerRevisionsParams = zod.object({
-  id: zod.uuid().regex(productControllerRevisionsPathIdRegExp),
+export const ProductControllerModerationForOwnerParams = zod.object({
+  id: zod.uuid().regex(productControllerModerationForOwnerPathIdRegExp),
 });
 
-export const productControllerRevisionsResponseDataItemIdRegExp = new RegExp(
-  '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
-);
-export const productControllerRevisionsResponseDataItemProductIdRegExp =
+export const productControllerModerationForOwnerResponseDataProductIdRegExp =
   new RegExp(
     '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
   );
-export const productControllerRevisionsResponseDataItemRevisionMin =
-  -9007199254740991;
-export const productControllerRevisionsResponseDataItemRevisionMax = 9007199254740991;
+export const productControllerModerationForOwnerResponseDataVersionExclusiveMin = 0;
+export const productControllerModerationForOwnerResponseDataVersionMax = 9007199254740991;
 
-export const productControllerRevisionsResponseDataItemSubmittedByIdRegExp =
-  new RegExp(
-    '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
-  );
-export const productControllerRevisionsResponseDataItemReviewedByIdRegExp =
-  new RegExp(
-    '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
-  );
-export const productControllerRevisionsResponseDataItemReviewedAtRegExp =
-  new RegExp(
-    '^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$',
-  );
-export const productControllerRevisionsResponseDataItemCreatedAtRegExp =
-  new RegExp(
-    '^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$',
-  );
-export const productControllerRevisionsResponseDataItemUpdatedAtRegExp =
-  new RegExp(
-    '^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$',
-  );
-
-export const ProductControllerRevisionsResponse = zod.object({
+export const ProductControllerModerationForOwnerResponse = zod.object({
   statusCode: zod.literal(200),
   message: zod.string(),
-  data: zod.array(
-    zod.object({
-      id: zod.uuid().regex(productControllerRevisionsResponseDataItemIdRegExp),
-      productId: zod
-        .uuid()
-        .regex(productControllerRevisionsResponseDataItemProductIdRegExp),
-      revision: zod
-        .int()
-        .min(productControllerRevisionsResponseDataItemRevisionMin)
-        .max(productControllerRevisionsResponseDataItemRevisionMax),
-      snapshot: zod.record(zod.string(), zod.unknown()),
-      submittedById: zod
-        .uuid()
-        .regex(productControllerRevisionsResponseDataItemSubmittedByIdRegExp),
-      decision: zod.enum(['PENDING', 'APPROVED', 'REJECTED', 'SUPERSEDED']),
-      reviewedById: zod
-        .uuid()
-        .regex(productControllerRevisionsResponseDataItemReviewedByIdRegExp)
-        .nullable(),
-      reason: zod.string().nullable(),
-      reviewedAt: zod.iso
-        .datetime({ offset: true })
-        .regex(productControllerRevisionsResponseDataItemReviewedAtRegExp)
-        .nullable(),
-      createdAt: zod.iso
-        .datetime({ offset: true })
-        .regex(productControllerRevisionsResponseDataItemCreatedAtRegExp),
-      updatedAt: zod.iso
-        .datetime({ offset: true })
-        .regex(productControllerRevisionsResponseDataItemUpdatedAtRegExp),
-    }),
-  ),
+  data: zod.object({
+    productId: zod
+      .uuid()
+      .regex(productControllerModerationForOwnerResponseDataProductIdRegExp),
+    status: zod.enum([
+      'DRAFT',
+      'PENDING',
+      'APPROVED',
+      'REJECTED',
+      'CANCELLED',
+      'SUSPENDED',
+    ]),
+    version: zod
+      .int()
+      .gt(productControllerModerationForOwnerResponseDataVersionExclusiveMin)
+      .max(productControllerModerationForOwnerResponseDataVersionMax),
+    reason: zod.string().nullable(),
+  }),
 });
-
-export const productControllerReviewQueueQueryPageOneRegExp = new RegExp(
-  '^\\d+$',
-);
-export const productControllerReviewQueueQueryPageSizeOneRegExp = new RegExp(
-  '^\\d+$',
-);
-export const productControllerReviewQueueQueryOrderDefault = `DESC`;
-export const productControllerReviewQueueQuerySearchMax = 150;
-
-export const productControllerReviewQueueQueryCategoryIdRegExp = new RegExp(
-  '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
-);
-export const productControllerReviewQueueQueryShopIdRegExp = new RegExp(
-  '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
-);
-export const productControllerReviewQueueQuerySellerUserIdRegExp = new RegExp(
-  '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
-);
-export const productControllerReviewQueueQuerySizeMax = 50;
-
-export const productControllerReviewQueueQueryColorMax = 50;
-
-export const productControllerReviewQueueQueryBrandMax = 100;
-
-export const productControllerReviewQueueQueryMinPriceOneRegExp = new RegExp(
-  '^\\d+$',
-);
-export const productControllerReviewQueueQueryMaxPriceOneRegExp = new RegExp(
-  '^\\d+$',
-);
 
 export const ProductControllerReviewQueueQueryParams = zod.object({
   page: zod
-    .union([
-      zod.string().regex(productControllerReviewQueueQueryPageOneRegExp),
-      zod.number(),
-    ])
-    .optional(),
-  pageSize: zod
-    .union([
-      zod.string().regex(productControllerReviewQueueQueryPageSizeOneRegExp),
-      zod.number(),
-    ])
-    .optional(),
-  order: zod
-    .enum(['ASC', 'DESC'])
-    .default(productControllerReviewQueueQueryOrderDefault),
-  sortBy: zod.string().optional(),
+    .number()
+    .optional()
+    .describe(
+      'Page number to retrieve. If you provide invalid value the default page number will applied\n\n**Example:** 1\n\n\n**Default Value:** 1\n\n',
+    ),
+  limit: zod
+    .number()
+    .optional()
+    .describe(
+      'Number of records per page.\n\n\n**Example:** 20\n\n\n\n**Default Value:** 10\n\n\n\n**Max Value:** 100\n\n\nIf provided value is greater than max value, max value will be applied.\n',
+    ),
+  'filter.categoryId': zod
+    .array(zod.string())
+    .optional()
+    .describe(
+      'Filter by categoryId query param.\n\n**Format:** filter.categoryId={$not}:OPERATION:VALUE\n\n\n\n**Example:** filter.categoryId=$eq:John Doe\n\n**Available Operations**\n- $eq\n\n- $and\n\n- $or',
+    ),
+  'filter.shopId': zod
+    .array(zod.string())
+    .optional()
+    .describe(
+      'Filter by shopId query param.\n\n**Format:** filter.shopId={$not}:OPERATION:VALUE\n\n\n\n**Example:** filter.shopId=$eq:John Doe\n\n**Available Operations**\n- $eq\n\n- $and\n\n- $or',
+    ),
+  'filter.condition': zod
+    .array(zod.string())
+    .optional()
+    .describe(
+      'Filter by condition query param.\n\n**Format:** filter.condition={$not}:OPERATION:VALUE\n\n\n\n**Example:** filter.condition=$eq:John Doe\n\n**Available Operations**\n- $eq\n\n- $and\n\n- $or',
+    ),
+  'filter.status': zod
+    .array(zod.string())
+    .optional()
+    .describe(
+      'Filter by status query param.\n\n**Format:** filter.status={$not}:OPERATION:VALUE\n\n\n\n**Example:** filter.status=$eq:John Doe\n\n**Available Operations**\n- $eq\n\n- $and\n\n- $or',
+    ),
+  'filter.size': zod
+    .array(zod.string())
+    .optional()
+    .describe(
+      'Filter by size query param.\n\n**Format:** filter.size={$not}:OPERATION:VALUE\n\n\n\n**Example:** filter.size=$ilike:John Doe\n\n**Available Operations**\n- $ilike\n\n- $and\n\n- $or',
+    ),
+  'filter.color': zod
+    .array(zod.string())
+    .optional()
+    .describe(
+      'Filter by color query param.\n\n**Format:** filter.color={$not}:OPERATION:VALUE\n\n\n\n**Example:** filter.color=$ilike:John Doe\n\n**Available Operations**\n- $ilike\n\n- $and\n\n- $or',
+    ),
+  'filter.brand': zod
+    .array(zod.string())
+    .optional()
+    .describe(
+      'Filter by brand query param.\n\n**Format:** filter.brand={$not}:OPERATION:VALUE\n\n\n\n**Example:** filter.brand=$ilike:John Doe\n\n**Available Operations**\n- $ilike\n\n- $and\n\n- $or',
+    ),
+  'filter.price': zod
+    .array(zod.string())
+    .optional()
+    .describe(
+      'Filter by price query param.\n\n**Format:** filter.price={$not}:OPERATION:VALUE\n\n\n\n**Example:** filter.price=$gte:John Doe&filter.price=$lte:John Doe\n\n**Available Operations**\n- $gte\n\n- $lte\n\n- $and\n\n- $or',
+    ),
+  sortBy: zod
+    .array(
+      zod.enum([
+        'createdAt:ASC',
+        'createdAt:DESC',
+        'price:ASC',
+        'price:DESC',
+        'publishedAt:ASC',
+        'publishedAt:DESC',
+        'id:ASC',
+        'id:DESC',
+      ]),
+    )
+    .optional()
+    .describe(
+      'Parameter to sort by.\nTo sort by multiple fields, just provide query param multiple types. The order in url defines an order of sorting\n\n**Format:** {fieldName}:{DIRECTION}\n\n\n**Example:** sortBy=createdAt:DESC&sortBy=price:DESC\n\n\n**Default Value:** createdAt:DESC,id:DESC\n\n**Available Fields**\n- createdAt\n\n- price\n\n- publishedAt\n\n- id\n',
+    ),
   search: zod
     .string()
-    .min(1)
-    .max(productControllerReviewQueueQuerySearchMax)
-    .optional(),
-  categoryId: zod
-    .uuid()
-    .regex(productControllerReviewQueueQueryCategoryIdRegExp)
-    .optional(),
-  shopId: zod
-    .uuid()
-    .regex(productControllerReviewQueueQueryShopIdRegExp)
-    .optional(),
-  sellerUserId: zod
-    .uuid()
-    .regex(productControllerReviewQueueQuerySellerUserIdRegExp)
-    .optional(),
-  condition: zod.enum(['FAIR', 'GOOD', 'EXCELLENT', 'PRISTINE']).optional(),
-  size: zod
-    .string()
-    .min(1)
-    .max(productControllerReviewQueueQuerySizeMax)
-    .optional(),
-  color: zod
-    .string()
-    .min(1)
-    .max(productControllerReviewQueueQueryColorMax)
-    .optional(),
-  brand: zod
-    .string()
-    .min(1)
-    .max(productControllerReviewQueueQueryBrandMax)
-    .optional(),
-  minPrice: zod
-    .union([
-      zod.string().regex(productControllerReviewQueueQueryMinPriceOneRegExp),
-      zod.number(),
-    ])
-    .optional(),
-  maxPrice: zod
-    .union([
-      zod.string().regex(productControllerReviewQueueQueryMaxPriceOneRegExp),
-      zod.number(),
-    ])
-    .optional(),
-  status: zod
-    .enum([
-      'DRAFT',
-      'PENDING_REVIEW',
-      'REJECTED',
-      'SUSPENDED',
-      'ACTIVE',
-      'HELD',
-      'SOLD',
-      'HIDDEN',
-    ])
-    .optional(),
+    .optional()
+    .describe(
+      'Search term to filter result values\n\n**Example:** John\n\n\n**Default Value:** No default value\n\n',
+    ),
+  searchBy: zod
+    .array(zod.string())
+    .optional()
+    .describe(
+      'List of fields to search by term to filter result values\n\n**Example:** title,description,brand\n\n\n**Default Value:** By default all fields mentioned below will be used to search by term\n\n**Available Fields**\n- title\n\n- description\n\n- brand\n',
+    ),
 });
 
-export const productControllerReviewQueueResponseDataItemsItemIdRegExp =
+export const productControllerReviewQueueResponseDataDataItemIdRegExp =
   new RegExp(
     '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
   );
-export const productControllerReviewQueueResponseDataItemsItemCategoryIdRegExp =
+export const productControllerReviewQueueResponseDataDataItemCategoryIdRegExp =
   new RegExp(
     '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
   );
-export const productControllerReviewQueueResponseDataItemsItemSellerUserIdRegExp =
+export const productControllerReviewQueueResponseDataDataItemShopIdRegExp =
   new RegExp(
     '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
   );
-export const productControllerReviewQueueResponseDataItemsItemShopIdRegExp =
-  new RegExp(
-    '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
-  );
-export const productControllerReviewQueueResponseDataItemsItemPriceMin = 0;
-export const productControllerReviewQueueResponseDataItemsItemPriceMax = 9007199254740991;
+export const productControllerReviewQueueResponseDataDataItemPriceMin = 0;
+export const productControllerReviewQueueResponseDataDataItemPriceMax = 9007199254740991;
 
-export const productControllerReviewQueueResponseDataItemsItemMeasurementsChestExclusiveMin = 0;
-export const productControllerReviewQueueResponseDataItemsItemMeasurementsChestMax = 500;
+export const productControllerReviewQueueResponseDataDataItemMeasurementsChestExclusiveMin = 0;
+export const productControllerReviewQueueResponseDataDataItemMeasurementsChestMax = 500;
 
-export const productControllerReviewQueueResponseDataItemsItemMeasurementsWaistExclusiveMin = 0;
-export const productControllerReviewQueueResponseDataItemsItemMeasurementsWaistMax = 500;
+export const productControllerReviewQueueResponseDataDataItemMeasurementsWaistExclusiveMin = 0;
+export const productControllerReviewQueueResponseDataDataItemMeasurementsWaistMax = 500;
 
-export const productControllerReviewQueueResponseDataItemsItemMeasurementsHipExclusiveMin = 0;
-export const productControllerReviewQueueResponseDataItemsItemMeasurementsHipMax = 500;
+export const productControllerReviewQueueResponseDataDataItemMeasurementsHipExclusiveMin = 0;
+export const productControllerReviewQueueResponseDataDataItemMeasurementsHipMax = 500;
 
-export const productControllerReviewQueueResponseDataItemsItemMeasurementsLengthExclusiveMin = 0;
-export const productControllerReviewQueueResponseDataItemsItemMeasurementsLengthMax = 500;
+export const productControllerReviewQueueResponseDataDataItemMeasurementsLengthExclusiveMin = 0;
+export const productControllerReviewQueueResponseDataDataItemMeasurementsLengthMax = 500;
 
-export const productControllerReviewQueueResponseDataItemsItemMeasurementsShoulderExclusiveMin = 0;
-export const productControllerReviewQueueResponseDataItemsItemMeasurementsShoulderMax = 500;
+export const productControllerReviewQueueResponseDataDataItemMeasurementsShoulderExclusiveMin = 0;
+export const productControllerReviewQueueResponseDataDataItemMeasurementsShoulderMax = 500;
 
-export const productControllerReviewQueueResponseDataItemsItemMeasurementsSleeveExclusiveMin = 0;
-export const productControllerReviewQueueResponseDataItemsItemMeasurementsSleeveMax = 500;
+export const productControllerReviewQueueResponseDataDataItemMeasurementsSleeveExclusiveMin = 0;
+export const productControllerReviewQueueResponseDataDataItemMeasurementsSleeveMax = 500;
 
-export const productControllerReviewQueueResponseDataItemsItemMeasurementsInseamExclusiveMin = 0;
-export const productControllerReviewQueueResponseDataItemsItemMeasurementsInseamMax = 500;
+export const productControllerReviewQueueResponseDataDataItemMeasurementsInseamExclusiveMin = 0;
+export const productControllerReviewQueueResponseDataDataItemMeasurementsInseamMax = 500;
 
-export const productControllerReviewQueueResponseDataItemsItemShippingPackageWeightTwoGramsExclusiveMin = 0;
-export const productControllerReviewQueueResponseDataItemsItemShippingPackageWeightTwoGramsMax = 50000;
+export const productControllerReviewQueueResponseDataDataItemShippingPackageWeightGramsExclusiveMin = 0;
+export const productControllerReviewQueueResponseDataDataItemShippingPackageWeightGramsMax = 50000;
 
-export const productControllerReviewQueueResponseDataItemsItemShippingPackageSizeTwoLengthCmExclusiveMin = 0;
-export const productControllerReviewQueueResponseDataItemsItemShippingPackageSizeTwoLengthCmMax = 200;
+export const productControllerReviewQueueResponseDataDataItemShippingPackageLengthCmExclusiveMin = 0;
+export const productControllerReviewQueueResponseDataDataItemShippingPackageLengthCmMax = 200;
 
-export const productControllerReviewQueueResponseDataItemsItemShippingPackageSizeTwoWidthCmExclusiveMin = 0;
-export const productControllerReviewQueueResponseDataItemsItemShippingPackageSizeTwoWidthCmMax = 200;
+export const productControllerReviewQueueResponseDataDataItemShippingPackageWidthCmExclusiveMin = 0;
+export const productControllerReviewQueueResponseDataDataItemShippingPackageWidthCmMax = 200;
 
-export const productControllerReviewQueueResponseDataItemsItemShippingPackageSizeTwoHeightCmExclusiveMin = 0;
-export const productControllerReviewQueueResponseDataItemsItemShippingPackageSizeTwoHeightCmMax = 200;
+export const productControllerReviewQueueResponseDataDataItemShippingPackageHeightCmExclusiveMin = 0;
+export const productControllerReviewQueueResponseDataDataItemShippingPackageHeightCmMax = 200;
 
-export const productControllerReviewQueueResponseDataItemsItemShippingPackageDefault =
+export const productControllerReviewQueueResponseDataDataItemShippingPackageDefault =
   null;
-export const productControllerReviewQueueResponseDataItemsItemDefectsItemDescriptionMax = 1000;
+export const productControllerReviewQueueResponseDataDataItemDefectsItemDescriptionMax = 1000;
 
-export const productControllerReviewQueueResponseDataItemsItemDefectsItemMediaIdsItemRegExp =
+export const productControllerReviewQueueResponseDataDataItemDefectsItemMediaIdsItemRegExp =
   new RegExp(
     '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
   );
-export const productControllerReviewQueueResponseDataItemsItemDefectsItemMediaIdsMax = 10;
+export const productControllerReviewQueueResponseDataDataItemDefectsItemMediaIdsMax = 10;
 
-export const productControllerReviewQueueResponseDataItemsItemRevisionExclusiveMin = 0;
-export const productControllerReviewQueueResponseDataItemsItemRevisionMax = 9007199254740991;
+export const productControllerReviewQueueResponseDataDataItemMediaCountMin = 0;
+export const productControllerReviewQueueResponseDataDataItemMediaCountMax = 9007199254740991;
 
-export const productControllerReviewQueueResponseDataItemsItemApprovedRevisionExclusiveMin = 0;
-export const productControllerReviewQueueResponseDataItemsItemApprovedRevisionMax = 9007199254740991;
-
-export const productControllerReviewQueueResponseDataItemsItemMediaCountMin = 0;
-export const productControllerReviewQueueResponseDataItemsItemMediaCountMax = 9007199254740991;
-
-export const productControllerReviewQueueResponseDataItemsItemPublishedAtRegExp =
+export const productControllerReviewQueueResponseDataDataItemPublishedAtRegExp =
   new RegExp(
     '^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$',
   );
-export const productControllerReviewQueueResponseDataItemsItemHeldUntilRegExp =
+export const productControllerReviewQueueResponseDataDataItemHeldUntilRegExp =
   new RegExp(
     '^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$',
   );
-export const productControllerReviewQueueResponseDataItemsItemSoldAtRegExp =
+export const productControllerReviewQueueResponseDataDataItemSoldAtRegExp =
   new RegExp(
     '^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$',
   );
-export const productControllerReviewQueueResponseDataItemsItemCreatedAtRegExp =
+export const productControllerReviewQueueResponseDataDataItemCreatedAtRegExp =
   new RegExp(
     '^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$',
   );
-export const productControllerReviewQueueResponseDataItemsItemUpdatedAtRegExp =
+export const productControllerReviewQueueResponseDataDataItemUpdatedAtRegExp =
   new RegExp(
     '^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$',
   );
-export const productControllerReviewQueueResponseDataItemsItemCategoryIdRegExpOne =
+export const productControllerReviewQueueResponseDataDataItemCategoryIdRegExpOne =
   new RegExp(
     '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
   );
-export const productControllerReviewQueueResponseDataItemsItemSellerIdRegExp =
+export const productControllerReviewQueueResponseDataDataItemShopIdRegExpOne =
   new RegExp(
     '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
   );
-export const productControllerReviewQueueResponseDataItemsItemShopIdRegExpOne =
-  new RegExp(
-    '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
-  );
-export const productControllerReviewQueueResponseDataMetaPageMax = 9007199254740991;
-
-export const productControllerReviewQueueResponseDataMetaPageSizeMax = 9007199254740991;
-
-export const productControllerReviewQueueResponseDataMetaTotalMin = 0;
-export const productControllerReviewQueueResponseDataMetaTotalMax = 9007199254740991;
-
-export const productControllerReviewQueueResponseDataMetaTotalPageMin = 0;
-export const productControllerReviewQueueResponseDataMetaTotalPageMax = 9007199254740991;
+export const productControllerReviewQueueResponseDataMetaSortByItemMin = 2;
+export const productControllerReviewQueueResponseDataMetaSortByItemMax = 2;
 
 export const ProductControllerReviewQueueResponse = zod.object({
   statusCode: zod.literal(200),
   message: zod.string(),
   data: zod.object({
-    items: zod.array(
+    data: zod.array(
       zod.object({
         id: zod
           .uuid()
-          .regex(productControllerReviewQueueResponseDataItemsItemIdRegExp),
+          .regex(productControllerReviewQueueResponseDataDataItemIdRegExp),
         categoryId: zod
           .uuid()
           .regex(
-            productControllerReviewQueueResponseDataItemsItemCategoryIdRegExp,
-          )
-          .nullable(),
-        sellerUserId: zod
-          .uuid()
-          .regex(
-            productControllerReviewQueueResponseDataItemsItemSellerUserIdRegExp,
+            productControllerReviewQueueResponseDataDataItemCategoryIdRegExp,
           )
           .nullable(),
         shopId: zod
           .uuid()
-          .regex(productControllerReviewQueueResponseDataItemsItemShopIdRegExp)
-          .nullable(),
+          .regex(productControllerReviewQueueResponseDataDataItemShopIdRegExp),
         title: zod.string().nullable(),
         description: zod.string().nullable(),
         condition: zod
@@ -2249,141 +1833,112 @@ export const ProductControllerReviewQueueResponse = zod.object({
         brand: zod.string().nullable(),
         price: zod
           .int()
-          .min(productControllerReviewQueueResponseDataItemsItemPriceMin)
-          .max(productControllerReviewQueueResponseDataItemsItemPriceMax)
+          .min(productControllerReviewQueueResponseDataDataItemPriceMin)
+          .max(productControllerReviewQueueResponseDataDataItemPriceMax)
           .nullable(),
         measurements: zod.object({
           chest: zod
             .number()
             .gt(
-              productControllerReviewQueueResponseDataItemsItemMeasurementsChestExclusiveMin,
+              productControllerReviewQueueResponseDataDataItemMeasurementsChestExclusiveMin,
             )
             .max(
-              productControllerReviewQueueResponseDataItemsItemMeasurementsChestMax,
+              productControllerReviewQueueResponseDataDataItemMeasurementsChestMax,
             )
             .optional(),
           waist: zod
             .number()
             .gt(
-              productControllerReviewQueueResponseDataItemsItemMeasurementsWaistExclusiveMin,
+              productControllerReviewQueueResponseDataDataItemMeasurementsWaistExclusiveMin,
             )
             .max(
-              productControllerReviewQueueResponseDataItemsItemMeasurementsWaistMax,
+              productControllerReviewQueueResponseDataDataItemMeasurementsWaistMax,
             )
             .optional(),
           hip: zod
             .number()
             .gt(
-              productControllerReviewQueueResponseDataItemsItemMeasurementsHipExclusiveMin,
+              productControllerReviewQueueResponseDataDataItemMeasurementsHipExclusiveMin,
             )
             .max(
-              productControllerReviewQueueResponseDataItemsItemMeasurementsHipMax,
+              productControllerReviewQueueResponseDataDataItemMeasurementsHipMax,
             )
             .optional(),
           length: zod
             .number()
             .gt(
-              productControllerReviewQueueResponseDataItemsItemMeasurementsLengthExclusiveMin,
+              productControllerReviewQueueResponseDataDataItemMeasurementsLengthExclusiveMin,
             )
             .max(
-              productControllerReviewQueueResponseDataItemsItemMeasurementsLengthMax,
+              productControllerReviewQueueResponseDataDataItemMeasurementsLengthMax,
             )
             .optional(),
           shoulder: zod
             .number()
             .gt(
-              productControllerReviewQueueResponseDataItemsItemMeasurementsShoulderExclusiveMin,
+              productControllerReviewQueueResponseDataDataItemMeasurementsShoulderExclusiveMin,
             )
             .max(
-              productControllerReviewQueueResponseDataItemsItemMeasurementsShoulderMax,
+              productControllerReviewQueueResponseDataDataItemMeasurementsShoulderMax,
             )
             .optional(),
           sleeve: zod
             .number()
             .gt(
-              productControllerReviewQueueResponseDataItemsItemMeasurementsSleeveExclusiveMin,
+              productControllerReviewQueueResponseDataDataItemMeasurementsSleeveExclusiveMin,
             )
             .max(
-              productControllerReviewQueueResponseDataItemsItemMeasurementsSleeveMax,
+              productControllerReviewQueueResponseDataDataItemMeasurementsSleeveMax,
             )
             .optional(),
           inseam: zod
             .number()
             .gt(
-              productControllerReviewQueueResponseDataItemsItemMeasurementsInseamExclusiveMin,
+              productControllerReviewQueueResponseDataDataItemMeasurementsInseamExclusiveMin,
             )
             .max(
-              productControllerReviewQueueResponseDataItemsItemMeasurementsInseamMax,
+              productControllerReviewQueueResponseDataDataItemMeasurementsInseamMax,
             )
             .optional(),
         }),
         shippingPackage: zod
           .object({
-            weight: zod.union([
-              zod.object({
-                mode: zod.enum(['RANGE']),
-                preset: zod.enum([
-                  'UP_TO_250_G',
-                  'UP_TO_500_G',
-                  'UP_TO_1000_G',
-                  'UP_TO_2000_G',
-                  'UP_TO_5000_G',
-                ]),
-              }),
-              zod.object({
-                mode: zod.enum(['CUSTOM']),
-                grams: zod
-                  .int()
-                  .gt(
-                    productControllerReviewQueueResponseDataItemsItemShippingPackageWeightTwoGramsExclusiveMin,
-                  )
-                  .max(
-                    productControllerReviewQueueResponseDataItemsItemShippingPackageWeightTwoGramsMax,
-                  ),
-              }),
-            ]),
-            size: zod.union([
-              zod.object({
-                mode: zod.enum(['RANGE']),
-                preset: zod.enum([
-                  'BOX_20_15_10_CM',
-                  'BOX_30_20_15_CM',
-                  'BOX_40_30_20_CM',
-                  'BOX_50_40_30_CM',
-                ]),
-              }),
-              zod.object({
-                mode: zod.enum(['CUSTOM']),
-                lengthCm: zod
-                  .number()
-                  .gt(
-                    productControllerReviewQueueResponseDataItemsItemShippingPackageSizeTwoLengthCmExclusiveMin,
-                  )
-                  .max(
-                    productControllerReviewQueueResponseDataItemsItemShippingPackageSizeTwoLengthCmMax,
-                  ),
-                widthCm: zod
-                  .number()
-                  .gt(
-                    productControllerReviewQueueResponseDataItemsItemShippingPackageSizeTwoWidthCmExclusiveMin,
-                  )
-                  .max(
-                    productControllerReviewQueueResponseDataItemsItemShippingPackageSizeTwoWidthCmMax,
-                  ),
-                heightCm: zod
-                  .number()
-                  .gt(
-                    productControllerReviewQueueResponseDataItemsItemShippingPackageSizeTwoHeightCmExclusiveMin,
-                  )
-                  .max(
-                    productControllerReviewQueueResponseDataItemsItemShippingPackageSizeTwoHeightCmMax,
-                  ),
-              }),
-            ]),
+            weightGrams: zod
+              .int()
+              .gt(
+                productControllerReviewQueueResponseDataDataItemShippingPackageWeightGramsExclusiveMin,
+              )
+              .max(
+                productControllerReviewQueueResponseDataDataItemShippingPackageWeightGramsMax,
+              ),
+            lengthCm: zod
+              .number()
+              .gt(
+                productControllerReviewQueueResponseDataDataItemShippingPackageLengthCmExclusiveMin,
+              )
+              .max(
+                productControllerReviewQueueResponseDataDataItemShippingPackageLengthCmMax,
+              ),
+            widthCm: zod
+              .number()
+              .gt(
+                productControllerReviewQueueResponseDataDataItemShippingPackageWidthCmExclusiveMin,
+              )
+              .max(
+                productControllerReviewQueueResponseDataDataItemShippingPackageWidthCmMax,
+              ),
+            heightCm: zod
+              .number()
+              .gt(
+                productControllerReviewQueueResponseDataDataItemShippingPackageHeightCmExclusiveMin,
+              )
+              .max(
+                productControllerReviewQueueResponseDataDataItemShippingPackageHeightCmMax,
+              ),
           })
           .nullable()
           .default(
-            productControllerReviewQueueResponseDataItemsItemShippingPackageDefault,
+            productControllerReviewQueueResponseDataDataItemShippingPackageDefault,
           ),
         repairs: zod.string().nullable(),
         defects: zod.array(
@@ -2392,42 +1947,27 @@ export const ProductControllerReviewQueueResponse = zod.object({
               .string()
               .min(1)
               .max(
-                productControllerReviewQueueResponseDataItemsItemDefectsItemDescriptionMax,
+                productControllerReviewQueueResponseDataDataItemDefectsItemDescriptionMax,
               ),
             mediaIds: zod
               .array(
                 zod
                   .uuid()
                   .regex(
-                    productControllerReviewQueueResponseDataItemsItemDefectsItemMediaIdsItemRegExp,
+                    productControllerReviewQueueResponseDataDataItemDefectsItemMediaIdsItemRegExp,
                   ),
               )
               .min(1)
               .max(
-                productControllerReviewQueueResponseDataItemsItemDefectsItemMediaIdsMax,
+                productControllerReviewQueueResponseDataDataItemDefectsItemMediaIdsMax,
               ),
           }),
         ),
-        revision: zod
-          .int()
-          .gt(
-            productControllerReviewQueueResponseDataItemsItemRevisionExclusiveMin,
-          )
-          .max(productControllerReviewQueueResponseDataItemsItemRevisionMax),
-        approvedRevision: zod
-          .int()
-          .gt(
-            productControllerReviewQueueResponseDataItemsItemApprovedRevisionExclusiveMin,
-          )
-          .max(
-            productControllerReviewQueueResponseDataItemsItemApprovedRevisionMax,
-          )
-          .nullable(),
         coverUrl: zod.url().nullable(),
         mediaCount: zod
           .int()
-          .min(productControllerReviewQueueResponseDataItemsItemMediaCountMin)
-          .max(productControllerReviewQueueResponseDataItemsItemMediaCountMax),
+          .min(productControllerReviewQueueResponseDataDataItemMediaCountMin)
+          .max(productControllerReviewQueueResponseDataDataItemMediaCountMax),
         status: zod.enum([
           'DRAFT',
           'PENDING_REVIEW',
@@ -2441,81 +1981,83 @@ export const ProductControllerReviewQueueResponse = zod.object({
         publishedAt: zod.iso
           .datetime({ offset: true })
           .regex(
-            productControllerReviewQueueResponseDataItemsItemPublishedAtRegExp,
+            productControllerReviewQueueResponseDataDataItemPublishedAtRegExp,
           )
           .nullable(),
         heldUntil: zod.iso
           .datetime({ offset: true })
           .regex(
-            productControllerReviewQueueResponseDataItemsItemHeldUntilRegExp,
+            productControllerReviewQueueResponseDataDataItemHeldUntilRegExp,
           )
           .nullable(),
         soldAt: zod.iso
           .datetime({ offset: true })
-          .regex(productControllerReviewQueueResponseDataItemsItemSoldAtRegExp)
+          .regex(productControllerReviewQueueResponseDataDataItemSoldAtRegExp)
           .nullable(),
         createdAt: zod.iso
           .datetime({ offset: true })
           .regex(
-            productControllerReviewQueueResponseDataItemsItemCreatedAtRegExp,
+            productControllerReviewQueueResponseDataDataItemCreatedAtRegExp,
           ),
         updatedAt: zod.iso
           .datetime({ offset: true })
           .regex(
-            productControllerReviewQueueResponseDataItemsItemUpdatedAtRegExp,
+            productControllerReviewQueueResponseDataDataItemUpdatedAtRegExp,
           ),
         category: zod
           .object({
             id: zod
               .uuid()
               .regex(
-                productControllerReviewQueueResponseDataItemsItemCategoryIdRegExpOne,
+                productControllerReviewQueueResponseDataDataItemCategoryIdRegExpOne,
               ),
             name: zod.string(),
             slug: zod.string(),
           })
           .nullable(),
-        seller: zod
-          .object({
-            id: zod
-              .uuid()
-              .regex(
-                productControllerReviewQueueResponseDataItemsItemSellerIdRegExp,
-              ),
-            fullName: zod.string(),
-          })
-          .nullable(),
-        shop: zod
-          .object({
-            id: zod
-              .uuid()
-              .regex(
-                productControllerReviewQueueResponseDataItemsItemShopIdRegExpOne,
-              ),
-            name: zod.string(),
-          })
-          .nullable(),
+        shop: zod.object({
+          id: zod
+            .uuid()
+            .regex(
+              productControllerReviewQueueResponseDataDataItemShopIdRegExpOne,
+            ),
+          name: zod.string(),
+        }),
       }),
     ),
     meta: zod.object({
-      page: zod
-        .int()
-        .min(1)
-        .max(productControllerReviewQueueResponseDataMetaPageMax),
-      pageSize: zod
-        .int()
-        .min(1)
-        .max(productControllerReviewQueueResponseDataMetaPageSizeMax),
-      total: zod
-        .int()
-        .min(productControllerReviewQueueResponseDataMetaTotalMin)
-        .max(productControllerReviewQueueResponseDataMetaTotalMax),
-      totalPage: zod
-        .int()
-        .min(productControllerReviewQueueResponseDataMetaTotalPageMin)
-        .max(productControllerReviewQueueResponseDataMetaTotalPageMax),
-      hasNextPage: zod.boolean(),
-      hasPreviousPage: zod.boolean(),
+      itemsPerPage: zod.number(),
+      totalItems: zod.number().optional(),
+      currentPage: zod.number().optional(),
+      totalPages: zod.number().optional(),
+      sortBy: zod.array(
+        zod
+          .array(
+            zod.union([
+              zod.union([zod.string(), zod.array(zod.string())]),
+              zod.string(),
+            ]),
+          )
+          .min(productControllerReviewQueueResponseDataMetaSortByItemMin)
+          .max(productControllerReviewQueueResponseDataMetaSortByItemMax),
+      ),
+      searchBy: zod.array(zod.string()).optional(),
+      search: zod.string().optional(),
+      select: zod.array(zod.string()).optional(),
+      filter: zod
+        .record(
+          zod.string(),
+          zod.union([zod.string(), zod.array(zod.string())]),
+        )
+        .optional(),
+      cursor: zod.string().optional(),
+    }),
+    links: zod.object({
+      first: zod.string().optional(),
+      previous: zod.string().optional(),
+      current: zod.string(),
+      next: zod.string().optional(),
+      last: zod.string().optional(),
     }),
   }),
 });
@@ -2532,10 +2074,6 @@ export const productControllerReviewDetailResponseDataIdRegExp = new RegExp(
   '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
 );
 export const productControllerReviewDetailResponseDataCategoryIdRegExp =
-  new RegExp(
-    '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
-  );
-export const productControllerReviewDetailResponseDataSellerUserIdRegExp =
   new RegExp(
     '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
   );
@@ -2566,17 +2104,17 @@ export const productControllerReviewDetailResponseDataMeasurementsSleeveMax = 50
 export const productControllerReviewDetailResponseDataMeasurementsInseamExclusiveMin = 0;
 export const productControllerReviewDetailResponseDataMeasurementsInseamMax = 500;
 
-export const productControllerReviewDetailResponseDataShippingPackageWeightTwoGramsExclusiveMin = 0;
-export const productControllerReviewDetailResponseDataShippingPackageWeightTwoGramsMax = 50000;
+export const productControllerReviewDetailResponseDataShippingPackageWeightGramsExclusiveMin = 0;
+export const productControllerReviewDetailResponseDataShippingPackageWeightGramsMax = 50000;
 
-export const productControllerReviewDetailResponseDataShippingPackageSizeTwoLengthCmExclusiveMin = 0;
-export const productControllerReviewDetailResponseDataShippingPackageSizeTwoLengthCmMax = 200;
+export const productControllerReviewDetailResponseDataShippingPackageLengthCmExclusiveMin = 0;
+export const productControllerReviewDetailResponseDataShippingPackageLengthCmMax = 200;
 
-export const productControllerReviewDetailResponseDataShippingPackageSizeTwoWidthCmExclusiveMin = 0;
-export const productControllerReviewDetailResponseDataShippingPackageSizeTwoWidthCmMax = 200;
+export const productControllerReviewDetailResponseDataShippingPackageWidthCmExclusiveMin = 0;
+export const productControllerReviewDetailResponseDataShippingPackageWidthCmMax = 200;
 
-export const productControllerReviewDetailResponseDataShippingPackageSizeTwoHeightCmExclusiveMin = 0;
-export const productControllerReviewDetailResponseDataShippingPackageSizeTwoHeightCmMax = 200;
+export const productControllerReviewDetailResponseDataShippingPackageHeightCmExclusiveMin = 0;
+export const productControllerReviewDetailResponseDataShippingPackageHeightCmMax = 200;
 
 export const productControllerReviewDetailResponseDataShippingPackageDefault =
   null;
@@ -2587,12 +2125,6 @@ export const productControllerReviewDetailResponseDataDefectsItemMediaIdsItemReg
     '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
   );
 export const productControllerReviewDetailResponseDataDefectsItemMediaIdsMax = 10;
-
-export const productControllerReviewDetailResponseDataRevisionExclusiveMin = 0;
-export const productControllerReviewDetailResponseDataRevisionMax = 9007199254740991;
-
-export const productControllerReviewDetailResponseDataApprovedRevisionExclusiveMin = 0;
-export const productControllerReviewDetailResponseDataApprovedRevisionMax = 9007199254740991;
 
 export const productControllerReviewDetailResponseDataMediaCountMin = 0;
 export const productControllerReviewDetailResponseDataMediaCountMax = 9007199254740991;
@@ -2620,10 +2152,6 @@ export const productControllerReviewDetailResponseDataCategoryIdRegExpOne =
   new RegExp(
     '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
   );
-export const productControllerReviewDetailResponseDataSellerIdRegExp =
-  new RegExp(
-    '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
-  );
 export const productControllerReviewDetailResponseDataShopIdRegExpOne =
   new RegExp(
     '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
@@ -2638,14 +2166,9 @@ export const ProductControllerReviewDetailResponse = zod.object({
       .uuid()
       .regex(productControllerReviewDetailResponseDataCategoryIdRegExp)
       .nullable(),
-    sellerUserId: zod
-      .uuid()
-      .regex(productControllerReviewDetailResponseDataSellerUserIdRegExp)
-      .nullable(),
     shopId: zod
       .uuid()
-      .regex(productControllerReviewDetailResponseDataShopIdRegExp)
-      .nullable(),
+      .regex(productControllerReviewDetailResponseDataShopIdRegExp),
     title: zod.string().nullable(),
     description: zod.string().nullable(),
     condition: zod
@@ -2718,67 +2241,38 @@ export const ProductControllerReviewDetailResponse = zod.object({
     }),
     shippingPackage: zod
       .object({
-        weight: zod.union([
-          zod.object({
-            mode: zod.enum(['RANGE']),
-            preset: zod.enum([
-              'UP_TO_250_G',
-              'UP_TO_500_G',
-              'UP_TO_1000_G',
-              'UP_TO_2000_G',
-              'UP_TO_5000_G',
-            ]),
-          }),
-          zod.object({
-            mode: zod.enum(['CUSTOM']),
-            grams: zod
-              .int()
-              .gt(
-                productControllerReviewDetailResponseDataShippingPackageWeightTwoGramsExclusiveMin,
-              )
-              .max(
-                productControllerReviewDetailResponseDataShippingPackageWeightTwoGramsMax,
-              ),
-          }),
-        ]),
-        size: zod.union([
-          zod.object({
-            mode: zod.enum(['RANGE']),
-            preset: zod.enum([
-              'BOX_20_15_10_CM',
-              'BOX_30_20_15_CM',
-              'BOX_40_30_20_CM',
-              'BOX_50_40_30_CM',
-            ]),
-          }),
-          zod.object({
-            mode: zod.enum(['CUSTOM']),
-            lengthCm: zod
-              .number()
-              .gt(
-                productControllerReviewDetailResponseDataShippingPackageSizeTwoLengthCmExclusiveMin,
-              )
-              .max(
-                productControllerReviewDetailResponseDataShippingPackageSizeTwoLengthCmMax,
-              ),
-            widthCm: zod
-              .number()
-              .gt(
-                productControllerReviewDetailResponseDataShippingPackageSizeTwoWidthCmExclusiveMin,
-              )
-              .max(
-                productControllerReviewDetailResponseDataShippingPackageSizeTwoWidthCmMax,
-              ),
-            heightCm: zod
-              .number()
-              .gt(
-                productControllerReviewDetailResponseDataShippingPackageSizeTwoHeightCmExclusiveMin,
-              )
-              .max(
-                productControllerReviewDetailResponseDataShippingPackageSizeTwoHeightCmMax,
-              ),
-          }),
-        ]),
+        weightGrams: zod
+          .int()
+          .gt(
+            productControllerReviewDetailResponseDataShippingPackageWeightGramsExclusiveMin,
+          )
+          .max(
+            productControllerReviewDetailResponseDataShippingPackageWeightGramsMax,
+          ),
+        lengthCm: zod
+          .number()
+          .gt(
+            productControllerReviewDetailResponseDataShippingPackageLengthCmExclusiveMin,
+          )
+          .max(
+            productControllerReviewDetailResponseDataShippingPackageLengthCmMax,
+          ),
+        widthCm: zod
+          .number()
+          .gt(
+            productControllerReviewDetailResponseDataShippingPackageWidthCmExclusiveMin,
+          )
+          .max(
+            productControllerReviewDetailResponseDataShippingPackageWidthCmMax,
+          ),
+        heightCm: zod
+          .number()
+          .gt(
+            productControllerReviewDetailResponseDataShippingPackageHeightCmExclusiveMin,
+          )
+          .max(
+            productControllerReviewDetailResponseDataShippingPackageHeightCmMax,
+          ),
       })
       .nullable()
       .default(productControllerReviewDetailResponseDataShippingPackageDefault),
@@ -2803,15 +2297,6 @@ export const ProductControllerReviewDetailResponse = zod.object({
           .max(productControllerReviewDetailResponseDataDefectsItemMediaIdsMax),
       }),
     ),
-    revision: zod
-      .int()
-      .gt(productControllerReviewDetailResponseDataRevisionExclusiveMin)
-      .max(productControllerReviewDetailResponseDataRevisionMax),
-    approvedRevision: zod
-      .int()
-      .gt(productControllerReviewDetailResponseDataApprovedRevisionExclusiveMin)
-      .max(productControllerReviewDetailResponseDataApprovedRevisionMax)
-      .nullable(),
     coverUrl: zod.url().nullable(),
     mediaCount: zod
       .int()
@@ -2854,430 +2339,50 @@ export const ProductControllerReviewDetailResponse = zod.object({
         slug: zod.string(),
       })
       .nullable(),
-    seller: zod
-      .object({
-        id: zod
-          .uuid()
-          .regex(productControllerReviewDetailResponseDataSellerIdRegExp),
-        fullName: zod.string(),
-      })
-      .nullable(),
-    shop: zod
-      .object({
-        id: zod
-          .uuid()
-          .regex(productControllerReviewDetailResponseDataShopIdRegExpOne),
-        name: zod.string(),
-      })
-      .nullable(),
+    shop: zod.object({
+      id: zod
+        .uuid()
+        .regex(productControllerReviewDetailResponseDataShopIdRegExpOne),
+      name: zod.string(),
+    }),
   }),
 });
 
-export const productControllerReviewHistoryPathIdRegExp = new RegExp(
+export const productControllerModerationForAdminPathIdRegExp = new RegExp(
   '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
 );
 
-export const ProductControllerReviewHistoryParams = zod.object({
-  id: zod.uuid().regex(productControllerReviewHistoryPathIdRegExp),
+export const ProductControllerModerationForAdminParams = zod.object({
+  id: zod.uuid().regex(productControllerModerationForAdminPathIdRegExp),
 });
 
-export const productControllerReviewHistoryResponseDataItemIdRegExp =
+export const productControllerModerationForAdminResponseDataProductIdRegExp =
   new RegExp(
     '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
   );
-export const productControllerReviewHistoryResponseDataItemProductIdRegExp =
-  new RegExp(
-    '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
-  );
-export const productControllerReviewHistoryResponseDataItemRevisionMin =
-  -9007199254740991;
-export const productControllerReviewHistoryResponseDataItemRevisionMax = 9007199254740991;
+export const productControllerModerationForAdminResponseDataVersionExclusiveMin = 0;
+export const productControllerModerationForAdminResponseDataVersionMax = 9007199254740991;
 
-export const productControllerReviewHistoryResponseDataItemSubmittedByIdRegExp =
-  new RegExp(
-    '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
-  );
-export const productControllerReviewHistoryResponseDataItemReviewedByIdRegExp =
-  new RegExp(
-    '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
-  );
-export const productControllerReviewHistoryResponseDataItemReviewedAtRegExp =
-  new RegExp(
-    '^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$',
-  );
-export const productControllerReviewHistoryResponseDataItemCreatedAtRegExp =
-  new RegExp(
-    '^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$',
-  );
-export const productControllerReviewHistoryResponseDataItemUpdatedAtRegExp =
-  new RegExp(
-    '^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$',
-  );
-
-export const ProductControllerReviewHistoryResponse = zod.object({
-  statusCode: zod.literal(200),
-  message: zod.string(),
-  data: zod.array(
-    zod.object({
-      id: zod
-        .uuid()
-        .regex(productControllerReviewHistoryResponseDataItemIdRegExp),
-      productId: zod
-        .uuid()
-        .regex(productControllerReviewHistoryResponseDataItemProductIdRegExp),
-      revision: zod
-        .int()
-        .min(productControllerReviewHistoryResponseDataItemRevisionMin)
-        .max(productControllerReviewHistoryResponseDataItemRevisionMax),
-      snapshot: zod.record(zod.string(), zod.unknown()),
-      submittedById: zod
-        .uuid()
-        .regex(
-          productControllerReviewHistoryResponseDataItemSubmittedByIdRegExp,
-        ),
-      decision: zod.enum(['PENDING', 'APPROVED', 'REJECTED', 'SUPERSEDED']),
-      reviewedById: zod
-        .uuid()
-        .regex(productControllerReviewHistoryResponseDataItemReviewedByIdRegExp)
-        .nullable(),
-      reason: zod.string().nullable(),
-      reviewedAt: zod.iso
-        .datetime({ offset: true })
-        .regex(productControllerReviewHistoryResponseDataItemReviewedAtRegExp)
-        .nullable(),
-      createdAt: zod.iso
-        .datetime({ offset: true })
-        .regex(productControllerReviewHistoryResponseDataItemCreatedAtRegExp),
-      updatedAt: zod.iso
-        .datetime({ offset: true })
-        .regex(productControllerReviewHistoryResponseDataItemUpdatedAtRegExp),
-    }),
-  ),
-});
-
-export const productControllerSubmitPathIdRegExp = new RegExp(
-  '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
-);
-
-export const ProductControllerSubmitParams = zod.object({
-  id: zod.uuid().regex(productControllerSubmitPathIdRegExp),
-});
-
-export const productControllerSubmitResponseDataIdRegExp = new RegExp(
-  '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
-);
-export const productControllerSubmitResponseDataCategoryIdRegExp = new RegExp(
-  '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
-);
-export const productControllerSubmitResponseDataSellerUserIdRegExp = new RegExp(
-  '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
-);
-export const productControllerSubmitResponseDataShopIdRegExp = new RegExp(
-  '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
-);
-export const productControllerSubmitResponseDataPriceMin = 0;
-export const productControllerSubmitResponseDataPriceMax = 9007199254740991;
-
-export const productControllerSubmitResponseDataMeasurementsChestExclusiveMin = 0;
-export const productControllerSubmitResponseDataMeasurementsChestMax = 500;
-
-export const productControllerSubmitResponseDataMeasurementsWaistExclusiveMin = 0;
-export const productControllerSubmitResponseDataMeasurementsWaistMax = 500;
-
-export const productControllerSubmitResponseDataMeasurementsHipExclusiveMin = 0;
-export const productControllerSubmitResponseDataMeasurementsHipMax = 500;
-
-export const productControllerSubmitResponseDataMeasurementsLengthExclusiveMin = 0;
-export const productControllerSubmitResponseDataMeasurementsLengthMax = 500;
-
-export const productControllerSubmitResponseDataMeasurementsShoulderExclusiveMin = 0;
-export const productControllerSubmitResponseDataMeasurementsShoulderMax = 500;
-
-export const productControllerSubmitResponseDataMeasurementsSleeveExclusiveMin = 0;
-export const productControllerSubmitResponseDataMeasurementsSleeveMax = 500;
-
-export const productControllerSubmitResponseDataMeasurementsInseamExclusiveMin = 0;
-export const productControllerSubmitResponseDataMeasurementsInseamMax = 500;
-
-export const productControllerSubmitResponseDataShippingPackageWeightTwoGramsExclusiveMin = 0;
-export const productControllerSubmitResponseDataShippingPackageWeightTwoGramsMax = 50000;
-
-export const productControllerSubmitResponseDataShippingPackageSizeTwoLengthCmExclusiveMin = 0;
-export const productControllerSubmitResponseDataShippingPackageSizeTwoLengthCmMax = 200;
-
-export const productControllerSubmitResponseDataShippingPackageSizeTwoWidthCmExclusiveMin = 0;
-export const productControllerSubmitResponseDataShippingPackageSizeTwoWidthCmMax = 200;
-
-export const productControllerSubmitResponseDataShippingPackageSizeTwoHeightCmExclusiveMin = 0;
-export const productControllerSubmitResponseDataShippingPackageSizeTwoHeightCmMax = 200;
-
-export const productControllerSubmitResponseDataShippingPackageDefault = null;
-export const productControllerSubmitResponseDataDefectsItemDescriptionMax = 1000;
-
-export const productControllerSubmitResponseDataDefectsItemMediaIdsItemRegExp =
-  new RegExp(
-    '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
-  );
-export const productControllerSubmitResponseDataDefectsItemMediaIdsMax = 10;
-
-export const productControllerSubmitResponseDataRevisionExclusiveMin = 0;
-export const productControllerSubmitResponseDataRevisionMax = 9007199254740991;
-
-export const productControllerSubmitResponseDataApprovedRevisionExclusiveMin = 0;
-export const productControllerSubmitResponseDataApprovedRevisionMax = 9007199254740991;
-
-export const productControllerSubmitResponseDataMediaCountMin = 0;
-export const productControllerSubmitResponseDataMediaCountMax = 9007199254740991;
-
-export const productControllerSubmitResponseDataPublishedAtRegExp = new RegExp(
-  '^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$',
-);
-export const productControllerSubmitResponseDataHeldUntilRegExp = new RegExp(
-  '^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$',
-);
-export const productControllerSubmitResponseDataSoldAtRegExp = new RegExp(
-  '^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$',
-);
-export const productControllerSubmitResponseDataCreatedAtRegExp = new RegExp(
-  '^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$',
-);
-export const productControllerSubmitResponseDataUpdatedAtRegExp = new RegExp(
-  '^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$',
-);
-export const productControllerSubmitResponseDataCategoryIdRegExpOne =
-  new RegExp(
-    '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
-  );
-export const productControllerSubmitResponseDataSellerIdRegExp = new RegExp(
-  '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
-);
-export const productControllerSubmitResponseDataShopIdRegExpOne = new RegExp(
-  '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
-);
-
-export const ProductControllerSubmitResponse = zod.object({
+export const ProductControllerModerationForAdminResponse = zod.object({
   statusCode: zod.literal(200),
   message: zod.string(),
   data: zod.object({
-    id: zod.uuid().regex(productControllerSubmitResponseDataIdRegExp),
-    categoryId: zod
+    productId: zod
       .uuid()
-      .regex(productControllerSubmitResponseDataCategoryIdRegExp)
-      .nullable(),
-    sellerUserId: zod
-      .uuid()
-      .regex(productControllerSubmitResponseDataSellerUserIdRegExp)
-      .nullable(),
-    shopId: zod
-      .uuid()
-      .regex(productControllerSubmitResponseDataShopIdRegExp)
-      .nullable(),
-    title: zod.string().nullable(),
-    description: zod.string().nullable(),
-    condition: zod
-      .union([
-        zod.literal('FAIR'),
-        zod.literal('GOOD'),
-        zod.literal('EXCELLENT'),
-        zod.literal('PRISTINE'),
-        zod.literal(null),
-      ])
-      .nullable(),
-    size: zod.string().nullable(),
-    color: zod.string().nullable(),
-    brand: zod.string().nullable(),
-    price: zod
-      .int()
-      .min(productControllerSubmitResponseDataPriceMin)
-      .max(productControllerSubmitResponseDataPriceMax)
-      .nullable(),
-    measurements: zod.object({
-      chest: zod
-        .number()
-        .gt(productControllerSubmitResponseDataMeasurementsChestExclusiveMin)
-        .max(productControllerSubmitResponseDataMeasurementsChestMax)
-        .optional(),
-      waist: zod
-        .number()
-        .gt(productControllerSubmitResponseDataMeasurementsWaistExclusiveMin)
-        .max(productControllerSubmitResponseDataMeasurementsWaistMax)
-        .optional(),
-      hip: zod
-        .number()
-        .gt(productControllerSubmitResponseDataMeasurementsHipExclusiveMin)
-        .max(productControllerSubmitResponseDataMeasurementsHipMax)
-        .optional(),
-      length: zod
-        .number()
-        .gt(productControllerSubmitResponseDataMeasurementsLengthExclusiveMin)
-        .max(productControllerSubmitResponseDataMeasurementsLengthMax)
-        .optional(),
-      shoulder: zod
-        .number()
-        .gt(productControllerSubmitResponseDataMeasurementsShoulderExclusiveMin)
-        .max(productControllerSubmitResponseDataMeasurementsShoulderMax)
-        .optional(),
-      sleeve: zod
-        .number()
-        .gt(productControllerSubmitResponseDataMeasurementsSleeveExclusiveMin)
-        .max(productControllerSubmitResponseDataMeasurementsSleeveMax)
-        .optional(),
-      inseam: zod
-        .number()
-        .gt(productControllerSubmitResponseDataMeasurementsInseamExclusiveMin)
-        .max(productControllerSubmitResponseDataMeasurementsInseamMax)
-        .optional(),
-    }),
-    shippingPackage: zod
-      .object({
-        weight: zod.union([
-          zod.object({
-            mode: zod.enum(['RANGE']),
-            preset: zod.enum([
-              'UP_TO_250_G',
-              'UP_TO_500_G',
-              'UP_TO_1000_G',
-              'UP_TO_2000_G',
-              'UP_TO_5000_G',
-            ]),
-          }),
-          zod.object({
-            mode: zod.enum(['CUSTOM']),
-            grams: zod
-              .int()
-              .gt(
-                productControllerSubmitResponseDataShippingPackageWeightTwoGramsExclusiveMin,
-              )
-              .max(
-                productControllerSubmitResponseDataShippingPackageWeightTwoGramsMax,
-              ),
-          }),
-        ]),
-        size: zod.union([
-          zod.object({
-            mode: zod.enum(['RANGE']),
-            preset: zod.enum([
-              'BOX_20_15_10_CM',
-              'BOX_30_20_15_CM',
-              'BOX_40_30_20_CM',
-              'BOX_50_40_30_CM',
-            ]),
-          }),
-          zod.object({
-            mode: zod.enum(['CUSTOM']),
-            lengthCm: zod
-              .number()
-              .gt(
-                productControllerSubmitResponseDataShippingPackageSizeTwoLengthCmExclusiveMin,
-              )
-              .max(
-                productControllerSubmitResponseDataShippingPackageSizeTwoLengthCmMax,
-              ),
-            widthCm: zod
-              .number()
-              .gt(
-                productControllerSubmitResponseDataShippingPackageSizeTwoWidthCmExclusiveMin,
-              )
-              .max(
-                productControllerSubmitResponseDataShippingPackageSizeTwoWidthCmMax,
-              ),
-            heightCm: zod
-              .number()
-              .gt(
-                productControllerSubmitResponseDataShippingPackageSizeTwoHeightCmExclusiveMin,
-              )
-              .max(
-                productControllerSubmitResponseDataShippingPackageSizeTwoHeightCmMax,
-              ),
-          }),
-        ]),
-      })
-      .nullable()
-      .default(productControllerSubmitResponseDataShippingPackageDefault),
-    repairs: zod.string().nullable(),
-    defects: zod.array(
-      zod.object({
-        description: zod
-          .string()
-          .min(1)
-          .max(productControllerSubmitResponseDataDefectsItemDescriptionMax),
-        mediaIds: zod
-          .array(
-            zod
-              .uuid()
-              .regex(
-                productControllerSubmitResponseDataDefectsItemMediaIdsItemRegExp,
-              ),
-          )
-          .min(1)
-          .max(productControllerSubmitResponseDataDefectsItemMediaIdsMax),
-      }),
-    ),
-    revision: zod
-      .int()
-      .gt(productControllerSubmitResponseDataRevisionExclusiveMin)
-      .max(productControllerSubmitResponseDataRevisionMax),
-    approvedRevision: zod
-      .int()
-      .gt(productControllerSubmitResponseDataApprovedRevisionExclusiveMin)
-      .max(productControllerSubmitResponseDataApprovedRevisionMax)
-      .nullable(),
-    coverUrl: zod.url().nullable(),
-    mediaCount: zod
-      .int()
-      .min(productControllerSubmitResponseDataMediaCountMin)
-      .max(productControllerSubmitResponseDataMediaCountMax),
+      .regex(productControllerModerationForAdminResponseDataProductIdRegExp),
     status: zod.enum([
       'DRAFT',
-      'PENDING_REVIEW',
+      'PENDING',
+      'APPROVED',
       'REJECTED',
+      'CANCELLED',
       'SUSPENDED',
-      'ACTIVE',
-      'HELD',
-      'SOLD',
-      'HIDDEN',
     ]),
-    publishedAt: zod.iso
-      .datetime({ offset: true })
-      .regex(productControllerSubmitResponseDataPublishedAtRegExp)
-      .nullable(),
-    heldUntil: zod.iso
-      .datetime({ offset: true })
-      .regex(productControllerSubmitResponseDataHeldUntilRegExp)
-      .nullable(),
-    soldAt: zod.iso
-      .datetime({ offset: true })
-      .regex(productControllerSubmitResponseDataSoldAtRegExp)
-      .nullable(),
-    createdAt: zod.iso
-      .datetime({ offset: true })
-      .regex(productControllerSubmitResponseDataCreatedAtRegExp),
-    updatedAt: zod.iso
-      .datetime({ offset: true })
-      .regex(productControllerSubmitResponseDataUpdatedAtRegExp),
-    category: zod
-      .object({
-        id: zod
-          .uuid()
-          .regex(productControllerSubmitResponseDataCategoryIdRegExpOne),
-        name: zod.string(),
-        slug: zod.string(),
-      })
-      .nullable(),
-    seller: zod
-      .object({
-        id: zod.uuid().regex(productControllerSubmitResponseDataSellerIdRegExp),
-        fullName: zod.string(),
-      })
-      .nullable(),
-    shop: zod
-      .object({
-        id: zod
-          .uuid()
-          .regex(productControllerSubmitResponseDataShopIdRegExpOne),
-        name: zod.string(),
-      })
-      .nullable(),
+    version: zod
+      .int()
+      .gt(productControllerModerationForAdminResponseDataVersionExclusiveMin)
+      .max(productControllerModerationForAdminResponseDataVersionMax),
+    reason: zod.string().nullable(),
   }),
 });
 
@@ -3289,16 +2394,16 @@ export const ProductControllerModerateParams = zod.object({
   id: zod.uuid().regex(productControllerModeratePathIdRegExp),
 });
 
-export const productControllerModerateBodyRevisionExclusiveMin = 0;
-export const productControllerModerateBodyRevisionMax = 9007199254740991;
+export const productControllerModerateBodyVersionExclusiveMin = 0;
+export const productControllerModerateBodyVersionMax = 9007199254740991;
 
 export const productControllerModerateBodyReasonMax = 2000;
 
 export const ProductControllerModerateBody = zod.strictObject({
-  revision: zod
+  version: zod
     .int()
-    .gt(productControllerModerateBodyRevisionExclusiveMin)
-    .max(productControllerModerateBodyRevisionMax),
+    .gt(productControllerModerateBodyVersionExclusiveMin)
+    .max(productControllerModerateBodyVersionMax),
   decision: zod.enum(['APPROVE', 'REJECT']),
   reason: zod
     .string()
@@ -3313,10 +2418,6 @@ export const productControllerModerateResponseDataIdRegExp = new RegExp(
 export const productControllerModerateResponseDataCategoryIdRegExp = new RegExp(
   '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
 );
-export const productControllerModerateResponseDataSellerUserIdRegExp =
-  new RegExp(
-    '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
-  );
 export const productControllerModerateResponseDataShopIdRegExp = new RegExp(
   '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
 );
@@ -3344,17 +2445,17 @@ export const productControllerModerateResponseDataMeasurementsSleeveMax = 500;
 export const productControllerModerateResponseDataMeasurementsInseamExclusiveMin = 0;
 export const productControllerModerateResponseDataMeasurementsInseamMax = 500;
 
-export const productControllerModerateResponseDataShippingPackageWeightTwoGramsExclusiveMin = 0;
-export const productControllerModerateResponseDataShippingPackageWeightTwoGramsMax = 50000;
+export const productControllerModerateResponseDataShippingPackageWeightGramsExclusiveMin = 0;
+export const productControllerModerateResponseDataShippingPackageWeightGramsMax = 50000;
 
-export const productControllerModerateResponseDataShippingPackageSizeTwoLengthCmExclusiveMin = 0;
-export const productControllerModerateResponseDataShippingPackageSizeTwoLengthCmMax = 200;
+export const productControllerModerateResponseDataShippingPackageLengthCmExclusiveMin = 0;
+export const productControllerModerateResponseDataShippingPackageLengthCmMax = 200;
 
-export const productControllerModerateResponseDataShippingPackageSizeTwoWidthCmExclusiveMin = 0;
-export const productControllerModerateResponseDataShippingPackageSizeTwoWidthCmMax = 200;
+export const productControllerModerateResponseDataShippingPackageWidthCmExclusiveMin = 0;
+export const productControllerModerateResponseDataShippingPackageWidthCmMax = 200;
 
-export const productControllerModerateResponseDataShippingPackageSizeTwoHeightCmExclusiveMin = 0;
-export const productControllerModerateResponseDataShippingPackageSizeTwoHeightCmMax = 200;
+export const productControllerModerateResponseDataShippingPackageHeightCmExclusiveMin = 0;
+export const productControllerModerateResponseDataShippingPackageHeightCmMax = 200;
 
 export const productControllerModerateResponseDataShippingPackageDefault = null;
 export const productControllerModerateResponseDataDefectsItemDescriptionMax = 1000;
@@ -3364,12 +2465,6 @@ export const productControllerModerateResponseDataDefectsItemMediaIdsItemRegExp 
     '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
   );
 export const productControllerModerateResponseDataDefectsItemMediaIdsMax = 10;
-
-export const productControllerModerateResponseDataRevisionExclusiveMin = 0;
-export const productControllerModerateResponseDataRevisionMax = 9007199254740991;
-
-export const productControllerModerateResponseDataApprovedRevisionExclusiveMin = 0;
-export const productControllerModerateResponseDataApprovedRevisionMax = 9007199254740991;
 
 export const productControllerModerateResponseDataMediaCountMin = 0;
 export const productControllerModerateResponseDataMediaCountMax = 9007199254740991;
@@ -3394,9 +2489,6 @@ export const productControllerModerateResponseDataCategoryIdRegExpOne =
   new RegExp(
     '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
   );
-export const productControllerModerateResponseDataSellerIdRegExp = new RegExp(
-  '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
-);
 export const productControllerModerateResponseDataShopIdRegExpOne = new RegExp(
   '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
 );
@@ -3410,14 +2502,7 @@ export const ProductControllerModerateResponse = zod.object({
       .uuid()
       .regex(productControllerModerateResponseDataCategoryIdRegExp)
       .nullable(),
-    sellerUserId: zod
-      .uuid()
-      .regex(productControllerModerateResponseDataSellerUserIdRegExp)
-      .nullable(),
-    shopId: zod
-      .uuid()
-      .regex(productControllerModerateResponseDataShopIdRegExp)
-      .nullable(),
+    shopId: zod.uuid().regex(productControllerModerateResponseDataShopIdRegExp),
     title: zod.string().nullable(),
     description: zod.string().nullable(),
     condition: zod
@@ -3478,67 +2563,32 @@ export const ProductControllerModerateResponse = zod.object({
     }),
     shippingPackage: zod
       .object({
-        weight: zod.union([
-          zod.object({
-            mode: zod.enum(['RANGE']),
-            preset: zod.enum([
-              'UP_TO_250_G',
-              'UP_TO_500_G',
-              'UP_TO_1000_G',
-              'UP_TO_2000_G',
-              'UP_TO_5000_G',
-            ]),
-          }),
-          zod.object({
-            mode: zod.enum(['CUSTOM']),
-            grams: zod
-              .int()
-              .gt(
-                productControllerModerateResponseDataShippingPackageWeightTwoGramsExclusiveMin,
-              )
-              .max(
-                productControllerModerateResponseDataShippingPackageWeightTwoGramsMax,
-              ),
-          }),
-        ]),
-        size: zod.union([
-          zod.object({
-            mode: zod.enum(['RANGE']),
-            preset: zod.enum([
-              'BOX_20_15_10_CM',
-              'BOX_30_20_15_CM',
-              'BOX_40_30_20_CM',
-              'BOX_50_40_30_CM',
-            ]),
-          }),
-          zod.object({
-            mode: zod.enum(['CUSTOM']),
-            lengthCm: zod
-              .number()
-              .gt(
-                productControllerModerateResponseDataShippingPackageSizeTwoLengthCmExclusiveMin,
-              )
-              .max(
-                productControllerModerateResponseDataShippingPackageSizeTwoLengthCmMax,
-              ),
-            widthCm: zod
-              .number()
-              .gt(
-                productControllerModerateResponseDataShippingPackageSizeTwoWidthCmExclusiveMin,
-              )
-              .max(
-                productControllerModerateResponseDataShippingPackageSizeTwoWidthCmMax,
-              ),
-            heightCm: zod
-              .number()
-              .gt(
-                productControllerModerateResponseDataShippingPackageSizeTwoHeightCmExclusiveMin,
-              )
-              .max(
-                productControllerModerateResponseDataShippingPackageSizeTwoHeightCmMax,
-              ),
-          }),
-        ]),
+        weightGrams: zod
+          .int()
+          .gt(
+            productControllerModerateResponseDataShippingPackageWeightGramsExclusiveMin,
+          )
+          .max(
+            productControllerModerateResponseDataShippingPackageWeightGramsMax,
+          ),
+        lengthCm: zod
+          .number()
+          .gt(
+            productControllerModerateResponseDataShippingPackageLengthCmExclusiveMin,
+          )
+          .max(productControllerModerateResponseDataShippingPackageLengthCmMax),
+        widthCm: zod
+          .number()
+          .gt(
+            productControllerModerateResponseDataShippingPackageWidthCmExclusiveMin,
+          )
+          .max(productControllerModerateResponseDataShippingPackageWidthCmMax),
+        heightCm: zod
+          .number()
+          .gt(
+            productControllerModerateResponseDataShippingPackageHeightCmExclusiveMin,
+          )
+          .max(productControllerModerateResponseDataShippingPackageHeightCmMax),
       })
       .nullable()
       .default(productControllerModerateResponseDataShippingPackageDefault),
@@ -3561,15 +2611,6 @@ export const ProductControllerModerateResponse = zod.object({
           .max(productControllerModerateResponseDataDefectsItemMediaIdsMax),
       }),
     ),
-    revision: zod
-      .int()
-      .gt(productControllerModerateResponseDataRevisionExclusiveMin)
-      .max(productControllerModerateResponseDataRevisionMax),
-    approvedRevision: zod
-      .int()
-      .gt(productControllerModerateResponseDataApprovedRevisionExclusiveMin)
-      .max(productControllerModerateResponseDataApprovedRevisionMax)
-      .nullable(),
     coverUrl: zod.url().nullable(),
     mediaCount: zod
       .int()
@@ -3612,22 +2653,561 @@ export const ProductControllerModerateResponse = zod.object({
         slug: zod.string(),
       })
       .nullable(),
-    seller: zod
-      .object({
-        id: zod
-          .uuid()
-          .regex(productControllerModerateResponseDataSellerIdRegExp),
-        fullName: zod.string(),
-      })
+    shop: zod.object({
+      id: zod
+        .uuid()
+        .regex(productControllerModerateResponseDataShopIdRegExpOne),
+      name: zod.string(),
+    }),
+  }),
+});
+
+export const productControllerSubmitPathIdRegExp = new RegExp(
+  '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
+);
+
+export const ProductControllerSubmitParams = zod.object({
+  id: zod.uuid().regex(productControllerSubmitPathIdRegExp),
+});
+
+export const productControllerSubmitResponseDataIdRegExp = new RegExp(
+  '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
+);
+export const productControllerSubmitResponseDataCategoryIdRegExp = new RegExp(
+  '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
+);
+export const productControllerSubmitResponseDataShopIdRegExp = new RegExp(
+  '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
+);
+export const productControllerSubmitResponseDataPriceMin = 0;
+export const productControllerSubmitResponseDataPriceMax = 9007199254740991;
+
+export const productControllerSubmitResponseDataMeasurementsChestExclusiveMin = 0;
+export const productControllerSubmitResponseDataMeasurementsChestMax = 500;
+
+export const productControllerSubmitResponseDataMeasurementsWaistExclusiveMin = 0;
+export const productControllerSubmitResponseDataMeasurementsWaistMax = 500;
+
+export const productControllerSubmitResponseDataMeasurementsHipExclusiveMin = 0;
+export const productControllerSubmitResponseDataMeasurementsHipMax = 500;
+
+export const productControllerSubmitResponseDataMeasurementsLengthExclusiveMin = 0;
+export const productControllerSubmitResponseDataMeasurementsLengthMax = 500;
+
+export const productControllerSubmitResponseDataMeasurementsShoulderExclusiveMin = 0;
+export const productControllerSubmitResponseDataMeasurementsShoulderMax = 500;
+
+export const productControllerSubmitResponseDataMeasurementsSleeveExclusiveMin = 0;
+export const productControllerSubmitResponseDataMeasurementsSleeveMax = 500;
+
+export const productControllerSubmitResponseDataMeasurementsInseamExclusiveMin = 0;
+export const productControllerSubmitResponseDataMeasurementsInseamMax = 500;
+
+export const productControllerSubmitResponseDataShippingPackageWeightGramsExclusiveMin = 0;
+export const productControllerSubmitResponseDataShippingPackageWeightGramsMax = 50000;
+
+export const productControllerSubmitResponseDataShippingPackageLengthCmExclusiveMin = 0;
+export const productControllerSubmitResponseDataShippingPackageLengthCmMax = 200;
+
+export const productControllerSubmitResponseDataShippingPackageWidthCmExclusiveMin = 0;
+export const productControllerSubmitResponseDataShippingPackageWidthCmMax = 200;
+
+export const productControllerSubmitResponseDataShippingPackageHeightCmExclusiveMin = 0;
+export const productControllerSubmitResponseDataShippingPackageHeightCmMax = 200;
+
+export const productControllerSubmitResponseDataShippingPackageDefault = null;
+export const productControllerSubmitResponseDataDefectsItemDescriptionMax = 1000;
+
+export const productControllerSubmitResponseDataDefectsItemMediaIdsItemRegExp =
+  new RegExp(
+    '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
+  );
+export const productControllerSubmitResponseDataDefectsItemMediaIdsMax = 10;
+
+export const productControllerSubmitResponseDataMediaCountMin = 0;
+export const productControllerSubmitResponseDataMediaCountMax = 9007199254740991;
+
+export const productControllerSubmitResponseDataPublishedAtRegExp = new RegExp(
+  '^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$',
+);
+export const productControllerSubmitResponseDataHeldUntilRegExp = new RegExp(
+  '^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$',
+);
+export const productControllerSubmitResponseDataSoldAtRegExp = new RegExp(
+  '^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$',
+);
+export const productControllerSubmitResponseDataCreatedAtRegExp = new RegExp(
+  '^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$',
+);
+export const productControllerSubmitResponseDataUpdatedAtRegExp = new RegExp(
+  '^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$',
+);
+export const productControllerSubmitResponseDataCategoryIdRegExpOne =
+  new RegExp(
+    '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
+  );
+export const productControllerSubmitResponseDataShopIdRegExpOne = new RegExp(
+  '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
+);
+
+export const ProductControllerSubmitResponse = zod.object({
+  statusCode: zod.literal(200),
+  message: zod.string(),
+  data: zod.object({
+    id: zod.uuid().regex(productControllerSubmitResponseDataIdRegExp),
+    categoryId: zod
+      .uuid()
+      .regex(productControllerSubmitResponseDataCategoryIdRegExp)
       .nullable(),
-    shop: zod
+    shopId: zod.uuid().regex(productControllerSubmitResponseDataShopIdRegExp),
+    title: zod.string().nullable(),
+    description: zod.string().nullable(),
+    condition: zod
+      .union([
+        zod.literal('FAIR'),
+        zod.literal('GOOD'),
+        zod.literal('EXCELLENT'),
+        zod.literal('PRISTINE'),
+        zod.literal(null),
+      ])
+      .nullable(),
+    size: zod.string().nullable(),
+    color: zod.string().nullable(),
+    brand: zod.string().nullable(),
+    price: zod
+      .int()
+      .min(productControllerSubmitResponseDataPriceMin)
+      .max(productControllerSubmitResponseDataPriceMax)
+      .nullable(),
+    measurements: zod.object({
+      chest: zod
+        .number()
+        .gt(productControllerSubmitResponseDataMeasurementsChestExclusiveMin)
+        .max(productControllerSubmitResponseDataMeasurementsChestMax)
+        .optional(),
+      waist: zod
+        .number()
+        .gt(productControllerSubmitResponseDataMeasurementsWaistExclusiveMin)
+        .max(productControllerSubmitResponseDataMeasurementsWaistMax)
+        .optional(),
+      hip: zod
+        .number()
+        .gt(productControllerSubmitResponseDataMeasurementsHipExclusiveMin)
+        .max(productControllerSubmitResponseDataMeasurementsHipMax)
+        .optional(),
+      length: zod
+        .number()
+        .gt(productControllerSubmitResponseDataMeasurementsLengthExclusiveMin)
+        .max(productControllerSubmitResponseDataMeasurementsLengthMax)
+        .optional(),
+      shoulder: zod
+        .number()
+        .gt(productControllerSubmitResponseDataMeasurementsShoulderExclusiveMin)
+        .max(productControllerSubmitResponseDataMeasurementsShoulderMax)
+        .optional(),
+      sleeve: zod
+        .number()
+        .gt(productControllerSubmitResponseDataMeasurementsSleeveExclusiveMin)
+        .max(productControllerSubmitResponseDataMeasurementsSleeveMax)
+        .optional(),
+      inseam: zod
+        .number()
+        .gt(productControllerSubmitResponseDataMeasurementsInseamExclusiveMin)
+        .max(productControllerSubmitResponseDataMeasurementsInseamMax)
+        .optional(),
+    }),
+    shippingPackage: zod
+      .object({
+        weightGrams: zod
+          .int()
+          .gt(
+            productControllerSubmitResponseDataShippingPackageWeightGramsExclusiveMin,
+          )
+          .max(
+            productControllerSubmitResponseDataShippingPackageWeightGramsMax,
+          ),
+        lengthCm: zod
+          .number()
+          .gt(
+            productControllerSubmitResponseDataShippingPackageLengthCmExclusiveMin,
+          )
+          .max(productControllerSubmitResponseDataShippingPackageLengthCmMax),
+        widthCm: zod
+          .number()
+          .gt(
+            productControllerSubmitResponseDataShippingPackageWidthCmExclusiveMin,
+          )
+          .max(productControllerSubmitResponseDataShippingPackageWidthCmMax),
+        heightCm: zod
+          .number()
+          .gt(
+            productControllerSubmitResponseDataShippingPackageHeightCmExclusiveMin,
+          )
+          .max(productControllerSubmitResponseDataShippingPackageHeightCmMax),
+      })
+      .nullable()
+      .default(productControllerSubmitResponseDataShippingPackageDefault),
+    repairs: zod.string().nullable(),
+    defects: zod.array(
+      zod.object({
+        description: zod
+          .string()
+          .min(1)
+          .max(productControllerSubmitResponseDataDefectsItemDescriptionMax),
+        mediaIds: zod
+          .array(
+            zod
+              .uuid()
+              .regex(
+                productControllerSubmitResponseDataDefectsItemMediaIdsItemRegExp,
+              ),
+          )
+          .min(1)
+          .max(productControllerSubmitResponseDataDefectsItemMediaIdsMax),
+      }),
+    ),
+    coverUrl: zod.url().nullable(),
+    mediaCount: zod
+      .int()
+      .min(productControllerSubmitResponseDataMediaCountMin)
+      .max(productControllerSubmitResponseDataMediaCountMax),
+    status: zod.enum([
+      'DRAFT',
+      'PENDING_REVIEW',
+      'REJECTED',
+      'SUSPENDED',
+      'ACTIVE',
+      'HELD',
+      'SOLD',
+      'HIDDEN',
+    ]),
+    publishedAt: zod.iso
+      .datetime({ offset: true })
+      .regex(productControllerSubmitResponseDataPublishedAtRegExp)
+      .nullable(),
+    heldUntil: zod.iso
+      .datetime({ offset: true })
+      .regex(productControllerSubmitResponseDataHeldUntilRegExp)
+      .nullable(),
+    soldAt: zod.iso
+      .datetime({ offset: true })
+      .regex(productControllerSubmitResponseDataSoldAtRegExp)
+      .nullable(),
+    createdAt: zod.iso
+      .datetime({ offset: true })
+      .regex(productControllerSubmitResponseDataCreatedAtRegExp),
+    updatedAt: zod.iso
+      .datetime({ offset: true })
+      .regex(productControllerSubmitResponseDataUpdatedAtRegExp),
+    category: zod
       .object({
         id: zod
           .uuid()
-          .regex(productControllerModerateResponseDataShopIdRegExpOne),
+          .regex(productControllerSubmitResponseDataCategoryIdRegExpOne),
         name: zod.string(),
+        slug: zod.string(),
       })
       .nullable(),
+    shop: zod.object({
+      id: zod.uuid().regex(productControllerSubmitResponseDataShopIdRegExpOne),
+      name: zod.string(),
+    }),
+  }),
+});
+
+export const productControllerCancelSubmissionPathIdRegExp = new RegExp(
+  '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
+);
+
+export const ProductControllerCancelSubmissionParams = zod.object({
+  id: zod.uuid().regex(productControllerCancelSubmissionPathIdRegExp),
+});
+
+export const productControllerCancelSubmissionResponseDataIdRegExp = new RegExp(
+  '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
+);
+export const productControllerCancelSubmissionResponseDataCategoryIdRegExp =
+  new RegExp(
+    '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
+  );
+export const productControllerCancelSubmissionResponseDataShopIdRegExp =
+  new RegExp(
+    '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
+  );
+export const productControllerCancelSubmissionResponseDataPriceMin = 0;
+export const productControllerCancelSubmissionResponseDataPriceMax = 9007199254740991;
+
+export const productControllerCancelSubmissionResponseDataMeasurementsChestExclusiveMin = 0;
+export const productControllerCancelSubmissionResponseDataMeasurementsChestMax = 500;
+
+export const productControllerCancelSubmissionResponseDataMeasurementsWaistExclusiveMin = 0;
+export const productControllerCancelSubmissionResponseDataMeasurementsWaistMax = 500;
+
+export const productControllerCancelSubmissionResponseDataMeasurementsHipExclusiveMin = 0;
+export const productControllerCancelSubmissionResponseDataMeasurementsHipMax = 500;
+
+export const productControllerCancelSubmissionResponseDataMeasurementsLengthExclusiveMin = 0;
+export const productControllerCancelSubmissionResponseDataMeasurementsLengthMax = 500;
+
+export const productControllerCancelSubmissionResponseDataMeasurementsShoulderExclusiveMin = 0;
+export const productControllerCancelSubmissionResponseDataMeasurementsShoulderMax = 500;
+
+export const productControllerCancelSubmissionResponseDataMeasurementsSleeveExclusiveMin = 0;
+export const productControllerCancelSubmissionResponseDataMeasurementsSleeveMax = 500;
+
+export const productControllerCancelSubmissionResponseDataMeasurementsInseamExclusiveMin = 0;
+export const productControllerCancelSubmissionResponseDataMeasurementsInseamMax = 500;
+
+export const productControllerCancelSubmissionResponseDataShippingPackageWeightGramsExclusiveMin = 0;
+export const productControllerCancelSubmissionResponseDataShippingPackageWeightGramsMax = 50000;
+
+export const productControllerCancelSubmissionResponseDataShippingPackageLengthCmExclusiveMin = 0;
+export const productControllerCancelSubmissionResponseDataShippingPackageLengthCmMax = 200;
+
+export const productControllerCancelSubmissionResponseDataShippingPackageWidthCmExclusiveMin = 0;
+export const productControllerCancelSubmissionResponseDataShippingPackageWidthCmMax = 200;
+
+export const productControllerCancelSubmissionResponseDataShippingPackageHeightCmExclusiveMin = 0;
+export const productControllerCancelSubmissionResponseDataShippingPackageHeightCmMax = 200;
+
+export const productControllerCancelSubmissionResponseDataShippingPackageDefault =
+  null;
+export const productControllerCancelSubmissionResponseDataDefectsItemDescriptionMax = 1000;
+
+export const productControllerCancelSubmissionResponseDataDefectsItemMediaIdsItemRegExp =
+  new RegExp(
+    '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
+  );
+export const productControllerCancelSubmissionResponseDataDefectsItemMediaIdsMax = 10;
+
+export const productControllerCancelSubmissionResponseDataMediaCountMin = 0;
+export const productControllerCancelSubmissionResponseDataMediaCountMax = 9007199254740991;
+
+export const productControllerCancelSubmissionResponseDataPublishedAtRegExp =
+  new RegExp(
+    '^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$',
+  );
+export const productControllerCancelSubmissionResponseDataHeldUntilRegExp =
+  new RegExp(
+    '^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$',
+  );
+export const productControllerCancelSubmissionResponseDataSoldAtRegExp =
+  new RegExp(
+    '^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$',
+  );
+export const productControllerCancelSubmissionResponseDataCreatedAtRegExp =
+  new RegExp(
+    '^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$',
+  );
+export const productControllerCancelSubmissionResponseDataUpdatedAtRegExp =
+  new RegExp(
+    '^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$',
+  );
+export const productControllerCancelSubmissionResponseDataCategoryIdRegExpOne =
+  new RegExp(
+    '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
+  );
+export const productControllerCancelSubmissionResponseDataShopIdRegExpOne =
+  new RegExp(
+    '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
+  );
+
+export const ProductControllerCancelSubmissionResponse = zod.object({
+  statusCode: zod.literal(200),
+  message: zod.string(),
+  data: zod.object({
+    id: zod.uuid().regex(productControllerCancelSubmissionResponseDataIdRegExp),
+    categoryId: zod
+      .uuid()
+      .regex(productControllerCancelSubmissionResponseDataCategoryIdRegExp)
+      .nullable(),
+    shopId: zod
+      .uuid()
+      .regex(productControllerCancelSubmissionResponseDataShopIdRegExp),
+    title: zod.string().nullable(),
+    description: zod.string().nullable(),
+    condition: zod
+      .union([
+        zod.literal('FAIR'),
+        zod.literal('GOOD'),
+        zod.literal('EXCELLENT'),
+        zod.literal('PRISTINE'),
+        zod.literal(null),
+      ])
+      .nullable(),
+    size: zod.string().nullable(),
+    color: zod.string().nullable(),
+    brand: zod.string().nullable(),
+    price: zod
+      .int()
+      .min(productControllerCancelSubmissionResponseDataPriceMin)
+      .max(productControllerCancelSubmissionResponseDataPriceMax)
+      .nullable(),
+    measurements: zod.object({
+      chest: zod
+        .number()
+        .gt(
+          productControllerCancelSubmissionResponseDataMeasurementsChestExclusiveMin,
+        )
+        .max(productControllerCancelSubmissionResponseDataMeasurementsChestMax)
+        .optional(),
+      waist: zod
+        .number()
+        .gt(
+          productControllerCancelSubmissionResponseDataMeasurementsWaistExclusiveMin,
+        )
+        .max(productControllerCancelSubmissionResponseDataMeasurementsWaistMax)
+        .optional(),
+      hip: zod
+        .number()
+        .gt(
+          productControllerCancelSubmissionResponseDataMeasurementsHipExclusiveMin,
+        )
+        .max(productControllerCancelSubmissionResponseDataMeasurementsHipMax)
+        .optional(),
+      length: zod
+        .number()
+        .gt(
+          productControllerCancelSubmissionResponseDataMeasurementsLengthExclusiveMin,
+        )
+        .max(productControllerCancelSubmissionResponseDataMeasurementsLengthMax)
+        .optional(),
+      shoulder: zod
+        .number()
+        .gt(
+          productControllerCancelSubmissionResponseDataMeasurementsShoulderExclusiveMin,
+        )
+        .max(
+          productControllerCancelSubmissionResponseDataMeasurementsShoulderMax,
+        )
+        .optional(),
+      sleeve: zod
+        .number()
+        .gt(
+          productControllerCancelSubmissionResponseDataMeasurementsSleeveExclusiveMin,
+        )
+        .max(productControllerCancelSubmissionResponseDataMeasurementsSleeveMax)
+        .optional(),
+      inseam: zod
+        .number()
+        .gt(
+          productControllerCancelSubmissionResponseDataMeasurementsInseamExclusiveMin,
+        )
+        .max(productControllerCancelSubmissionResponseDataMeasurementsInseamMax)
+        .optional(),
+    }),
+    shippingPackage: zod
+      .object({
+        weightGrams: zod
+          .int()
+          .gt(
+            productControllerCancelSubmissionResponseDataShippingPackageWeightGramsExclusiveMin,
+          )
+          .max(
+            productControllerCancelSubmissionResponseDataShippingPackageWeightGramsMax,
+          ),
+        lengthCm: zod
+          .number()
+          .gt(
+            productControllerCancelSubmissionResponseDataShippingPackageLengthCmExclusiveMin,
+          )
+          .max(
+            productControllerCancelSubmissionResponseDataShippingPackageLengthCmMax,
+          ),
+        widthCm: zod
+          .number()
+          .gt(
+            productControllerCancelSubmissionResponseDataShippingPackageWidthCmExclusiveMin,
+          )
+          .max(
+            productControllerCancelSubmissionResponseDataShippingPackageWidthCmMax,
+          ),
+        heightCm: zod
+          .number()
+          .gt(
+            productControllerCancelSubmissionResponseDataShippingPackageHeightCmExclusiveMin,
+          )
+          .max(
+            productControllerCancelSubmissionResponseDataShippingPackageHeightCmMax,
+          ),
+      })
+      .nullable()
+      .default(
+        productControllerCancelSubmissionResponseDataShippingPackageDefault,
+      ),
+    repairs: zod.string().nullable(),
+    defects: zod.array(
+      zod.object({
+        description: zod
+          .string()
+          .min(1)
+          .max(
+            productControllerCancelSubmissionResponseDataDefectsItemDescriptionMax,
+          ),
+        mediaIds: zod
+          .array(
+            zod
+              .uuid()
+              .regex(
+                productControllerCancelSubmissionResponseDataDefectsItemMediaIdsItemRegExp,
+              ),
+          )
+          .min(1)
+          .max(
+            productControllerCancelSubmissionResponseDataDefectsItemMediaIdsMax,
+          ),
+      }),
+    ),
+    coverUrl: zod.url().nullable(),
+    mediaCount: zod
+      .int()
+      .min(productControllerCancelSubmissionResponseDataMediaCountMin)
+      .max(productControllerCancelSubmissionResponseDataMediaCountMax),
+    status: zod.enum([
+      'DRAFT',
+      'PENDING_REVIEW',
+      'REJECTED',
+      'SUSPENDED',
+      'ACTIVE',
+      'HELD',
+      'SOLD',
+      'HIDDEN',
+    ]),
+    publishedAt: zod.iso
+      .datetime({ offset: true })
+      .regex(productControllerCancelSubmissionResponseDataPublishedAtRegExp)
+      .nullable(),
+    heldUntil: zod.iso
+      .datetime({ offset: true })
+      .regex(productControllerCancelSubmissionResponseDataHeldUntilRegExp)
+      .nullable(),
+    soldAt: zod.iso
+      .datetime({ offset: true })
+      .regex(productControllerCancelSubmissionResponseDataSoldAtRegExp)
+      .nullable(),
+    createdAt: zod.iso
+      .datetime({ offset: true })
+      .regex(productControllerCancelSubmissionResponseDataCreatedAtRegExp),
+    updatedAt: zod.iso
+      .datetime({ offset: true })
+      .regex(productControllerCancelSubmissionResponseDataUpdatedAtRegExp),
+    category: zod
+      .object({
+        id: zod
+          .uuid()
+          .regex(
+            productControllerCancelSubmissionResponseDataCategoryIdRegExpOne,
+          ),
+        name: zod.string(),
+        slug: zod.string(),
+      })
+      .nullable(),
+    shop: zod.object({
+      id: zod
+        .uuid()
+        .regex(productControllerCancelSubmissionResponseDataShopIdRegExpOne),
+      name: zod.string(),
+    }),
   }),
 });
 
@@ -3651,10 +3231,6 @@ export const productControllerSuspendResponseDataIdRegExp = new RegExp(
 export const productControllerSuspendResponseDataCategoryIdRegExp = new RegExp(
   '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
 );
-export const productControllerSuspendResponseDataSellerUserIdRegExp =
-  new RegExp(
-    '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
-  );
 export const productControllerSuspendResponseDataShopIdRegExp = new RegExp(
   '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
 );
@@ -3682,17 +3258,17 @@ export const productControllerSuspendResponseDataMeasurementsSleeveMax = 500;
 export const productControllerSuspendResponseDataMeasurementsInseamExclusiveMin = 0;
 export const productControllerSuspendResponseDataMeasurementsInseamMax = 500;
 
-export const productControllerSuspendResponseDataShippingPackageWeightTwoGramsExclusiveMin = 0;
-export const productControllerSuspendResponseDataShippingPackageWeightTwoGramsMax = 50000;
+export const productControllerSuspendResponseDataShippingPackageWeightGramsExclusiveMin = 0;
+export const productControllerSuspendResponseDataShippingPackageWeightGramsMax = 50000;
 
-export const productControllerSuspendResponseDataShippingPackageSizeTwoLengthCmExclusiveMin = 0;
-export const productControllerSuspendResponseDataShippingPackageSizeTwoLengthCmMax = 200;
+export const productControllerSuspendResponseDataShippingPackageLengthCmExclusiveMin = 0;
+export const productControllerSuspendResponseDataShippingPackageLengthCmMax = 200;
 
-export const productControllerSuspendResponseDataShippingPackageSizeTwoWidthCmExclusiveMin = 0;
-export const productControllerSuspendResponseDataShippingPackageSizeTwoWidthCmMax = 200;
+export const productControllerSuspendResponseDataShippingPackageWidthCmExclusiveMin = 0;
+export const productControllerSuspendResponseDataShippingPackageWidthCmMax = 200;
 
-export const productControllerSuspendResponseDataShippingPackageSizeTwoHeightCmExclusiveMin = 0;
-export const productControllerSuspendResponseDataShippingPackageSizeTwoHeightCmMax = 200;
+export const productControllerSuspendResponseDataShippingPackageHeightCmExclusiveMin = 0;
+export const productControllerSuspendResponseDataShippingPackageHeightCmMax = 200;
 
 export const productControllerSuspendResponseDataShippingPackageDefault = null;
 export const productControllerSuspendResponseDataDefectsItemDescriptionMax = 1000;
@@ -3702,12 +3278,6 @@ export const productControllerSuspendResponseDataDefectsItemMediaIdsItemRegExp =
     '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
   );
 export const productControllerSuspendResponseDataDefectsItemMediaIdsMax = 10;
-
-export const productControllerSuspendResponseDataRevisionExclusiveMin = 0;
-export const productControllerSuspendResponseDataRevisionMax = 9007199254740991;
-
-export const productControllerSuspendResponseDataApprovedRevisionExclusiveMin = 0;
-export const productControllerSuspendResponseDataApprovedRevisionMax = 9007199254740991;
 
 export const productControllerSuspendResponseDataMediaCountMin = 0;
 export const productControllerSuspendResponseDataMediaCountMax = 9007199254740991;
@@ -3731,9 +3301,6 @@ export const productControllerSuspendResponseDataCategoryIdRegExpOne =
   new RegExp(
     '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
   );
-export const productControllerSuspendResponseDataSellerIdRegExp = new RegExp(
-  '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
-);
 export const productControllerSuspendResponseDataShopIdRegExpOne = new RegExp(
   '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
 );
@@ -3747,14 +3314,7 @@ export const ProductControllerSuspendResponse = zod.object({
       .uuid()
       .regex(productControllerSuspendResponseDataCategoryIdRegExp)
       .nullable(),
-    sellerUserId: zod
-      .uuid()
-      .regex(productControllerSuspendResponseDataSellerUserIdRegExp)
-      .nullable(),
-    shopId: zod
-      .uuid()
-      .regex(productControllerSuspendResponseDataShopIdRegExp)
-      .nullable(),
+    shopId: zod.uuid().regex(productControllerSuspendResponseDataShopIdRegExp),
     title: zod.string().nullable(),
     description: zod.string().nullable(),
     condition: zod
@@ -3815,67 +3375,32 @@ export const ProductControllerSuspendResponse = zod.object({
     }),
     shippingPackage: zod
       .object({
-        weight: zod.union([
-          zod.object({
-            mode: zod.enum(['RANGE']),
-            preset: zod.enum([
-              'UP_TO_250_G',
-              'UP_TO_500_G',
-              'UP_TO_1000_G',
-              'UP_TO_2000_G',
-              'UP_TO_5000_G',
-            ]),
-          }),
-          zod.object({
-            mode: zod.enum(['CUSTOM']),
-            grams: zod
-              .int()
-              .gt(
-                productControllerSuspendResponseDataShippingPackageWeightTwoGramsExclusiveMin,
-              )
-              .max(
-                productControllerSuspendResponseDataShippingPackageWeightTwoGramsMax,
-              ),
-          }),
-        ]),
-        size: zod.union([
-          zod.object({
-            mode: zod.enum(['RANGE']),
-            preset: zod.enum([
-              'BOX_20_15_10_CM',
-              'BOX_30_20_15_CM',
-              'BOX_40_30_20_CM',
-              'BOX_50_40_30_CM',
-            ]),
-          }),
-          zod.object({
-            mode: zod.enum(['CUSTOM']),
-            lengthCm: zod
-              .number()
-              .gt(
-                productControllerSuspendResponseDataShippingPackageSizeTwoLengthCmExclusiveMin,
-              )
-              .max(
-                productControllerSuspendResponseDataShippingPackageSizeTwoLengthCmMax,
-              ),
-            widthCm: zod
-              .number()
-              .gt(
-                productControllerSuspendResponseDataShippingPackageSizeTwoWidthCmExclusiveMin,
-              )
-              .max(
-                productControllerSuspendResponseDataShippingPackageSizeTwoWidthCmMax,
-              ),
-            heightCm: zod
-              .number()
-              .gt(
-                productControllerSuspendResponseDataShippingPackageSizeTwoHeightCmExclusiveMin,
-              )
-              .max(
-                productControllerSuspendResponseDataShippingPackageSizeTwoHeightCmMax,
-              ),
-          }),
-        ]),
+        weightGrams: zod
+          .int()
+          .gt(
+            productControllerSuspendResponseDataShippingPackageWeightGramsExclusiveMin,
+          )
+          .max(
+            productControllerSuspendResponseDataShippingPackageWeightGramsMax,
+          ),
+        lengthCm: zod
+          .number()
+          .gt(
+            productControllerSuspendResponseDataShippingPackageLengthCmExclusiveMin,
+          )
+          .max(productControllerSuspendResponseDataShippingPackageLengthCmMax),
+        widthCm: zod
+          .number()
+          .gt(
+            productControllerSuspendResponseDataShippingPackageWidthCmExclusiveMin,
+          )
+          .max(productControllerSuspendResponseDataShippingPackageWidthCmMax),
+        heightCm: zod
+          .number()
+          .gt(
+            productControllerSuspendResponseDataShippingPackageHeightCmExclusiveMin,
+          )
+          .max(productControllerSuspendResponseDataShippingPackageHeightCmMax),
       })
       .nullable()
       .default(productControllerSuspendResponseDataShippingPackageDefault),
@@ -3898,15 +3423,6 @@ export const ProductControllerSuspendResponse = zod.object({
           .max(productControllerSuspendResponseDataDefectsItemMediaIdsMax),
       }),
     ),
-    revision: zod
-      .int()
-      .gt(productControllerSuspendResponseDataRevisionExclusiveMin)
-      .max(productControllerSuspendResponseDataRevisionMax),
-    approvedRevision: zod
-      .int()
-      .gt(productControllerSuspendResponseDataApprovedRevisionExclusiveMin)
-      .max(productControllerSuspendResponseDataApprovedRevisionMax)
-      .nullable(),
     coverUrl: zod.url().nullable(),
     mediaCount: zod
       .int()
@@ -3949,22 +3465,10 @@ export const ProductControllerSuspendResponse = zod.object({
         slug: zod.string(),
       })
       .nullable(),
-    seller: zod
-      .object({
-        id: zod
-          .uuid()
-          .regex(productControllerSuspendResponseDataSellerIdRegExp),
-        fullName: zod.string(),
-      })
-      .nullable(),
-    shop: zod
-      .object({
-        id: zod
-          .uuid()
-          .regex(productControllerSuspendResponseDataShopIdRegExpOne),
-        name: zod.string(),
-      })
-      .nullable(),
+    shop: zod.object({
+      id: zod.uuid().regex(productControllerSuspendResponseDataShopIdRegExpOne),
+      name: zod.string(),
+    }),
   }),
 });
 
@@ -3982,10 +3486,6 @@ export const productControllerFindOneResponseDataIdRegExp = new RegExp(
 export const productControllerFindOneResponseDataCategoryIdRegExp = new RegExp(
   '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
 );
-export const productControllerFindOneResponseDataSellerUserIdRegExp =
-  new RegExp(
-    '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
-  );
 export const productControllerFindOneResponseDataShopIdRegExp = new RegExp(
   '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
 );
@@ -4013,17 +3513,17 @@ export const productControllerFindOneResponseDataMeasurementsSleeveMax = 500;
 export const productControllerFindOneResponseDataMeasurementsInseamExclusiveMin = 0;
 export const productControllerFindOneResponseDataMeasurementsInseamMax = 500;
 
-export const productControllerFindOneResponseDataShippingPackageWeightTwoGramsExclusiveMin = 0;
-export const productControllerFindOneResponseDataShippingPackageWeightTwoGramsMax = 50000;
+export const productControllerFindOneResponseDataShippingPackageWeightGramsExclusiveMin = 0;
+export const productControllerFindOneResponseDataShippingPackageWeightGramsMax = 50000;
 
-export const productControllerFindOneResponseDataShippingPackageSizeTwoLengthCmExclusiveMin = 0;
-export const productControllerFindOneResponseDataShippingPackageSizeTwoLengthCmMax = 200;
+export const productControllerFindOneResponseDataShippingPackageLengthCmExclusiveMin = 0;
+export const productControllerFindOneResponseDataShippingPackageLengthCmMax = 200;
 
-export const productControllerFindOneResponseDataShippingPackageSizeTwoWidthCmExclusiveMin = 0;
-export const productControllerFindOneResponseDataShippingPackageSizeTwoWidthCmMax = 200;
+export const productControllerFindOneResponseDataShippingPackageWidthCmExclusiveMin = 0;
+export const productControllerFindOneResponseDataShippingPackageWidthCmMax = 200;
 
-export const productControllerFindOneResponseDataShippingPackageSizeTwoHeightCmExclusiveMin = 0;
-export const productControllerFindOneResponseDataShippingPackageSizeTwoHeightCmMax = 200;
+export const productControllerFindOneResponseDataShippingPackageHeightCmExclusiveMin = 0;
+export const productControllerFindOneResponseDataShippingPackageHeightCmMax = 200;
 
 export const productControllerFindOneResponseDataShippingPackageDefault = null;
 export const productControllerFindOneResponseDataDefectsItemDescriptionMax = 1000;
@@ -4033,12 +3533,6 @@ export const productControllerFindOneResponseDataDefectsItemMediaIdsItemRegExp =
     '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
   );
 export const productControllerFindOneResponseDataDefectsItemMediaIdsMax = 10;
-
-export const productControllerFindOneResponseDataRevisionExclusiveMin = 0;
-export const productControllerFindOneResponseDataRevisionMax = 9007199254740991;
-
-export const productControllerFindOneResponseDataApprovedRevisionExclusiveMin = 0;
-export const productControllerFindOneResponseDataApprovedRevisionMax = 9007199254740991;
 
 export const productControllerFindOneResponseDataMediaCountMin = 0;
 export const productControllerFindOneResponseDataMediaCountMax = 9007199254740991;
@@ -4062,9 +3556,6 @@ export const productControllerFindOneResponseDataCategoryIdRegExpOne =
   new RegExp(
     '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
   );
-export const productControllerFindOneResponseDataSellerIdRegExp = new RegExp(
-  '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
-);
 export const productControllerFindOneResponseDataShopIdRegExpOne = new RegExp(
   '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
 );
@@ -4078,14 +3569,7 @@ export const ProductControllerFindOneResponse = zod.object({
       .uuid()
       .regex(productControllerFindOneResponseDataCategoryIdRegExp)
       .nullable(),
-    sellerUserId: zod
-      .uuid()
-      .regex(productControllerFindOneResponseDataSellerUserIdRegExp)
-      .nullable(),
-    shopId: zod
-      .uuid()
-      .regex(productControllerFindOneResponseDataShopIdRegExp)
-      .nullable(),
+    shopId: zod.uuid().regex(productControllerFindOneResponseDataShopIdRegExp),
     title: zod.string().nullable(),
     description: zod.string().nullable(),
     condition: zod
@@ -4146,67 +3630,32 @@ export const ProductControllerFindOneResponse = zod.object({
     }),
     shippingPackage: zod
       .object({
-        weight: zod.union([
-          zod.object({
-            mode: zod.enum(['RANGE']),
-            preset: zod.enum([
-              'UP_TO_250_G',
-              'UP_TO_500_G',
-              'UP_TO_1000_G',
-              'UP_TO_2000_G',
-              'UP_TO_5000_G',
-            ]),
-          }),
-          zod.object({
-            mode: zod.enum(['CUSTOM']),
-            grams: zod
-              .int()
-              .gt(
-                productControllerFindOneResponseDataShippingPackageWeightTwoGramsExclusiveMin,
-              )
-              .max(
-                productControllerFindOneResponseDataShippingPackageWeightTwoGramsMax,
-              ),
-          }),
-        ]),
-        size: zod.union([
-          zod.object({
-            mode: zod.enum(['RANGE']),
-            preset: zod.enum([
-              'BOX_20_15_10_CM',
-              'BOX_30_20_15_CM',
-              'BOX_40_30_20_CM',
-              'BOX_50_40_30_CM',
-            ]),
-          }),
-          zod.object({
-            mode: zod.enum(['CUSTOM']),
-            lengthCm: zod
-              .number()
-              .gt(
-                productControllerFindOneResponseDataShippingPackageSizeTwoLengthCmExclusiveMin,
-              )
-              .max(
-                productControllerFindOneResponseDataShippingPackageSizeTwoLengthCmMax,
-              ),
-            widthCm: zod
-              .number()
-              .gt(
-                productControllerFindOneResponseDataShippingPackageSizeTwoWidthCmExclusiveMin,
-              )
-              .max(
-                productControllerFindOneResponseDataShippingPackageSizeTwoWidthCmMax,
-              ),
-            heightCm: zod
-              .number()
-              .gt(
-                productControllerFindOneResponseDataShippingPackageSizeTwoHeightCmExclusiveMin,
-              )
-              .max(
-                productControllerFindOneResponseDataShippingPackageSizeTwoHeightCmMax,
-              ),
-          }),
-        ]),
+        weightGrams: zod
+          .int()
+          .gt(
+            productControllerFindOneResponseDataShippingPackageWeightGramsExclusiveMin,
+          )
+          .max(
+            productControllerFindOneResponseDataShippingPackageWeightGramsMax,
+          ),
+        lengthCm: zod
+          .number()
+          .gt(
+            productControllerFindOneResponseDataShippingPackageLengthCmExclusiveMin,
+          )
+          .max(productControllerFindOneResponseDataShippingPackageLengthCmMax),
+        widthCm: zod
+          .number()
+          .gt(
+            productControllerFindOneResponseDataShippingPackageWidthCmExclusiveMin,
+          )
+          .max(productControllerFindOneResponseDataShippingPackageWidthCmMax),
+        heightCm: zod
+          .number()
+          .gt(
+            productControllerFindOneResponseDataShippingPackageHeightCmExclusiveMin,
+          )
+          .max(productControllerFindOneResponseDataShippingPackageHeightCmMax),
       })
       .nullable()
       .default(productControllerFindOneResponseDataShippingPackageDefault),
@@ -4229,15 +3678,6 @@ export const ProductControllerFindOneResponse = zod.object({
           .max(productControllerFindOneResponseDataDefectsItemMediaIdsMax),
       }),
     ),
-    revision: zod
-      .int()
-      .gt(productControllerFindOneResponseDataRevisionExclusiveMin)
-      .max(productControllerFindOneResponseDataRevisionMax),
-    approvedRevision: zod
-      .int()
-      .gt(productControllerFindOneResponseDataApprovedRevisionExclusiveMin)
-      .max(productControllerFindOneResponseDataApprovedRevisionMax)
-      .nullable(),
     coverUrl: zod.url().nullable(),
     mediaCount: zod
       .int()
@@ -4280,22 +3720,10 @@ export const ProductControllerFindOneResponse = zod.object({
         slug: zod.string(),
       })
       .nullable(),
-    seller: zod
-      .object({
-        id: zod
-          .uuid()
-          .regex(productControllerFindOneResponseDataSellerIdRegExp),
-        fullName: zod.string(),
-      })
-      .nullable(),
-    shop: zod
-      .object({
-        id: zod
-          .uuid()
-          .regex(productControllerFindOneResponseDataShopIdRegExpOne),
-        name: zod.string(),
-      })
-      .nullable(),
+    shop: zod.object({
+      id: zod.uuid().regex(productControllerFindOneResponseDataShopIdRegExpOne),
+      name: zod.string(),
+    }),
   }),
 });
 
@@ -4344,17 +3772,17 @@ export const productControllerUpdateBodyMeasurementsSleeveMax = 500;
 export const productControllerUpdateBodyMeasurementsInseamExclusiveMin = 0;
 export const productControllerUpdateBodyMeasurementsInseamMax = 500;
 
-export const productControllerUpdateBodyShippingPackageWeightTwoGramsExclusiveMin = 0;
-export const productControllerUpdateBodyShippingPackageWeightTwoGramsMax = 50000;
+export const productControllerUpdateBodyShippingPackageWeightGramsExclusiveMin = 0;
+export const productControllerUpdateBodyShippingPackageWeightGramsMax = 50000;
 
-export const productControllerUpdateBodyShippingPackageSizeTwoLengthCmExclusiveMin = 0;
-export const productControllerUpdateBodyShippingPackageSizeTwoLengthCmMax = 200;
+export const productControllerUpdateBodyShippingPackageLengthCmExclusiveMin = 0;
+export const productControllerUpdateBodyShippingPackageLengthCmMax = 200;
 
-export const productControllerUpdateBodyShippingPackageSizeTwoWidthCmExclusiveMin = 0;
-export const productControllerUpdateBodyShippingPackageSizeTwoWidthCmMax = 200;
+export const productControllerUpdateBodyShippingPackageWidthCmExclusiveMin = 0;
+export const productControllerUpdateBodyShippingPackageWidthCmMax = 200;
 
-export const productControllerUpdateBodyShippingPackageSizeTwoHeightCmExclusiveMin = 0;
-export const productControllerUpdateBodyShippingPackageSizeTwoHeightCmMax = 200;
+export const productControllerUpdateBodyShippingPackageHeightCmExclusiveMin = 0;
+export const productControllerUpdateBodyShippingPackageHeightCmMax = 200;
 
 export const productControllerUpdateBodyRepairsMax = 2000;
 
@@ -4436,59 +3864,22 @@ export const ProductControllerUpdateBody = zod.strictObject({
     .optional(),
   shippingPackage: zod
     .strictObject({
-      weight: zod.union([
-        zod.strictObject({
-          mode: zod.enum(['RANGE']),
-          preset: zod.enum([
-            'UP_TO_250_G',
-            'UP_TO_500_G',
-            'UP_TO_1000_G',
-            'UP_TO_2000_G',
-            'UP_TO_5000_G',
-          ]),
-        }),
-        zod.strictObject({
-          mode: zod.enum(['CUSTOM']),
-          grams: zod
-            .int()
-            .gt(
-              productControllerUpdateBodyShippingPackageWeightTwoGramsExclusiveMin,
-            )
-            .max(productControllerUpdateBodyShippingPackageWeightTwoGramsMax),
-        }),
-      ]),
-      size: zod.union([
-        zod.strictObject({
-          mode: zod.enum(['RANGE']),
-          preset: zod.enum([
-            'BOX_20_15_10_CM',
-            'BOX_30_20_15_CM',
-            'BOX_40_30_20_CM',
-            'BOX_50_40_30_CM',
-          ]),
-        }),
-        zod.strictObject({
-          mode: zod.enum(['CUSTOM']),
-          lengthCm: zod
-            .number()
-            .gt(
-              productControllerUpdateBodyShippingPackageSizeTwoLengthCmExclusiveMin,
-            )
-            .max(productControllerUpdateBodyShippingPackageSizeTwoLengthCmMax),
-          widthCm: zod
-            .number()
-            .gt(
-              productControllerUpdateBodyShippingPackageSizeTwoWidthCmExclusiveMin,
-            )
-            .max(productControllerUpdateBodyShippingPackageSizeTwoWidthCmMax),
-          heightCm: zod
-            .number()
-            .gt(
-              productControllerUpdateBodyShippingPackageSizeTwoHeightCmExclusiveMin,
-            )
-            .max(productControllerUpdateBodyShippingPackageSizeTwoHeightCmMax),
-        }),
-      ]),
+      weightGrams: zod
+        .int()
+        .gt(productControllerUpdateBodyShippingPackageWeightGramsExclusiveMin)
+        .max(productControllerUpdateBodyShippingPackageWeightGramsMax),
+      lengthCm: zod
+        .number()
+        .gt(productControllerUpdateBodyShippingPackageLengthCmExclusiveMin)
+        .max(productControllerUpdateBodyShippingPackageLengthCmMax),
+      widthCm: zod
+        .number()
+        .gt(productControllerUpdateBodyShippingPackageWidthCmExclusiveMin)
+        .max(productControllerUpdateBodyShippingPackageWidthCmMax),
+      heightCm: zod
+        .number()
+        .gt(productControllerUpdateBodyShippingPackageHeightCmExclusiveMin)
+        .max(productControllerUpdateBodyShippingPackageHeightCmMax),
     })
     .nullish(),
   repairs: zod.string().max(productControllerUpdateBodyRepairsMax).nullish(),
@@ -4519,9 +3910,6 @@ export const productControllerUpdateResponseDataIdRegExp = new RegExp(
 export const productControllerUpdateResponseDataCategoryIdRegExp = new RegExp(
   '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
 );
-export const productControllerUpdateResponseDataSellerUserIdRegExp = new RegExp(
-  '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
-);
 export const productControllerUpdateResponseDataShopIdRegExp = new RegExp(
   '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
 );
@@ -4549,17 +3937,17 @@ export const productControllerUpdateResponseDataMeasurementsSleeveMax = 500;
 export const productControllerUpdateResponseDataMeasurementsInseamExclusiveMin = 0;
 export const productControllerUpdateResponseDataMeasurementsInseamMax = 500;
 
-export const productControllerUpdateResponseDataShippingPackageWeightTwoGramsExclusiveMin = 0;
-export const productControllerUpdateResponseDataShippingPackageWeightTwoGramsMax = 50000;
+export const productControllerUpdateResponseDataShippingPackageWeightGramsExclusiveMin = 0;
+export const productControllerUpdateResponseDataShippingPackageWeightGramsMax = 50000;
 
-export const productControllerUpdateResponseDataShippingPackageSizeTwoLengthCmExclusiveMin = 0;
-export const productControllerUpdateResponseDataShippingPackageSizeTwoLengthCmMax = 200;
+export const productControllerUpdateResponseDataShippingPackageLengthCmExclusiveMin = 0;
+export const productControllerUpdateResponseDataShippingPackageLengthCmMax = 200;
 
-export const productControllerUpdateResponseDataShippingPackageSizeTwoWidthCmExclusiveMin = 0;
-export const productControllerUpdateResponseDataShippingPackageSizeTwoWidthCmMax = 200;
+export const productControllerUpdateResponseDataShippingPackageWidthCmExclusiveMin = 0;
+export const productControllerUpdateResponseDataShippingPackageWidthCmMax = 200;
 
-export const productControllerUpdateResponseDataShippingPackageSizeTwoHeightCmExclusiveMin = 0;
-export const productControllerUpdateResponseDataShippingPackageSizeTwoHeightCmMax = 200;
+export const productControllerUpdateResponseDataShippingPackageHeightCmExclusiveMin = 0;
+export const productControllerUpdateResponseDataShippingPackageHeightCmMax = 200;
 
 export const productControllerUpdateResponseDataShippingPackageDefault = null;
 export const productControllerUpdateResponseDataDefectsItemDescriptionMax = 1000;
@@ -4569,12 +3957,6 @@ export const productControllerUpdateResponseDataDefectsItemMediaIdsItemRegExp =
     '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
   );
 export const productControllerUpdateResponseDataDefectsItemMediaIdsMax = 10;
-
-export const productControllerUpdateResponseDataRevisionExclusiveMin = 0;
-export const productControllerUpdateResponseDataRevisionMax = 9007199254740991;
-
-export const productControllerUpdateResponseDataApprovedRevisionExclusiveMin = 0;
-export const productControllerUpdateResponseDataApprovedRevisionMax = 9007199254740991;
 
 export const productControllerUpdateResponseDataMediaCountMin = 0;
 export const productControllerUpdateResponseDataMediaCountMax = 9007199254740991;
@@ -4598,9 +3980,6 @@ export const productControllerUpdateResponseDataCategoryIdRegExpOne =
   new RegExp(
     '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
   );
-export const productControllerUpdateResponseDataSellerIdRegExp = new RegExp(
-  '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
-);
 export const productControllerUpdateResponseDataShopIdRegExpOne = new RegExp(
   '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
 );
@@ -4614,14 +3993,7 @@ export const ProductControllerUpdateResponse = zod.object({
       .uuid()
       .regex(productControllerUpdateResponseDataCategoryIdRegExp)
       .nullable(),
-    sellerUserId: zod
-      .uuid()
-      .regex(productControllerUpdateResponseDataSellerUserIdRegExp)
-      .nullable(),
-    shopId: zod
-      .uuid()
-      .regex(productControllerUpdateResponseDataShopIdRegExp)
-      .nullable(),
+    shopId: zod.uuid().regex(productControllerUpdateResponseDataShopIdRegExp),
     title: zod.string().nullable(),
     description: zod.string().nullable(),
     condition: zod
@@ -4680,67 +4052,32 @@ export const ProductControllerUpdateResponse = zod.object({
     }),
     shippingPackage: zod
       .object({
-        weight: zod.union([
-          zod.object({
-            mode: zod.enum(['RANGE']),
-            preset: zod.enum([
-              'UP_TO_250_G',
-              'UP_TO_500_G',
-              'UP_TO_1000_G',
-              'UP_TO_2000_G',
-              'UP_TO_5000_G',
-            ]),
-          }),
-          zod.object({
-            mode: zod.enum(['CUSTOM']),
-            grams: zod
-              .int()
-              .gt(
-                productControllerUpdateResponseDataShippingPackageWeightTwoGramsExclusiveMin,
-              )
-              .max(
-                productControllerUpdateResponseDataShippingPackageWeightTwoGramsMax,
-              ),
-          }),
-        ]),
-        size: zod.union([
-          zod.object({
-            mode: zod.enum(['RANGE']),
-            preset: zod.enum([
-              'BOX_20_15_10_CM',
-              'BOX_30_20_15_CM',
-              'BOX_40_30_20_CM',
-              'BOX_50_40_30_CM',
-            ]),
-          }),
-          zod.object({
-            mode: zod.enum(['CUSTOM']),
-            lengthCm: zod
-              .number()
-              .gt(
-                productControllerUpdateResponseDataShippingPackageSizeTwoLengthCmExclusiveMin,
-              )
-              .max(
-                productControllerUpdateResponseDataShippingPackageSizeTwoLengthCmMax,
-              ),
-            widthCm: zod
-              .number()
-              .gt(
-                productControllerUpdateResponseDataShippingPackageSizeTwoWidthCmExclusiveMin,
-              )
-              .max(
-                productControllerUpdateResponseDataShippingPackageSizeTwoWidthCmMax,
-              ),
-            heightCm: zod
-              .number()
-              .gt(
-                productControllerUpdateResponseDataShippingPackageSizeTwoHeightCmExclusiveMin,
-              )
-              .max(
-                productControllerUpdateResponseDataShippingPackageSizeTwoHeightCmMax,
-              ),
-          }),
-        ]),
+        weightGrams: zod
+          .int()
+          .gt(
+            productControllerUpdateResponseDataShippingPackageWeightGramsExclusiveMin,
+          )
+          .max(
+            productControllerUpdateResponseDataShippingPackageWeightGramsMax,
+          ),
+        lengthCm: zod
+          .number()
+          .gt(
+            productControllerUpdateResponseDataShippingPackageLengthCmExclusiveMin,
+          )
+          .max(productControllerUpdateResponseDataShippingPackageLengthCmMax),
+        widthCm: zod
+          .number()
+          .gt(
+            productControllerUpdateResponseDataShippingPackageWidthCmExclusiveMin,
+          )
+          .max(productControllerUpdateResponseDataShippingPackageWidthCmMax),
+        heightCm: zod
+          .number()
+          .gt(
+            productControllerUpdateResponseDataShippingPackageHeightCmExclusiveMin,
+          )
+          .max(productControllerUpdateResponseDataShippingPackageHeightCmMax),
       })
       .nullable()
       .default(productControllerUpdateResponseDataShippingPackageDefault),
@@ -4763,15 +4100,6 @@ export const ProductControllerUpdateResponse = zod.object({
           .max(productControllerUpdateResponseDataDefectsItemMediaIdsMax),
       }),
     ),
-    revision: zod
-      .int()
-      .gt(productControllerUpdateResponseDataRevisionExclusiveMin)
-      .max(productControllerUpdateResponseDataRevisionMax),
-    approvedRevision: zod
-      .int()
-      .gt(productControllerUpdateResponseDataApprovedRevisionExclusiveMin)
-      .max(productControllerUpdateResponseDataApprovedRevisionMax)
-      .nullable(),
     coverUrl: zod.url().nullable(),
     mediaCount: zod
       .int()
@@ -4814,20 +4142,10 @@ export const ProductControllerUpdateResponse = zod.object({
         slug: zod.string(),
       })
       .nullable(),
-    seller: zod
-      .object({
-        id: zod.uuid().regex(productControllerUpdateResponseDataSellerIdRegExp),
-        fullName: zod.string(),
-      })
-      .nullable(),
-    shop: zod
-      .object({
-        id: zod
-          .uuid()
-          .regex(productControllerUpdateResponseDataShopIdRegExpOne),
-        name: zod.string(),
-      })
-      .nullable(),
+    shop: zod.object({
+      id: zod.uuid().regex(productControllerUpdateResponseDataShopIdRegExpOne),
+      name: zod.string(),
+    }),
   }),
 });
 
@@ -4847,10 +4165,6 @@ export const productControllerUpdateStatusResponseDataIdRegExp = new RegExp(
   '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
 );
 export const productControllerUpdateStatusResponseDataCategoryIdRegExp =
-  new RegExp(
-    '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
-  );
-export const productControllerUpdateStatusResponseDataSellerUserIdRegExp =
   new RegExp(
     '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
   );
@@ -4881,17 +4195,17 @@ export const productControllerUpdateStatusResponseDataMeasurementsSleeveMax = 50
 export const productControllerUpdateStatusResponseDataMeasurementsInseamExclusiveMin = 0;
 export const productControllerUpdateStatusResponseDataMeasurementsInseamMax = 500;
 
-export const productControllerUpdateStatusResponseDataShippingPackageWeightTwoGramsExclusiveMin = 0;
-export const productControllerUpdateStatusResponseDataShippingPackageWeightTwoGramsMax = 50000;
+export const productControllerUpdateStatusResponseDataShippingPackageWeightGramsExclusiveMin = 0;
+export const productControllerUpdateStatusResponseDataShippingPackageWeightGramsMax = 50000;
 
-export const productControllerUpdateStatusResponseDataShippingPackageSizeTwoLengthCmExclusiveMin = 0;
-export const productControllerUpdateStatusResponseDataShippingPackageSizeTwoLengthCmMax = 200;
+export const productControllerUpdateStatusResponseDataShippingPackageLengthCmExclusiveMin = 0;
+export const productControllerUpdateStatusResponseDataShippingPackageLengthCmMax = 200;
 
-export const productControllerUpdateStatusResponseDataShippingPackageSizeTwoWidthCmExclusiveMin = 0;
-export const productControllerUpdateStatusResponseDataShippingPackageSizeTwoWidthCmMax = 200;
+export const productControllerUpdateStatusResponseDataShippingPackageWidthCmExclusiveMin = 0;
+export const productControllerUpdateStatusResponseDataShippingPackageWidthCmMax = 200;
 
-export const productControllerUpdateStatusResponseDataShippingPackageSizeTwoHeightCmExclusiveMin = 0;
-export const productControllerUpdateStatusResponseDataShippingPackageSizeTwoHeightCmMax = 200;
+export const productControllerUpdateStatusResponseDataShippingPackageHeightCmExclusiveMin = 0;
+export const productControllerUpdateStatusResponseDataShippingPackageHeightCmMax = 200;
 
 export const productControllerUpdateStatusResponseDataShippingPackageDefault =
   null;
@@ -4902,12 +4216,6 @@ export const productControllerUpdateStatusResponseDataDefectsItemMediaIdsItemReg
     '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
   );
 export const productControllerUpdateStatusResponseDataDefectsItemMediaIdsMax = 10;
-
-export const productControllerUpdateStatusResponseDataRevisionExclusiveMin = 0;
-export const productControllerUpdateStatusResponseDataRevisionMax = 9007199254740991;
-
-export const productControllerUpdateStatusResponseDataApprovedRevisionExclusiveMin = 0;
-export const productControllerUpdateStatusResponseDataApprovedRevisionMax = 9007199254740991;
 
 export const productControllerUpdateStatusResponseDataMediaCountMin = 0;
 export const productControllerUpdateStatusResponseDataMediaCountMax = 9007199254740991;
@@ -4935,10 +4243,6 @@ export const productControllerUpdateStatusResponseDataCategoryIdRegExpOne =
   new RegExp(
     '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
   );
-export const productControllerUpdateStatusResponseDataSellerIdRegExp =
-  new RegExp(
-    '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
-  );
 export const productControllerUpdateStatusResponseDataShopIdRegExpOne =
   new RegExp(
     '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
@@ -4953,14 +4257,9 @@ export const ProductControllerUpdateStatusResponse = zod.object({
       .uuid()
       .regex(productControllerUpdateStatusResponseDataCategoryIdRegExp)
       .nullable(),
-    sellerUserId: zod
-      .uuid()
-      .regex(productControllerUpdateStatusResponseDataSellerUserIdRegExp)
-      .nullable(),
     shopId: zod
       .uuid()
-      .regex(productControllerUpdateStatusResponseDataShopIdRegExp)
-      .nullable(),
+      .regex(productControllerUpdateStatusResponseDataShopIdRegExp),
     title: zod.string().nullable(),
     description: zod.string().nullable(),
     condition: zod
@@ -5033,67 +4332,38 @@ export const ProductControllerUpdateStatusResponse = zod.object({
     }),
     shippingPackage: zod
       .object({
-        weight: zod.union([
-          zod.object({
-            mode: zod.enum(['RANGE']),
-            preset: zod.enum([
-              'UP_TO_250_G',
-              'UP_TO_500_G',
-              'UP_TO_1000_G',
-              'UP_TO_2000_G',
-              'UP_TO_5000_G',
-            ]),
-          }),
-          zod.object({
-            mode: zod.enum(['CUSTOM']),
-            grams: zod
-              .int()
-              .gt(
-                productControllerUpdateStatusResponseDataShippingPackageWeightTwoGramsExclusiveMin,
-              )
-              .max(
-                productControllerUpdateStatusResponseDataShippingPackageWeightTwoGramsMax,
-              ),
-          }),
-        ]),
-        size: zod.union([
-          zod.object({
-            mode: zod.enum(['RANGE']),
-            preset: zod.enum([
-              'BOX_20_15_10_CM',
-              'BOX_30_20_15_CM',
-              'BOX_40_30_20_CM',
-              'BOX_50_40_30_CM',
-            ]),
-          }),
-          zod.object({
-            mode: zod.enum(['CUSTOM']),
-            lengthCm: zod
-              .number()
-              .gt(
-                productControllerUpdateStatusResponseDataShippingPackageSizeTwoLengthCmExclusiveMin,
-              )
-              .max(
-                productControllerUpdateStatusResponseDataShippingPackageSizeTwoLengthCmMax,
-              ),
-            widthCm: zod
-              .number()
-              .gt(
-                productControllerUpdateStatusResponseDataShippingPackageSizeTwoWidthCmExclusiveMin,
-              )
-              .max(
-                productControllerUpdateStatusResponseDataShippingPackageSizeTwoWidthCmMax,
-              ),
-            heightCm: zod
-              .number()
-              .gt(
-                productControllerUpdateStatusResponseDataShippingPackageSizeTwoHeightCmExclusiveMin,
-              )
-              .max(
-                productControllerUpdateStatusResponseDataShippingPackageSizeTwoHeightCmMax,
-              ),
-          }),
-        ]),
+        weightGrams: zod
+          .int()
+          .gt(
+            productControllerUpdateStatusResponseDataShippingPackageWeightGramsExclusiveMin,
+          )
+          .max(
+            productControllerUpdateStatusResponseDataShippingPackageWeightGramsMax,
+          ),
+        lengthCm: zod
+          .number()
+          .gt(
+            productControllerUpdateStatusResponseDataShippingPackageLengthCmExclusiveMin,
+          )
+          .max(
+            productControllerUpdateStatusResponseDataShippingPackageLengthCmMax,
+          ),
+        widthCm: zod
+          .number()
+          .gt(
+            productControllerUpdateStatusResponseDataShippingPackageWidthCmExclusiveMin,
+          )
+          .max(
+            productControllerUpdateStatusResponseDataShippingPackageWidthCmMax,
+          ),
+        heightCm: zod
+          .number()
+          .gt(
+            productControllerUpdateStatusResponseDataShippingPackageHeightCmExclusiveMin,
+          )
+          .max(
+            productControllerUpdateStatusResponseDataShippingPackageHeightCmMax,
+          ),
       })
       .nullable()
       .default(productControllerUpdateStatusResponseDataShippingPackageDefault),
@@ -5118,15 +4388,6 @@ export const ProductControllerUpdateStatusResponse = zod.object({
           .max(productControllerUpdateStatusResponseDataDefectsItemMediaIdsMax),
       }),
     ),
-    revision: zod
-      .int()
-      .gt(productControllerUpdateStatusResponseDataRevisionExclusiveMin)
-      .max(productControllerUpdateStatusResponseDataRevisionMax),
-    approvedRevision: zod
-      .int()
-      .gt(productControllerUpdateStatusResponseDataApprovedRevisionExclusiveMin)
-      .max(productControllerUpdateStatusResponseDataApprovedRevisionMax)
-      .nullable(),
     coverUrl: zod.url().nullable(),
     mediaCount: zod
       .int()
@@ -5169,21 +4430,11 @@ export const ProductControllerUpdateStatusResponse = zod.object({
         slug: zod.string(),
       })
       .nullable(),
-    seller: zod
-      .object({
-        id: zod
-          .uuid()
-          .regex(productControllerUpdateStatusResponseDataSellerIdRegExp),
-        fullName: zod.string(),
-      })
-      .nullable(),
-    shop: zod
-      .object({
-        id: zod
-          .uuid()
-          .regex(productControllerUpdateStatusResponseDataShopIdRegExpOne),
-        name: zod.string(),
-      })
-      .nullable(),
+    shop: zod.object({
+      id: zod
+        .uuid()
+        .regex(productControllerUpdateStatusResponseDataShopIdRegExpOne),
+      name: zod.string(),
+    }),
   }),
 });

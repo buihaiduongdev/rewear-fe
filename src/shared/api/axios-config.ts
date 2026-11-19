@@ -8,4 +8,5 @@ export const axiosConfig = {
     'Content-Type': 'application/json',
   },
   timeout: ms('10s'),
+  paramsSerializer: { indexes: null },
 } satisfies AxiosRequestConfig;

@@ -77,96 +77,134 @@ export const UserControllerUpdateMeResponse = zod.object({
   }),
 });
 
-export const userControllerFindAllQueryPageOneRegExp = new RegExp('^\\d+$');
-export const userControllerFindAllQueryPageSizeOneRegExp = new RegExp('^\\d+$');
-export const userControllerFindAllQueryOrderDefault = `DESC`;
-
 export const UserControllerFindAllQueryParams = zod.object({
   page: zod
-    .union([
-      zod.string().regex(userControllerFindAllQueryPageOneRegExp),
-      zod.number(),
-    ])
-    .optional(),
-  pageSize: zod
-    .union([
-      zod.string().regex(userControllerFindAllQueryPageSizeOneRegExp),
-      zod.number(),
-    ])
-    .optional(),
-  order: zod
-    .enum(['ASC', 'DESC'])
-    .default(userControllerFindAllQueryOrderDefault),
-  sortBy: zod.string().optional(),
-  search: zod.string().optional(),
-  role: zod.enum(['USER', 'ADMIN']).optional(),
-  status: zod.enum(['ACTIVE', 'INACTIVE']).optional(),
+    .number()
+    .optional()
+    .describe(
+      'Page number to retrieve. If you provide invalid value the default page number will applied\n\n**Example:** 1\n\n\n**Default Value:** 1\n\n',
+    ),
+  limit: zod
+    .number()
+    .optional()
+    .describe(
+      'Number of records per page.\n\n\n**Example:** 20\n\n\n\n**Default Value:** 10\n\n\n\n**Max Value:** 100\n\n\nIf provided value is greater than max value, max value will be applied.\n',
+    ),
+  'filter.role': zod
+    .array(zod.string())
+    .optional()
+    .describe(
+      'Filter by role query param.\n\n**Format:** filter.role={$not}:OPERATION:VALUE\n\n\n\n**Example:** filter.role=$eq:John Doe\n\n**Available Operations**\n- $eq\n\n- $and\n\n- $or',
+    ),
+  'filter.status': zod
+    .array(zod.string())
+    .optional()
+    .describe(
+      'Filter by status query param.\n\n**Format:** filter.status={$not}:OPERATION:VALUE\n\n\n\n**Example:** filter.status=$eq:John Doe\n\n**Available Operations**\n- $eq\n\n- $and\n\n- $or',
+    ),
+  sortBy: zod
+    .array(
+      zod.enum([
+        'createdAt:ASC',
+        'createdAt:DESC',
+        'email:ASC',
+        'email:DESC',
+        'fullName:ASC',
+        'fullName:DESC',
+        'id:ASC',
+        'id:DESC',
+      ]),
+    )
+    .optional()
+    .describe(
+      'Parameter to sort by.\nTo sort by multiple fields, just provide query param multiple types. The order in url defines an order of sorting\n\n**Format:** {fieldName}:{DIRECTION}\n\n\n**Example:** sortBy=createdAt:DESC&sortBy=email:DESC\n\n\n**Default Value:** createdAt:DESC,id:DESC\n\n**Available Fields**\n- createdAt\n\n- email\n\n- fullName\n\n- id\n',
+    ),
+  search: zod
+    .string()
+    .optional()
+    .describe(
+      'Search term to filter result values\n\n**Example:** John\n\n\n**Default Value:** No default value\n\n',
+    ),
+  searchBy: zod
+    .array(zod.string())
+    .optional()
+    .describe(
+      'List of fields to search by term to filter result values\n\n**Example:** fullName,email\n\n\n**Default Value:** By default all fields mentioned below will be used to search by term\n\n**Available Fields**\n- fullName\n\n- email\n',
+    ),
 });
 
-export const userControllerFindAllResponseDataItemsItemIdRegExp = new RegExp(
+export const userControllerFindAllResponseDataDataItemIdRegExp = new RegExp(
   '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
 );
-export const userControllerFindAllResponseDataItemsItemEmailRegExp = new RegExp(
+export const userControllerFindAllResponseDataDataItemEmailRegExp = new RegExp(
   "^(?!\\.)(?!.*\\.\\.)([A-Za-z0-9_'+\\-\\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$",
 );
-export const userControllerFindAllResponseDataItemsItemCreatedAtRegExp =
+export const userControllerFindAllResponseDataDataItemCreatedAtRegExp =
   new RegExp(
     '^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$',
   );
-export const userControllerFindAllResponseDataItemsItemUpdatedAtRegExp =
+export const userControllerFindAllResponseDataDataItemUpdatedAtRegExp =
   new RegExp(
     '^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$',
   );
-export const userControllerFindAllResponseDataMetaPageMax = 9007199254740991;
-
-export const userControllerFindAllResponseDataMetaPageSizeMax = 9007199254740991;
-
-export const userControllerFindAllResponseDataMetaTotalMin = 0;
-export const userControllerFindAllResponseDataMetaTotalMax = 9007199254740991;
-
-export const userControllerFindAllResponseDataMetaTotalPageMin = 0;
-export const userControllerFindAllResponseDataMetaTotalPageMax = 9007199254740991;
+export const userControllerFindAllResponseDataMetaSortByItemMin = 2;
+export const userControllerFindAllResponseDataMetaSortByItemMax = 2;
 
 export const UserControllerFindAllResponse = zod.object({
   statusCode: zod.literal(200),
   message: zod.string(),
   data: zod.object({
-    items: zod.array(
+    data: zod.array(
       zod.object({
-        id: zod
-          .uuid()
-          .regex(userControllerFindAllResponseDataItemsItemIdRegExp),
+        id: zod.uuid().regex(userControllerFindAllResponseDataDataItemIdRegExp),
         email: zod
           .email()
-          .regex(userControllerFindAllResponseDataItemsItemEmailRegExp),
+          .regex(userControllerFindAllResponseDataDataItemEmailRegExp),
         fullName: zod.string(),
         provider: zod.enum(['credentials', 'google']),
         role: zod.enum(['USER', 'ADMIN']),
         status: zod.enum(['ACTIVE', 'INACTIVE']),
         createdAt: zod.iso
           .datetime({ offset: true })
-          .regex(userControllerFindAllResponseDataItemsItemCreatedAtRegExp),
+          .regex(userControllerFindAllResponseDataDataItemCreatedAtRegExp),
         updatedAt: zod.iso
           .datetime({ offset: true })
-          .regex(userControllerFindAllResponseDataItemsItemUpdatedAtRegExp),
+          .regex(userControllerFindAllResponseDataDataItemUpdatedAtRegExp),
       }),
     ),
     meta: zod.object({
-      page: zod.int().min(1).max(userControllerFindAllResponseDataMetaPageMax),
-      pageSize: zod
-        .int()
-        .min(1)
-        .max(userControllerFindAllResponseDataMetaPageSizeMax),
-      total: zod
-        .int()
-        .min(userControllerFindAllResponseDataMetaTotalMin)
-        .max(userControllerFindAllResponseDataMetaTotalMax),
-      totalPage: zod
-        .int()
-        .min(userControllerFindAllResponseDataMetaTotalPageMin)
-        .max(userControllerFindAllResponseDataMetaTotalPageMax),
-      hasNextPage: zod.boolean(),
-      hasPreviousPage: zod.boolean(),
+      itemsPerPage: zod.number(),
+      totalItems: zod.number().optional(),
+      currentPage: zod.number().optional(),
+      totalPages: zod.number().optional(),
+      sortBy: zod.array(
+        zod
+          .array(
+            zod.union([
+              zod.union([zod.string(), zod.array(zod.string())]),
+              zod.string(),
+            ]),
+          )
+          .min(userControllerFindAllResponseDataMetaSortByItemMin)
+          .max(userControllerFindAllResponseDataMetaSortByItemMax),
+      ),
+      searchBy: zod.array(zod.string()).optional(),
+      search: zod.string().optional(),
+      select: zod.array(zod.string()).optional(),
+      filter: zod
+        .record(
+          zod.string(),
+          zod.union([zod.string(), zod.array(zod.string())]),
+        )
+        .optional(),
+      cursor: zod.string().optional(),
+    }),
+    links: zod.object({
+      first: zod.string().optional(),
+      previous: zod.string().optional(),
+      current: zod.string(),
+      next: zod.string().optional(),
+      last: zod.string().optional(),
     }),
   }),
 });

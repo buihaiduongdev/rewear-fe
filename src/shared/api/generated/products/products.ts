@@ -6,6 +6,7 @@
  * OpenAPI spec version: 1.0
  */
 import type {
+  ProductControllerCancelSubmission200,
   ProductControllerCreate201,
   ProductControllerCreateBody,
   ProductControllerFindAll200,
@@ -16,11 +17,11 @@ import type {
   ProductControllerFindOne200,
   ProductControllerModerate200,
   ProductControllerModerateBody,
+  ProductControllerModerationForAdmin200,
+  ProductControllerModerationForOwner200,
   ProductControllerReviewDetail200,
-  ProductControllerReviewHistory200,
   ProductControllerReviewQueue200,
   ProductControllerReviewQueueParams,
-  ProductControllerRevisions200,
   ProductControllerSubmit200,
   ProductControllerSuspend200,
   ProductControllerSuspendBody,
@@ -76,12 +77,14 @@ export const productControllerFindManaged = (
     options,
   );
 };
-export const productControllerRevisions = (
+export const productControllerModerationForOwner = (
   id: string,
-  options?: SecondParameter<typeof orvalRequest<ProductControllerRevisions200>>,
+  options?: SecondParameter<
+    typeof orvalRequest<ProductControllerModerationForOwner200>
+  >,
 ) => {
-  return orvalRequest<ProductControllerRevisions200>(
-    { url: `/api/products/manage/${id}/revisions`, method: 'GET' },
+  return orvalRequest<ProductControllerModerationForOwner200>(
+    { url: `/api/products/manage/${id}/moderation`, method: 'GET' },
     options,
   );
 };
@@ -107,23 +110,14 @@ export const productControllerReviewDetail = (
     options,
   );
 };
-export const productControllerReviewHistory = (
+export const productControllerModerationForAdmin = (
   id: string,
   options?: SecondParameter<
-    typeof orvalRequest<ProductControllerReviewHistory200>
+    typeof orvalRequest<ProductControllerModerationForAdmin200>
   >,
 ) => {
-  return orvalRequest<ProductControllerReviewHistory200>(
-    { url: `/api/products/admin/${id}/revisions`, method: 'GET' },
-    options,
-  );
-};
-export const productControllerSubmit = (
-  id: string,
-  options?: SecondParameter<typeof orvalRequest<ProductControllerSubmit200>>,
-) => {
-  return orvalRequest<ProductControllerSubmit200>(
-    { url: `/api/products/${id}/submit`, method: 'POST' },
+  return orvalRequest<ProductControllerModerationForAdmin200>(
+    { url: `/api/products/admin/${id}/moderation`, method: 'GET' },
     options,
   );
 };
@@ -139,6 +133,26 @@ export const productControllerModerate = (
       headers: { 'Content-Type': 'application/json' },
       data: productControllerModerateBody,
     },
+    options,
+  );
+};
+export const productControllerSubmit = (
+  id: string,
+  options?: SecondParameter<typeof orvalRequest<ProductControllerSubmit200>>,
+) => {
+  return orvalRequest<ProductControllerSubmit200>(
+    { url: `/api/products/${id}/submit`, method: 'POST' },
+    options,
+  );
+};
+export const productControllerCancelSubmission = (
+  id: string,
+  options?: SecondParameter<
+    typeof orvalRequest<ProductControllerCancelSubmission200>
+  >,
+) => {
+  return orvalRequest<ProductControllerCancelSubmission200>(
+    { url: `/api/products/${id}/cancel-submission`, method: 'POST' },
     options,
   );
 };
@@ -210,8 +224,8 @@ export type ProductControllerFindMineResult = NonNullable<
 export type ProductControllerFindManagedResult = NonNullable<
   Awaited<ReturnType<typeof productControllerFindManaged>>
 >;
-export type ProductControllerRevisionsResult = NonNullable<
-  Awaited<ReturnType<typeof productControllerRevisions>>
+export type ProductControllerModerationForOwnerResult = NonNullable<
+  Awaited<ReturnType<typeof productControllerModerationForOwner>>
 >;
 export type ProductControllerReviewQueueResult = NonNullable<
   Awaited<ReturnType<typeof productControllerReviewQueue>>
@@ -219,14 +233,17 @@ export type ProductControllerReviewQueueResult = NonNullable<
 export type ProductControllerReviewDetailResult = NonNullable<
   Awaited<ReturnType<typeof productControllerReviewDetail>>
 >;
-export type ProductControllerReviewHistoryResult = NonNullable<
-  Awaited<ReturnType<typeof productControllerReviewHistory>>
+export type ProductControllerModerationForAdminResult = NonNullable<
+  Awaited<ReturnType<typeof productControllerModerationForAdmin>>
+>;
+export type ProductControllerModerateResult = NonNullable<
+  Awaited<ReturnType<typeof productControllerModerate>>
 >;
 export type ProductControllerSubmitResult = NonNullable<
   Awaited<ReturnType<typeof productControllerSubmit>>
 >;
-export type ProductControllerModerateResult = NonNullable<
-  Awaited<ReturnType<typeof productControllerModerate>>
+export type ProductControllerCancelSubmissionResult = NonNullable<
+  Awaited<ReturnType<typeof productControllerCancelSubmission>>
 >;
 export type ProductControllerSuspendResult = NonNullable<
   Awaited<ReturnType<typeof productControllerSuspend>>

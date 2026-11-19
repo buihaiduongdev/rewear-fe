@@ -7,7 +7,7 @@ import { useProductControllerFindAll } from '@/shared/api/query-generated/produc
 import { useShopControllerFindAll } from '@/shared/api/query-generated/shops/shops';
 import { keepPreviousData } from '@tanstack/react-query';
 
-export function useHomeCatalog() {
+export function useHomeCatalog(catalog = false) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const search = searchParams.get('search') ?? '';
@@ -15,7 +15,6 @@ export function useHomeCatalog() {
   const shopId = searchParams.get('shopId') ?? '';
   const pageValue = Number(searchParams.get('page') ?? 1);
   const page = Number.isSafeInteger(pageValue) && pageValue > 0 ? pageValue : 1;
-  const expanded = searchParams.get('view') === 'all';
   const categories = useCategoryControllerFindAll({
     query: { meta: { skipErrorToast: true } },
   });
@@ -25,12 +24,10 @@ export function useHomeCatalog() {
   const products = useProductControllerFindAll(
     {
       page,
-      pageSize: expanded ? 12 : 4,
-      sortBy: 'publishedAt',
-      order: 'DESC',
+      limit: catalog ? 12 : 4,
       ...(search ? { search } : {}),
-      ...(categoryId ? { categoryId } : {}),
-      ...(shopId ? { shopId } : {}),
+      ...(categoryId ? { 'filter.categoryId': [categoryId] } : {}),
+      ...(shopId ? { 'filter.shopId': [shopId] } : {}),
     },
     {
       query: {
@@ -42,18 +39,16 @@ export function useHomeCatalog() {
 
   function updateFilters(updates: Record<string, string | undefined>) {
     const next = new URLSearchParams(searchParams.toString());
-    next.delete('page');
+    if (!('page' in updates)) next.delete('page');
+    next.delete('view');
     for (const [key, value] of Object.entries(updates)) {
       if (value) next.set(key, value);
       else next.delete(key);
     }
     const query = next.toString();
-    router.replace(`${query ? `/?${query}` : '/'}#new-arrivals`, {
-      scroll: false,
-    });
-    document
-      .getElementById('new-arrivals')
-      ?.scrollIntoView({ behavior: 'instant' });
+    const url = query ? `/products?${query}` : '/products';
+    if (catalog) router.replace(url, { scroll: false });
+    else router.push(url);
   }
 
   return {
@@ -61,7 +56,6 @@ export function useHomeCatalog() {
     categoryId,
     shopId,
     page,
-    expanded,
     categories,
     shops,
     products,

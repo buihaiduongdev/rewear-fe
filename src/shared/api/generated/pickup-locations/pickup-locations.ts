@@ -6,10 +6,7 @@
  * OpenAPI spec version: 1.0
  */
 import type {
-  PickupLocationControllerFindPersonal200,
   PickupLocationControllerFindShop200,
-  PickupLocationControllerSavePersonal200,
-  PickupLocationControllerSavePersonalBody,
   PickupLocationControllerSaveShop200,
   PickupLocationControllerSaveShopBody,
 } from '../../models/index';
@@ -17,32 +14,6 @@ import { orvalRequest } from '../../orval-request';
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
-export const pickupLocationControllerFindPersonal = (
-  options?: SecondParameter<
-    typeof orvalRequest<PickupLocationControllerFindPersonal200>
-  >,
-) => {
-  return orvalRequest<PickupLocationControllerFindPersonal200>(
-    { url: `/api/shipping/pickup-location`, method: 'GET' },
-    options,
-  );
-};
-export const pickupLocationControllerSavePersonal = (
-  pickupLocationControllerSavePersonalBody: PickupLocationControllerSavePersonalBody,
-  options?: SecondParameter<
-    typeof orvalRequest<PickupLocationControllerSavePersonal200>
-  >,
-) => {
-  return orvalRequest<PickupLocationControllerSavePersonal200>(
-    {
-      url: `/api/shipping/pickup-location`,
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      data: pickupLocationControllerSavePersonalBody,
-    },
-    options,
-  );
-};
 export const pickupLocationControllerFindShop = (
   shopId: string,
   options?: SecondParameter<
@@ -71,12 +42,6 @@ export const pickupLocationControllerSaveShop = (
     options,
   );
 };
-export type PickupLocationControllerFindPersonalResult = NonNullable<
-  Awaited<ReturnType<typeof pickupLocationControllerFindPersonal>>
->;
-export type PickupLocationControllerSavePersonalResult = NonNullable<
-  Awaited<ReturnType<typeof pickupLocationControllerSavePersonal>>
->;
 export type PickupLocationControllerFindShopResult = NonNullable<
   Awaited<ReturnType<typeof pickupLocationControllerFindShop>>
 >;

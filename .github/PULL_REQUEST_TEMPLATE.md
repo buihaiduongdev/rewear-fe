@@ -2,13 +2,13 @@
 
 <!-- Tóm tắt thay đổi và lý do. Gắn issue/user story hoặc acceptance criteria liên quan nếu có. -->
 
--
+- 
 
 ## Kiểm chứng
 
 <!-- Ghi lệnh/test đã chạy và kết quả; nêu rõ phần chưa kiểm chứng nếu có. -->
 
--
+- 
 
 ## AI assistance
 
@@ -23,8 +23,4 @@
 
 - [ ] Thay đổi phù hợp với phạm vi và quy tắc nghiệp vụ đã thống nhất.
 - [ ] Đã tự đọc và giải thích được phần mã/tài liệu đưa vào PR.
-
-## Khi áp dụng
-
-- [ ] PR có secrets/mã tham khảo: đã kiểm tra dữ liệu nhạy cảm, khóa truy cập và nguồn/giấy phép.
-- [ ] PR làm thay đổi hành vi: đã cập nhật tài liệu hoặc kiểm thử liên quan.
+- [ ] Đã cập nhật tài liệu hoặc kiểm thử liên quan khi cần.

@@ -47,3 +47,8 @@ next-env.d.ts
 
 # Local Figma design baselines
 /.figwright/snapshots/
+
+# graphify
+graphify-out/
+.graphify*
+
