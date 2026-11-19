@@ -26,7 +26,7 @@ import { Dialog } from '@base-ui/react/dialog';
 import { useQueryClient } from '@tanstack/react-query';
 import { useSession } from 'next-auth/react';
 
-import { AddDeliveryAddress } from './AddDeliveryAddress';
+import { AddAddressDialog } from '@/modules/address';
 import {
   ShippingEstimateForOrder,
   ShippingEstimateSummary,
@@ -204,7 +204,7 @@ export function CheckoutPage() {
                 ))}
               </select>
             </label>
-            <AddDeliveryAddress
+            <AddAddressDialog
               disabled={create.isPending || !enabled}
               onCreated={(address) => {
                 client.setQueryData<UserAddressControllerFindAll200>(

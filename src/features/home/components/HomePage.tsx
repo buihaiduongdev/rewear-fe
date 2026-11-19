@@ -17,7 +17,7 @@ import type { HomeProduct } from '../lib/product';
 import { ProductCard } from './ProductCard';
 import { ProductPreview } from './ProductPreview';
 import { SectionState } from './SectionState';
-import { ShopCard } from './ShopCard';
+import { ShopCard } from '@/modules/shop';
 
 const primaryButtonClass =
   'h-[52px] w-full rounded-none border-0 bg-rewear-accent px-5 py-3 text-sm leading-5 font-normal text-rewear-text shadow-none hover:bg-rewear-accent/90 md:w-52';
