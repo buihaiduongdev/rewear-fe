@@ -145,4 +145,4 @@ Ghi một mục cho mỗi task có dùng AI. Cập nhật liên kết PR/commit 
 - **Phần tự làm hoặc đã chỉnh sửa:** Định nghĩa ranh giới trách nhiệm giữa `shared` và `modules`, tối ưu kiểu dữ liệu component để tránh phụ thuộc chặt vào generic TanStack Query, giữ nguyên tương thích ngược cho các import hiện tại.
 - **Cách kiểm chứng:** Chạy `pnpm check` (pass TypeScript và ESLint architecture zones với 0 lỗi, 0 cảnh báo), `pnpm test` (3/3 test suites pass), `pnpm build` (compile và prerender 14/14 static routes thành công).
 - **Lỗi hoặc đề xuất sai của AI đã phát hiện:** Lỗi type checking do ép kiểu generic chặt của `UseQueryResult` với `unknown`; đã nới lỏng interface dữ liệu đầu vào của `AdministrativeDivisionFields` để component thuần túy nhận data/error mà không phụ thuộc sâu vào TanStack Query type.
-- **Minh chứng:** Nhánh `refactor/extract-shared-modules`, PR (rewear-fe).
+- **Minh chứng:** [PR #13](https://github.com/buihaiduongdev/rewear-fe/pull/13), commit [9f91883](https://github.com/buihaiduongdev/rewear-fe/commit/9f91883) trên branch `refactor/extract-shared-modules` (rewear-fe).
