@@ -1,5 +1,7 @@
 export { AddAddressDialog } from './components/AddAddressDialog';
 export type { AddAddressDialogProps } from './components/AddAddressDialog';
+export { DeliveryAddressModal } from './components/DeliveryAddressModal';
+export type { DeliveryAddressModalProps } from './components/DeliveryAddressModal';
 export { AdministrativeDivisionFields } from './components/AdministrativeDivisionFields';
 export type { AdministrativeDivisionFieldsProps } from './components/AdministrativeDivisionFields';
 export { UserAddressForm } from './components/UserAddressForm';
