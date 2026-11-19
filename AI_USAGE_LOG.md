@@ -134,3 +134,15 @@ Ghi một mục cho mỗi task có dùng AI. Cập nhật liên kết PR/commit 
 - **Cách kiểm chứng:** Chạy `pnpm lint` (0 lỗi, 0 cảnh báo), `pnpm test` (3/3 suites, 5 tests pass 100%), `pnpm build` (compile và static prerender 14 routes thành công), Vercel CI/CD preview deployment ready.
 - **Lỗi hoặc đề xuất sai của AI đã phát hiện:** Đề xuất ban đầu gom skeletons trực tiếp trong components/ gây loãng danh sách component; đã điều chỉnh tách ra thư mục `skeletons/` độc lập theo yêu cầu.
 - **Minh chứng:** Nhánh `feat/product-detail-page`, PR #12 (rewear-fe).
+
+### 2026-11-19 — Nâng cấp bảo mật Next.js 16.4.1 lên 16.4.6 theo khuyến cáo an ninh
+
+- **Người thực hiện:** Bùi Hải Dương.
+- **Công cụ:** Antigravity (Gemini 3.8 Flash), Next.js CLI (`next upgrade --agent=security`).
+- **Mục đích và phạm vi:** Thực hiện cập nhật bảo mật cùng phiên bản chính (same-major security upgrade) từ Next.js `16.4.1` lên `16.4.6` nhằm vá các lỗ hổng bảo mật được công bố theo security advisory chính thức của Next.js; đồng thời cập nhật `eslint-config-next` đồng bộ và cấu hình `experimental.agentUpgrade = 'security'`.
+- **Prompt chính:** Khởi chạy `next upgrade --agent=security`, rà soát các kiểm tra trùng lặp trên GitHub PR/nhánh, cập nhật Next.js lên phiên bản đích 16.4.6 trong worktree độc lập, bật cờ cấu hình experimental tương ứng và thực hiện đầy đủ quy trình kiểm chứng.
+- **Phần AI hỗ trợ:** Quét và kiểm tra trùng lặp PR/nhánh, cập nhật `next` và `eslint-config-next` lên `16.4.6`, bổ sung `agentUpgrade: 'security'` vào `experimental` trong `next.config.ts`, chạy telemetry báo cáo kết quả `success` và thực hiện kiểm thử tự động.
+- **Phần tự làm hoặc đã chỉnh sửa:** Thiết lập worktree độc lập `fix/security-upgrade-next-16.4.6`, đồng bộ biến môi trường `.env` cho tiến trình build static pages, rà soát typecheck và chạy toàn bộ bộ kiểm thử.
+- **Cách kiểm chứng:** Chạy `next --version` xác nhận `16.4.6`, `pnpm check` (tsc + eslint) 0 lỗi, `pnpm test` pass 3/3 test suites (5 tests), `pnpm build` biên dịch và prerender thành công 14/14 static pages qua Turbopack.
+- **Lỗi hoặc đề xuất sai của AI đã phát hiện:** Không phát hiện.
+- **Minh chứng:** Nhánh `fix/security-upgrade-next-16.4.6`.
