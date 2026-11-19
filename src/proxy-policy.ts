@@ -7,6 +7,11 @@ const isAuthRoute = (pathname: string) =>
     (route) => pathname === route || pathname.startsWith(`${route}/`),
   );
 
+const isPublicMarketplaceRoute = (pathname: string) =>
+  pathname === '/' ||
+  pathname === '/products' ||
+  pathname.startsWith('/products/');
+
 export const getProxyDecision = (
   url: URL,
   isLoggedIn: boolean,
@@ -20,12 +25,7 @@ export const getProxyDecision = (
     };
   }
 
-  if (
-    url.pathname !== '/' &&
-    url.pathname !== '/products' &&
-    !authRoute &&
-    !isLoggedIn
-  ) {
+  if (!isPublicMarketplaceRoute(url.pathname) && !authRoute && !isLoggedIn) {
     const loginUrl = new URL(AUTH_ROUTES.LOGIN, url);
     loginUrl.searchParams.set('callbackUrl', `${url.pathname}${url.search}`);
 
