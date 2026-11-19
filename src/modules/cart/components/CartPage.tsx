@@ -19,6 +19,8 @@ const availabilityLabels = {
   UNAVAILABLE: 'No longer available',
 };
 
+import { CartSkeleton } from '../skeletons/CartSkeleton';
+
 export function CartPage() {
   const router = useRouter();
   const cart = useCart();
@@ -41,11 +43,7 @@ export function CartPage() {
         <h1 className="text-[28px] leading-[34px] font-semibold tracking-[-0.02em] md:text-[40px] md:leading-[46px]">
           Your cart
         </h1>
-        {cart.isPending && (
-          <p role="status" className="mt-8">
-            Loading your cart…
-          </p>
-        )}
+        {cart.isPending && <CartSkeleton />}
         {cart.isError && (
           <div role="alert" className="mt-8 space-y-3">
             <p>{getApiErrorMessage(cart.error)}</p>

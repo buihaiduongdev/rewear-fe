@@ -3,6 +3,7 @@ import { Suspense } from 'react';
 import type { Metadata } from 'next';
 
 import { HomePage } from '@/features/home/components/HomePage';
+import { CatalogSkeleton } from '@/features/home/skeletons/CatalogSkeleton';
 
 export const metadata: Metadata = {
   title: 'RE.WEAR — Good pieces. Next chapter.',
@@ -13,16 +14,7 @@ export const metadata: Metadata = {
 export default function Home() {
   return (
     <div className="bg-rewear-surface text-rewear-text min-h-dvh [--foreground:var(--color-rewear-text)] [--muted-foreground:var(--color-rewear-muted)]">
-      <Suspense
-        fallback={
-          <div
-            role="status"
-            className="flex min-h-screen items-center justify-center"
-          >
-            Loading RE.WEAR…
-          </div>
-        }
-      >
+      <Suspense fallback={<CatalogSkeleton />}>
         <HomePage />
       </Suspense>
     </div>
