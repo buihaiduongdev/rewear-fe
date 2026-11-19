@@ -153,100 +153,173 @@ export function CheckoutPage() {
         {!!error && <p role="alert">{getApiErrorMessage(error)}</p>}
         {id && checkout.isPending && <p role="status">Loading checkout…</p>}
         {!id && (
-          <>
-            <p>
-              Choose your items and delivery address. Items are reserved for 10
-              minutes after you continue.
-            </p>
-            {(cart.isPending || addresses.isPending) && (
-              <p role="status">Loading items and addresses…</p>
-            )}
-            {available.map((item) => (
-              <label
-                key={item.productId}
-                className="bg-rewear-soft flex min-h-11 items-center gap-4 p-4"
-              >
-                <input
-                  type="checkbox"
-                  disabled={create.isPending}
-                  checked={!excluded.includes(item.productId)}
-                  onChange={(e) =>
-                    setExcluded(
-                      e.target.checked
-                        ? excluded.filter((id) => id !== item.productId)
-                        : [...excluded, item.productId],
-                    )
-                  }
-                />
-                {item.product?.title} · {formatPrice(item.product!.price)}
-              </label>
-            ))}
-            {!cart.isPending && available.length === 0 && (
-              <p>No available items in your cart.</p>
-            )}
-            <label className="block space-y-2">
-              <span className="block font-semibold">Delivery address</span>
-              <select
-                aria-label="Delivery address"
-                className="bg-rewear-soft min-h-11 w-full p-3"
-                value={selectedAddress}
-                onChange={(e) => setAddressId(e.target.value)}
-                disabled={!addresses.data?.data.length || create.isPending}
-              >
-                <option value="" disabled>
-                  Select an address
-                </option>
-                {addresses.data?.data.map((a) => (
-                  <option key={a.id} value={a.id}>
-                    {a.recipientName} · {a.addressLine1}, {a.wardName},{' '}
-                    {a.provinceName}
-                  </option>
-                ))}
-              </select>
-            </label>
-            <AddAddressDialog
-              disabled={create.isPending || !enabled}
-              onCreated={(address) => {
-                client.setQueryData<UserAddressControllerFindAll200>(
-                  ['/api/user-addresses', session?.user.id],
-                  (previous) => ({
-                    statusCode: 200,
-                    message: previous?.message ?? 'Addresses loaded',
-                    data: [
-                      ...(previous?.data ?? []).map((a) =>
-                        address.isDefault ? { ...a, isDefault: false } : a,
-                      ),
-                      address,
-                    ],
-                  }),
-                );
-                setAddressId(address.id);
-                void client.invalidateQueries({
-                  queryKey: ['/api/user-addresses', session?.user.id],
-                });
-              }}
-            />
-            {addresses.data?.data.length === 0 && (
-              <p>No delivery address saved. Add one to reserve your items.</p>
-            )}
-            <p className="text-[28px] font-semibold">
-              {formatPrice(
-                selected.reduce((sum, i) => sum + i.product!.price, 0),
+          <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_416px] lg:gap-10">
+            <div className="space-y-6">
+              <section className="bg-rewear-soft space-y-4 p-4 md:p-6">
+                <div className="flex items-center justify-between">
+                  <h2 className="text-[20px] leading-[26px] font-semibold tracking-[-0.01em] md:text-[24px]">
+                    Delivery address
+                  </h2>
+                  <AddAddressDialog
+                    disabled={create.isPending || !enabled}
+                    onCreated={(address) => {
+                      client.setQueryData<UserAddressControllerFindAll200>(
+                        ['/api/user-addresses', session?.user.id],
+                        (previous) => ({
+                          statusCode: 200,
+                          message: previous?.message ?? 'Addresses loaded',
+                          data: [
+                            ...(previous?.data ?? []).map((a) =>
+                              address.isDefault
+                                ? { ...a, isDefault: false }
+                                : a,
+                            ),
+                            address,
+                          ],
+                        }),
+                      );
+                      setAddressId(address.id);
+                      void client.invalidateQueries({
+                        queryKey: ['/api/user-addresses', session?.user.id],
+                      });
+                    }}
+                  />
+                </div>
+                {addresses.data?.data.length === 0 && (
+                  <p>
+                    No delivery address saved. Add one to reserve your items.
+                  </p>
+                )}
+                <label className="block space-y-2">
+                  <span className="sr-only">Delivery address</span>
+                  <select
+                    aria-label="Delivery address"
+                    className="bg-rewear-surface text-rewear-text min-h-11 w-full border border-rewear-border p-3"
+                    value={selectedAddress}
+                    onChange={(e) => setAddressId(e.target.value)}
+                    disabled={!addresses.data?.data.length || create.isPending}
+                  >
+                    <option value="" disabled>
+                      Select an address
+                    </option>
+                    {addresses.data?.data.map((a) => (
+                      <option key={a.id} value={a.id}>
+                        {a.recipientName} ({a.phone}) · {a.addressLine1},{' '}
+                        {a.wardName}, {a.provinceName}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+              </section>
+
+              {(cart.isPending || addresses.isPending) && (
+                <p role="status">Loading items and addresses…</p>
               )}
-            </p>
-            <button
-              className={actionClass}
-              disabled={
-                !selected.length ||
-                !selectedAddress ||
-                create.isPending ||
-                !enabled
-              }
-              onClick={reserve}
+
+              {cart.data?.data.groups.map((group, groupIndex) => {
+                const groupAvailableItems = group.items.filter(
+                  (i) => i.availability === 'AVAILABLE' && i.product,
+                );
+                if (!groupAvailableItems.length) return null;
+                return (
+                  <section
+                    key={group.shop?.id ?? `group-${groupIndex}`}
+                    className="space-y-4"
+                  >
+                    <h2 className="text-sm font-semibold md:text-base">
+                      {group.shop?.name ?? 'Shop items'}
+                    </h2>
+                    {groupAvailableItems.map((item) => {
+                      const isChecked = !excluded.includes(item.productId);
+                      return (
+                        <article
+                          key={item.productId}
+                          className="bg-rewear-soft flex items-center gap-4 p-4"
+                        >
+                          <input
+                            type="checkbox"
+                            aria-label={`Select ${item.product?.title}`}
+                            className="size-5 shrink-0 accent-rewear-accent"
+                            disabled={create.isPending}
+                            checked={isChecked}
+                            onChange={(e) =>
+                              setExcluded(
+                                e.target.checked
+                                  ? excluded.filter(
+                                      (id) => id !== item.productId,
+                                    )
+                                  : [...excluded, item.productId],
+                              )
+                            }
+                          />
+                          <div className="bg-rewear-surface relative h-20 w-16 shrink-0">
+                            <ProductPhoto
+                              title={item.product?.title ?? ''}
+                              url={item.product?.coverUrl ?? null}
+                              sizes="64px"
+                            />
+                          </div>
+                          <div className="min-w-0 flex-1 space-y-1">
+                            <h3 className="truncate text-sm font-semibold md:text-base">
+                              {item.product?.title}
+                            </h3>
+                            <p className="text-rewear-muted text-xs md:text-sm">
+                              {[item.product?.size, item.product?.color]
+                                .filter(Boolean)
+                                .join(' · ')}
+                            </p>
+                            <p className="text-sm font-semibold md:text-base">
+                              {formatPrice(item.product!.price)}
+                            </p>
+                          </div>
+                        </article>
+                      );
+                    })}
+                  </section>
+                );
+              })}
+
+              {!cart.isPending && available.length === 0 && (
+                <p>No available items in your cart.</p>
+              )}
+            </div>
+
+            <aside
+              className="bg-rewear-soft h-fit space-y-6 p-4 md:p-6"
+              aria-label="Checkout summary"
             >
-              {create.isPending ? 'Reserving…' : 'Reserve items'}
-            </button>
-          </>
+              <h2 className="text-lg font-semibold md:text-xl">
+                Order summary
+              </h2>
+              <p className="text-rewear-muted text-sm">
+                Choose your items and delivery address. Items are reserved for
+                10 minutes after you continue.
+              </p>
+              <div className="flex justify-between border-t border-rewear-border/20 pt-4">
+                <span>Selected items ({selected.length})</span>
+                <span className="text-xl font-semibold">
+                  {formatPrice(
+                    selected.reduce(
+                      (sum, i) => sum + (i.product?.price ?? 0),
+                      0,
+                    ),
+                  )}
+                </span>
+              </div>
+              <button
+                className={actionClass}
+                disabled={
+                  !selected.length ||
+                  !selectedAddress ||
+                  create.isPending ||
+                  !enabled
+                }
+                onClick={reserve}
+              >
+                {create.isPending ? 'Reserving…' : 'Reserve items'}
+              </button>
+            </aside>
+          </div>
         )}
         {data && (
           <>
