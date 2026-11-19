@@ -1,4 +1,5 @@
 import { ShieldCheck } from 'lucide-react';
+import { Badge } from '@/shared/components/ui/badge';
 
 export function SellerVerifiedBadge({
   label = 'Đã xác thực',
@@ -6,9 +7,12 @@ export function SellerVerifiedBadge({
   label?: string;
 }) {
   return (
-    <span className="inline-flex items-center gap-1 rounded bg-rewear-surface px-2.5 py-1 text-xs font-medium text-rewear-muted border border-rewear-border">
+    <Badge
+      variant="outline"
+      className="bg-rewear-surface text-rewear-muted border-rewear-border gap-1 font-medium"
+    >
       <ShieldCheck size={14} className="text-green-600" />
       {label}
-    </span>
+    </Badge>
   );
 }

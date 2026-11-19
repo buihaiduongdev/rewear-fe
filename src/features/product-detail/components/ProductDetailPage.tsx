@@ -19,6 +19,7 @@ import { ProductPhoto } from '@/shared/components/marketplace/ProductPhoto';
 import { AddToCartAction } from '@/modules/cart/components/AddToCartAction';
 import { ShopSummaryCard } from '@/modules/shop';
 import { formatCondition, formatPrice } from '@/shared/utils/product';
+import { Badge } from '@/shared/components/ui/badge';
 import { Button } from '@/shared/components/ui/button';
 import { TOAST_DURATION_MS } from '@/shared/constants/toast';
 import { useToastStore } from '@/shared/stores/toast.store';
@@ -188,9 +189,9 @@ export function ProductDetailPage({ id }: { id: string }) {
                 </span>
               )}
               {product.condition && (
-                <span className="inline-flex items-center rounded-full bg-rewear-soft px-2.5 py-0.5 text-xs font-medium text-rewear-text">
+                <Badge variant="secondary">
                   {formatCondition(product.condition)}
-                </span>
+                </Badge>
               )}
             </div>
             <h1 className="text-2xl font-bold tracking-tight text-rewear-text sm:text-3xl">

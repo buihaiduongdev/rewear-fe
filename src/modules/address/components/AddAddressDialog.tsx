@@ -3,7 +3,14 @@
 import { useState } from 'react';
 import type { FormEvent } from 'react';
 
-import { Dialog } from '@base-ui/react/dialog';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/shared/components/ui/dialog';
 
 import { getApiErrorMessage } from '@/shared/api/api-error';
 import type { UserAddressControllerCreate201Data } from '@/shared/api/models';
@@ -29,45 +36,36 @@ export function AddAddressDialog({
   const [saving, setSaving] = useState(false);
 
   return (
-    <Dialog.Root
+    <Dialog
       open={open}
       onOpenChange={(next) => {
         if (!saving) setOpen(next);
       }}
     >
-      <Dialog.Trigger
+      <DialogTrigger
         disabled={disabled}
-        className="min-h-11 text-left text-sm font-semibold underline underline-offset-4"
+        className="min-h-11 cursor-pointer text-left text-sm font-semibold underline underline-offset-4"
       >
         {trigger ?? 'Add address'}
-      </Dialog.Trigger>
-      <Dialog.Portal>
-        <Dialog.Backdrop className="fixed inset-0 z-50 bg-black/50" />
-        <Dialog.Popup className="bg-rewear-surface text-rewear-text fixed bottom-0 left-0 z-50 max-h-[95dvh] w-full overflow-y-auto p-4 outline-none md:top-1/2 md:bottom-auto md:left-1/2 md:w-[520px] md:-translate-x-1/2 md:-translate-y-1/2 md:p-8">
-          <Dialog.Close
-            disabled={saving}
-            className="mb-6 min-h-11 text-left text-sm font-semibold"
-          >
-            Close ×
-          </Dialog.Close>
-          <Dialog.Title className="mb-6 text-[28px] leading-[34px] font-semibold tracking-[-0.02em]">
-            Add address
-          </Dialog.Title>
-          <Dialog.Description className="sr-only">
+      </DialogTrigger>
+      <DialogContent className="max-h-[95dvh] overflow-y-auto sm:max-w-[520px]">
+        <DialogHeader>
+          <DialogTitle>Add address</DialogTitle>
+          <DialogDescription className="sr-only">
             Save a delivery address in Vietnam for this checkout.
-          </Dialog.Description>
-          {open && (
-            <AddressForm
-              onSaving={setSaving}
-              onCreated={(address) => {
-                onCreated(address);
-                setOpen(false);
-              }}
-            />
-          )}
-        </Dialog.Popup>
-      </Dialog.Portal>
-    </Dialog.Root>
+          </DialogDescription>
+        </DialogHeader>
+        {open && (
+          <AddressForm
+            onSaving={setSaving}
+            onCreated={(address) => {
+              onCreated(address);
+              setOpen(false);
+            }}
+          />
+        )}
+      </DialogContent>
+    </Dialog>
   );
 }
 
