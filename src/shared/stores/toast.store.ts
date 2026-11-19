@@ -1,16 +1,22 @@
 'use client';
 
+import type { ReactNode } from 'react';
 import { create } from 'zustand';
+
+export type TToastType = 'success' | 'error' | 'info';
 
 export type TToast = {
   id: string;
   createdAt: number;
-  description: string;
+  title: string;
+  description?: string;
   durationMs: number;
+  type: TToastType;
+  meta?: string;
+  thumbnail?: ReactNode;
   href?: string;
   actionLabel?: string;
-  title: string;
-  type: 'success' | 'error';
+  onAction?: () => void;
 };
 
 type TToastStore = {
