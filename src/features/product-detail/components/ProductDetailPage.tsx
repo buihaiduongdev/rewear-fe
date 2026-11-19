@@ -4,10 +4,8 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { 
   ArrowLeft, 
-  Store, 
   Ruler, 
   AlertTriangle, 
-  ShieldCheck, 
   Truck, 
   PackageCheck, 
   Share2, 
@@ -19,6 +17,7 @@ import { useProductControllerFindOne } from '@/shared/api/query-generated/produc
 import { useMediaControllerFindAll } from '@/shared/api/query-generated/product-media/product-media';
 import { ProductPhoto } from '@/shared/components/marketplace/ProductPhoto';
 import { AddToCartAction } from '@/modules/cart/components/AddToCartAction';
+import { ShopSummaryCard } from '@/modules/shop';
 import { formatCondition, formatPrice } from '@/shared/utils/product';
 import { Button } from '@/shared/components/ui/button';
 import { TOAST_DURATION_MS } from '@/shared/constants/toast';
@@ -236,25 +235,10 @@ export function ProductDetailPage({ id }: { id: string }) {
           </div>
 
           {/* Seller / Shop Information Card */}
-          <div className="rounded-lg border border-rewear-border bg-rewear-soft/30 p-4">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-3">
-                <div className="flex size-11 items-center justify-center rounded-full bg-rewear-soft text-rewear-text border border-rewear-border">
-                  <Store size={20} />
-                </div>
-                <div>
-                  <p className="text-xs text-rewear-muted">Người bán</p>
-                  <p className="font-semibold text-rewear-text">
-                    {product.shop?.name || 'Người bán RE.WEAR'}
-                  </p>
-                </div>
-              </div>
-              <span className="inline-flex items-center gap-1 rounded bg-rewear-surface px-2.5 py-1 text-xs font-medium text-rewear-muted border border-rewear-border">
-                <ShieldCheck size={14} className="text-green-600" />
-                Đã xác thực
-              </span>
-            </div>
-          </div>
+          <ShopSummaryCard
+            name={product.shop?.name || 'Người bán RE.WEAR'}
+            verified
+          />
 
           {/* Description Section */}
           <div className="space-y-3">

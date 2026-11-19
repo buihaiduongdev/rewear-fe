@@ -3,12 +3,12 @@
 import { useState } from 'react';
 import type { FormEvent } from 'react';
 
+import {
+  AdministrativeDivisionFields,
+  useAdministrativeDivisions,
+} from '@/modules/address';
 import { getApiErrorMessage } from '@/shared/api/api-error';
 import type { PickupLocationControllerSaveShop200 } from '@/shared/api/models';
-import {
-  useAdministrativeDivisionControllerFindAllProvinces,
-  useAdministrativeDivisionControllerFindWardsByProvinceCode,
-} from '@/shared/api/query-generated/administrative-divisions/administrative-divisions';
 import { usePickupLocationControllerSaveShop } from '@/shared/api/query-generated/pickup-locations/pickup-locations';
 import { PickupLocationControllerSaveShopBody } from '@/shared/api/zod-generated/pickup-locations/pickup-locations';
 import { Button } from '@/shared/components/ui/button';
@@ -29,15 +29,31 @@ export function PickupAddressForm({
   onSaving,
   onSaved,
 }: Props) {
-  const [provinceCode, setProvinceCode] = useState(initial?.provinceCode ?? '');
-  const [wardCode, setWardCode] = useState(initial?.wardCode ?? '');
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [message, setMessage] = useState('');
-  const provinces = useAdministrativeDivisionControllerFindAllProvinces();
-  const wards = useAdministrativeDivisionControllerFindWardsByProvinceCode(
+
+  const clear = () => {
+    setErrors({});
+    setMessage('');
+    shopSave.reset();
+  };
+
+  const {
     provinceCode,
-    { query: { enabled: !!provinceCode } },
-  );
+    setProvinceCode,
+    wardCode,
+    setWardCode,
+    provinces,
+    wards,
+    error: divisionError,
+    refetch: refetchDivisions,
+  } = useAdministrativeDivisions({
+    initialProvinceCode: initial?.provinceCode ?? '',
+    initialWardCode: initial?.wardCode ?? '',
+    onProvinceChange: () => clear(),
+    onWardChange: () => clear(),
+  });
+
   const config = {
     mutation: {
       onMutate: onBeforeSave,
@@ -46,13 +62,8 @@ export function PickupAddressForm({
   };
   const shopSave = usePickupLocationControllerSaveShop(config);
   const saving = shopSave.isPending;
-  const apiError =
-    provinces.error || (provinceCode ? wards.error : null) || shopSave.error;
-  const clear = () => {
-    setErrors({});
-    setMessage('');
-    shopSave.reset();
-  };
+  const apiError = divisionError || shopSave.error;
+
   const submit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (saving) return;
@@ -98,6 +109,7 @@ export function PickupAddressForm({
     };
     shopSave.mutate({ shopId, data: result.data }, callbacks);
   };
+
   return (
     <form
       noValidate
@@ -131,78 +143,18 @@ export function PickupAddressForm({
           error={errors.phone}
           required
         />
-        <div>
-          <label className="bg-rewear-soft block space-y-2 rounded-lg px-4 py-3">
-            <span className="block text-sm leading-5 font-semibold">
-              Province / City
-            </span>
-            <select
-              name="provinceCode"
-              aria-label="Province / City"
-              className="h-6 w-full min-w-0 bg-transparent text-base leading-6"
-              value={provinceCode}
-              disabled={provinces.isPending || !!provinces.error}
-              aria-invalid={!!errors.provinceCode}
-              aria-describedby={
-                errors.provinceCode ? 'pickup-province-error' : undefined
-              }
-              onChange={(e) => {
-                setProvinceCode(e.target.value);
-                setWardCode('');
-                clear();
-              }}
-            >
-              <option value="">Choose a province or city</option>
-              {provinces.data?.data.map((province) => (
-                <option key={province.code} value={province.code}>
-                  {province.name}
-                </option>
-              ))}
-            </select>
-          </label>
-          {errors.provinceCode && (
-            <p
-              id="pickup-province-error"
-              className="text-destructive mt-2 text-sm"
-            >
-              {errors.provinceCode}
-            </p>
-          )}
-        </div>
-        <div>
-          <label className="bg-rewear-soft block space-y-2 rounded-lg px-4 py-3">
-            <span className="block text-sm leading-5 font-semibold">
-              Ward / Commune
-            </span>
-            <select
-              name="wardCode"
-              aria-label="Ward / Commune"
-              className="h-6 w-full min-w-0 bg-transparent text-base leading-6"
-              value={wardCode}
-              disabled={!provinceCode || wards.isPending || !!wards.error}
-              aria-invalid={!!errors.wardCode}
-              aria-describedby={
-                errors.wardCode ? 'pickup-ward-error' : undefined
-              }
-              onChange={(e) => {
-                setWardCode(e.target.value);
-                clear();
-              }}
-            >
-              <option value="">Choose a ward</option>
-              {wards.data?.data.map((ward) => (
-                <option key={ward.code} value={ward.code}>
-                  {ward.name}
-                </option>
-              ))}
-            </select>
-          </label>
-          {errors.wardCode && (
-            <p id="pickup-ward-error" className="text-destructive mt-2 text-sm">
-              {errors.wardCode}
-            </p>
-          )}
-        </div>
+        <AdministrativeDivisionFields
+          provinceCode={provinceCode}
+          wardCode={wardCode}
+          onProvinceChange={setProvinceCode}
+          onWardChange={setWardCode}
+          provinces={provinces}
+          wards={wards}
+          errors={errors}
+          rounded
+          provinceLabel="Province / City"
+          wardLabel="Ward / Commune"
+        />
         <BaseInputField
           id="pickup-street"
           name="addressLine1"
@@ -231,10 +183,7 @@ export function PickupAddressForm({
             type="button"
             disabled={saving}
             className="min-h-11 underline"
-            onClick={() => {
-              void provinces.refetch();
-              if (provinceCode) void wards.refetch();
-            }}
+            onClick={refetchDivisions}
           >
             Retry address directory
           </button>

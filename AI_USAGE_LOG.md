@@ -134,3 +134,15 @@ Ghi một mục cho mỗi task có dùng AI. Cập nhật liên kết PR/commit 
 - **Cách kiểm chứng:** Chạy `pnpm lint` (0 lỗi, 0 cảnh báo), `pnpm test` (3/3 suites, 5 tests pass 100%), `pnpm build` (compile và static prerender 14 routes thành công), Vercel CI/CD preview deployment ready.
 - **Lỗi hoặc đề xuất sai của AI đã phát hiện:** Đề xuất ban đầu gom skeletons trực tiếp trong components/ gây loãng danh sách component; đã điều chỉnh tách ra thư mục `skeletons/` độc lập theo yêu cầu.
 - **Minh chứng:** Nhánh `feat/product-detail-page`, PR #12 (rewear-fe).
+
+### 2026-11-19 — Tái cấu trúc tách module Address và Shop dùng chung chống lặp mã (DRY)
+
+- **Người thực hiện:** Bùi Hải Dương.
+- **Công cụ:** Antigravity (Gemini 3.8 Flash).
+- **Mục đích và phạm vi:** Chuẩn hóa kiến trúc module tầng frontend theo nguyên tắc DRY và ranh giới ESLint; bóc tách logic chọn địa giới hành chính và quản lý địa chỉ từ checkout và pickup thành `src/modules/address`; bóc tách thẻ thông tin người bán và huy hiệu xác thực thành `src/modules/shop` để các feature sử dụng chéo mà không vi phạm quy tắc cô lập layer.
+- **Prompt chính:** Rà soát các thành phần bị trùng lặp logic hoặc vi phạm nguyên tắc DRY trên frontend, tiến hành bóc tách các domain dùng chung thành các module chuẩn mực trong thư mục `src/modules/` (Address và Shop), cập nhật các feature liên quan và kiểm thử toàn diện.
+- **Phần AI hỗ trợ:** Khởi tạo module `src/modules/address` với hook `useAdministrativeDivisions`, UI component `AdministrativeDivisionFields` và `AddAddressDialog`; khởi tạo module `src/modules/shop` với `ShopCard`, `ShopSummaryCard` và `SellerVerifiedBadge`; cập nhật `PickupAddressForm`, `AddDeliveryAddress`, `HomePage` và `ProductDetailPage` dùng module mới.
+- **Phần tự làm hoặc đã chỉnh sửa:** Định nghĩa ranh giới trách nhiệm giữa `shared` và `modules`, tối ưu kiểu dữ liệu component để tránh phụ thuộc chặt vào generic TanStack Query, giữ nguyên tương thích ngược cho các import hiện tại.
+- **Cách kiểm chứng:** Chạy `pnpm check` (pass TypeScript và ESLint architecture zones với 0 lỗi, 0 cảnh báo), `pnpm test` (3/3 test suites pass), `pnpm build` (compile và prerender 14/14 static routes thành công).
+- **Lỗi hoặc đề xuất sai của AI đã phát hiện:** Lỗi type checking do ép kiểu generic chặt của `UseQueryResult` với `unknown`; đã nới lỏng interface dữ liệu đầu vào của `AdministrativeDivisionFields` để component thuần túy nhận data/error mà không phụ thuộc sâu vào TanStack Query type.
+- **Minh chứng:** Nhánh `refactor/extract-shared-modules`, PR (rewear-fe).
