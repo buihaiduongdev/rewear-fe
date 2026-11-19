@@ -23,7 +23,7 @@ import { formatCondition, formatPrice } from '@/shared/utils/product';
 import { Button } from '@/shared/components/ui/button';
 import { TOAST_DURATION_MS } from '@/shared/constants/toast';
 import { useToastStore } from '@/shared/stores/toast.store';
-import { ProductDetailSkeleton } from './ProductDetailSkeleton';
+import { ProductDetailSkeleton } from '../skeletons/ProductDetailSkeleton';
 
 export function ProductDetailPage({ id }: { id: string }) {
   const addToast = useToastStore((s) => s.addToast);

@@ -1,7 +1,7 @@
 import { Suspense } from 'react';
 import type { Metadata } from 'next';
 import { ProductDetailPage } from '@/features/product-detail/components/ProductDetailPage';
-import { ProductDetailSkeleton } from '@/features/product-detail/components/ProductDetailSkeleton';
+import { ProductDetailSkeleton } from '@/features/product-detail/skeletons/ProductDetailSkeleton';
 
 interface Props {
   params: Promise<{ id: string }>;
