@@ -36,6 +36,7 @@ export function usePickupAddressForm({
     handleSubmit,
     setValue,
     control,
+    clearErrors,
     formState: { errors },
   } = useForm<PickupAddressFormValues>({
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -62,8 +63,8 @@ export function usePickupAddressForm({
     error: divisionError,
     refetch: refetchDivisions,
   } = useAdministrativeDivisions({
-    initialProvinceCode: provinceCode,
-    initialWardCode: wardCode,
+    provinceCode,
+    wardCode,
     onProvinceChange: () => setMessage(''),
     onWardChange: () => setMessage(''),
   });
@@ -88,7 +89,8 @@ export function usePickupAddressForm({
 
   const handleProvinceChange = (code: string) => {
     setValue('provinceCode', code, { shouldValidate: true });
-    setValue('wardCode', '', { shouldValidate: true });
+    setValue('wardCode', '', { shouldValidate: false });
+    clearErrors('wardCode');
     setMessage('');
   };
 

@@ -8,6 +8,8 @@ import {
 } from '@/shared/api/query-generated/administrative-divisions/administrative-divisions';
 
 export type UseAdministrativeDivisionsOptions = {
+  provinceCode?: string;
+  wardCode?: string;
   initialProvinceCode?: string;
   initialWardCode?: string;
   onProvinceChange?: (provinceCode: string) => void;
@@ -17,25 +19,51 @@ export type UseAdministrativeDivisionsOptions = {
 export function useAdministrativeDivisions(
   options: UseAdministrativeDivisionsOptions = {},
 ) {
-  const [provinceCode, setProvinceCodeState] = useState(
-    options.initialProvinceCode ?? '',
+  const [internalProvinceCode, setInternalProvinceCode] = useState(
+    options.provinceCode ?? options.initialProvinceCode ?? '',
   );
-  const [wardCode, setWardCodeState] = useState(options.initialWardCode ?? '');
+  const [internalWardCode, setInternalWardCode] = useState(
+    options.wardCode ?? options.initialWardCode ?? '',
+  );
 
-  const provinces = useAdministrativeDivisionControllerFindAllProvinces();
+  // Controlled provinceCode takes priority, or initialProvinceCode if provided/updated
+  const provinceCode =
+    options.provinceCode ??
+    (options.initialProvinceCode !== undefined
+      ? options.initialProvinceCode
+      : internalProvinceCode);
+
+  const wardCode =
+    options.wardCode ??
+    (options.initialWardCode !== undefined
+      ? options.initialWardCode
+      : internalWardCode);
+
+  const provinces = useAdministrativeDivisionControllerFindAllProvinces({
+    query: {
+      staleTime: Infinity,
+      gcTime: 1000 * 60 * 60 * 24,
+    },
+  });
   const wards = useAdministrativeDivisionControllerFindWardsByProvinceCode(
     provinceCode,
-    { query: { enabled: !!provinceCode } },
+    {
+      query: {
+        enabled: !!provinceCode,
+        staleTime: Infinity,
+        gcTime: 1000 * 60 * 60 * 24,
+      },
+    },
   );
 
   const setProvinceCode = (code: string) => {
-    setProvinceCodeState(code);
-    setWardCodeState('');
+    setInternalProvinceCode(code);
+    setInternalWardCode('');
     options.onProvinceChange?.(code);
   };
 
   const setWardCode = (code: string) => {
-    setWardCodeState(code);
+    setInternalWardCode(code);
     options.onWardChange?.(code);
   };
 

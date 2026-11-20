@@ -8,6 +8,7 @@ import type {
 } from '@/shared/api/models';
 import {
   Combobox,
+  ComboboxCollection,
   ComboboxContent,
   ComboboxEmpty,
   ComboboxInput,
@@ -57,11 +58,24 @@ function normalizeVietnamese(str: string): string {
 }
 
 const filterDivision = (item: DivisionOption, query: string) => {
-  if (!query) return true;
+  const trimmed = query.trim();
+  if (!trimmed) return true;
+  if (!item?.label) return false;
   const normItem = normalizeVietnamese(item.label);
-  const normQuery = normalizeVietnamese(query);
+  const normQuery = normalizeVietnamese(trimmed);
   return normItem.includes(normQuery);
 };
+
+function formatDivisionError(
+  err?: string,
+  fallback = 'Please make a valid selection',
+): string | undefined {
+  if (!err) return undefined;
+  if (/pattern|regex|\/\\d/i.test(err)) {
+    return fallback;
+  }
+  return err;
+}
 
 export function AdministrativeDivisionFields({
   provinceCode,
@@ -78,6 +92,15 @@ export function AdministrativeDivisionFields({
   className = '',
   errorClassName = 'text-destructive',
 }: AdministrativeDivisionFieldsProps) {
+  const formattedProvinceError = formatDivisionError(
+    errors?.provinceCode,
+    'Please select a valid province or city',
+  );
+  const formattedWardError = formatDivisionError(
+    errors?.wardCode,
+    'Please select a valid ward or commune',
+  );
+
   const provinceOptions: DivisionOption[] = useMemo(
     () =>
       provinces.data?.data.map((p) => ({
@@ -129,6 +152,11 @@ export function AdministrativeDivisionFields({
               onProvinceChange(val?.value ?? '');
             }}
             filter={filterDivision}
+            itemToStringLabel={(item: DivisionOption) => item?.label ?? ''}
+            itemToStringValue={(item: DivisionOption) => item?.value ?? ''}
+            isItemEqualToValue={(a: DivisionOption, b: DivisionOption) =>
+              a?.value === b?.value
+            }
             disabled={disabled || provinces.isPending || !!provinces.error}
           >
             <ComboboxInput
@@ -146,26 +174,28 @@ export function AdministrativeDivisionFields({
                 No province or city found
               </ComboboxEmpty>
               <ComboboxList>
-                {provinceOptions.map((item) => (
-                  <ComboboxItem
-                    key={item.value}
-                    value={item}
-                    className="hover:bg-rewear-soft cursor-pointer px-3 py-2 text-sm"
-                  >
-                    {item.label}
-                  </ComboboxItem>
-                ))}
+                <ComboboxCollection>
+                  {(item: DivisionOption) => (
+                    <ComboboxItem
+                      key={item.value}
+                      value={item}
+                      className="hover:bg-rewear-soft cursor-pointer px-3 py-2 text-sm"
+                    >
+                      {item.label}
+                    </ComboboxItem>
+                  )}
+                </ComboboxCollection>
               </ComboboxList>
             </ComboboxContent>
           </Combobox>
         </div>
-        {errors?.provinceCode && (
+        {formattedProvinceError && (
           <p
             id="division-province-error"
             className={`mt-2 text-sm ${errorClassName}`}
             role="alert"
           >
-            {errors.provinceCode}
+            {formattedProvinceError}
           </p>
         )}
       </div>
@@ -183,6 +213,11 @@ export function AdministrativeDivisionFields({
               onWardChange(val?.value ?? '');
             }}
             filter={filterDivision}
+            itemToStringLabel={(item: DivisionOption) => item?.label ?? ''}
+            itemToStringValue={(item: DivisionOption) => item?.value ?? ''}
+            isItemEqualToValue={(a: DivisionOption, b: DivisionOption) =>
+              a?.value === b?.value
+            }
             disabled={
               disabled || !provinceCode || wards.isPending || !!wards.error
             }
@@ -204,26 +239,28 @@ export function AdministrativeDivisionFields({
                 No ward or commune found
               </ComboboxEmpty>
               <ComboboxList>
-                {wardOptions.map((item) => (
-                  <ComboboxItem
-                    key={item.value}
-                    value={item}
-                    className="hover:bg-rewear-soft cursor-pointer px-3 py-2 text-sm"
-                  >
-                    {item.label}
-                  </ComboboxItem>
-                ))}
+                <ComboboxCollection>
+                  {(item: DivisionOption) => (
+                    <ComboboxItem
+                      key={item.value}
+                      value={item}
+                      className="hover:bg-rewear-soft cursor-pointer px-3 py-2 text-sm"
+                    >
+                      {item.label}
+                    </ComboboxItem>
+                  )}
+                </ComboboxCollection>
               </ComboboxList>
             </ComboboxContent>
           </Combobox>
         </div>
-        {errors?.wardCode && (
+        {formattedWardError && (
           <p
             id="division-ward-error"
             className={`mt-2 text-sm ${errorClassName}`}
             role="alert"
           >
-            {errors.wardCode}
+            {formattedWardError}
           </p>
         )}
       </div>
