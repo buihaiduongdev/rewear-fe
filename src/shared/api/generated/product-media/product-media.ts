@@ -10,6 +10,7 @@ import type {
   MediaControllerConfirmUploadBody,
   MediaControllerCreateUploadTicket201,
   MediaControllerCreateUploadTicketBody,
+  MediaControllerDelete200,
   MediaControllerFindAll200,
   MediaControllerFindForManagement200,
   MediaControllerReorder200,
@@ -125,9 +126,9 @@ export const mediaControllerSetCover = (
 export const mediaControllerDelete = (
   productId: string,
   mediaId: string,
-  options?: SecondParameter<typeof orvalRequest<void>>,
+  options?: SecondParameter<typeof orvalRequest<MediaControllerDelete200>>,
 ) => {
-  return orvalRequest<void>(
+  return orvalRequest<MediaControllerDelete200>(
     { url: `/api/products/${productId}/media/${mediaId}`, method: 'DELETE' },
     options,
   );

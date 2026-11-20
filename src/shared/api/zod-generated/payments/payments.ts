@@ -223,68 +223,6 @@ export const PaymentControllerReconcileResponse = zod.object({
   }),
 });
 
-export const paymentControllerOrdersResponseDataItemIdRegExp = new RegExp(
-  '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
-);
-export const paymentControllerOrdersResponseDataItemPaymentIdRegExp =
-  new RegExp(
-    '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
-  );
-export const paymentControllerOrdersResponseDataItemShopIdRegExp = new RegExp(
-  '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
-);
-export const paymentControllerOrdersResponseDataItemSubtotalMin =
-  -9007199254740991;
-export const paymentControllerOrdersResponseDataItemSubtotalMax = 9007199254740991;
-
-export const paymentControllerOrdersResponseDataItemShippingFeeMin =
-  -9007199254740991;
-export const paymentControllerOrdersResponseDataItemShippingFeeMax = 9007199254740991;
-
-export const paymentControllerOrdersResponseDataItemTotalMin =
-  -9007199254740991;
-export const paymentControllerOrdersResponseDataItemTotalMax = 9007199254740991;
-
-export const paymentControllerOrdersResponseDataItemSellerConfirmByRegExp =
-  new RegExp(
-    '^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$',
-  );
-
-export const PaymentControllerOrdersResponse = zod.object({
-  statusCode: zod.literal(200),
-  message: zod.string(),
-  data: zod.array(
-    zod.object({
-      id: zod.uuid().regex(paymentControllerOrdersResponseDataItemIdRegExp),
-      paymentId: zod
-        .uuid()
-        .regex(paymentControllerOrdersResponseDataItemPaymentIdRegExp),
-      shopId: zod
-        .uuid()
-        .regex(paymentControllerOrdersResponseDataItemShopIdRegExp),
-      shopName: zod.string(),
-      status: zod.enum(['pending']),
-      subtotal: zod
-        .int()
-        .min(paymentControllerOrdersResponseDataItemSubtotalMin)
-        .max(paymentControllerOrdersResponseDataItemSubtotalMax),
-      shippingFee: zod
-        .int()
-        .min(paymentControllerOrdersResponseDataItemShippingFeeMin)
-        .max(paymentControllerOrdersResponseDataItemShippingFeeMax),
-      total: zod
-        .int()
-        .min(paymentControllerOrdersResponseDataItemTotalMin)
-        .max(paymentControllerOrdersResponseDataItemTotalMax),
-      sellerConfirmBy: zod.iso
-        .datetime({ offset: true })
-        .regex(paymentControllerOrdersResponseDataItemSellerConfirmByRegExp),
-      address: zod.record(zod.string(), zod.unknown()),
-      items: zod.array(zod.record(zod.string(), zod.unknown())),
-    }),
-  ),
-});
-
 export const paymentControllerIpnBodyPartnerCodeMax = 50;
 
 export const paymentControllerIpnBodyOrderIdMax = 200;

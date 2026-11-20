@@ -60,7 +60,7 @@ export function PackageForm({
     setError('');
     onSaving(true);
     save.mutate(
-      { id: product.id, data: result.data },
+      { productId: product.id, data: result.data },
       {
         onSuccess: onSaved,
         onError: onRefresh,

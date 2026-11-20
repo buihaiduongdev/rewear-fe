@@ -158,3 +158,17 @@ Ghi một mục cho mỗi task có dùng AI. Cập nhật liên kết PR/commit 
 - **Cách kiểm chứng:** Chạy `pnpm check` (pass TypeScript và ESLint với 0 lỗi, 0 cảnh báo), `pnpm test` (5/5 unit tests pass 100%), `pnpm build` (compile và static prerender 14/14 static pages thành công).
 - **Lỗi hoặc đề xuất sai của AI đã phát hiện:** Ban đầu AI vẫn giữ lại khung giao diện pre-reserve và popup hỏi xác nhận hủy checkout gây gián đoạn luồng người dùng; đã phát hiện và yêu cầu dọn dẹp triệt để để người dùng chuyển trang mượt mà 1-click.
 - **Minh chứng:** [PR #13](https://github.com/buihaiduongdev/rewear-fe/pull/13) trên branch `refactor/extract-shared-modules` (rewear-fe).
+
+### 2026-11-20 — Triển khai tính năng Wishlist và Lưu để mua sau (Save for later)
+
+- **Người thực hiện:** Bùi Hải Dương.
+- **Công cụ:** Antigravity (Gemini 3.8 Flash).
+- **Mục đích và phạm vi:** Triển khai tính năng Wishlist (Danh sách yêu thích) và "Lưu để mua sau" (Save for later) kết nối đồng bộ giữa Backend NestJS và Frontend Next.js; tích hợp nút lưu trên trang chi tiết sản phẩm và liên kết luồng chuyển qua lại giữa Giỏ hàng và Mục đã lưu.
+- **Prompt chính:** Triển khai tính năng Wishlist và kết nối nút "Save for later" trên giỏ hàng, hiển thị danh mục "Saved for later" phía dưới giỏ hàng cho phép chuyển lại vào giỏ hàng (Move to cart) hoặc xóa khỏi danh sách lưu; bổ sung nút bookmark/lưu trên trang chi tiết sản phẩm.
+- **Phần AI hỗ trợ:** 
+  - Backend (`rewear-be`): Thiết kế `WishlistItem` entity, migration TypeORM, Zod schemas, `WishlistService` và `WishlistController` với các endpoint `GET /api/wishlist`, `PUT /api/wishlist/items/:productId`, `DELETE /api/wishlist/items/:productId`; viết unit test `wishlist.service.spec.ts` đạt 100% test pass.
+  - Frontend (`rewear-fe`): Tái tạo API client và React Query hooks thông qua Orval; xây dựng hook `useWishlist`, `useAddToWishlist`, `useRemoveFromWishlist`; tạo component `SaveToWishlistButton` tích hợp vào `ProductDetailPage`; cập nhật `CartPage.tsx` gắn action "Save for later" chuyển sản phẩm từ giỏ sang danh sách lưu và render khối "Saved for later" với đầy đủ hình ảnh, giá bán, tình trạng hàng cùng thao tác "Move to cart" và "Remove".
+- **Phần tự làm hoặc đã chỉnh sửa:** Kiểm soát ranh giới xác thực JWT, chuẩn hóa định dạng dữ liệu trả về theo quy chuẩn API của dự án, kiểm tra đối chiếu tính sẵn sàng của sản phẩm (AVAILABLE, HELD, SOLD, UNAVAILABLE).
+- **Cách kiểm chứng:** Chạy `pnpm check` và `test:unit` trên cả BE và FE; chạy `pnpm build` trên FE thành công 14/14 static pages; kiểm thử tích hợp thực tế bằng HTTP request thêm/xóa/truy vấn sản phẩm trong danh sách lưu.
+- **Lỗi hoặc đề xuất sai của AI đã phát hiện:** Lỗi sai tên biến param khi đồng bộ Orval (`productId` thay vì `id`) trong `PackageForm` và `ShippingPackagesPage`; đã kịp thời hiệu chỉnh để `pnpm check` pass hoàn toàn.
+- **Minh chứng:** Branch `feat/wishlist` (rewear-be) và branch `refactor/extract-shared-modules` (rewear-fe).

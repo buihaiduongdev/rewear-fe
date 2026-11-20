@@ -17,6 +17,7 @@ import { useProductControllerFindOne } from '@/shared/api/query-generated/produc
 import { useMediaControllerFindAll } from '@/shared/api/query-generated/product-media/product-media';
 import { ProductPhoto } from '@/shared/components/marketplace/ProductPhoto';
 import { AddToCartAction } from '@/modules/cart/components/AddToCartAction';
+import { SaveToWishlistButton } from '@/modules/wishlist/components/SaveToWishlistButton';
 import { ShopSummaryCard } from '@/modules/shop';
 import { formatCondition, formatPrice } from '@/shared/utils/product';
 import { Badge } from '@/shared/components/ui/badge';
@@ -223,16 +224,21 @@ export function ProductDetailPage({ id }: { id: string }) {
             </div>
           </div>
 
-          {/* Add to Cart Primary Action */}
-          <div className="pt-2">
-            <AddToCartAction
-              product={{
-                id: product.id,
-                title: product.title,
-                size: product.size,
-              }}
-              primary
-            />
+          {/* Add to Cart & Save to Wishlist Actions */}
+          <div className="flex flex-col gap-3 pt-2 sm:flex-row">
+            <div className="flex-1">
+              <AddToCartAction
+                product={{
+                  id: product.id,
+                  title: product.title,
+                  size: product.size,
+                }}
+                primary
+              />
+            </div>
+            <div className="sm:w-48">
+              <SaveToWishlistButton productId={product.id} />
+            </div>
           </div>
 
           {/* Seller / Shop Information Card */}

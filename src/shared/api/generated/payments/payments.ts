@@ -10,7 +10,6 @@ import type {
   PaymentControllerCreateBody,
   PaymentControllerFind200,
   PaymentControllerIpnBody,
-  PaymentControllerOrders200,
   PaymentControllerReconcile200,
 } from '../../models/index';
 import { orvalRequest } from '../../orval-request';
@@ -50,14 +49,6 @@ export const paymentControllerReconcile = (
     options,
   );
 };
-export const paymentControllerOrders = (
-  options?: SecondParameter<typeof orvalRequest<PaymentControllerOrders200>>,
-) => {
-  return orvalRequest<PaymentControllerOrders200>(
-    { url: `/api/orders/mine`, method: 'GET' },
-    options,
-  );
-};
 export const paymentControllerIpn = (
   paymentControllerIpnBody: PaymentControllerIpnBody,
   options?: SecondParameter<typeof orvalRequest<void>>,
@@ -80,9 +71,6 @@ export type PaymentControllerFindResult = NonNullable<
 >;
 export type PaymentControllerReconcileResult = NonNullable<
   Awaited<ReturnType<typeof paymentControllerReconcile>>
->;
-export type PaymentControllerOrdersResult = NonNullable<
-  Awaited<ReturnType<typeof paymentControllerOrders>>
 >;
 export type PaymentControllerIpnResult = NonNullable<
   Awaited<ReturnType<typeof paymentControllerIpn>>
