@@ -22,18 +22,20 @@ import type {
 } from '@tanstack/react-query';
 
 import type {
-  ShopControllerAddStaff201,
-  ShopControllerAddStaffBody,
+  ShopControllerAccept200,
   ShopControllerCreate201,
   ShopControllerCreateBody,
   ShopControllerFindAll200,
   ShopControllerFindMembers200,
   ShopControllerFindMine200,
+  ShopControllerFindMyInvitations200,
   ShopControllerFindOne200,
+  ShopControllerInvite201,
+  ShopControllerInviteBody,
+  ShopControllerList200,
+  ShopControllerRevoke200,
   ShopControllerUpdate200,
   ShopControllerUpdateBody,
-  ShopControllerUpdateStaff200,
-  ShopControllerUpdateStaffBody,
 } from '../../models/index';
 import { orvalRequest } from '../../orval-request';
 
@@ -440,25 +442,25 @@ export function useShopControllerFindMine<
 }
 
 export const shopControllerFindOne = (
-  id: string,
+  shopId: string,
   options?: SecondParameter<typeof orvalRequest>,
   signal?: AbortSignal,
 ) => {
   return orvalRequest<ShopControllerFindOne200>(
-    { url: `/api/shops/${id}`, method: 'GET', signal },
+    { url: `/api/shops/${shopId}`, method: 'GET', signal },
     options,
   );
 };
 
-export const getShopControllerFindOneQueryKey = (id: string) => {
-  return [`/api/shops/${id}`] as const;
+export const getShopControllerFindOneQueryKey = (shopId: string) => {
+  return [`/api/shops/${shopId}`] as const;
 };
 
 export const getShopControllerFindOneQueryOptions = <
   TData = Awaited<ReturnType<typeof shopControllerFindOne>>,
   TError = unknown,
 >(
-  id: string,
+  shopId: string,
   options?: {
     query?: Partial<
       UseQueryOptions<
@@ -473,16 +475,16 @@ export const getShopControllerFindOneQueryOptions = <
   const { query: queryOptions, request: requestOptions } = options ?? {};
 
   const queryKey =
-    queryOptions?.queryKey ?? getShopControllerFindOneQueryKey(id);
+    queryOptions?.queryKey ?? getShopControllerFindOneQueryKey(shopId);
 
   const queryFn: QueryFunction<
     Awaited<ReturnType<typeof shopControllerFindOne>>
-  > = ({ signal }) => shopControllerFindOne(id, requestOptions, signal);
+  > = ({ signal }) => shopControllerFindOne(shopId, requestOptions, signal);
 
   return {
     queryKey,
     queryFn,
-    enabled: id !== null && id !== undefined,
+    enabled: shopId !== null && shopId !== undefined,
     ...queryOptions,
   } as UseQueryOptions<
     Awaited<ReturnType<typeof shopControllerFindOne>>,
@@ -500,7 +502,7 @@ export function useShopControllerFindOne<
   TData = Awaited<ReturnType<typeof shopControllerFindOne>>,
   TError = unknown,
 >(
-  id: string,
+  shopId: string,
   options: {
     query: Partial<
       UseQueryOptions<
@@ -527,7 +529,7 @@ export function useShopControllerFindOne<
   TData = Awaited<ReturnType<typeof shopControllerFindOne>>,
   TError = unknown,
 >(
-  id: string,
+  shopId: string,
   options?: {
     query?: Partial<
       UseQueryOptions<
@@ -554,7 +556,7 @@ export function useShopControllerFindOne<
   TData = Awaited<ReturnType<typeof shopControllerFindOne>>,
   TError = unknown,
 >(
-  id: string,
+  shopId: string,
   options?: {
     query?: Partial<
       UseQueryOptions<
@@ -574,7 +576,7 @@ export function useShopControllerFindOne<
   TData = Awaited<ReturnType<typeof shopControllerFindOne>>,
   TError = unknown,
 >(
-  id: string,
+  shopId: string,
   options?: {
     query?: Partial<
       UseQueryOptions<
@@ -589,7 +591,7 @@ export function useShopControllerFindOne<
 ): UseQueryResult<TData, TError> & {
   queryKey: DataTag<QueryKey, TData, TError>;
 } {
-  const queryOptions = getShopControllerFindOneQueryOptions(id, options);
+  const queryOptions = getShopControllerFindOneQueryOptions(shopId, options);
 
   const query = useQuery(queryOptions, queryClient) as UseQueryResult<
     TData,
@@ -600,14 +602,14 @@ export function useShopControllerFindOne<
 }
 
 export const shopControllerUpdate = (
-  id: string,
+  shopId: string,
   shopControllerUpdateBody: ShopControllerUpdateBody,
   options?: SecondParameter<typeof orvalRequest>,
   signal?: AbortSignal,
 ) => {
   return orvalRequest<ShopControllerUpdate200>(
     {
-      url: `/api/shops/${id}`,
+      url: `/api/shops/${shopId}`,
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       data: shopControllerUpdateBody,
@@ -650,9 +652,9 @@ export const getShopControllerUpdateMutationOptions = <
     Awaited<ReturnType<typeof shopControllerUpdate>>,
     ShopControllerUpdateMutationVariables
   > = (props) => {
-    const { id, data } = props ?? {};
+    const { shopId, data } = props ?? {};
 
-    return shopControllerUpdate(id, data, requestOptions);
+    return shopControllerUpdate(shopId, data, requestOptions);
   };
 
   return { mutationFn, ...mutationOptions };
@@ -664,7 +666,7 @@ export type ShopControllerUpdateMutationResult = NonNullable<
 export type ShopControllerUpdateMutationBody = ShopControllerUpdateBody;
 export type ShopControllerUpdateMutationError = unknown;
 export type ShopControllerUpdateMutationVariables = {
-  id: string;
+  shopId: string;
   data: ShopControllerUpdateBody;
 };
 
@@ -691,25 +693,25 @@ export const useShopControllerUpdate = <TError = unknown, TContext = unknown>(
   );
 };
 export const shopControllerFindMembers = (
-  id: string,
+  shopId: string,
   options?: SecondParameter<typeof orvalRequest>,
   signal?: AbortSignal,
 ) => {
   return orvalRequest<ShopControllerFindMembers200>(
-    { url: `/api/shops/${id}/members`, method: 'GET', signal },
+    { url: `/api/shops/${shopId}/members`, method: 'GET', signal },
     options,
   );
 };
 
-export const getShopControllerFindMembersQueryKey = (id: string) => {
-  return [`/api/shops/${id}/members`] as const;
+export const getShopControllerFindMembersQueryKey = (shopId: string) => {
+  return [`/api/shops/${shopId}/members`] as const;
 };
 
 export const getShopControllerFindMembersQueryOptions = <
   TData = Awaited<ReturnType<typeof shopControllerFindMembers>>,
   TError = unknown,
 >(
-  id: string,
+  shopId: string,
   options?: {
     query?: Partial<
       UseQueryOptions<
@@ -724,16 +726,16 @@ export const getShopControllerFindMembersQueryOptions = <
   const { query: queryOptions, request: requestOptions } = options ?? {};
 
   const queryKey =
-    queryOptions?.queryKey ?? getShopControllerFindMembersQueryKey(id);
+    queryOptions?.queryKey ?? getShopControllerFindMembersQueryKey(shopId);
 
   const queryFn: QueryFunction<
     Awaited<ReturnType<typeof shopControllerFindMembers>>
-  > = ({ signal }) => shopControllerFindMembers(id, requestOptions, signal);
+  > = ({ signal }) => shopControllerFindMembers(shopId, requestOptions, signal);
 
   return {
     queryKey,
     queryFn,
-    enabled: id !== null && id !== undefined,
+    enabled: shopId !== null && shopId !== undefined,
     ...queryOptions,
   } as UseQueryOptions<
     Awaited<ReturnType<typeof shopControllerFindMembers>>,
@@ -751,7 +753,7 @@ export function useShopControllerFindMembers<
   TData = Awaited<ReturnType<typeof shopControllerFindMembers>>,
   TError = unknown,
 >(
-  id: string,
+  shopId: string,
   options: {
     query: Partial<
       UseQueryOptions<
@@ -778,7 +780,7 @@ export function useShopControllerFindMembers<
   TData = Awaited<ReturnType<typeof shopControllerFindMembers>>,
   TError = unknown,
 >(
-  id: string,
+  shopId: string,
   options?: {
     query?: Partial<
       UseQueryOptions<
@@ -805,7 +807,7 @@ export function useShopControllerFindMembers<
   TData = Awaited<ReturnType<typeof shopControllerFindMembers>>,
   TError = unknown,
 >(
-  id: string,
+  shopId: string,
   options?: {
     query?: Partial<
       UseQueryOptions<
@@ -825,7 +827,7 @@ export function useShopControllerFindMembers<
   TData = Awaited<ReturnType<typeof shopControllerFindMembers>>,
   TError = unknown,
 >(
-  id: string,
+  shopId: string,
   options?: {
     query?: Partial<
       UseQueryOptions<
@@ -840,7 +842,10 @@ export function useShopControllerFindMembers<
 ): UseQueryResult<TData, TError> & {
   queryKey: DataTag<QueryKey, TData, TError>;
 } {
-  const queryOptions = getShopControllerFindMembersQueryOptions(id, options);
+  const queryOptions = getShopControllerFindMembersQueryOptions(
+    shopId,
+    options,
+  );
 
   const query = useQuery(queryOptions, queryClient) as UseQueryResult<
     TData,
@@ -850,137 +855,43 @@ export function useShopControllerFindMembers<
   return withQueryKey(query, queryOptions.queryKey);
 }
 
-export const shopControllerAddStaff = (
-  id: string,
-  shopControllerAddStaffBody: ShopControllerAddStaffBody,
-  options?: SecondParameter<typeof orvalRequest>,
-  signal?: AbortSignal,
-) => {
-  return orvalRequest<ShopControllerAddStaff201>(
-    {
-      url: `/api/shops/${id}/members`,
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      data: shopControllerAddStaffBody,
-      signal,
-    },
-    options,
-  );
-};
-
-export const getShopControllerAddStaffMutationKey = () =>
-  ['shopControllerAddStaff'] as const;
-
-export const getShopControllerAddStaffMutationOptions = <
-  TError = unknown,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof shopControllerAddStaff>>,
-    TError,
-    ShopControllerAddStaffMutationVariables,
-    TContext
-  >;
-  request?: SecondParameter<typeof orvalRequest>;
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof shopControllerAddStaff>>,
-  TError,
-  ShopControllerAddStaffMutationVariables,
-  TContext
-> => {
-  const mutationKey = getShopControllerAddStaffMutationKey();
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation &&
-      'mutationKey' in options.mutation &&
-      options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined };
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof shopControllerAddStaff>>,
-    ShopControllerAddStaffMutationVariables
-  > = (props) => {
-    const { id, data } = props ?? {};
-
-    return shopControllerAddStaff(id, data, requestOptions);
-  };
-
-  return { mutationFn, ...mutationOptions };
-};
-
-export type ShopControllerAddStaffMutationResult = NonNullable<
-  Awaited<ReturnType<typeof shopControllerAddStaff>>
->;
-export type ShopControllerAddStaffMutationBody = ShopControllerAddStaffBody;
-export type ShopControllerAddStaffMutationError = unknown;
-export type ShopControllerAddStaffMutationVariables = {
-  id: string;
-  data: ShopControllerAddStaffBody;
-};
-
-export const useShopControllerAddStaff = <TError = unknown, TContext = unknown>(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof shopControllerAddStaff>>,
-      TError,
-      ShopControllerAddStaffMutationVariables,
-      TContext
-    >;
-    request?: SecondParameter<typeof orvalRequest>;
-  },
-  queryClient?: QueryClient,
-): UseMutationResult<
-  Awaited<ReturnType<typeof shopControllerAddStaff>>,
-  TError,
-  ShopControllerAddStaffMutationVariables,
-  TContext
-> => {
-  return useMutation(
-    getShopControllerAddStaffMutationOptions(options),
-    queryClient,
-  );
-};
-export const shopControllerUpdateStaff = (
+export const shopControllerRemoveMember = (
   shopId: string,
   memberId: string,
-  shopControllerUpdateStaffBody: ShopControllerUpdateStaffBody,
   options?: SecondParameter<typeof orvalRequest>,
   signal?: AbortSignal,
 ) => {
-  return orvalRequest<ShopControllerUpdateStaff200>(
+  return orvalRequest<void>(
     {
       url: `/api/shops/${shopId}/members/${memberId}`,
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      data: shopControllerUpdateStaffBody,
+      method: 'DELETE',
       signal,
     },
     options,
   );
 };
 
-export const getShopControllerUpdateStaffMutationKey = () =>
-  ['shopControllerUpdateStaff'] as const;
+export const getShopControllerRemoveMemberMutationKey = () =>
+  ['shopControllerRemoveMember'] as const;
 
-export const getShopControllerUpdateStaffMutationOptions = <
+export const getShopControllerRemoveMemberMutationOptions = <
   TError = unknown,
   TContext = unknown,
 >(options?: {
   mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof shopControllerUpdateStaff>>,
+    Awaited<ReturnType<typeof shopControllerRemoveMember>>,
     TError,
-    ShopControllerUpdateStaffMutationVariables,
+    ShopControllerRemoveMemberMutationVariables,
     TContext
   >;
   request?: SecondParameter<typeof orvalRequest>;
 }): UseMutationOptions<
-  Awaited<ReturnType<typeof shopControllerUpdateStaff>>,
+  Awaited<ReturnType<typeof shopControllerRemoveMember>>,
   TError,
-  ShopControllerUpdateStaffMutationVariables,
+  ShopControllerRemoveMemberMutationVariables,
   TContext
 > => {
-  const mutationKey = getShopControllerUpdateStaffMutationKey();
+  const mutationKey = getShopControllerRemoveMemberMutationKey();
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation &&
       'mutationKey' in options.mutation &&
@@ -990,51 +901,702 @@ export const getShopControllerUpdateStaffMutationOptions = <
     : { mutation: { mutationKey }, request: undefined };
 
   const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof shopControllerUpdateStaff>>,
-    ShopControllerUpdateStaffMutationVariables
+    Awaited<ReturnType<typeof shopControllerRemoveMember>>,
+    ShopControllerRemoveMemberMutationVariables
   > = (props) => {
-    const { shopId, memberId, data } = props ?? {};
+    const { shopId, memberId } = props ?? {};
 
-    return shopControllerUpdateStaff(shopId, memberId, data, requestOptions);
+    return shopControllerRemoveMember(shopId, memberId, requestOptions);
   };
 
   return { mutationFn, ...mutationOptions };
 };
 
-export type ShopControllerUpdateStaffMutationResult = NonNullable<
-  Awaited<ReturnType<typeof shopControllerUpdateStaff>>
+export type ShopControllerRemoveMemberMutationResult = NonNullable<
+  Awaited<ReturnType<typeof shopControllerRemoveMember>>
 >;
-export type ShopControllerUpdateStaffMutationBody =
-  ShopControllerUpdateStaffBody;
-export type ShopControllerUpdateStaffMutationError = unknown;
-export type ShopControllerUpdateStaffMutationVariables = {
+
+export type ShopControllerRemoveMemberMutationError = unknown;
+export type ShopControllerRemoveMemberMutationVariables = {
   shopId: string;
   memberId: string;
-  data: ShopControllerUpdateStaffBody;
 };
 
-export const useShopControllerUpdateStaff = <
+export const useShopControllerRemoveMember = <
   TError = unknown,
   TContext = unknown,
 >(
   options?: {
     mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof shopControllerUpdateStaff>>,
+      Awaited<ReturnType<typeof shopControllerRemoveMember>>,
       TError,
-      ShopControllerUpdateStaffMutationVariables,
+      ShopControllerRemoveMemberMutationVariables,
       TContext
     >;
     request?: SecondParameter<typeof orvalRequest>;
   },
   queryClient?: QueryClient,
 ): UseMutationResult<
-  Awaited<ReturnType<typeof shopControllerUpdateStaff>>,
+  Awaited<ReturnType<typeof shopControllerRemoveMember>>,
   TError,
-  ShopControllerUpdateStaffMutationVariables,
+  ShopControllerRemoveMemberMutationVariables,
   TContext
 > => {
   return useMutation(
-    getShopControllerUpdateStaffMutationOptions(options),
+    getShopControllerRemoveMemberMutationOptions(options),
+    queryClient,
+  );
+};
+export const shopControllerInvite = (
+  shopId: string,
+  shopControllerInviteBody: ShopControllerInviteBody,
+  options?: SecondParameter<typeof orvalRequest>,
+  signal?: AbortSignal,
+) => {
+  return orvalRequest<ShopControllerInvite201>(
+    {
+      url: `/api/shops/${shopId}/invitations`,
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      data: shopControllerInviteBody,
+      signal,
+    },
+    options,
+  );
+};
+
+export const getShopControllerInviteMutationKey = () =>
+  ['shopControllerInvite'] as const;
+
+export const getShopControllerInviteMutationOptions = <
+  TError = unknown,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof shopControllerInvite>>,
+    TError,
+    ShopControllerInviteMutationVariables,
+    TContext
+  >;
+  request?: SecondParameter<typeof orvalRequest>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof shopControllerInvite>>,
+  TError,
+  ShopControllerInviteMutationVariables,
+  TContext
+> => {
+  const mutationKey = getShopControllerInviteMutationKey();
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      'mutationKey' in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof shopControllerInvite>>,
+    ShopControllerInviteMutationVariables
+  > = (props) => {
+    const { shopId, data } = props ?? {};
+
+    return shopControllerInvite(shopId, data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type ShopControllerInviteMutationResult = NonNullable<
+  Awaited<ReturnType<typeof shopControllerInvite>>
+>;
+export type ShopControllerInviteMutationBody = ShopControllerInviteBody;
+export type ShopControllerInviteMutationError = unknown;
+export type ShopControllerInviteMutationVariables = {
+  shopId: string;
+  data: ShopControllerInviteBody;
+};
+
+export const useShopControllerInvite = <TError = unknown, TContext = unknown>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof shopControllerInvite>>,
+      TError,
+      ShopControllerInviteMutationVariables,
+      TContext
+    >;
+    request?: SecondParameter<typeof orvalRequest>;
+  },
+  queryClient?: QueryClient,
+): UseMutationResult<
+  Awaited<ReturnType<typeof shopControllerInvite>>,
+  TError,
+  ShopControllerInviteMutationVariables,
+  TContext
+> => {
+  return useMutation(
+    getShopControllerInviteMutationOptions(options),
+    queryClient,
+  );
+};
+export const shopControllerList = (
+  shopId: string,
+  options?: SecondParameter<typeof orvalRequest>,
+  signal?: AbortSignal,
+) => {
+  return orvalRequest<ShopControllerList200>(
+    { url: `/api/shops/${shopId}/invitations`, method: 'GET', signal },
+    options,
+  );
+};
+
+export const getShopControllerListQueryKey = (shopId: string) => {
+  return [`/api/shops/${shopId}/invitations`] as const;
+};
+
+export const getShopControllerListQueryOptions = <
+  TData = Awaited<ReturnType<typeof shopControllerList>>,
+  TError = unknown,
+>(
+  shopId: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof shopControllerList>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof orvalRequest>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ?? getShopControllerListQueryKey(shopId);
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof shopControllerList>>
+  > = ({ signal }) => shopControllerList(shopId, requestOptions, signal);
+
+  return {
+    queryKey,
+    queryFn,
+    enabled: shopId !== null && shopId !== undefined,
+    ...queryOptions,
+  } as UseQueryOptions<
+    Awaited<ReturnType<typeof shopControllerList>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+};
+
+export type ShopControllerListQueryResult = NonNullable<
+  Awaited<ReturnType<typeof shopControllerList>>
+>;
+export type ShopControllerListQueryError = unknown;
+
+export function useShopControllerList<
+  TData = Awaited<ReturnType<typeof shopControllerList>>,
+  TError = unknown,
+>(
+  shopId: string,
+  options: {
+    query: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof shopControllerList>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof shopControllerList>>,
+          TError,
+          Awaited<ReturnType<typeof shopControllerList>>
+        >,
+        'initialData'
+      >;
+    request?: SecondParameter<typeof orvalRequest>;
+  },
+  queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useShopControllerList<
+  TData = Awaited<ReturnType<typeof shopControllerList>>,
+  TError = unknown,
+>(
+  shopId: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof shopControllerList>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof shopControllerList>>,
+          TError,
+          Awaited<ReturnType<typeof shopControllerList>>
+        >,
+        'initialData'
+      >;
+    request?: SecondParameter<typeof orvalRequest>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useShopControllerList<
+  TData = Awaited<ReturnType<typeof shopControllerList>>,
+  TError = unknown,
+>(
+  shopId: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof shopControllerList>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof orvalRequest>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+
+export function useShopControllerList<
+  TData = Awaited<ReturnType<typeof shopControllerList>>,
+  TError = unknown,
+>(
+  shopId: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof shopControllerList>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof orvalRequest>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+} {
+  const queryOptions = getShopControllerListQueryOptions(shopId, options);
+
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<
+    TData,
+    TError
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+export const shopControllerLeave = (
+  shopId: string,
+  options?: SecondParameter<typeof orvalRequest>,
+  signal?: AbortSignal,
+) => {
+  return orvalRequest<void>(
+    { url: `/api/shops/${shopId}/leave`, method: 'POST', signal },
+    options,
+  );
+};
+
+export const getShopControllerLeaveMutationKey = () =>
+  ['shopControllerLeave'] as const;
+
+export const getShopControllerLeaveMutationOptions = <
+  TError = unknown,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof shopControllerLeave>>,
+    TError,
+    ShopControllerLeaveMutationVariables,
+    TContext
+  >;
+  request?: SecondParameter<typeof orvalRequest>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof shopControllerLeave>>,
+  TError,
+  ShopControllerLeaveMutationVariables,
+  TContext
+> => {
+  const mutationKey = getShopControllerLeaveMutationKey();
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      'mutationKey' in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof shopControllerLeave>>,
+    ShopControllerLeaveMutationVariables
+  > = (props) => {
+    const { shopId } = props ?? {};
+
+    return shopControllerLeave(shopId, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type ShopControllerLeaveMutationResult = NonNullable<
+  Awaited<ReturnType<typeof shopControllerLeave>>
+>;
+
+export type ShopControllerLeaveMutationError = unknown;
+export type ShopControllerLeaveMutationVariables = { shopId: string };
+
+export const useShopControllerLeave = <TError = unknown, TContext = unknown>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof shopControllerLeave>>,
+      TError,
+      ShopControllerLeaveMutationVariables,
+      TContext
+    >;
+    request?: SecondParameter<typeof orvalRequest>;
+  },
+  queryClient?: QueryClient,
+): UseMutationResult<
+  Awaited<ReturnType<typeof shopControllerLeave>>,
+  TError,
+  ShopControllerLeaveMutationVariables,
+  TContext
+> => {
+  return useMutation(
+    getShopControllerLeaveMutationOptions(options),
+    queryClient,
+  );
+};
+export const shopControllerFindMyInvitations = (
+  options?: SecondParameter<typeof orvalRequest>,
+  signal?: AbortSignal,
+) => {
+  return orvalRequest<ShopControllerFindMyInvitations200>(
+    { url: `/api/shop-invitations/me`, method: 'GET', signal },
+    options,
+  );
+};
+
+export const getShopControllerFindMyInvitationsQueryKey = () => {
+  return [`/api/shop-invitations/me`] as const;
+};
+
+export const getShopControllerFindMyInvitationsQueryOptions = <
+  TData = Awaited<ReturnType<typeof shopControllerFindMyInvitations>>,
+  TError = unknown,
+>(options?: {
+  query?: Partial<
+    UseQueryOptions<
+      Awaited<ReturnType<typeof shopControllerFindMyInvitations>>,
+      TError,
+      TData
+    >
+  >;
+  request?: SecondParameter<typeof orvalRequest>;
+}) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ?? getShopControllerFindMyInvitationsQueryKey();
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof shopControllerFindMyInvitations>>
+  > = ({ signal }) => shopControllerFindMyInvitations(requestOptions, signal);
+
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof shopControllerFindMyInvitations>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+};
+
+export type ShopControllerFindMyInvitationsQueryResult = NonNullable<
+  Awaited<ReturnType<typeof shopControllerFindMyInvitations>>
+>;
+export type ShopControllerFindMyInvitationsQueryError = unknown;
+
+export function useShopControllerFindMyInvitations<
+  TData = Awaited<ReturnType<typeof shopControllerFindMyInvitations>>,
+  TError = unknown,
+>(
+  options: {
+    query: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof shopControllerFindMyInvitations>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof shopControllerFindMyInvitations>>,
+          TError,
+          Awaited<ReturnType<typeof shopControllerFindMyInvitations>>
+        >,
+        'initialData'
+      >;
+    request?: SecondParameter<typeof orvalRequest>;
+  },
+  queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useShopControllerFindMyInvitations<
+  TData = Awaited<ReturnType<typeof shopControllerFindMyInvitations>>,
+  TError = unknown,
+>(
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof shopControllerFindMyInvitations>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof shopControllerFindMyInvitations>>,
+          TError,
+          Awaited<ReturnType<typeof shopControllerFindMyInvitations>>
+        >,
+        'initialData'
+      >;
+    request?: SecondParameter<typeof orvalRequest>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useShopControllerFindMyInvitations<
+  TData = Awaited<ReturnType<typeof shopControllerFindMyInvitations>>,
+  TError = unknown,
+>(
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof shopControllerFindMyInvitations>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof orvalRequest>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+
+export function useShopControllerFindMyInvitations<
+  TData = Awaited<ReturnType<typeof shopControllerFindMyInvitations>>,
+  TError = unknown,
+>(
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof shopControllerFindMyInvitations>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof orvalRequest>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+} {
+  const queryOptions = getShopControllerFindMyInvitationsQueryOptions(options);
+
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<
+    TData,
+    TError
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+export const shopControllerRevoke = (
+  shopId: string,
+  invitationId: string,
+  options?: SecondParameter<typeof orvalRequest>,
+  signal?: AbortSignal,
+) => {
+  return orvalRequest<ShopControllerRevoke200>(
+    {
+      url: `/api/shops/${shopId}/invitations/${invitationId}/revoke`,
+      method: 'POST',
+      signal,
+    },
+    options,
+  );
+};
+
+export const getShopControllerRevokeMutationKey = () =>
+  ['shopControllerRevoke'] as const;
+
+export const getShopControllerRevokeMutationOptions = <
+  TError = unknown,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof shopControllerRevoke>>,
+    TError,
+    ShopControllerRevokeMutationVariables,
+    TContext
+  >;
+  request?: SecondParameter<typeof orvalRequest>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof shopControllerRevoke>>,
+  TError,
+  ShopControllerRevokeMutationVariables,
+  TContext
+> => {
+  const mutationKey = getShopControllerRevokeMutationKey();
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      'mutationKey' in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof shopControllerRevoke>>,
+    ShopControllerRevokeMutationVariables
+  > = (props) => {
+    const { shopId, invitationId } = props ?? {};
+
+    return shopControllerRevoke(shopId, invitationId, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type ShopControllerRevokeMutationResult = NonNullable<
+  Awaited<ReturnType<typeof shopControllerRevoke>>
+>;
+
+export type ShopControllerRevokeMutationError = unknown;
+export type ShopControllerRevokeMutationVariables = {
+  shopId: string;
+  invitationId: string;
+};
+
+export const useShopControllerRevoke = <TError = unknown, TContext = unknown>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof shopControllerRevoke>>,
+      TError,
+      ShopControllerRevokeMutationVariables,
+      TContext
+    >;
+    request?: SecondParameter<typeof orvalRequest>;
+  },
+  queryClient?: QueryClient,
+): UseMutationResult<
+  Awaited<ReturnType<typeof shopControllerRevoke>>,
+  TError,
+  ShopControllerRevokeMutationVariables,
+  TContext
+> => {
+  return useMutation(
+    getShopControllerRevokeMutationOptions(options),
+    queryClient,
+  );
+};
+export const shopControllerAccept = (
+  invitationId: string,
+  options?: SecondParameter<typeof orvalRequest>,
+  signal?: AbortSignal,
+) => {
+  return orvalRequest<ShopControllerAccept200>(
+    {
+      url: `/api/shop-invitations/${invitationId}/accept`,
+      method: 'POST',
+      signal,
+    },
+    options,
+  );
+};
+
+export const getShopControllerAcceptMutationKey = () =>
+  ['shopControllerAccept'] as const;
+
+export const getShopControllerAcceptMutationOptions = <
+  TError = unknown,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof shopControllerAccept>>,
+    TError,
+    ShopControllerAcceptMutationVariables,
+    TContext
+  >;
+  request?: SecondParameter<typeof orvalRequest>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof shopControllerAccept>>,
+  TError,
+  ShopControllerAcceptMutationVariables,
+  TContext
+> => {
+  const mutationKey = getShopControllerAcceptMutationKey();
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      'mutationKey' in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof shopControllerAccept>>,
+    ShopControllerAcceptMutationVariables
+  > = (props) => {
+    const { invitationId } = props ?? {};
+
+    return shopControllerAccept(invitationId, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type ShopControllerAcceptMutationResult = NonNullable<
+  Awaited<ReturnType<typeof shopControllerAccept>>
+>;
+
+export type ShopControllerAcceptMutationError = unknown;
+export type ShopControllerAcceptMutationVariables = { invitationId: string };
+
+export const useShopControllerAccept = <TError = unknown, TContext = unknown>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof shopControllerAccept>>,
+      TError,
+      ShopControllerAcceptMutationVariables,
+      TContext
+    >;
+    request?: SecondParameter<typeof orvalRequest>;
+  },
+  queryClient?: QueryClient,
+): UseMutationResult<
+  Awaited<ReturnType<typeof shopControllerAccept>>,
+  TError,
+  ShopControllerAcceptMutationVariables,
+  TContext
+> => {
+  return useMutation(
+    getShopControllerAcceptMutationOptions(options),
     queryClient,
   );
 };

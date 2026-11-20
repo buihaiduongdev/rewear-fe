@@ -2,13 +2,13 @@
 
 <!-- Tóm tắt thay đổi và lý do. Gắn issue/user story hoặc acceptance criteria liên quan nếu có. -->
 
-- 
+-
 
 ## Kiểm chứng
 
 <!-- Ghi lệnh/test đã chạy và kết quả; nêu rõ phần chưa kiểm chứng nếu có. -->
 
-- 
+-
 
 ## AI assistance
 

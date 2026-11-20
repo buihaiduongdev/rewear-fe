@@ -84,6 +84,7 @@ export const shopControllerFindMineResponseDataItemShopIdRegExp = new RegExp(
 export const shopControllerFindMineResponseDataItemUserIdRegExp = new RegExp(
   '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
 );
+export const shopControllerFindMineResponseDataItemStatusDefault = `ACTIVE`;
 export const shopControllerFindMineResponseDataItemJoinedAtRegExp = new RegExp(
   '^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$',
 );
@@ -112,7 +113,9 @@ export const ShopControllerFindMineResponse = zod.object({
         .uuid()
         .regex(shopControllerFindMineResponseDataItemUserIdRegExp),
       memberRole: zod.enum(['OWNER', 'STAFF']),
-      status: zod.enum(['ACTIVE', 'INACTIVE']),
+      status: zod
+        .string()
+        .default(shopControllerFindMineResponseDataItemStatusDefault),
       joinedAt: zod.iso
         .datetime({ offset: true })
         .regex(shopControllerFindMineResponseDataItemJoinedAtRegExp),
@@ -134,12 +137,12 @@ export const ShopControllerFindMineResponse = zod.object({
   ),
 });
 
-export const shopControllerFindOnePathIdRegExp = new RegExp(
+export const shopControllerFindOnePathShopIdRegExp = new RegExp(
   '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
 );
 
 export const ShopControllerFindOneParams = zod.object({
-  id: zod.uuid().regex(shopControllerFindOnePathIdRegExp),
+  shopId: zod.uuid().regex(shopControllerFindOnePathShopIdRegExp),
 });
 
 export const shopControllerFindOneResponseDataIdRegExp = new RegExp(
@@ -169,12 +172,16 @@ export const ShopControllerFindOneResponse = zod.object({
   }),
 });
 
-export const shopControllerUpdatePathIdRegExp = new RegExp(
+export const shopControllerUpdatePathShopIdRegExp = new RegExp(
   '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
 );
 
 export const ShopControllerUpdateParams = zod.object({
-  id: zod.uuid().regex(shopControllerUpdatePathIdRegExp),
+  shopId: zod.uuid().regex(shopControllerUpdatePathShopIdRegExp),
+});
+
+export const ShopControllerUpdateHeader = zod.object({
+  'X-Shop-Id': zod.uuid(),
 });
 
 export const shopControllerUpdateBodyNameMax = 100;
@@ -219,12 +226,16 @@ export const ShopControllerUpdateResponse = zod.object({
   }),
 });
 
-export const shopControllerFindMembersPathIdRegExp = new RegExp(
+export const shopControllerFindMembersPathShopIdRegExp = new RegExp(
   '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
 );
 
 export const ShopControllerFindMembersParams = zod.object({
-  id: zod.uuid().regex(shopControllerFindMembersPathIdRegExp),
+  shopId: zod.uuid().regex(shopControllerFindMembersPathShopIdRegExp),
+});
+
+export const ShopControllerFindMembersHeader = zod.object({
+  'X-Shop-Id': zod.uuid(),
 });
 
 export const shopControllerFindMembersResponseDataItemIdRegExp = new RegExp(
@@ -236,6 +247,10 @@ export const shopControllerFindMembersResponseDataItemShopIdRegExp = new RegExp(
 export const shopControllerFindMembersResponseDataItemUserIdRegExp = new RegExp(
   '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
 );
+export const shopControllerFindMembersResponseDataItemRolesItemIdRegExp =
+  new RegExp(
+    '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
+  );
 export const shopControllerFindMembersResponseDataItemJoinedAtRegExp =
   new RegExp(
     '^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$',
@@ -270,7 +285,14 @@ export const ShopControllerFindMembersResponse = zod.object({
         .uuid()
         .regex(shopControllerFindMembersResponseDataItemUserIdRegExp),
       memberRole: zod.enum(['OWNER', 'STAFF']),
-      status: zod.enum(['ACTIVE', 'INACTIVE']),
+      roles: zod.array(
+        zod.object({
+          id: zod
+            .uuid()
+            .regex(shopControllerFindMembersResponseDataItemRolesItemIdRegExp),
+          name: zod.string(),
+        }),
+      ),
       joinedAt: zod.iso
         .datetime({ offset: true })
         .regex(shopControllerFindMembersResponseDataItemJoinedAtRegExp),
@@ -293,142 +315,433 @@ export const ShopControllerFindMembersResponse = zod.object({
   ),
 });
 
-export const shopControllerAddStaffPathIdRegExp = new RegExp(
+export const shopControllerRemoveMemberPathShopIdRegExp = new RegExp(
+  '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
+);
+export const shopControllerRemoveMemberPathMemberIdRegExp = new RegExp(
   '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
 );
 
-export const ShopControllerAddStaffParams = zod.object({
-  id: zod.uuid().regex(shopControllerAddStaffPathIdRegExp),
+export const ShopControllerRemoveMemberParams = zod.object({
+  shopId: zod.uuid().regex(shopControllerRemoveMemberPathShopIdRegExp),
+  memberId: zod.uuid().regex(shopControllerRemoveMemberPathMemberIdRegExp),
 });
 
-export const shopControllerAddStaffBodyUserIdRegExp = new RegExp(
-  '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
-);
-
-export const ShopControllerAddStaffBody = zod.strictObject({
-  userId: zod.uuid().regex(shopControllerAddStaffBodyUserIdRegExp),
+export const ShopControllerRemoveMemberHeader = zod.object({
+  'X-Shop-Id': zod.uuid(),
 });
 
-export const shopControllerAddStaffResponseDataIdRegExp = new RegExp(
+export const ShopControllerRemoveMemberResponse = zod.void();
+
+export const shopControllerInvitePathShopIdRegExp = new RegExp(
   '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
 );
-export const shopControllerAddStaffResponseDataShopIdRegExp = new RegExp(
-  '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
-);
-export const shopControllerAddStaffResponseDataUserIdRegExp = new RegExp(
-  '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
-);
-export const shopControllerAddStaffResponseDataJoinedAtRegExp = new RegExp(
-  '^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$',
-);
-export const shopControllerAddStaffResponseDataCreatedAtRegExp = new RegExp(
-  '^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$',
-);
-export const shopControllerAddStaffResponseDataUpdatedAtRegExp = new RegExp(
-  '^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$',
-);
-export const shopControllerAddStaffResponseDataUserIdRegExpOne = new RegExp(
-  '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
-);
-export const shopControllerAddStaffResponseDataUserEmailRegExp = new RegExp(
+
+export const ShopControllerInviteParams = zod.object({
+  shopId: zod.uuid().regex(shopControllerInvitePathShopIdRegExp),
+});
+
+export const ShopControllerInviteHeader = zod.object({
+  'X-Shop-Id': zod.uuid(),
+});
+
+export const shopControllerInviteBodyEmailRegExp = new RegExp(
   "^(?!\\.)(?!.*\\.\\.)([A-Za-z0-9_'+\\-\\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$",
 );
+export const shopControllerInviteBodyRoleIdsItemRegExp = new RegExp(
+  '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
+);
 
-export const ShopControllerAddStaffResponse = zod.object({
+export const ShopControllerInviteBody = zod.strictObject({
+  email: zod.email().regex(shopControllerInviteBodyEmailRegExp),
+  roleIds: zod.array(
+    zod.uuid().regex(shopControllerInviteBodyRoleIdsItemRegExp),
+  ),
+});
+
+export const shopControllerInviteResponseDataIdRegExp = new RegExp(
+  '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
+);
+export const shopControllerInviteResponseDataShopIdRegExp = new RegExp(
+  '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
+);
+export const shopControllerInviteResponseDataUserIdRegExp = new RegExp(
+  '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
+);
+export const shopControllerInviteResponseDataExpiresAtRegExp = new RegExp(
+  '^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$',
+);
+export const shopControllerInviteResponseDataCreatedAtRegExp = new RegExp(
+  '^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$',
+);
+export const shopControllerInviteResponseDataUpdatedAtRegExp = new RegExp(
+  '^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$',
+);
+export const shopControllerInviteResponseDataRoleIdsItemRegExp = new RegExp(
+  '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
+);
+export const shopControllerInviteResponseDataUserIdRegExpOne = new RegExp(
+  '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
+);
+export const shopControllerInviteResponseDataUserEmailRegExp = new RegExp(
+  "^(?!\\.)(?!.*\\.\\.)([A-Za-z0-9_'+\\-\\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$",
+);
+export const shopControllerInviteResponseDataShopIdRegExpOne = new RegExp(
+  '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
+);
+
+export const ShopControllerInviteResponse = zod.object({
   statusCode: zod.literal(201),
   message: zod.string(),
   data: zod.object({
-    id: zod.uuid().regex(shopControllerAddStaffResponseDataIdRegExp),
-    shopId: zod.uuid().regex(shopControllerAddStaffResponseDataShopIdRegExp),
-    userId: zod.uuid().regex(shopControllerAddStaffResponseDataUserIdRegExp),
-    memberRole: zod.enum(['OWNER', 'STAFF']),
-    status: zod.enum(['ACTIVE', 'INACTIVE']),
-    joinedAt: zod.iso
+    id: zod.uuid().regex(shopControllerInviteResponseDataIdRegExp),
+    shopId: zod.uuid().regex(shopControllerInviteResponseDataShopIdRegExp),
+    userId: zod.uuid().regex(shopControllerInviteResponseDataUserIdRegExp),
+    status: zod.enum(['PENDING', 'ACCEPTED', 'REVOKED']),
+    expiresAt: zod.iso
       .datetime({ offset: true })
-      .regex(shopControllerAddStaffResponseDataJoinedAtRegExp),
+      .regex(shopControllerInviteResponseDataExpiresAtRegExp),
     createdAt: zod.iso
       .datetime({ offset: true })
-      .regex(shopControllerAddStaffResponseDataCreatedAtRegExp),
+      .regex(shopControllerInviteResponseDataCreatedAtRegExp),
     updatedAt: zod.iso
       .datetime({ offset: true })
-      .regex(shopControllerAddStaffResponseDataUpdatedAtRegExp),
-    user: zod.object({
-      id: zod.uuid().regex(shopControllerAddStaffResponseDataUserIdRegExpOne),
-      email: zod
-        .email()
-        .regex(shopControllerAddStaffResponseDataUserEmailRegExp),
-      fullName: zod.string(),
-    }),
+      .regex(shopControllerInviteResponseDataUpdatedAtRegExp),
+    roleIds: zod.array(
+      zod.uuid().regex(shopControllerInviteResponseDataRoleIdsItemRegExp),
+    ),
+    user: zod
+      .object({
+        id: zod.uuid().regex(shopControllerInviteResponseDataUserIdRegExpOne),
+        email: zod
+          .email()
+          .regex(shopControllerInviteResponseDataUserEmailRegExp),
+        fullName: zod.string(),
+      })
+      .optional(),
+    shop: zod
+      .object({
+        id: zod.uuid().regex(shopControllerInviteResponseDataShopIdRegExpOne),
+        name: zod.string(),
+      })
+      .optional(),
   }),
 });
 
-export const shopControllerUpdateStaffPathShopIdRegExp = new RegExp(
-  '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
-);
-export const shopControllerUpdateStaffPathMemberIdRegExp = new RegExp(
+export const shopControllerListPathShopIdRegExp = new RegExp(
   '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
 );
 
-export const ShopControllerUpdateStaffParams = zod.object({
-  shopId: zod.uuid().regex(shopControllerUpdateStaffPathShopIdRegExp),
-  memberId: zod.uuid().regex(shopControllerUpdateStaffPathMemberIdRegExp),
+export const ShopControllerListParams = zod.object({
+  shopId: zod.uuid().regex(shopControllerListPathShopIdRegExp),
 });
 
-export const ShopControllerUpdateStaffBody = zod.strictObject({
-  status: zod.enum(['ACTIVE', 'INACTIVE']),
+export const ShopControllerListHeader = zod.object({
+  'X-Shop-Id': zod.uuid(),
 });
 
-export const shopControllerUpdateStaffResponseDataIdRegExp = new RegExp(
+export const shopControllerListResponseDataItemIdRegExp = new RegExp(
   '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
 );
-export const shopControllerUpdateStaffResponseDataShopIdRegExp = new RegExp(
+export const shopControllerListResponseDataItemShopIdRegExp = new RegExp(
   '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
 );
-export const shopControllerUpdateStaffResponseDataUserIdRegExp = new RegExp(
+export const shopControllerListResponseDataItemUserIdRegExp = new RegExp(
   '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
 );
-export const shopControllerUpdateStaffResponseDataJoinedAtRegExp = new RegExp(
+export const shopControllerListResponseDataItemExpiresAtRegExp = new RegExp(
   '^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$',
 );
-export const shopControllerUpdateStaffResponseDataCreatedAtRegExp = new RegExp(
+export const shopControllerListResponseDataItemCreatedAtRegExp = new RegExp(
   '^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$',
 );
-export const shopControllerUpdateStaffResponseDataUpdatedAtRegExp = new RegExp(
+export const shopControllerListResponseDataItemUpdatedAtRegExp = new RegExp(
   '^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$',
 );
-export const shopControllerUpdateStaffResponseDataUserIdRegExpOne = new RegExp(
+export const shopControllerListResponseDataItemRoleIdsItemRegExp = new RegExp(
   '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
 );
-export const shopControllerUpdateStaffResponseDataUserEmailRegExp = new RegExp(
+export const shopControllerListResponseDataItemUserIdRegExpOne = new RegExp(
+  '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
+);
+export const shopControllerListResponseDataItemUserEmailRegExp = new RegExp(
   "^(?!\\.)(?!.*\\.\\.)([A-Za-z0-9_'+\\-\\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$",
 );
+export const shopControllerListResponseDataItemShopIdRegExpOne = new RegExp(
+  '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
+);
 
-export const ShopControllerUpdateStaffResponse = zod.object({
+export const ShopControllerListResponse = zod.object({
+  statusCode: zod.literal(200),
+  message: zod.string(),
+  data: zod.array(
+    zod.object({
+      id: zod.uuid().regex(shopControllerListResponseDataItemIdRegExp),
+      shopId: zod.uuid().regex(shopControllerListResponseDataItemShopIdRegExp),
+      userId: zod.uuid().regex(shopControllerListResponseDataItemUserIdRegExp),
+      status: zod.enum(['PENDING', 'ACCEPTED', 'REVOKED']),
+      expiresAt: zod.iso
+        .datetime({ offset: true })
+        .regex(shopControllerListResponseDataItemExpiresAtRegExp),
+      createdAt: zod.iso
+        .datetime({ offset: true })
+        .regex(shopControllerListResponseDataItemCreatedAtRegExp),
+      updatedAt: zod.iso
+        .datetime({ offset: true })
+        .regex(shopControllerListResponseDataItemUpdatedAtRegExp),
+      roleIds: zod.array(
+        zod.uuid().regex(shopControllerListResponseDataItemRoleIdsItemRegExp),
+      ),
+      user: zod
+        .object({
+          id: zod
+            .uuid()
+            .regex(shopControllerListResponseDataItemUserIdRegExpOne),
+          email: zod
+            .email()
+            .regex(shopControllerListResponseDataItemUserEmailRegExp),
+          fullName: zod.string(),
+        })
+        .optional(),
+      shop: zod
+        .object({
+          id: zod
+            .uuid()
+            .regex(shopControllerListResponseDataItemShopIdRegExpOne),
+          name: zod.string(),
+        })
+        .optional(),
+    }),
+  ),
+});
+
+export const shopControllerLeavePathShopIdRegExp = new RegExp(
+  '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
+);
+
+export const ShopControllerLeaveParams = zod.object({
+  shopId: zod.uuid().regex(shopControllerLeavePathShopIdRegExp),
+});
+
+export const ShopControllerLeaveResponse = zod.void();
+
+export const shopControllerFindMyInvitationsResponseDataItemIdRegExp =
+  new RegExp(
+    '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
+  );
+export const shopControllerFindMyInvitationsResponseDataItemShopIdRegExp =
+  new RegExp(
+    '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
+  );
+export const shopControllerFindMyInvitationsResponseDataItemUserIdRegExp =
+  new RegExp(
+    '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
+  );
+export const shopControllerFindMyInvitationsResponseDataItemExpiresAtRegExp =
+  new RegExp(
+    '^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$',
+  );
+export const shopControllerFindMyInvitationsResponseDataItemCreatedAtRegExp =
+  new RegExp(
+    '^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$',
+  );
+export const shopControllerFindMyInvitationsResponseDataItemUpdatedAtRegExp =
+  new RegExp(
+    '^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$',
+  );
+export const shopControllerFindMyInvitationsResponseDataItemRoleIdsItemRegExp =
+  new RegExp(
+    '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
+  );
+export const shopControllerFindMyInvitationsResponseDataItemUserIdRegExpOne =
+  new RegExp(
+    '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
+  );
+export const shopControllerFindMyInvitationsResponseDataItemUserEmailRegExp =
+  new RegExp(
+    "^(?!\\.)(?!.*\\.\\.)([A-Za-z0-9_'+\\-\\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$",
+  );
+export const shopControllerFindMyInvitationsResponseDataItemShopIdRegExpOne =
+  new RegExp(
+    '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
+  );
+
+export const ShopControllerFindMyInvitationsResponse = zod.object({
+  statusCode: zod.literal(200),
+  message: zod.string(),
+  data: zod.array(
+    zod.object({
+      id: zod
+        .uuid()
+        .regex(shopControllerFindMyInvitationsResponseDataItemIdRegExp),
+      shopId: zod
+        .uuid()
+        .regex(shopControllerFindMyInvitationsResponseDataItemShopIdRegExp),
+      userId: zod
+        .uuid()
+        .regex(shopControllerFindMyInvitationsResponseDataItemUserIdRegExp),
+      status: zod.enum(['PENDING', 'ACCEPTED', 'REVOKED']),
+      expiresAt: zod.iso
+        .datetime({ offset: true })
+        .regex(shopControllerFindMyInvitationsResponseDataItemExpiresAtRegExp),
+      createdAt: zod.iso
+        .datetime({ offset: true })
+        .regex(shopControllerFindMyInvitationsResponseDataItemCreatedAtRegExp),
+      updatedAt: zod.iso
+        .datetime({ offset: true })
+        .regex(shopControllerFindMyInvitationsResponseDataItemUpdatedAtRegExp),
+      roleIds: zod.array(
+        zod
+          .uuid()
+          .regex(
+            shopControllerFindMyInvitationsResponseDataItemRoleIdsItemRegExp,
+          ),
+      ),
+      user: zod
+        .object({
+          id: zod
+            .uuid()
+            .regex(
+              shopControllerFindMyInvitationsResponseDataItemUserIdRegExpOne,
+            ),
+          email: zod
+            .email()
+            .regex(
+              shopControllerFindMyInvitationsResponseDataItemUserEmailRegExp,
+            ),
+          fullName: zod.string(),
+        })
+        .optional(),
+      shop: zod
+        .object({
+          id: zod
+            .uuid()
+            .regex(
+              shopControllerFindMyInvitationsResponseDataItemShopIdRegExpOne,
+            ),
+          name: zod.string(),
+        })
+        .optional(),
+    }),
+  ),
+});
+
+export const shopControllerRevokePathShopIdRegExp = new RegExp(
+  '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
+);
+export const shopControllerRevokePathInvitationIdRegExp = new RegExp(
+  '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
+);
+
+export const ShopControllerRevokeParams = zod.object({
+  shopId: zod.uuid().regex(shopControllerRevokePathShopIdRegExp),
+  invitationId: zod.uuid().regex(shopControllerRevokePathInvitationIdRegExp),
+});
+
+export const ShopControllerRevokeHeader = zod.object({
+  'X-Shop-Id': zod.uuid(),
+});
+
+export const shopControllerRevokeResponseDataIdRegExp = new RegExp(
+  '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
+);
+export const shopControllerRevokeResponseDataShopIdRegExp = new RegExp(
+  '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
+);
+export const shopControllerRevokeResponseDataUserIdRegExp = new RegExp(
+  '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
+);
+export const shopControllerRevokeResponseDataExpiresAtRegExp = new RegExp(
+  '^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$',
+);
+export const shopControllerRevokeResponseDataCreatedAtRegExp = new RegExp(
+  '^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$',
+);
+export const shopControllerRevokeResponseDataUpdatedAtRegExp = new RegExp(
+  '^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$',
+);
+export const shopControllerRevokeResponseDataRoleIdsItemRegExp = new RegExp(
+  '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
+);
+export const shopControllerRevokeResponseDataUserIdRegExpOne = new RegExp(
+  '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
+);
+export const shopControllerRevokeResponseDataUserEmailRegExp = new RegExp(
+  "^(?!\\.)(?!.*\\.\\.)([A-Za-z0-9_'+\\-\\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$",
+);
+export const shopControllerRevokeResponseDataShopIdRegExpOne = new RegExp(
+  '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
+);
+
+export const ShopControllerRevokeResponse = zod.object({
   statusCode: zod.literal(200),
   message: zod.string(),
   data: zod.object({
-    id: zod.uuid().regex(shopControllerUpdateStaffResponseDataIdRegExp),
-    shopId: zod.uuid().regex(shopControllerUpdateStaffResponseDataShopIdRegExp),
-    userId: zod.uuid().regex(shopControllerUpdateStaffResponseDataUserIdRegExp),
-    memberRole: zod.enum(['OWNER', 'STAFF']),
-    status: zod.enum(['ACTIVE', 'INACTIVE']),
-    joinedAt: zod.iso
+    id: zod.uuid().regex(shopControllerRevokeResponseDataIdRegExp),
+    shopId: zod.uuid().regex(shopControllerRevokeResponseDataShopIdRegExp),
+    userId: zod.uuid().regex(shopControllerRevokeResponseDataUserIdRegExp),
+    status: zod.enum(['PENDING', 'ACCEPTED', 'REVOKED']),
+    expiresAt: zod.iso
       .datetime({ offset: true })
-      .regex(shopControllerUpdateStaffResponseDataJoinedAtRegExp),
+      .regex(shopControllerRevokeResponseDataExpiresAtRegExp),
     createdAt: zod.iso
       .datetime({ offset: true })
-      .regex(shopControllerUpdateStaffResponseDataCreatedAtRegExp),
+      .regex(shopControllerRevokeResponseDataCreatedAtRegExp),
     updatedAt: zod.iso
       .datetime({ offset: true })
-      .regex(shopControllerUpdateStaffResponseDataUpdatedAtRegExp),
-    user: zod.object({
-      id: zod
-        .uuid()
-        .regex(shopControllerUpdateStaffResponseDataUserIdRegExpOne),
-      email: zod
-        .email()
-        .regex(shopControllerUpdateStaffResponseDataUserEmailRegExp),
-      fullName: zod.string(),
-    }),
+      .regex(shopControllerRevokeResponseDataUpdatedAtRegExp),
+    roleIds: zod.array(
+      zod.uuid().regex(shopControllerRevokeResponseDataRoleIdsItemRegExp),
+    ),
+    user: zod
+      .object({
+        id: zod.uuid().regex(shopControllerRevokeResponseDataUserIdRegExpOne),
+        email: zod
+          .email()
+          .regex(shopControllerRevokeResponseDataUserEmailRegExp),
+        fullName: zod.string(),
+      })
+      .optional(),
+    shop: zod
+      .object({
+        id: zod.uuid().regex(shopControllerRevokeResponseDataShopIdRegExpOne),
+        name: zod.string(),
+      })
+      .optional(),
+  }),
+});
+
+export const shopControllerAcceptPathInvitationIdRegExp = new RegExp(
+  '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
+);
+
+export const ShopControllerAcceptParams = zod.object({
+  invitationId: zod.uuid().regex(shopControllerAcceptPathInvitationIdRegExp),
+});
+
+export const shopControllerAcceptResponseDataIdRegExp = new RegExp(
+  '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
+);
+export const shopControllerAcceptResponseDataShopIdRegExp = new RegExp(
+  '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
+);
+export const shopControllerAcceptResponseDataUserIdRegExp = new RegExp(
+  '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
+);
+export const shopControllerAcceptResponseDataJoinedAtRegExp = new RegExp(
+  '^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$',
+);
+
+export const ShopControllerAcceptResponse = zod.object({
+  statusCode: zod.literal(200),
+  message: zod.string(),
+  data: zod.object({
+    id: zod.uuid().regex(shopControllerAcceptResponseDataIdRegExp),
+    shopId: zod.uuid().regex(shopControllerAcceptResponseDataShopIdRegExp),
+    userId: zod.uuid().regex(shopControllerAcceptResponseDataUserIdRegExp),
+    memberRole: zod.string(),
+    joinedAt: zod.iso
+      .datetime({ offset: true })
+      .regex(shopControllerAcceptResponseDataJoinedAtRegExp),
   }),
 });

@@ -6,18 +6,20 @@
  * OpenAPI spec version: 1.0
  */
 import type {
-  ShopControllerAddStaff201,
-  ShopControllerAddStaffBody,
+  ShopControllerAccept200,
   ShopControllerCreate201,
   ShopControllerCreateBody,
   ShopControllerFindAll200,
   ShopControllerFindMembers200,
   ShopControllerFindMine200,
+  ShopControllerFindMyInvitations200,
   ShopControllerFindOne200,
+  ShopControllerInvite201,
+  ShopControllerInviteBody,
+  ShopControllerList200,
+  ShopControllerRevoke200,
   ShopControllerUpdate200,
   ShopControllerUpdateBody,
-  ShopControllerUpdateStaff200,
-  ShopControllerUpdateStaffBody,
 } from '../../models/index';
 import { orvalRequest } from '../../orval-request';
 
@@ -54,22 +56,22 @@ export const shopControllerFindMine = (
   );
 };
 export const shopControllerFindOne = (
-  id: string,
+  shopId: string,
   options?: SecondParameter<typeof orvalRequest<ShopControllerFindOne200>>,
 ) => {
   return orvalRequest<ShopControllerFindOne200>(
-    { url: `/api/shops/${id}`, method: 'GET' },
+    { url: `/api/shops/${shopId}`, method: 'GET' },
     options,
   );
 };
 export const shopControllerUpdate = (
-  id: string,
+  shopId: string,
   shopControllerUpdateBody: ShopControllerUpdateBody,
   options?: SecondParameter<typeof orvalRequest<ShopControllerUpdate200>>,
 ) => {
   return orvalRequest<ShopControllerUpdate200>(
     {
-      url: `/api/shops/${id}`,
+      url: `/api/shops/${shopId}`,
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       data: shopControllerUpdateBody,
@@ -78,42 +80,86 @@ export const shopControllerUpdate = (
   );
 };
 export const shopControllerFindMembers = (
-  id: string,
+  shopId: string,
   options?: SecondParameter<typeof orvalRequest<ShopControllerFindMembers200>>,
 ) => {
   return orvalRequest<ShopControllerFindMembers200>(
-    { url: `/api/shops/${id}/members`, method: 'GET' },
+    { url: `/api/shops/${shopId}/members`, method: 'GET' },
     options,
   );
 };
-export const shopControllerAddStaff = (
-  id: string,
-  shopControllerAddStaffBody: ShopControllerAddStaffBody,
-  options?: SecondParameter<typeof orvalRequest<ShopControllerAddStaff201>>,
-) => {
-  return orvalRequest<ShopControllerAddStaff201>(
-    {
-      url: `/api/shops/${id}/members`,
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      data: shopControllerAddStaffBody,
-    },
-    options,
-  );
-};
-export const shopControllerUpdateStaff = (
+export const shopControllerRemoveMember = (
   shopId: string,
   memberId: string,
-  shopControllerUpdateStaffBody: ShopControllerUpdateStaffBody,
-  options?: SecondParameter<typeof orvalRequest<ShopControllerUpdateStaff200>>,
+  options?: SecondParameter<typeof orvalRequest<void>>,
 ) => {
-  return orvalRequest<ShopControllerUpdateStaff200>(
+  return orvalRequest<void>(
+    { url: `/api/shops/${shopId}/members/${memberId}`, method: 'DELETE' },
+    options,
+  );
+};
+export const shopControllerInvite = (
+  shopId: string,
+  shopControllerInviteBody: ShopControllerInviteBody,
+  options?: SecondParameter<typeof orvalRequest<ShopControllerInvite201>>,
+) => {
+  return orvalRequest<ShopControllerInvite201>(
     {
-      url: `/api/shops/${shopId}/members/${memberId}`,
-      method: 'PATCH',
+      url: `/api/shops/${shopId}/invitations`,
+      method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      data: shopControllerUpdateStaffBody,
+      data: shopControllerInviteBody,
     },
+    options,
+  );
+};
+export const shopControllerList = (
+  shopId: string,
+  options?: SecondParameter<typeof orvalRequest<ShopControllerList200>>,
+) => {
+  return orvalRequest<ShopControllerList200>(
+    { url: `/api/shops/${shopId}/invitations`, method: 'GET' },
+    options,
+  );
+};
+export const shopControllerLeave = (
+  shopId: string,
+  options?: SecondParameter<typeof orvalRequest<void>>,
+) => {
+  return orvalRequest<void>(
+    { url: `/api/shops/${shopId}/leave`, method: 'POST' },
+    options,
+  );
+};
+export const shopControllerFindMyInvitations = (
+  options?: SecondParameter<
+    typeof orvalRequest<ShopControllerFindMyInvitations200>
+  >,
+) => {
+  return orvalRequest<ShopControllerFindMyInvitations200>(
+    { url: `/api/shop-invitations/me`, method: 'GET' },
+    options,
+  );
+};
+export const shopControllerRevoke = (
+  shopId: string,
+  invitationId: string,
+  options?: SecondParameter<typeof orvalRequest<ShopControllerRevoke200>>,
+) => {
+  return orvalRequest<ShopControllerRevoke200>(
+    {
+      url: `/api/shops/${shopId}/invitations/${invitationId}/revoke`,
+      method: 'POST',
+    },
+    options,
+  );
+};
+export const shopControllerAccept = (
+  invitationId: string,
+  options?: SecondParameter<typeof orvalRequest<ShopControllerAccept200>>,
+) => {
+  return orvalRequest<ShopControllerAccept200>(
+    { url: `/api/shop-invitations/${invitationId}/accept`, method: 'POST' },
     options,
   );
 };
@@ -135,9 +181,24 @@ export type ShopControllerUpdateResult = NonNullable<
 export type ShopControllerFindMembersResult = NonNullable<
   Awaited<ReturnType<typeof shopControllerFindMembers>>
 >;
-export type ShopControllerAddStaffResult = NonNullable<
-  Awaited<ReturnType<typeof shopControllerAddStaff>>
+export type ShopControllerRemoveMemberResult = NonNullable<
+  Awaited<ReturnType<typeof shopControllerRemoveMember>>
 >;
-export type ShopControllerUpdateStaffResult = NonNullable<
-  Awaited<ReturnType<typeof shopControllerUpdateStaff>>
+export type ShopControllerInviteResult = NonNullable<
+  Awaited<ReturnType<typeof shopControllerInvite>>
+>;
+export type ShopControllerListResult = NonNullable<
+  Awaited<ReturnType<typeof shopControllerList>>
+>;
+export type ShopControllerLeaveResult = NonNullable<
+  Awaited<ReturnType<typeof shopControllerLeave>>
+>;
+export type ShopControllerFindMyInvitationsResult = NonNullable<
+  Awaited<ReturnType<typeof shopControllerFindMyInvitations>>
+>;
+export type ShopControllerRevokeResult = NonNullable<
+  Awaited<ReturnType<typeof shopControllerRevoke>>
+>;
+export type ShopControllerAcceptResult = NonNullable<
+  Awaited<ReturnType<typeof shopControllerAccept>>
 >;

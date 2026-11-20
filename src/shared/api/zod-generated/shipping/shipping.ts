@@ -7,12 +7,18 @@
  */
 import * as zod from 'zod';
 
-export const shippingControllerUpdatePackagePathIdRegExp = new RegExp(
+export const shippingControllerUpdatePackagePathProductIdRegExp = new RegExp(
   '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
 );
 
 export const ShippingControllerUpdatePackageParams = zod.object({
-  id: zod.uuid().regex(shippingControllerUpdatePackagePathIdRegExp),
+  productId: zod
+    .uuid()
+    .regex(shippingControllerUpdatePackagePathProductIdRegExp),
+});
+
+export const ShippingControllerUpdatePackageHeader = zod.object({
+  'X-Shop-Id': zod.uuid(),
 });
 
 export const shippingControllerUpdatePackageBodyWeightGramsExclusiveMin = 0;

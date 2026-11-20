@@ -1,28 +1,31 @@
 'use client';
 
 import { useState } from 'react';
-import Link from 'next/link';
-import { 
-  ArrowLeft, 
-  Store, 
-  Ruler, 
-  AlertTriangle, 
-  ShieldCheck, 
-  Truck, 
-  PackageCheck, 
-  Share2, 
-  Check,
-  ChevronRight
-} from 'lucide-react';
 
-import { useProductControllerFindOne } from '@/shared/api/query-generated/products/products';
-import { useMediaControllerFindAll } from '@/shared/api/query-generated/product-media/product-media';
-import { ProductPhoto } from '@/shared/components/marketplace/ProductPhoto';
+import Link from 'next/link';
+
 import { AddToCartAction } from '@/modules/cart/components/AddToCartAction';
-import { formatCondition, formatPrice } from '@/shared/utils/product';
+import { ShopSummaryCard } from '@/modules/shop';
+import { SaveToWishlistButton } from '@/modules/wishlist/components/SaveToWishlistButton';
+import { useMediaControllerFindAll } from '@/shared/api/query-generated/product-media/product-media';
+import { useProductControllerFindOne } from '@/shared/api/query-generated/products/products';
+import { ProductPhoto } from '@/shared/components/marketplace/ProductPhoto';
+import { Badge } from '@/shared/components/ui/badge';
 import { Button } from '@/shared/components/ui/button';
 import { TOAST_DURATION_MS } from '@/shared/constants/toast';
 import { useToastStore } from '@/shared/stores/toast.store';
+import { formatCondition, formatPrice } from '@/shared/utils/product';
+import {
+  AlertTriangle,
+  ArrowLeft,
+  Check,
+  ChevronRight,
+  PackageCheck,
+  Ruler,
+  Share2,
+  Truck,
+} from 'lucide-react';
+
 import { ProductDetailSkeleton } from '../skeletons/ProductDetailSkeleton';
 
 export function ProductDetailPage({ id }: { id: string }) {
@@ -30,20 +33,26 @@ export function ProductDetailPage({ id }: { id: string }) {
   const [selectedMediaIndex, setSelectedMediaIndex] = useState(0);
   const [copied, setCopied] = useState(false);
 
-  const { data: productResponse, isLoading, isError } = useProductControllerFindOne(id);
+  const {
+    data: productResponse,
+    isLoading,
+    isError,
+  } = useProductControllerFindOne(id);
   const { data: mediaResponse } = useMediaControllerFindAll(id);
 
   const product = productResponse?.data;
   const mediaList = mediaResponse?.data ?? [];
 
   // Combine cover and mediaList items if needed
-  const displayPhotos = mediaList.length > 0 
-    ? mediaList 
-    : product?.coverUrl 
-      ? [{ id: 'cover', url: product.coverUrl, position: 0 }] 
-      : [];
+  const displayPhotos =
+    mediaList.length > 0
+      ? mediaList
+      : product?.coverUrl
+        ? [{ id: 'cover', url: product.coverUrl, position: 0 }]
+        : [];
 
-  const activePhotoUrl = displayPhotos[selectedMediaIndex]?.url ?? product?.coverUrl ?? null;
+  const activePhotoUrl =
+    displayPhotos[selectedMediaIndex]?.url ?? product?.coverUrl ?? null;
 
   const handleShare = async () => {
     try {
@@ -73,13 +82,13 @@ export function ProductDetailPage({ id }: { id: string }) {
   if (isError || !product) {
     return (
       <div className="mx-auto max-w-3xl px-4 py-16 text-center sm:px-6">
-        <div className="inline-flex size-16 items-center justify-center rounded-full bg-rewear-soft text-rewear-muted mb-4">
+        <div className="bg-rewear-soft text-rewear-muted mb-4 inline-flex size-16 items-center justify-center rounded-full">
           <AlertTriangle size={32} />
         </div>
-        <h1 className="text-2xl font-bold tracking-tight text-rewear-text">
+        <h1 className="text-rewear-text text-2xl font-bold tracking-tight">
           Không tìm thấy sản phẩm
         </h1>
-        <p className="mt-2 text-sm text-rewear-muted">
+        <p className="text-rewear-muted mt-2 text-sm">
           Sản phẩm có thể đã bị gỡ hoặc đường dẫn không chính xác.
         </p>
         <div className="mt-6 flex justify-center gap-4">
@@ -96,16 +105,20 @@ export function ProductDetailPage({ id }: { id: string }) {
   }
 
   const measurements = product.measurements;
-  const hasMeasurements = measurements && Object.values(measurements).some(Boolean);
+  const hasMeasurements =
+    measurements && Object.values(measurements).some(Boolean);
   const defects = product.defects || [];
   const shippingPkg = product.shippingPackage;
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
       {/* Breadcrumb & Navigation */}
-      <nav className="mb-6 flex items-center justify-between text-sm text-rewear-muted">
+      <nav className="text-rewear-muted mb-6 flex items-center justify-between text-sm">
         <div className="flex items-center space-x-2">
-          <Link href="/products" className="hover:text-rewear-text flex items-center gap-1 transition-colors">
+          <Link
+            href="/products"
+            className="hover:text-rewear-text flex items-center gap-1 transition-colors"
+          >
             <ArrowLeft size={16} />
             <span>Danh mục</span>
           </Link>
@@ -118,17 +131,21 @@ export function ProductDetailPage({ id }: { id: string }) {
               <ChevronRight size={14} className="text-rewear-muted/50" />
             </>
           )}
-          <span className="line-clamp-1 max-w-[200px] text-rewear-text font-medium sm:max-w-xs">
+          <span className="text-rewear-text line-clamp-1 max-w-[200px] font-medium sm:max-w-xs">
             {product.title ?? 'Chi tiết món đồ'}
           </span>
         </div>
 
         <button
           onClick={handleShare}
-          className="flex items-center gap-1.5 rounded px-2.5 py-1 text-xs font-medium hover:bg-rewear-soft text-rewear-text transition-colors"
+          className="hover:bg-rewear-soft text-rewear-text flex items-center gap-1.5 rounded px-2.5 py-1 text-xs font-medium transition-colors"
           title="Chia sẻ sản phẩm"
         >
-          {copied ? <Check size={14} className="text-green-600" /> : <Share2 size={14} />}
+          {copied ? (
+            <Check size={14} className="text-green-600" />
+          ) : (
+            <Share2 size={14} />
+          )}
           <span>{copied ? 'Đã sao chép' : 'Chia sẻ'}</span>
         </button>
       </nav>
@@ -138,22 +155,26 @@ export function ProductDetailPage({ id }: { id: string }) {
         {/* Left Column: Gallery (7 cols on lg) */}
         <div className="space-y-4 lg:col-span-7">
           {/* Main Photo View */}
-          <div className="bg-rewear-soft relative aspect-[3/4] w-full overflow-hidden rounded-lg border border-rewear-border">
+          <div className="bg-rewear-soft border-rewear-border relative aspect-[3/4] w-full overflow-hidden rounded-lg border">
             <ProductPhoto
               url={activePhotoUrl}
               title={product.title}
               sizes="(min-width: 1024px) 50vw, 100vw"
             />
             {product.status && product.status !== 'ACTIVE' && (
-              <div className="absolute top-3 left-3 rounded bg-black/75 px-2.5 py-1 text-xs font-semibold text-white uppercase tracking-wider backdrop-blur-sm">
-                {product.status === 'SOLD' ? 'Đã bán' : product.status === 'HELD' ? 'Đang giữ hàng' : product.status}
+              <div className="absolute top-3 left-3 rounded bg-black/75 px-2.5 py-1 text-xs font-semibold tracking-wider text-white uppercase backdrop-blur-sm">
+                {product.status === 'SOLD'
+                  ? 'Đã bán'
+                  : product.status === 'HELD'
+                    ? 'Đang giữ hàng'
+                    : product.status}
               </div>
             )}
           </div>
 
           {/* Thumbnails */}
           {displayPhotos.length > 1 && (
-            <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-thin">
+            <div className="flex scrollbar-thin gap-3 overflow-x-auto pb-2">
               {displayPhotos.map((photo, index) => {
                 const isSelected = index === selectedMediaIndex;
                 return (
@@ -162,7 +183,7 @@ export function ProductDetailPage({ id }: { id: string }) {
                     onClick={() => setSelectedMediaIndex(index)}
                     className={`relative size-20 shrink-0 overflow-hidden rounded-md border-2 transition-all ${
                       isSelected
-                        ? 'border-rewear-accent ring-2 ring-rewear-accent/20'
+                        ? 'border-rewear-accent ring-rewear-accent/20 ring-2'
                         : 'border-rewear-border/60 opacity-70 hover:opacity-100'
                     }`}
                   >
@@ -181,29 +202,30 @@ export function ProductDetailPage({ id }: { id: string }) {
         {/* Right Column: Actions & Information (5 cols on lg) */}
         <div className="flex flex-col space-y-6 lg:col-span-5">
           {/* Title & Price Header */}
-          <div className="space-y-2 border-b border-rewear-border pb-5">
+          <div className="border-rewear-border space-y-2 border-b pb-5">
             <div className="flex items-center gap-2">
               {product.brand && (
-                <span className="text-xs font-semibold uppercase tracking-wider text-rewear-muted">
+                <span className="text-rewear-muted text-xs font-semibold tracking-wider uppercase">
                   {product.brand}
                 </span>
               )}
               {product.condition && (
-                <span className="inline-flex items-center rounded-full bg-rewear-soft px-2.5 py-0.5 text-xs font-medium text-rewear-text">
+                <Badge variant="secondary">
                   {formatCondition(product.condition)}
-                </span>
+                </Badge>
               )}
             </div>
-            <h1 className="text-2xl font-bold tracking-tight text-rewear-text sm:text-3xl">
+            <h1 className="text-rewear-text text-2xl font-bold tracking-tight sm:text-3xl">
               {product.title ?? 'Untitled piece'}
             </h1>
             <div className="flex items-baseline gap-3 pt-1">
-              <span className="text-2xl font-extrabold text-rewear-text">
+              <span className="text-rewear-text text-2xl font-extrabold">
                 {formatPrice(product.price)}
               </span>
               {product.size && (
-                <span className="text-sm text-rewear-muted">
-                  Kích cỡ: <strong className="text-rewear-text">{product.size}</strong>
+                <span className="text-rewear-muted text-sm">
+                  Kích cỡ:{' '}
+                  <strong className="text-rewear-text">{product.size}</strong>
                 </span>
               )}
             </div>
@@ -211,89 +233,117 @@ export function ProductDetailPage({ id }: { id: string }) {
 
           {/* Key Attributes Pills */}
           <div className="grid grid-cols-2 gap-3 text-sm">
-            <div className="rounded-lg border border-rewear-border p-3">
-              <span className="text-xs text-rewear-muted">Màu sắc</span>
-              <p className="font-medium text-rewear-text">{product.color || 'Chưa cập nhật'}</p>
+            <div className="border-rewear-border rounded-lg border p-3">
+              <span className="text-rewear-muted text-xs">Màu sắc</span>
+              <p className="text-rewear-text font-medium">
+                {product.color || 'Chưa cập nhật'}
+              </p>
             </div>
-            <div className="rounded-lg border border-rewear-border p-3">
-              <span className="text-xs text-rewear-muted">Tình trạng</span>
-              <p className="font-medium text-rewear-text">
+            <div className="border-rewear-border rounded-lg border p-3">
+              <span className="text-rewear-muted text-xs">Tình trạng</span>
+              <p className="text-rewear-text font-medium">
                 {formatCondition(product.condition) || 'Chưa phân loại'}
               </p>
             </div>
           </div>
 
-          {/* Add to Cart Primary Action */}
-          <div className="pt-2">
-            <AddToCartAction
-              product={{
-                id: product.id,
-                title: product.title,
-                size: product.size,
-              }}
-              primary
-            />
-          </div>
-
-          {/* Seller / Shop Information Card */}
-          <div className="rounded-lg border border-rewear-border bg-rewear-soft/30 p-4">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-3">
-                <div className="flex size-11 items-center justify-center rounded-full bg-rewear-soft text-rewear-text border border-rewear-border">
-                  <Store size={20} />
-                </div>
-                <div>
-                  <p className="text-xs text-rewear-muted">Người bán</p>
-                  <p className="font-semibold text-rewear-text">
-                    {product.shop?.name || 'Người bán RE.WEAR'}
-                  </p>
-                </div>
-              </div>
-              <span className="inline-flex items-center gap-1 rounded bg-rewear-surface px-2.5 py-1 text-xs font-medium text-rewear-muted border border-rewear-border">
-                <ShieldCheck size={14} className="text-green-600" />
-                Đã xác thực
-              </span>
+          {/* Add to Cart & Save to Wishlist Actions */}
+          <div className="flex flex-col gap-3 pt-2 sm:flex-row">
+            <div className="flex-1">
+              <AddToCartAction
+                product={{
+                  id: product.id,
+                  title: product.title,
+                  size: product.size,
+                }}
+                primary
+              />
+            </div>
+            <div className="sm:w-48">
+              <SaveToWishlistButton productId={product.id} />
             </div>
           </div>
 
+          {/* Seller / Shop Information Card */}
+          <ShopSummaryCard
+            name={product.shop?.name || 'Người bán RE.WEAR'}
+            verified
+          />
+
           {/* Description Section */}
           <div className="space-y-3">
-            <h3 className="text-sm font-semibold uppercase tracking-wider text-rewear-muted">
+            <h3 className="text-rewear-muted text-sm font-semibold tracking-wider uppercase">
               Mô tả chi tiết
             </h3>
-            <div className="whitespace-pre-line text-sm leading-relaxed text-rewear-text">
-              {product.description || 'Người bán chưa cung cấp thêm mô tả chi tiết cho sản phẩm này.'}
+            <div className="text-rewear-text text-sm leading-relaxed whitespace-pre-line">
+              {product.description ||
+                'Người bán chưa cung cấp thêm mô tả chi tiết cho sản phẩm này.'}
             </div>
           </div>
 
           {/* Measurements Specifications */}
           {hasMeasurements && (
-            <div className="space-y-3 rounded-lg border border-rewear-border p-4">
-              <div className="flex items-center gap-2 text-sm font-semibold text-rewear-text">
+            <div className="border-rewear-border space-y-3 rounded-lg border p-4">
+              <div className="text-rewear-text flex items-center gap-2 text-sm font-semibold">
                 <Ruler size={16} />
                 <span>Số đo chi tiết (cm)</span>
               </div>
               <div className="grid grid-cols-2 gap-2 text-xs sm:grid-cols-3">
                 {measurements?.chest && (
-                  <div>Vòng ngực: <strong className="text-rewear-text">{measurements.chest} cm</strong></div>
+                  <div>
+                    Vòng ngực:{' '}
+                    <strong className="text-rewear-text">
+                      {measurements.chest} cm
+                    </strong>
+                  </div>
                 )}
                 {measurements?.waist && (
-                  <div>Vòng eo: <strong className="text-rewear-text">{measurements.waist} cm</strong></div>
+                  <div>
+                    Vòng eo:{' '}
+                    <strong className="text-rewear-text">
+                      {measurements.waist} cm
+                    </strong>
+                  </div>
                 )}
                 {measurements?.hip && (
-                  <div>Vòng mông: <strong className="text-rewear-text">{measurements.hip} cm</strong></div>
+                  <div>
+                    Vòng mông:{' '}
+                    <strong className="text-rewear-text">
+                      {measurements.hip} cm
+                    </strong>
+                  </div>
                 )}
                 {measurements?.length && (
-                  <div>Chiều dài: <strong className="text-rewear-text">{measurements.length} cm</strong></div>
+                  <div>
+                    Chiều dài:{' '}
+                    <strong className="text-rewear-text">
+                      {measurements.length} cm
+                    </strong>
+                  </div>
                 )}
                 {measurements?.shoulder && (
-                  <div>Rộng vai: <strong className="text-rewear-text">{measurements.shoulder} cm</strong></div>
+                  <div>
+                    Rộng vai:{' '}
+                    <strong className="text-rewear-text">
+                      {measurements.shoulder} cm
+                    </strong>
+                  </div>
                 )}
                 {measurements?.sleeve && (
-                  <div>Dài tay: <strong className="text-rewear-text">{measurements.sleeve} cm</strong></div>
+                  <div>
+                    Dài tay:{' '}
+                    <strong className="text-rewear-text">
+                      {measurements.sleeve} cm
+                    </strong>
+                  </div>
                 )}
                 {measurements?.inseam && (
-                  <div>Đáy quần (inseam): <strong className="text-rewear-text">{measurements.inseam} cm</strong></div>
+                  <div>
+                    Đáy quần (inseam):{' '}
+                    <strong className="text-rewear-text">
+                      {measurements.inseam} cm
+                    </strong>
+                  </div>
                 )}
               </div>
             </div>
@@ -302,7 +352,7 @@ export function ProductDetailPage({ id }: { id: string }) {
           {/* Defects & Repairs Note if any */}
           {(defects.length > 0 || product.repairs) && (
             <div className="space-y-2 rounded-lg border border-amber-200 bg-amber-50/50 p-4 text-amber-900 dark:border-amber-900/40 dark:bg-amber-950/20 dark:text-amber-200">
-              <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider">
+              <div className="flex items-center gap-2 text-xs font-semibold tracking-wider uppercase">
                 <AlertTriangle size={15} />
                 <span>Lưu ý tình trạng & Lỗi nhỏ</span>
               </div>
@@ -314,7 +364,7 @@ export function ProductDetailPage({ id }: { id: string }) {
               {defects.length > 0 && (
                 <div className="space-y-1 text-xs">
                   <strong>Lỗi được ghi nhận:</strong>
-                  <ul className="list-disc pl-4 space-y-0.5">
+                  <ul className="list-disc space-y-0.5 pl-4">
                     {defects.map((d, i) => (
                       <li key={i}>{d.description}</li>
                     ))}
@@ -326,12 +376,13 @@ export function ProductDetailPage({ id }: { id: string }) {
 
           {/* Shipping and Package specs */}
           {shippingPkg && (
-            <div className="flex items-center gap-3 text-xs text-rewear-muted border-t border-rewear-border pt-4">
+            <div className="text-rewear-muted border-rewear-border flex items-center gap-3 border-t pt-4 text-xs">
               <Truck size={16} />
               <span>
-                Đóng gói: {shippingPkg.weightGrams}g ({shippingPkg.lengthCm}x{shippingPkg.widthCm}x{shippingPkg.heightCm} cm)
+                Đóng gói: {shippingPkg.weightGrams}g ({shippingPkg.lengthCm}x
+                {shippingPkg.widthCm}x{shippingPkg.heightCm} cm)
               </span>
-              <span className="flex items-center gap-1 ml-auto">
+              <span className="ml-auto flex items-center gap-1">
                 <PackageCheck size={14} />
                 Kiểm hàng trước khi nhận
               </span>

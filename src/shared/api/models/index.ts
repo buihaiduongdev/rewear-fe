@@ -482,6 +482,117 @@ export type CartControllerAdd200 = {
   data: CartControllerAdd200Data;
 };
 
+export type CartControllerRemove200StatusCode =
+  (typeof CartControllerRemove200StatusCode)[keyof typeof CartControllerRemove200StatusCode];
+
+export const CartControllerRemove200StatusCode = {
+  NUMBER_200: 200,
+} as const;
+
+/**
+ * @nullable
+ */
+export type CartControllerRemove200DataGroupsItemShop = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  name: string;
+} | null;
+
+export type CartControllerRemove200DataGroupsItemItemsItemAvailability =
+  (typeof CartControllerRemove200DataGroupsItemItemsItemAvailability)[keyof typeof CartControllerRemove200DataGroupsItemItemsItemAvailability];
+
+export const CartControllerRemove200DataGroupsItemItemsItemAvailability = {
+  AVAILABLE: 'AVAILABLE',
+  HELD: 'HELD',
+  SOLD: 'SOLD',
+  UNAVAILABLE: 'UNAVAILABLE',
+  OWN_PRODUCT: 'OWN_PRODUCT',
+} as const;
+
+export type CartControllerRemove200DataGroupsItemItemsItemProductCondition =
+  (typeof CartControllerRemove200DataGroupsItemItemsItemProductCondition)[keyof typeof CartControllerRemove200DataGroupsItemItemsItemProductCondition];
+
+export const CartControllerRemove200DataGroupsItemItemsItemProductCondition = {
+  FAIR: 'FAIR',
+  GOOD: 'GOOD',
+  EXCELLENT: 'EXCELLENT',
+  PRISTINE: 'PRISTINE',
+} as const;
+
+/**
+ * @nullable
+ */
+export type CartControllerRemove200DataGroupsItemItemsItemProduct = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  title: string;
+  /**
+   * @maximum 9007199254740991
+   * @exclusiveMinimum 0
+   */
+  price: number;
+  condition: CartControllerRemove200DataGroupsItemItemsItemProductCondition;
+  /** @nullable */
+  size: string | null;
+  /** @nullable */
+  color: string | null;
+  /** @nullable */
+  coverUrl: string | null;
+} | null;
+
+export type CartControllerRemove200DataGroupsItemItemsItem = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  productId: string;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  addedAt: string;
+  availability: CartControllerRemove200DataGroupsItemItemsItemAvailability;
+  /** @nullable */
+  product: CartControllerRemove200DataGroupsItemItemsItemProduct;
+};
+
+export type CartControllerRemove200DataGroupsItem = {
+  /** @nullable */
+  shop: CartControllerRemove200DataGroupsItemShop;
+  items: CartControllerRemove200DataGroupsItemItemsItem[];
+};
+
+export type CartControllerRemove200DataSummaryCurrency =
+  (typeof CartControllerRemove200DataSummaryCurrency)[keyof typeof CartControllerRemove200DataSummaryCurrency];
+
+export const CartControllerRemove200DataSummaryCurrency = {
+  VND: 'VND',
+} as const;
+
+export type CartControllerRemove200DataSummary = {
+  /**
+   * @minimum 0
+   * @maximum 9007199254740991
+   */
+  itemCount: number;
+  /**
+   * @minimum 0
+   * @maximum 9007199254740991
+   */
+  availableItemCount: number;
+  /**
+   * @minimum 0
+   * @maximum 9007199254740991
+   */
+  totalPrice: number;
+  currency: CartControllerRemove200DataSummaryCurrency;
+};
+
+export type CartControllerRemove200Data = {
+  groups: CartControllerRemove200DataGroupsItem[];
+  summary: CartControllerRemove200DataSummary;
+};
+
+export type CartControllerRemove200 = {
+  statusCode: CartControllerRemove200StatusCode;
+  message: string;
+  data: CartControllerRemove200Data;
+};
+
 export type CheckoutControllerQuoteBody = { [key: string]: unknown };
 
 export type CheckoutControllerQuote200StatusCode =
@@ -671,6 +782,7 @@ export const CheckoutControllerCreate200DataStatus = {
   CANCELLED: 'CANCELLED',
   EXPIRED: 'EXPIRED',
   PAID: 'PAID',
+  COD_PLACED: 'COD_PLACED',
 } as const;
 
 export type CheckoutControllerCreate200DataRemovedItemsItem = {
@@ -834,6 +946,7 @@ export const CheckoutControllerFind200DataStatus = {
   CANCELLED: 'CANCELLED',
   EXPIRED: 'EXPIRED',
   PAID: 'PAID',
+  COD_PLACED: 'COD_PLACED',
 } as const;
 
 export type CheckoutControllerFind200DataRemovedItemsItem = {
@@ -996,6 +1109,7 @@ export const CheckoutControllerCancel200DataStatus = {
   CANCELLED: 'CANCELLED',
   EXPIRED: 'EXPIRED',
   PAID: 'PAID',
+  COD_PLACED: 'COD_PLACED',
 } as const;
 
 export type CheckoutControllerCancel200DataRemovedItemsItem = {
@@ -1352,64 +1466,6 @@ export type PaymentControllerReconcile200 = {
   data: PaymentControllerReconcile200Data;
 };
 
-export type PaymentControllerOrders200StatusCode =
-  (typeof PaymentControllerOrders200StatusCode)[keyof typeof PaymentControllerOrders200StatusCode];
-
-export const PaymentControllerOrders200StatusCode = {
-  NUMBER_200: 200,
-} as const;
-
-export type PaymentControllerOrders200DataItemStatus =
-  (typeof PaymentControllerOrders200DataItemStatus)[keyof typeof PaymentControllerOrders200DataItemStatus];
-
-export const PaymentControllerOrders200DataItemStatus = {
-  pending: 'pending',
-} as const;
-
-export type PaymentControllerOrders200DataItemAddress = {
-  [key: string]: unknown;
-};
-
-export type PaymentControllerOrders200DataItemItemsItem = {
-  [key: string]: unknown;
-};
-
-export type PaymentControllerOrders200DataItem = {
-  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
-  id: string;
-  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
-  paymentId: string;
-  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
-  shopId: string;
-  shopName: string;
-  status: PaymentControllerOrders200DataItemStatus;
-  /**
-   * @minimum -9007199254740991
-   * @maximum 9007199254740991
-   */
-  subtotal: number;
-  /**
-   * @minimum -9007199254740991
-   * @maximum 9007199254740991
-   */
-  shippingFee: number;
-  /**
-   * @minimum -9007199254740991
-   * @maximum 9007199254740991
-   */
-  total: number;
-  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
-  sellerConfirmBy: string;
-  address: PaymentControllerOrders200DataItemAddress;
-  items: PaymentControllerOrders200DataItemItemsItem[];
-};
-
-export type PaymentControllerOrders200 = {
-  statusCode: PaymentControllerOrders200StatusCode;
-  message: string;
-  data: PaymentControllerOrders200DataItem[];
-};
-
 export type PaymentControllerIpnBody = {
   /** @maxLength 50 */
   partnerCode: string;
@@ -1449,6 +1505,5456 @@ export type PaymentControllerIpnBody = {
   extraData: string;
   /** @pattern ^[a-f0-9]{64}$ */
   signature: string;
+};
+
+export type ShopRoleControllerMyPermissions200StatusCode =
+  (typeof ShopRoleControllerMyPermissions200StatusCode)[keyof typeof ShopRoleControllerMyPermissions200StatusCode];
+
+export const ShopRoleControllerMyPermissions200StatusCode = {
+  NUMBER_200: 200,
+} as const;
+
+export type ShopRoleControllerMyPermissions200Data = {
+  isOwner: boolean;
+  roles: string[];
+  permissions: string[];
+};
+
+export type ShopRoleControllerMyPermissions200 = {
+  statusCode: ShopRoleControllerMyPermissions200StatusCode;
+  message: string;
+  data: ShopRoleControllerMyPermissions200Data;
+};
+
+export type ShopRoleControllerList200StatusCode =
+  (typeof ShopRoleControllerList200StatusCode)[keyof typeof ShopRoleControllerList200StatusCode];
+
+export const ShopRoleControllerList200StatusCode = {
+  NUMBER_200: 200,
+} as const;
+
+export type ShopRoleControllerList200DataItem = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  shopId: string;
+  name: string;
+  isDefault: boolean;
+  permissions: string[];
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  createdAt: string;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  updatedAt: string;
+};
+
+export type ShopRoleControllerList200 = {
+  statusCode: ShopRoleControllerList200StatusCode;
+  message: string;
+  data: ShopRoleControllerList200DataItem[];
+};
+
+export type ShopRoleControllerCreateBodyPermissionsItem =
+  (typeof ShopRoleControllerCreateBodyPermissionsItem)[keyof typeof ShopRoleControllerCreateBodyPermissionsItem];
+
+export const ShopRoleControllerCreateBodyPermissionsItem = {
+  shopupdate: 'shop.update',
+  productview: 'product.view',
+  productcreate: 'product.create',
+  productupdate: 'product.update',
+  orderview: 'order.view',
+  orderupdate: 'order.update',
+  pickupview: 'pickup.view',
+  pickupupdate: 'pickup.update',
+  chatmanage: 'chat.manage',
+} as const;
+
+export type ShopRoleControllerCreateBody = {
+  /**
+   * @minLength 1
+   * @maxLength 80
+   */
+  name: string;
+  permissions: ShopRoleControllerCreateBodyPermissionsItem[];
+};
+
+export type ShopRoleControllerCreate201StatusCode =
+  (typeof ShopRoleControllerCreate201StatusCode)[keyof typeof ShopRoleControllerCreate201StatusCode];
+
+export const ShopRoleControllerCreate201StatusCode = {
+  NUMBER_201: 201,
+} as const;
+
+export type ShopRoleControllerCreate201Data = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  shopId: string;
+  name: string;
+  isDefault: boolean;
+  permissions: string[];
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  createdAt: string;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  updatedAt: string;
+};
+
+export type ShopRoleControllerCreate201 = {
+  statusCode: ShopRoleControllerCreate201StatusCode;
+  message: string;
+  data: ShopRoleControllerCreate201Data;
+};
+
+export type ShopRoleControllerPermissions200StatusCode =
+  (typeof ShopRoleControllerPermissions200StatusCode)[keyof typeof ShopRoleControllerPermissions200StatusCode];
+
+export const ShopRoleControllerPermissions200StatusCode = {
+  NUMBER_200: 200,
+} as const;
+
+export type ShopRoleControllerPermissions200 = {
+  statusCode: ShopRoleControllerPermissions200StatusCode;
+  message: string;
+  data: string[];
+};
+
+export type ShopRoleControllerUpdateBodyPermissionsItem =
+  (typeof ShopRoleControllerUpdateBodyPermissionsItem)[keyof typeof ShopRoleControllerUpdateBodyPermissionsItem];
+
+export const ShopRoleControllerUpdateBodyPermissionsItem = {
+  shopupdate: 'shop.update',
+  productview: 'product.view',
+  productcreate: 'product.create',
+  productupdate: 'product.update',
+  orderview: 'order.view',
+  orderupdate: 'order.update',
+  pickupview: 'pickup.view',
+  pickupupdate: 'pickup.update',
+  chatmanage: 'chat.manage',
+} as const;
+
+export type ShopRoleControllerUpdateBody = {
+  /**
+   * @minLength 1
+   * @maxLength 80
+   */
+  name?: string;
+  permissions?: ShopRoleControllerUpdateBodyPermissionsItem[];
+};
+
+export type ShopRoleControllerUpdate200StatusCode =
+  (typeof ShopRoleControllerUpdate200StatusCode)[keyof typeof ShopRoleControllerUpdate200StatusCode];
+
+export const ShopRoleControllerUpdate200StatusCode = {
+  NUMBER_200: 200,
+} as const;
+
+export type ShopRoleControllerUpdate200Data = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  shopId: string;
+  name: string;
+  isDefault: boolean;
+  permissions: string[];
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  createdAt: string;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  updatedAt: string;
+};
+
+export type ShopRoleControllerUpdate200 = {
+  statusCode: ShopRoleControllerUpdate200StatusCode;
+  message: string;
+  data: ShopRoleControllerUpdate200Data;
+};
+
+export type ShopRoleControllerAssignBody = {
+  /** @items.pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  roleIds: string[];
+};
+
+export type ShopRoleControllerAssign200StatusCode =
+  (typeof ShopRoleControllerAssign200StatusCode)[keyof typeof ShopRoleControllerAssign200StatusCode];
+
+export const ShopRoleControllerAssign200StatusCode = {
+  NUMBER_200: 200,
+} as const;
+
+export type ShopRoleControllerAssign200DataRolesItem = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  name: string;
+};
+
+export type ShopRoleControllerAssign200Data = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  memberId: string;
+  roles: ShopRoleControllerAssign200DataRolesItem[];
+};
+
+export type ShopRoleControllerAssign200 = {
+  statusCode: ShopRoleControllerAssign200StatusCode;
+  message: string;
+  data: ShopRoleControllerAssign200Data;
+};
+
+export type OrderControllerBuyerListParams = {
+  status?: OrderControllerBuyerListStatus;
+  /**
+   * @minimum 1
+   * @maximum 100
+   */
+  limit?: number;
+  /**
+   * @minimum 0
+   * @maximum 100000
+   */
+  offset?: number;
+};
+
+export type OrderControllerBuyerListStatus =
+  (typeof OrderControllerBuyerListStatus)[keyof typeof OrderControllerBuyerListStatus];
+
+export const OrderControllerBuyerListStatus = {
+  waiting: 'waiting',
+  pending: 'pending',
+  preparing: 'preparing',
+  shipping: 'shipping',
+  delivered: 'delivered',
+  completed: 'completed',
+  dispute: 'dispute',
+  returns: 'returns',
+  cancelled: 'cancelled',
+} as const;
+
+export type OrderControllerBuyerList200StatusCode =
+  (typeof OrderControllerBuyerList200StatusCode)[keyof typeof OrderControllerBuyerList200StatusCode];
+
+export const OrderControllerBuyerList200StatusCode = {
+  NUMBER_200: 200,
+} as const;
+
+export type OrderControllerBuyerList200DataItemPaymentMethod =
+  (typeof OrderControllerBuyerList200DataItemPaymentMethod)[keyof typeof OrderControllerBuyerList200DataItemPaymentMethod];
+
+export const OrderControllerBuyerList200DataItemPaymentMethod = {
+  MOMO: 'MOMO',
+  COD: 'COD',
+} as const;
+
+/**
+ * @nullable
+ */
+export type OrderControllerBuyerList200DataItemCancelState =
+  | (typeof OrderControllerBuyerList200DataItemCancelState)[keyof typeof OrderControllerBuyerList200DataItemCancelState]
+  | null;
+
+export const OrderControllerBuyerList200DataItemCancelState = {
+  PENDING: 'PENDING',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED',
+  ADMIN_REVIEW: 'ADMIN_REVIEW',
+  CLOSED: 'CLOSED',
+} as const;
+
+export type OrderControllerBuyerList200DataItemStatus =
+  (typeof OrderControllerBuyerList200DataItemStatus)[keyof typeof OrderControllerBuyerList200DataItemStatus];
+
+export const OrderControllerBuyerList200DataItemStatus = {
+  waiting: 'waiting',
+  pending: 'pending',
+  preparing: 'preparing',
+  shipping: 'shipping',
+  delivered: 'delivered',
+  completed: 'completed',
+  dispute: 'dispute',
+  returns: 'returns',
+  cancelled: 'cancelled',
+} as const;
+
+/**
+ * @nullable
+ */
+export type OrderControllerBuyerList200DataItemCancellationReason =
+  | (typeof OrderControllerBuyerList200DataItemCancellationReason)[keyof typeof OrderControllerBuyerList200DataItemCancellationReason]
+  | null;
+
+export const OrderControllerBuyerList200DataItemCancellationReason = {
+  SELLER_REJECTED: 'SELLER_REJECTED',
+  SELLER_CONFIRM_TIMEOUT: 'SELLER_CONFIRM_TIMEOUT',
+  BUYER_CANCELLED: 'BUYER_CANCELLED',
+  BUYER_CANCEL_APPROVED: 'BUYER_CANCEL_APPROVED',
+  CARRIER_RETURNED: 'CARRIER_RETURNED',
+} as const;
+
+export type OrderControllerBuyerList200DataItemAddress = {
+  [key: string]: unknown;
+};
+
+export type OrderControllerBuyerList200DataItemItemsItem = {
+  [key: string]: unknown;
+};
+
+/**
+ * @nullable
+ */
+export type OrderControllerBuyerList200DataItemWalletRefund = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  /**
+   * @maximum 9007199254740991
+   * @exclusiveMinimum 0
+   */
+  amount: number;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  creditedAt: string;
+} | null;
+
+export type OrderControllerBuyerList200DataItemEventsItemAction =
+  (typeof OrderControllerBuyerList200DataItemEventsItemAction)[keyof typeof OrderControllerBuyerList200DataItemEventsItemAction];
+
+export const OrderControllerBuyerList200DataItemEventsItemAction = {
+  RECEIPT_CONFIRMED: 'RECEIPT_CONFIRMED',
+  DELIVERY_VERIFIED: 'DELIVERY_VERIFIED',
+  SETTLED: 'SETTLED',
+  COMPLETED: 'COMPLETED',
+  PAID: 'PAID',
+  PLACED: 'PLACED',
+  ACCEPTED: 'ACCEPTED',
+  REJECTED: 'REJECTED',
+  EXPIRED: 'EXPIRED',
+  BUYER_CANCELLED: 'BUYER_CANCELLED',
+  CANCEL_APPROVED: 'CANCEL_APPROVED',
+  SHIPPING: 'SHIPPING',
+  DELIVERED: 'DELIVERED',
+  RETURNING: 'RETURNING',
+  RETURN_INSPECTED: 'RETURN_INSPECTED',
+  CANCEL_REQUESTED: 'CANCEL_REQUESTED',
+  CANCEL_DECISION: 'CANCEL_DECISION',
+  CANCEL_REVIEW_REQUESTED: 'CANCEL_REVIEW_REQUESTED',
+  CANCEL_REVIEW_DECIDED: 'CANCEL_REVIEW_DECIDED',
+} as const;
+
+export type OrderControllerBuyerList200DataItemEventsItem = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  action: OrderControllerBuyerList200DataItemEventsItemAction;
+  /**
+   * @nullable
+   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+   */
+  actorId: string | null;
+  /** @nullable */
+  reason: string | null;
+  /** @nullable */
+  evidence: string | null;
+  /** @nullable */
+  approved: boolean | null;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  createdAt: string;
+};
+
+export type OrderControllerBuyerList200DataItem = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  /**
+   * @nullable
+   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+   */
+  paymentId: string | null;
+  paymentMethod: OrderControllerBuyerList200DataItemPaymentMethod;
+  /**
+   * @nullable
+   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+   */
+  checkoutId: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  handoverBy: string | null;
+  handoverReviewRequired: boolean;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  deliveryObservedAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  receiptConfirmedAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  deliveryVerifiedAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  disputeDeadlineAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  carrierReturnedAt: string | null;
+  /** @nullable */
+  cancelState: OrderControllerBuyerList200DataItemCancelState;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  cancelRequestedAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  cancelRespondBy: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  cancelReviewUntil: string | null;
+  /** @nullable */
+  cancelDecisionReason: string | null;
+  /** @nullable */
+  cancelDecisionEvidence: string | null;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  shopId: string;
+  shopName: string;
+  status: OrderControllerBuyerList200DataItemStatus;
+  /**
+   * @minimum -9007199254740991
+   * @maximum 9007199254740991
+   */
+  subtotal: number;
+  /**
+   * @minimum -9007199254740991
+   * @maximum 9007199254740991
+   */
+  shippingFee: number;
+  /**
+   * @minimum -9007199254740991
+   * @maximum 9007199254740991
+   */
+  total: number;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  sellerConfirmBy: string;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  acceptedAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  cancelledAt: string | null;
+  /** @nullable */
+  cancellationReason: OrderControllerBuyerList200DataItemCancellationReason;
+  /** @nullable */
+  cancellationNote: string | null;
+  address: OrderControllerBuyerList200DataItemAddress;
+  items: OrderControllerBuyerList200DataItemItemsItem[];
+  /** @items.pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  stockReleaseReviewIds: string[];
+  /** @nullable */
+  walletRefund?: OrderControllerBuyerList200DataItemWalletRefund;
+  events?: OrderControllerBuyerList200DataItemEventsItem[];
+};
+
+export type OrderControllerBuyerList200 = {
+  statusCode: OrderControllerBuyerList200StatusCode;
+  message: string;
+  data: OrderControllerBuyerList200DataItem[];
+};
+
+export type OrderControllerBuyerDetail200StatusCode =
+  (typeof OrderControllerBuyerDetail200StatusCode)[keyof typeof OrderControllerBuyerDetail200StatusCode];
+
+export const OrderControllerBuyerDetail200StatusCode = {
+  NUMBER_200: 200,
+} as const;
+
+export type OrderControllerBuyerDetail200DataPaymentMethod =
+  (typeof OrderControllerBuyerDetail200DataPaymentMethod)[keyof typeof OrderControllerBuyerDetail200DataPaymentMethod];
+
+export const OrderControllerBuyerDetail200DataPaymentMethod = {
+  MOMO: 'MOMO',
+  COD: 'COD',
+} as const;
+
+/**
+ * @nullable
+ */
+export type OrderControllerBuyerDetail200DataCancelState =
+  | (typeof OrderControllerBuyerDetail200DataCancelState)[keyof typeof OrderControllerBuyerDetail200DataCancelState]
+  | null;
+
+export const OrderControllerBuyerDetail200DataCancelState = {
+  PENDING: 'PENDING',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED',
+  ADMIN_REVIEW: 'ADMIN_REVIEW',
+  CLOSED: 'CLOSED',
+} as const;
+
+export type OrderControllerBuyerDetail200DataStatus =
+  (typeof OrderControllerBuyerDetail200DataStatus)[keyof typeof OrderControllerBuyerDetail200DataStatus];
+
+export const OrderControllerBuyerDetail200DataStatus = {
+  waiting: 'waiting',
+  pending: 'pending',
+  preparing: 'preparing',
+  shipping: 'shipping',
+  delivered: 'delivered',
+  completed: 'completed',
+  dispute: 'dispute',
+  returns: 'returns',
+  cancelled: 'cancelled',
+} as const;
+
+/**
+ * @nullable
+ */
+export type OrderControllerBuyerDetail200DataCancellationReason =
+  | (typeof OrderControllerBuyerDetail200DataCancellationReason)[keyof typeof OrderControllerBuyerDetail200DataCancellationReason]
+  | null;
+
+export const OrderControllerBuyerDetail200DataCancellationReason = {
+  SELLER_REJECTED: 'SELLER_REJECTED',
+  SELLER_CONFIRM_TIMEOUT: 'SELLER_CONFIRM_TIMEOUT',
+  BUYER_CANCELLED: 'BUYER_CANCELLED',
+  BUYER_CANCEL_APPROVED: 'BUYER_CANCEL_APPROVED',
+  CARRIER_RETURNED: 'CARRIER_RETURNED',
+} as const;
+
+export type OrderControllerBuyerDetail200DataAddress = {
+  [key: string]: unknown;
+};
+
+export type OrderControllerBuyerDetail200DataItemsItem = {
+  [key: string]: unknown;
+};
+
+/**
+ * @nullable
+ */
+export type OrderControllerBuyerDetail200DataWalletRefund = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  /**
+   * @maximum 9007199254740991
+   * @exclusiveMinimum 0
+   */
+  amount: number;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  creditedAt: string;
+} | null;
+
+export type OrderControllerBuyerDetail200DataEventsItemAction =
+  (typeof OrderControllerBuyerDetail200DataEventsItemAction)[keyof typeof OrderControllerBuyerDetail200DataEventsItemAction];
+
+export const OrderControllerBuyerDetail200DataEventsItemAction = {
+  RECEIPT_CONFIRMED: 'RECEIPT_CONFIRMED',
+  DELIVERY_VERIFIED: 'DELIVERY_VERIFIED',
+  SETTLED: 'SETTLED',
+  COMPLETED: 'COMPLETED',
+  PAID: 'PAID',
+  PLACED: 'PLACED',
+  ACCEPTED: 'ACCEPTED',
+  REJECTED: 'REJECTED',
+  EXPIRED: 'EXPIRED',
+  BUYER_CANCELLED: 'BUYER_CANCELLED',
+  CANCEL_APPROVED: 'CANCEL_APPROVED',
+  SHIPPING: 'SHIPPING',
+  DELIVERED: 'DELIVERED',
+  RETURNING: 'RETURNING',
+  RETURN_INSPECTED: 'RETURN_INSPECTED',
+  CANCEL_REQUESTED: 'CANCEL_REQUESTED',
+  CANCEL_DECISION: 'CANCEL_DECISION',
+  CANCEL_REVIEW_REQUESTED: 'CANCEL_REVIEW_REQUESTED',
+  CANCEL_REVIEW_DECIDED: 'CANCEL_REVIEW_DECIDED',
+} as const;
+
+export type OrderControllerBuyerDetail200DataEventsItem = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  action: OrderControllerBuyerDetail200DataEventsItemAction;
+  /**
+   * @nullable
+   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+   */
+  actorId: string | null;
+  /** @nullable */
+  reason: string | null;
+  /** @nullable */
+  evidence: string | null;
+  /** @nullable */
+  approved: boolean | null;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  createdAt: string;
+};
+
+export type OrderControllerBuyerDetail200Data = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  /**
+   * @nullable
+   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+   */
+  paymentId: string | null;
+  paymentMethod: OrderControllerBuyerDetail200DataPaymentMethod;
+  /**
+   * @nullable
+   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+   */
+  checkoutId: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  handoverBy: string | null;
+  handoverReviewRequired: boolean;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  deliveryObservedAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  receiptConfirmedAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  deliveryVerifiedAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  disputeDeadlineAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  carrierReturnedAt: string | null;
+  /** @nullable */
+  cancelState: OrderControllerBuyerDetail200DataCancelState;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  cancelRequestedAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  cancelRespondBy: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  cancelReviewUntil: string | null;
+  /** @nullable */
+  cancelDecisionReason: string | null;
+  /** @nullable */
+  cancelDecisionEvidence: string | null;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  shopId: string;
+  shopName: string;
+  status: OrderControllerBuyerDetail200DataStatus;
+  /**
+   * @minimum -9007199254740991
+   * @maximum 9007199254740991
+   */
+  subtotal: number;
+  /**
+   * @minimum -9007199254740991
+   * @maximum 9007199254740991
+   */
+  shippingFee: number;
+  /**
+   * @minimum -9007199254740991
+   * @maximum 9007199254740991
+   */
+  total: number;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  sellerConfirmBy: string;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  acceptedAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  cancelledAt: string | null;
+  /** @nullable */
+  cancellationReason: OrderControllerBuyerDetail200DataCancellationReason;
+  /** @nullable */
+  cancellationNote: string | null;
+  address: OrderControllerBuyerDetail200DataAddress;
+  items: OrderControllerBuyerDetail200DataItemsItem[];
+  /** @items.pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  stockReleaseReviewIds: string[];
+  /** @nullable */
+  walletRefund?: OrderControllerBuyerDetail200DataWalletRefund;
+  events?: OrderControllerBuyerDetail200DataEventsItem[];
+};
+
+export type OrderControllerBuyerDetail200 = {
+  statusCode: OrderControllerBuyerDetail200StatusCode;
+  message: string;
+  data: OrderControllerBuyerDetail200Data;
+};
+
+export type OrderControllerShopListParams = {
+  status?: OrderControllerShopListStatus;
+  /**
+   * @minimum 1
+   * @maximum 100
+   */
+  limit?: number;
+  /**
+   * @minimum 0
+   * @maximum 100000
+   */
+  offset?: number;
+};
+
+export type OrderControllerShopListStatus =
+  (typeof OrderControllerShopListStatus)[keyof typeof OrderControllerShopListStatus];
+
+export const OrderControllerShopListStatus = {
+  waiting: 'waiting',
+  pending: 'pending',
+  preparing: 'preparing',
+  shipping: 'shipping',
+  delivered: 'delivered',
+  completed: 'completed',
+  dispute: 'dispute',
+  returns: 'returns',
+  cancelled: 'cancelled',
+} as const;
+
+export type OrderControllerShopList200StatusCode =
+  (typeof OrderControllerShopList200StatusCode)[keyof typeof OrderControllerShopList200StatusCode];
+
+export const OrderControllerShopList200StatusCode = {
+  NUMBER_200: 200,
+} as const;
+
+export type OrderControllerShopList200DataItemPaymentMethod =
+  (typeof OrderControllerShopList200DataItemPaymentMethod)[keyof typeof OrderControllerShopList200DataItemPaymentMethod];
+
+export const OrderControllerShopList200DataItemPaymentMethod = {
+  MOMO: 'MOMO',
+  COD: 'COD',
+} as const;
+
+/**
+ * @nullable
+ */
+export type OrderControllerShopList200DataItemCancelState =
+  | (typeof OrderControllerShopList200DataItemCancelState)[keyof typeof OrderControllerShopList200DataItemCancelState]
+  | null;
+
+export const OrderControllerShopList200DataItemCancelState = {
+  PENDING: 'PENDING',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED',
+  ADMIN_REVIEW: 'ADMIN_REVIEW',
+  CLOSED: 'CLOSED',
+} as const;
+
+export type OrderControllerShopList200DataItemStatus =
+  (typeof OrderControllerShopList200DataItemStatus)[keyof typeof OrderControllerShopList200DataItemStatus];
+
+export const OrderControllerShopList200DataItemStatus = {
+  waiting: 'waiting',
+  pending: 'pending',
+  preparing: 'preparing',
+  shipping: 'shipping',
+  delivered: 'delivered',
+  completed: 'completed',
+  dispute: 'dispute',
+  returns: 'returns',
+  cancelled: 'cancelled',
+} as const;
+
+/**
+ * @nullable
+ */
+export type OrderControllerShopList200DataItemCancellationReason =
+  | (typeof OrderControllerShopList200DataItemCancellationReason)[keyof typeof OrderControllerShopList200DataItemCancellationReason]
+  | null;
+
+export const OrderControllerShopList200DataItemCancellationReason = {
+  SELLER_REJECTED: 'SELLER_REJECTED',
+  SELLER_CONFIRM_TIMEOUT: 'SELLER_CONFIRM_TIMEOUT',
+  BUYER_CANCELLED: 'BUYER_CANCELLED',
+  BUYER_CANCEL_APPROVED: 'BUYER_CANCEL_APPROVED',
+  CARRIER_RETURNED: 'CARRIER_RETURNED',
+} as const;
+
+export type OrderControllerShopList200DataItemAddress = {
+  [key: string]: unknown;
+};
+
+export type OrderControllerShopList200DataItemItemsItem = {
+  [key: string]: unknown;
+};
+
+/**
+ * @nullable
+ */
+export type OrderControllerShopList200DataItemWalletRefund = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  /**
+   * @maximum 9007199254740991
+   * @exclusiveMinimum 0
+   */
+  amount: number;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  creditedAt: string;
+} | null;
+
+export type OrderControllerShopList200DataItemEventsItemAction =
+  (typeof OrderControllerShopList200DataItemEventsItemAction)[keyof typeof OrderControllerShopList200DataItemEventsItemAction];
+
+export const OrderControllerShopList200DataItemEventsItemAction = {
+  RECEIPT_CONFIRMED: 'RECEIPT_CONFIRMED',
+  DELIVERY_VERIFIED: 'DELIVERY_VERIFIED',
+  SETTLED: 'SETTLED',
+  COMPLETED: 'COMPLETED',
+  PAID: 'PAID',
+  PLACED: 'PLACED',
+  ACCEPTED: 'ACCEPTED',
+  REJECTED: 'REJECTED',
+  EXPIRED: 'EXPIRED',
+  BUYER_CANCELLED: 'BUYER_CANCELLED',
+  CANCEL_APPROVED: 'CANCEL_APPROVED',
+  SHIPPING: 'SHIPPING',
+  DELIVERED: 'DELIVERED',
+  RETURNING: 'RETURNING',
+  RETURN_INSPECTED: 'RETURN_INSPECTED',
+  CANCEL_REQUESTED: 'CANCEL_REQUESTED',
+  CANCEL_DECISION: 'CANCEL_DECISION',
+  CANCEL_REVIEW_REQUESTED: 'CANCEL_REVIEW_REQUESTED',
+  CANCEL_REVIEW_DECIDED: 'CANCEL_REVIEW_DECIDED',
+} as const;
+
+export type OrderControllerShopList200DataItemEventsItem = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  action: OrderControllerShopList200DataItemEventsItemAction;
+  /**
+   * @nullable
+   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+   */
+  actorId: string | null;
+  /** @nullable */
+  reason: string | null;
+  /** @nullable */
+  evidence: string | null;
+  /** @nullable */
+  approved: boolean | null;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  createdAt: string;
+};
+
+export type OrderControllerShopList200DataItem = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  /**
+   * @nullable
+   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+   */
+  paymentId: string | null;
+  paymentMethod: OrderControllerShopList200DataItemPaymentMethod;
+  /**
+   * @nullable
+   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+   */
+  checkoutId: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  handoverBy: string | null;
+  handoverReviewRequired: boolean;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  deliveryObservedAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  receiptConfirmedAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  deliveryVerifiedAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  disputeDeadlineAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  carrierReturnedAt: string | null;
+  /** @nullable */
+  cancelState: OrderControllerShopList200DataItemCancelState;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  cancelRequestedAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  cancelRespondBy: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  cancelReviewUntil: string | null;
+  /** @nullable */
+  cancelDecisionReason: string | null;
+  /** @nullable */
+  cancelDecisionEvidence: string | null;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  shopId: string;
+  shopName: string;
+  status: OrderControllerShopList200DataItemStatus;
+  /**
+   * @minimum -9007199254740991
+   * @maximum 9007199254740991
+   */
+  subtotal: number;
+  /**
+   * @minimum -9007199254740991
+   * @maximum 9007199254740991
+   */
+  shippingFee: number;
+  /**
+   * @minimum -9007199254740991
+   * @maximum 9007199254740991
+   */
+  total: number;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  sellerConfirmBy: string;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  acceptedAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  cancelledAt: string | null;
+  /** @nullable */
+  cancellationReason: OrderControllerShopList200DataItemCancellationReason;
+  /** @nullable */
+  cancellationNote: string | null;
+  address: OrderControllerShopList200DataItemAddress;
+  items: OrderControllerShopList200DataItemItemsItem[];
+  /** @items.pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  stockReleaseReviewIds: string[];
+  /** @nullable */
+  walletRefund?: OrderControllerShopList200DataItemWalletRefund;
+  events?: OrderControllerShopList200DataItemEventsItem[];
+};
+
+export type OrderControllerShopList200 = {
+  statusCode: OrderControllerShopList200StatusCode;
+  message: string;
+  data: OrderControllerShopList200DataItem[];
+};
+
+export type OrderControllerShopDetail200StatusCode =
+  (typeof OrderControllerShopDetail200StatusCode)[keyof typeof OrderControllerShopDetail200StatusCode];
+
+export const OrderControllerShopDetail200StatusCode = {
+  NUMBER_200: 200,
+} as const;
+
+export type OrderControllerShopDetail200DataPaymentMethod =
+  (typeof OrderControllerShopDetail200DataPaymentMethod)[keyof typeof OrderControllerShopDetail200DataPaymentMethod];
+
+export const OrderControllerShopDetail200DataPaymentMethod = {
+  MOMO: 'MOMO',
+  COD: 'COD',
+} as const;
+
+/**
+ * @nullable
+ */
+export type OrderControllerShopDetail200DataCancelState =
+  | (typeof OrderControllerShopDetail200DataCancelState)[keyof typeof OrderControllerShopDetail200DataCancelState]
+  | null;
+
+export const OrderControllerShopDetail200DataCancelState = {
+  PENDING: 'PENDING',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED',
+  ADMIN_REVIEW: 'ADMIN_REVIEW',
+  CLOSED: 'CLOSED',
+} as const;
+
+export type OrderControllerShopDetail200DataStatus =
+  (typeof OrderControllerShopDetail200DataStatus)[keyof typeof OrderControllerShopDetail200DataStatus];
+
+export const OrderControllerShopDetail200DataStatus = {
+  waiting: 'waiting',
+  pending: 'pending',
+  preparing: 'preparing',
+  shipping: 'shipping',
+  delivered: 'delivered',
+  completed: 'completed',
+  dispute: 'dispute',
+  returns: 'returns',
+  cancelled: 'cancelled',
+} as const;
+
+/**
+ * @nullable
+ */
+export type OrderControllerShopDetail200DataCancellationReason =
+  | (typeof OrderControllerShopDetail200DataCancellationReason)[keyof typeof OrderControllerShopDetail200DataCancellationReason]
+  | null;
+
+export const OrderControllerShopDetail200DataCancellationReason = {
+  SELLER_REJECTED: 'SELLER_REJECTED',
+  SELLER_CONFIRM_TIMEOUT: 'SELLER_CONFIRM_TIMEOUT',
+  BUYER_CANCELLED: 'BUYER_CANCELLED',
+  BUYER_CANCEL_APPROVED: 'BUYER_CANCEL_APPROVED',
+  CARRIER_RETURNED: 'CARRIER_RETURNED',
+} as const;
+
+export type OrderControllerShopDetail200DataAddress = {
+  [key: string]: unknown;
+};
+
+export type OrderControllerShopDetail200DataItemsItem = {
+  [key: string]: unknown;
+};
+
+/**
+ * @nullable
+ */
+export type OrderControllerShopDetail200DataWalletRefund = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  /**
+   * @maximum 9007199254740991
+   * @exclusiveMinimum 0
+   */
+  amount: number;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  creditedAt: string;
+} | null;
+
+export type OrderControllerShopDetail200DataEventsItemAction =
+  (typeof OrderControllerShopDetail200DataEventsItemAction)[keyof typeof OrderControllerShopDetail200DataEventsItemAction];
+
+export const OrderControllerShopDetail200DataEventsItemAction = {
+  RECEIPT_CONFIRMED: 'RECEIPT_CONFIRMED',
+  DELIVERY_VERIFIED: 'DELIVERY_VERIFIED',
+  SETTLED: 'SETTLED',
+  COMPLETED: 'COMPLETED',
+  PAID: 'PAID',
+  PLACED: 'PLACED',
+  ACCEPTED: 'ACCEPTED',
+  REJECTED: 'REJECTED',
+  EXPIRED: 'EXPIRED',
+  BUYER_CANCELLED: 'BUYER_CANCELLED',
+  CANCEL_APPROVED: 'CANCEL_APPROVED',
+  SHIPPING: 'SHIPPING',
+  DELIVERED: 'DELIVERED',
+  RETURNING: 'RETURNING',
+  RETURN_INSPECTED: 'RETURN_INSPECTED',
+  CANCEL_REQUESTED: 'CANCEL_REQUESTED',
+  CANCEL_DECISION: 'CANCEL_DECISION',
+  CANCEL_REVIEW_REQUESTED: 'CANCEL_REVIEW_REQUESTED',
+  CANCEL_REVIEW_DECIDED: 'CANCEL_REVIEW_DECIDED',
+} as const;
+
+export type OrderControllerShopDetail200DataEventsItem = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  action: OrderControllerShopDetail200DataEventsItemAction;
+  /**
+   * @nullable
+   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+   */
+  actorId: string | null;
+  /** @nullable */
+  reason: string | null;
+  /** @nullable */
+  evidence: string | null;
+  /** @nullable */
+  approved: boolean | null;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  createdAt: string;
+};
+
+export type OrderControllerShopDetail200Data = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  /**
+   * @nullable
+   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+   */
+  paymentId: string | null;
+  paymentMethod: OrderControllerShopDetail200DataPaymentMethod;
+  /**
+   * @nullable
+   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+   */
+  checkoutId: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  handoverBy: string | null;
+  handoverReviewRequired: boolean;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  deliveryObservedAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  receiptConfirmedAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  deliveryVerifiedAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  disputeDeadlineAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  carrierReturnedAt: string | null;
+  /** @nullable */
+  cancelState: OrderControllerShopDetail200DataCancelState;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  cancelRequestedAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  cancelRespondBy: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  cancelReviewUntil: string | null;
+  /** @nullable */
+  cancelDecisionReason: string | null;
+  /** @nullable */
+  cancelDecisionEvidence: string | null;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  shopId: string;
+  shopName: string;
+  status: OrderControllerShopDetail200DataStatus;
+  /**
+   * @minimum -9007199254740991
+   * @maximum 9007199254740991
+   */
+  subtotal: number;
+  /**
+   * @minimum -9007199254740991
+   * @maximum 9007199254740991
+   */
+  shippingFee: number;
+  /**
+   * @minimum -9007199254740991
+   * @maximum 9007199254740991
+   */
+  total: number;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  sellerConfirmBy: string;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  acceptedAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  cancelledAt: string | null;
+  /** @nullable */
+  cancellationReason: OrderControllerShopDetail200DataCancellationReason;
+  /** @nullable */
+  cancellationNote: string | null;
+  address: OrderControllerShopDetail200DataAddress;
+  items: OrderControllerShopDetail200DataItemsItem[];
+  /** @items.pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  stockReleaseReviewIds: string[];
+  /** @nullable */
+  walletRefund?: OrderControllerShopDetail200DataWalletRefund;
+  events?: OrderControllerShopDetail200DataEventsItem[];
+};
+
+export type OrderControllerShopDetail200 = {
+  statusCode: OrderControllerShopDetail200StatusCode;
+  message: string;
+  data: OrderControllerShopDetail200Data;
+};
+
+export type OrderControllerAcceptBody = { [key: string]: unknown };
+
+export type OrderControllerAccept200StatusCode =
+  (typeof OrderControllerAccept200StatusCode)[keyof typeof OrderControllerAccept200StatusCode];
+
+export const OrderControllerAccept200StatusCode = {
+  NUMBER_200: 200,
+} as const;
+
+export type OrderControllerAccept200DataPaymentMethod =
+  (typeof OrderControllerAccept200DataPaymentMethod)[keyof typeof OrderControllerAccept200DataPaymentMethod];
+
+export const OrderControllerAccept200DataPaymentMethod = {
+  MOMO: 'MOMO',
+  COD: 'COD',
+} as const;
+
+/**
+ * @nullable
+ */
+export type OrderControllerAccept200DataCancelState =
+  | (typeof OrderControllerAccept200DataCancelState)[keyof typeof OrderControllerAccept200DataCancelState]
+  | null;
+
+export const OrderControllerAccept200DataCancelState = {
+  PENDING: 'PENDING',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED',
+  ADMIN_REVIEW: 'ADMIN_REVIEW',
+  CLOSED: 'CLOSED',
+} as const;
+
+export type OrderControllerAccept200DataStatus =
+  (typeof OrderControllerAccept200DataStatus)[keyof typeof OrderControllerAccept200DataStatus];
+
+export const OrderControllerAccept200DataStatus = {
+  waiting: 'waiting',
+  pending: 'pending',
+  preparing: 'preparing',
+  shipping: 'shipping',
+  delivered: 'delivered',
+  completed: 'completed',
+  dispute: 'dispute',
+  returns: 'returns',
+  cancelled: 'cancelled',
+} as const;
+
+/**
+ * @nullable
+ */
+export type OrderControllerAccept200DataCancellationReason =
+  | (typeof OrderControllerAccept200DataCancellationReason)[keyof typeof OrderControllerAccept200DataCancellationReason]
+  | null;
+
+export const OrderControllerAccept200DataCancellationReason = {
+  SELLER_REJECTED: 'SELLER_REJECTED',
+  SELLER_CONFIRM_TIMEOUT: 'SELLER_CONFIRM_TIMEOUT',
+  BUYER_CANCELLED: 'BUYER_CANCELLED',
+  BUYER_CANCEL_APPROVED: 'BUYER_CANCEL_APPROVED',
+  CARRIER_RETURNED: 'CARRIER_RETURNED',
+} as const;
+
+export type OrderControllerAccept200DataAddress = { [key: string]: unknown };
+
+export type OrderControllerAccept200DataItemsItem = { [key: string]: unknown };
+
+/**
+ * @nullable
+ */
+export type OrderControllerAccept200DataWalletRefund = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  /**
+   * @maximum 9007199254740991
+   * @exclusiveMinimum 0
+   */
+  amount: number;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  creditedAt: string;
+} | null;
+
+export type OrderControllerAccept200DataEventsItemAction =
+  (typeof OrderControllerAccept200DataEventsItemAction)[keyof typeof OrderControllerAccept200DataEventsItemAction];
+
+export const OrderControllerAccept200DataEventsItemAction = {
+  RECEIPT_CONFIRMED: 'RECEIPT_CONFIRMED',
+  DELIVERY_VERIFIED: 'DELIVERY_VERIFIED',
+  SETTLED: 'SETTLED',
+  COMPLETED: 'COMPLETED',
+  PAID: 'PAID',
+  PLACED: 'PLACED',
+  ACCEPTED: 'ACCEPTED',
+  REJECTED: 'REJECTED',
+  EXPIRED: 'EXPIRED',
+  BUYER_CANCELLED: 'BUYER_CANCELLED',
+  CANCEL_APPROVED: 'CANCEL_APPROVED',
+  SHIPPING: 'SHIPPING',
+  DELIVERED: 'DELIVERED',
+  RETURNING: 'RETURNING',
+  RETURN_INSPECTED: 'RETURN_INSPECTED',
+  CANCEL_REQUESTED: 'CANCEL_REQUESTED',
+  CANCEL_DECISION: 'CANCEL_DECISION',
+  CANCEL_REVIEW_REQUESTED: 'CANCEL_REVIEW_REQUESTED',
+  CANCEL_REVIEW_DECIDED: 'CANCEL_REVIEW_DECIDED',
+} as const;
+
+export type OrderControllerAccept200DataEventsItem = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  action: OrderControllerAccept200DataEventsItemAction;
+  /**
+   * @nullable
+   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+   */
+  actorId: string | null;
+  /** @nullable */
+  reason: string | null;
+  /** @nullable */
+  evidence: string | null;
+  /** @nullable */
+  approved: boolean | null;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  createdAt: string;
+};
+
+export type OrderControllerAccept200Data = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  /**
+   * @nullable
+   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+   */
+  paymentId: string | null;
+  paymentMethod: OrderControllerAccept200DataPaymentMethod;
+  /**
+   * @nullable
+   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+   */
+  checkoutId: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  handoverBy: string | null;
+  handoverReviewRequired: boolean;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  deliveryObservedAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  receiptConfirmedAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  deliveryVerifiedAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  disputeDeadlineAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  carrierReturnedAt: string | null;
+  /** @nullable */
+  cancelState: OrderControllerAccept200DataCancelState;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  cancelRequestedAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  cancelRespondBy: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  cancelReviewUntil: string | null;
+  /** @nullable */
+  cancelDecisionReason: string | null;
+  /** @nullable */
+  cancelDecisionEvidence: string | null;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  shopId: string;
+  shopName: string;
+  status: OrderControllerAccept200DataStatus;
+  /**
+   * @minimum -9007199254740991
+   * @maximum 9007199254740991
+   */
+  subtotal: number;
+  /**
+   * @minimum -9007199254740991
+   * @maximum 9007199254740991
+   */
+  shippingFee: number;
+  /**
+   * @minimum -9007199254740991
+   * @maximum 9007199254740991
+   */
+  total: number;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  sellerConfirmBy: string;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  acceptedAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  cancelledAt: string | null;
+  /** @nullable */
+  cancellationReason: OrderControllerAccept200DataCancellationReason;
+  /** @nullable */
+  cancellationNote: string | null;
+  address: OrderControllerAccept200DataAddress;
+  items: OrderControllerAccept200DataItemsItem[];
+  /** @items.pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  stockReleaseReviewIds: string[];
+  /** @nullable */
+  walletRefund?: OrderControllerAccept200DataWalletRefund;
+  events?: OrderControllerAccept200DataEventsItem[];
+};
+
+export type OrderControllerAccept200 = {
+  statusCode: OrderControllerAccept200StatusCode;
+  message: string;
+  data: OrderControllerAccept200Data;
+};
+
+export type OrderControllerRejectBody = {
+  /**
+   * @minLength 1
+   * @maxLength 1000
+   */
+  reason: string;
+};
+
+export type OrderControllerReject200StatusCode =
+  (typeof OrderControllerReject200StatusCode)[keyof typeof OrderControllerReject200StatusCode];
+
+export const OrderControllerReject200StatusCode = {
+  NUMBER_200: 200,
+} as const;
+
+export type OrderControllerReject200DataPaymentMethod =
+  (typeof OrderControllerReject200DataPaymentMethod)[keyof typeof OrderControllerReject200DataPaymentMethod];
+
+export const OrderControllerReject200DataPaymentMethod = {
+  MOMO: 'MOMO',
+  COD: 'COD',
+} as const;
+
+/**
+ * @nullable
+ */
+export type OrderControllerReject200DataCancelState =
+  | (typeof OrderControllerReject200DataCancelState)[keyof typeof OrderControllerReject200DataCancelState]
+  | null;
+
+export const OrderControllerReject200DataCancelState = {
+  PENDING: 'PENDING',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED',
+  ADMIN_REVIEW: 'ADMIN_REVIEW',
+  CLOSED: 'CLOSED',
+} as const;
+
+export type OrderControllerReject200DataStatus =
+  (typeof OrderControllerReject200DataStatus)[keyof typeof OrderControllerReject200DataStatus];
+
+export const OrderControllerReject200DataStatus = {
+  waiting: 'waiting',
+  pending: 'pending',
+  preparing: 'preparing',
+  shipping: 'shipping',
+  delivered: 'delivered',
+  completed: 'completed',
+  dispute: 'dispute',
+  returns: 'returns',
+  cancelled: 'cancelled',
+} as const;
+
+/**
+ * @nullable
+ */
+export type OrderControllerReject200DataCancellationReason =
+  | (typeof OrderControllerReject200DataCancellationReason)[keyof typeof OrderControllerReject200DataCancellationReason]
+  | null;
+
+export const OrderControllerReject200DataCancellationReason = {
+  SELLER_REJECTED: 'SELLER_REJECTED',
+  SELLER_CONFIRM_TIMEOUT: 'SELLER_CONFIRM_TIMEOUT',
+  BUYER_CANCELLED: 'BUYER_CANCELLED',
+  BUYER_CANCEL_APPROVED: 'BUYER_CANCEL_APPROVED',
+  CARRIER_RETURNED: 'CARRIER_RETURNED',
+} as const;
+
+export type OrderControllerReject200DataAddress = { [key: string]: unknown };
+
+export type OrderControllerReject200DataItemsItem = { [key: string]: unknown };
+
+/**
+ * @nullable
+ */
+export type OrderControllerReject200DataWalletRefund = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  /**
+   * @maximum 9007199254740991
+   * @exclusiveMinimum 0
+   */
+  amount: number;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  creditedAt: string;
+} | null;
+
+export type OrderControllerReject200DataEventsItemAction =
+  (typeof OrderControllerReject200DataEventsItemAction)[keyof typeof OrderControllerReject200DataEventsItemAction];
+
+export const OrderControllerReject200DataEventsItemAction = {
+  RECEIPT_CONFIRMED: 'RECEIPT_CONFIRMED',
+  DELIVERY_VERIFIED: 'DELIVERY_VERIFIED',
+  SETTLED: 'SETTLED',
+  COMPLETED: 'COMPLETED',
+  PAID: 'PAID',
+  PLACED: 'PLACED',
+  ACCEPTED: 'ACCEPTED',
+  REJECTED: 'REJECTED',
+  EXPIRED: 'EXPIRED',
+  BUYER_CANCELLED: 'BUYER_CANCELLED',
+  CANCEL_APPROVED: 'CANCEL_APPROVED',
+  SHIPPING: 'SHIPPING',
+  DELIVERED: 'DELIVERED',
+  RETURNING: 'RETURNING',
+  RETURN_INSPECTED: 'RETURN_INSPECTED',
+  CANCEL_REQUESTED: 'CANCEL_REQUESTED',
+  CANCEL_DECISION: 'CANCEL_DECISION',
+  CANCEL_REVIEW_REQUESTED: 'CANCEL_REVIEW_REQUESTED',
+  CANCEL_REVIEW_DECIDED: 'CANCEL_REVIEW_DECIDED',
+} as const;
+
+export type OrderControllerReject200DataEventsItem = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  action: OrderControllerReject200DataEventsItemAction;
+  /**
+   * @nullable
+   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+   */
+  actorId: string | null;
+  /** @nullable */
+  reason: string | null;
+  /** @nullable */
+  evidence: string | null;
+  /** @nullable */
+  approved: boolean | null;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  createdAt: string;
+};
+
+export type OrderControllerReject200Data = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  /**
+   * @nullable
+   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+   */
+  paymentId: string | null;
+  paymentMethod: OrderControllerReject200DataPaymentMethod;
+  /**
+   * @nullable
+   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+   */
+  checkoutId: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  handoverBy: string | null;
+  handoverReviewRequired: boolean;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  deliveryObservedAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  receiptConfirmedAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  deliveryVerifiedAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  disputeDeadlineAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  carrierReturnedAt: string | null;
+  /** @nullable */
+  cancelState: OrderControllerReject200DataCancelState;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  cancelRequestedAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  cancelRespondBy: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  cancelReviewUntil: string | null;
+  /** @nullable */
+  cancelDecisionReason: string | null;
+  /** @nullable */
+  cancelDecisionEvidence: string | null;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  shopId: string;
+  shopName: string;
+  status: OrderControllerReject200DataStatus;
+  /**
+   * @minimum -9007199254740991
+   * @maximum 9007199254740991
+   */
+  subtotal: number;
+  /**
+   * @minimum -9007199254740991
+   * @maximum 9007199254740991
+   */
+  shippingFee: number;
+  /**
+   * @minimum -9007199254740991
+   * @maximum 9007199254740991
+   */
+  total: number;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  sellerConfirmBy: string;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  acceptedAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  cancelledAt: string | null;
+  /** @nullable */
+  cancellationReason: OrderControllerReject200DataCancellationReason;
+  /** @nullable */
+  cancellationNote: string | null;
+  address: OrderControllerReject200DataAddress;
+  items: OrderControllerReject200DataItemsItem[];
+  /** @items.pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  stockReleaseReviewIds: string[];
+  /** @nullable */
+  walletRefund?: OrderControllerReject200DataWalletRefund;
+  events?: OrderControllerReject200DataEventsItem[];
+};
+
+export type OrderControllerReject200 = {
+  statusCode: OrderControllerReject200StatusCode;
+  message: string;
+  data: OrderControllerReject200Data;
+};
+
+export type OrderSettlementControllerConfirmReceiptBody = {
+  [key: string]: unknown;
+};
+
+export type OrderSettlementControllerConfirmReceipt200StatusCode =
+  (typeof OrderSettlementControllerConfirmReceipt200StatusCode)[keyof typeof OrderSettlementControllerConfirmReceipt200StatusCode];
+
+export const OrderSettlementControllerConfirmReceipt200StatusCode = {
+  NUMBER_200: 200,
+} as const;
+
+export type OrderSettlementControllerConfirmReceipt200DataPaymentMethod =
+  (typeof OrderSettlementControllerConfirmReceipt200DataPaymentMethod)[keyof typeof OrderSettlementControllerConfirmReceipt200DataPaymentMethod];
+
+export const OrderSettlementControllerConfirmReceipt200DataPaymentMethod = {
+  MOMO: 'MOMO',
+  COD: 'COD',
+} as const;
+
+/**
+ * @nullable
+ */
+export type OrderSettlementControllerConfirmReceipt200DataCancelState =
+  | (typeof OrderSettlementControllerConfirmReceipt200DataCancelState)[keyof typeof OrderSettlementControllerConfirmReceipt200DataCancelState]
+  | null;
+
+export const OrderSettlementControllerConfirmReceipt200DataCancelState = {
+  PENDING: 'PENDING',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED',
+  ADMIN_REVIEW: 'ADMIN_REVIEW',
+  CLOSED: 'CLOSED',
+} as const;
+
+export type OrderSettlementControllerConfirmReceipt200DataStatus =
+  (typeof OrderSettlementControllerConfirmReceipt200DataStatus)[keyof typeof OrderSettlementControllerConfirmReceipt200DataStatus];
+
+export const OrderSettlementControllerConfirmReceipt200DataStatus = {
+  waiting: 'waiting',
+  pending: 'pending',
+  preparing: 'preparing',
+  shipping: 'shipping',
+  delivered: 'delivered',
+  completed: 'completed',
+  dispute: 'dispute',
+  returns: 'returns',
+  cancelled: 'cancelled',
+} as const;
+
+/**
+ * @nullable
+ */
+export type OrderSettlementControllerConfirmReceipt200DataCancellationReason =
+  | (typeof OrderSettlementControllerConfirmReceipt200DataCancellationReason)[keyof typeof OrderSettlementControllerConfirmReceipt200DataCancellationReason]
+  | null;
+
+export const OrderSettlementControllerConfirmReceipt200DataCancellationReason =
+  {
+    SELLER_REJECTED: 'SELLER_REJECTED',
+    SELLER_CONFIRM_TIMEOUT: 'SELLER_CONFIRM_TIMEOUT',
+    BUYER_CANCELLED: 'BUYER_CANCELLED',
+    BUYER_CANCEL_APPROVED: 'BUYER_CANCEL_APPROVED',
+    CARRIER_RETURNED: 'CARRIER_RETURNED',
+  } as const;
+
+export type OrderSettlementControllerConfirmReceipt200DataAddress = {
+  [key: string]: unknown;
+};
+
+export type OrderSettlementControllerConfirmReceipt200DataItemsItem = {
+  [key: string]: unknown;
+};
+
+/**
+ * @nullable
+ */
+export type OrderSettlementControllerConfirmReceipt200DataWalletRefund = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  /**
+   * @maximum 9007199254740991
+   * @exclusiveMinimum 0
+   */
+  amount: number;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  creditedAt: string;
+} | null;
+
+export type OrderSettlementControllerConfirmReceipt200DataEventsItemAction =
+  (typeof OrderSettlementControllerConfirmReceipt200DataEventsItemAction)[keyof typeof OrderSettlementControllerConfirmReceipt200DataEventsItemAction];
+
+export const OrderSettlementControllerConfirmReceipt200DataEventsItemAction = {
+  RECEIPT_CONFIRMED: 'RECEIPT_CONFIRMED',
+  DELIVERY_VERIFIED: 'DELIVERY_VERIFIED',
+  SETTLED: 'SETTLED',
+  COMPLETED: 'COMPLETED',
+  PAID: 'PAID',
+  PLACED: 'PLACED',
+  ACCEPTED: 'ACCEPTED',
+  REJECTED: 'REJECTED',
+  EXPIRED: 'EXPIRED',
+  BUYER_CANCELLED: 'BUYER_CANCELLED',
+  CANCEL_APPROVED: 'CANCEL_APPROVED',
+  SHIPPING: 'SHIPPING',
+  DELIVERED: 'DELIVERED',
+  RETURNING: 'RETURNING',
+  RETURN_INSPECTED: 'RETURN_INSPECTED',
+  CANCEL_REQUESTED: 'CANCEL_REQUESTED',
+  CANCEL_DECISION: 'CANCEL_DECISION',
+  CANCEL_REVIEW_REQUESTED: 'CANCEL_REVIEW_REQUESTED',
+  CANCEL_REVIEW_DECIDED: 'CANCEL_REVIEW_DECIDED',
+} as const;
+
+export type OrderSettlementControllerConfirmReceipt200DataEventsItem = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  action: OrderSettlementControllerConfirmReceipt200DataEventsItemAction;
+  /**
+   * @nullable
+   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+   */
+  actorId: string | null;
+  /** @nullable */
+  reason: string | null;
+  /** @nullable */
+  evidence: string | null;
+  /** @nullable */
+  approved: boolean | null;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  createdAt: string;
+};
+
+export type OrderSettlementControllerConfirmReceipt200Data = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  /**
+   * @nullable
+   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+   */
+  paymentId: string | null;
+  paymentMethod: OrderSettlementControllerConfirmReceipt200DataPaymentMethod;
+  /**
+   * @nullable
+   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+   */
+  checkoutId: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  handoverBy: string | null;
+  handoverReviewRequired: boolean;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  deliveryObservedAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  receiptConfirmedAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  deliveryVerifiedAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  disputeDeadlineAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  carrierReturnedAt: string | null;
+  /** @nullable */
+  cancelState: OrderSettlementControllerConfirmReceipt200DataCancelState;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  cancelRequestedAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  cancelRespondBy: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  cancelReviewUntil: string | null;
+  /** @nullable */
+  cancelDecisionReason: string | null;
+  /** @nullable */
+  cancelDecisionEvidence: string | null;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  shopId: string;
+  shopName: string;
+  status: OrderSettlementControllerConfirmReceipt200DataStatus;
+  /**
+   * @minimum -9007199254740991
+   * @maximum 9007199254740991
+   */
+  subtotal: number;
+  /**
+   * @minimum -9007199254740991
+   * @maximum 9007199254740991
+   */
+  shippingFee: number;
+  /**
+   * @minimum -9007199254740991
+   * @maximum 9007199254740991
+   */
+  total: number;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  sellerConfirmBy: string;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  acceptedAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  cancelledAt: string | null;
+  /** @nullable */
+  cancellationReason: OrderSettlementControllerConfirmReceipt200DataCancellationReason;
+  /** @nullable */
+  cancellationNote: string | null;
+  address: OrderSettlementControllerConfirmReceipt200DataAddress;
+  items: OrderSettlementControllerConfirmReceipt200DataItemsItem[];
+  /** @items.pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  stockReleaseReviewIds: string[];
+  /** @nullable */
+  walletRefund?: OrderSettlementControllerConfirmReceipt200DataWalletRefund;
+  events?: OrderSettlementControllerConfirmReceipt200DataEventsItem[];
+};
+
+export type OrderSettlementControllerConfirmReceipt200 = {
+  statusCode: OrderSettlementControllerConfirmReceipt200StatusCode;
+  message: string;
+  data: OrderSettlementControllerConfirmReceipt200Data;
+};
+
+export type OrderSettlementControllerVerifyDeliveryBodyMode =
+  (typeof OrderSettlementControllerVerifyDeliveryBodyMode)[keyof typeof OrderSettlementControllerVerifyDeliveryBodyMode];
+
+export const OrderSettlementControllerVerifyDeliveryBodyMode = {
+  EVIDENCE: 'EVIDENCE',
+  SIMULATION: 'SIMULATION',
+} as const;
+
+export type OrderSettlementControllerVerifyDeliveryBody = {
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z|([+-](?:[01]\d|2[0-3]):[0-5]\d)))$ */
+  deliveredAt: string;
+  mode: OrderSettlementControllerVerifyDeliveryBodyMode;
+  /**
+   * @minLength 1
+   * @maxLength 1000
+   */
+  reason: string;
+  /**
+   * @minLength 1
+   * @maxLength 2000
+   */
+  evidence: string;
+};
+
+export type OrderSettlementControllerVerifyDelivery200StatusCode =
+  (typeof OrderSettlementControllerVerifyDelivery200StatusCode)[keyof typeof OrderSettlementControllerVerifyDelivery200StatusCode];
+
+export const OrderSettlementControllerVerifyDelivery200StatusCode = {
+  NUMBER_200: 200,
+} as const;
+
+export type OrderSettlementControllerVerifyDelivery200DataPaymentMethod =
+  (typeof OrderSettlementControllerVerifyDelivery200DataPaymentMethod)[keyof typeof OrderSettlementControllerVerifyDelivery200DataPaymentMethod];
+
+export const OrderSettlementControllerVerifyDelivery200DataPaymentMethod = {
+  MOMO: 'MOMO',
+  COD: 'COD',
+} as const;
+
+/**
+ * @nullable
+ */
+export type OrderSettlementControllerVerifyDelivery200DataCancelState =
+  | (typeof OrderSettlementControllerVerifyDelivery200DataCancelState)[keyof typeof OrderSettlementControllerVerifyDelivery200DataCancelState]
+  | null;
+
+export const OrderSettlementControllerVerifyDelivery200DataCancelState = {
+  PENDING: 'PENDING',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED',
+  ADMIN_REVIEW: 'ADMIN_REVIEW',
+  CLOSED: 'CLOSED',
+} as const;
+
+export type OrderSettlementControllerVerifyDelivery200DataStatus =
+  (typeof OrderSettlementControllerVerifyDelivery200DataStatus)[keyof typeof OrderSettlementControllerVerifyDelivery200DataStatus];
+
+export const OrderSettlementControllerVerifyDelivery200DataStatus = {
+  waiting: 'waiting',
+  pending: 'pending',
+  preparing: 'preparing',
+  shipping: 'shipping',
+  delivered: 'delivered',
+  completed: 'completed',
+  dispute: 'dispute',
+  returns: 'returns',
+  cancelled: 'cancelled',
+} as const;
+
+/**
+ * @nullable
+ */
+export type OrderSettlementControllerVerifyDelivery200DataCancellationReason =
+  | (typeof OrderSettlementControllerVerifyDelivery200DataCancellationReason)[keyof typeof OrderSettlementControllerVerifyDelivery200DataCancellationReason]
+  | null;
+
+export const OrderSettlementControllerVerifyDelivery200DataCancellationReason =
+  {
+    SELLER_REJECTED: 'SELLER_REJECTED',
+    SELLER_CONFIRM_TIMEOUT: 'SELLER_CONFIRM_TIMEOUT',
+    BUYER_CANCELLED: 'BUYER_CANCELLED',
+    BUYER_CANCEL_APPROVED: 'BUYER_CANCEL_APPROVED',
+    CARRIER_RETURNED: 'CARRIER_RETURNED',
+  } as const;
+
+export type OrderSettlementControllerVerifyDelivery200DataAddress = {
+  [key: string]: unknown;
+};
+
+export type OrderSettlementControllerVerifyDelivery200DataItemsItem = {
+  [key: string]: unknown;
+};
+
+/**
+ * @nullable
+ */
+export type OrderSettlementControllerVerifyDelivery200DataWalletRefund = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  /**
+   * @maximum 9007199254740991
+   * @exclusiveMinimum 0
+   */
+  amount: number;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  creditedAt: string;
+} | null;
+
+export type OrderSettlementControllerVerifyDelivery200DataEventsItemAction =
+  (typeof OrderSettlementControllerVerifyDelivery200DataEventsItemAction)[keyof typeof OrderSettlementControllerVerifyDelivery200DataEventsItemAction];
+
+export const OrderSettlementControllerVerifyDelivery200DataEventsItemAction = {
+  RECEIPT_CONFIRMED: 'RECEIPT_CONFIRMED',
+  DELIVERY_VERIFIED: 'DELIVERY_VERIFIED',
+  SETTLED: 'SETTLED',
+  COMPLETED: 'COMPLETED',
+  PAID: 'PAID',
+  PLACED: 'PLACED',
+  ACCEPTED: 'ACCEPTED',
+  REJECTED: 'REJECTED',
+  EXPIRED: 'EXPIRED',
+  BUYER_CANCELLED: 'BUYER_CANCELLED',
+  CANCEL_APPROVED: 'CANCEL_APPROVED',
+  SHIPPING: 'SHIPPING',
+  DELIVERED: 'DELIVERED',
+  RETURNING: 'RETURNING',
+  RETURN_INSPECTED: 'RETURN_INSPECTED',
+  CANCEL_REQUESTED: 'CANCEL_REQUESTED',
+  CANCEL_DECISION: 'CANCEL_DECISION',
+  CANCEL_REVIEW_REQUESTED: 'CANCEL_REVIEW_REQUESTED',
+  CANCEL_REVIEW_DECIDED: 'CANCEL_REVIEW_DECIDED',
+} as const;
+
+export type OrderSettlementControllerVerifyDelivery200DataEventsItem = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  action: OrderSettlementControllerVerifyDelivery200DataEventsItemAction;
+  /**
+   * @nullable
+   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+   */
+  actorId: string | null;
+  /** @nullable */
+  reason: string | null;
+  /** @nullable */
+  evidence: string | null;
+  /** @nullable */
+  approved: boolean | null;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  createdAt: string;
+};
+
+export type OrderSettlementControllerVerifyDelivery200Data = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  /**
+   * @nullable
+   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+   */
+  paymentId: string | null;
+  paymentMethod: OrderSettlementControllerVerifyDelivery200DataPaymentMethod;
+  /**
+   * @nullable
+   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+   */
+  checkoutId: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  handoverBy: string | null;
+  handoverReviewRequired: boolean;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  deliveryObservedAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  receiptConfirmedAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  deliveryVerifiedAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  disputeDeadlineAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  carrierReturnedAt: string | null;
+  /** @nullable */
+  cancelState: OrderSettlementControllerVerifyDelivery200DataCancelState;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  cancelRequestedAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  cancelRespondBy: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  cancelReviewUntil: string | null;
+  /** @nullable */
+  cancelDecisionReason: string | null;
+  /** @nullable */
+  cancelDecisionEvidence: string | null;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  shopId: string;
+  shopName: string;
+  status: OrderSettlementControllerVerifyDelivery200DataStatus;
+  /**
+   * @minimum -9007199254740991
+   * @maximum 9007199254740991
+   */
+  subtotal: number;
+  /**
+   * @minimum -9007199254740991
+   * @maximum 9007199254740991
+   */
+  shippingFee: number;
+  /**
+   * @minimum -9007199254740991
+   * @maximum 9007199254740991
+   */
+  total: number;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  sellerConfirmBy: string;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  acceptedAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  cancelledAt: string | null;
+  /** @nullable */
+  cancellationReason: OrderSettlementControllerVerifyDelivery200DataCancellationReason;
+  /** @nullable */
+  cancellationNote: string | null;
+  address: OrderSettlementControllerVerifyDelivery200DataAddress;
+  items: OrderSettlementControllerVerifyDelivery200DataItemsItem[];
+  /** @items.pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  stockReleaseReviewIds: string[];
+  /** @nullable */
+  walletRefund?: OrderSettlementControllerVerifyDelivery200DataWalletRefund;
+  events?: OrderSettlementControllerVerifyDelivery200DataEventsItem[];
+};
+
+export type OrderSettlementControllerVerifyDelivery200 = {
+  statusCode: OrderSettlementControllerVerifyDelivery200StatusCode;
+  message: string;
+  data: OrderSettlementControllerVerifyDelivery200Data;
+};
+
+export type WalletControllerMineParams = {
+  /**
+   * @minimum 1
+   * @maximum 100
+   */
+  limit?: number;
+  /**
+   * @minimum 0
+   * @maximum 100000
+   */
+  offset?: number;
+};
+
+export type WalletControllerMine200StatusCode =
+  (typeof WalletControllerMine200StatusCode)[keyof typeof WalletControllerMine200StatusCode];
+
+export const WalletControllerMine200StatusCode = {
+  NUMBER_200: 200,
+} as const;
+
+export type WalletControllerMine200DataCurrency =
+  (typeof WalletControllerMine200DataCurrency)[keyof typeof WalletControllerMine200DataCurrency];
+
+export const WalletControllerMine200DataCurrency = {
+  VND: 'VND',
+} as const;
+
+export type WalletControllerMine200DataCreditsItemReason =
+  (typeof WalletControllerMine200DataCreditsItemReason)[keyof typeof WalletControllerMine200DataCreditsItemReason];
+
+export const WalletControllerMine200DataCreditsItemReason = {
+  ORDER_CANCELLED: 'ORDER_CANCELLED',
+} as const;
+
+export type WalletControllerMine200DataCreditsItem = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  orderId: string;
+  /**
+   * @maximum 2147483647
+   * @exclusiveMinimum 0
+   */
+  amount: number;
+  reason: WalletControllerMine200DataCreditsItemReason;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  createdAt: string;
+};
+
+export type WalletControllerMine200Data = {
+  /**
+   * @minimum 0
+   * @maximum 9007199254740991
+   */
+  balance: number;
+  currency: WalletControllerMine200DataCurrency;
+  credits: WalletControllerMine200DataCreditsItem[];
+};
+
+export type WalletControllerMine200 = {
+  statusCode: WalletControllerMine200StatusCode;
+  message: string;
+  data: WalletControllerMine200Data;
+};
+
+export type DisputeControllerOpenBodyKind =
+  (typeof DisputeControllerOpenBodyKind)[keyof typeof DisputeControllerOpenBodyKind];
+
+export const DisputeControllerOpenBodyKind = {
+  WRONG_ITEM: 'WRONG_ITEM',
+  NOT_AS_DESCRIBED: 'NOT_AS_DESCRIBED',
+  MISSING_ITEM: 'MISSING_ITEM',
+  TRANSIT_DAMAGE: 'TRANSIT_DAMAGE',
+} as const;
+
+export type DisputeControllerOpenBody = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  productId: string;
+  kind: DisputeControllerOpenBodyKind;
+  /**
+   * @minLength 1
+   * @maxLength 2000
+   */
+  description: string;
+  /**
+   * @maxItems 10
+   * @items.pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+   */
+  evidenceIds?: string[];
+};
+
+export type DisputeControllerOpen200StatusCode =
+  (typeof DisputeControllerOpen200StatusCode)[keyof typeof DisputeControllerOpen200StatusCode];
+
+export const DisputeControllerOpen200StatusCode = {
+  NUMBER_200: 200,
+} as const;
+
+export type DisputeControllerOpen200DataKind =
+  (typeof DisputeControllerOpen200DataKind)[keyof typeof DisputeControllerOpen200DataKind];
+
+export const DisputeControllerOpen200DataKind = {
+  WRONG_ITEM: 'WRONG_ITEM',
+  NOT_AS_DESCRIBED: 'NOT_AS_DESCRIBED',
+  MISSING_ITEM: 'MISSING_ITEM',
+  TRANSIT_DAMAGE: 'TRANSIT_DAMAGE',
+} as const;
+
+export type DisputeControllerOpen200DataStatus =
+  (typeof DisputeControllerOpen200DataStatus)[keyof typeof DisputeControllerOpen200DataStatus];
+
+export const DisputeControllerOpen200DataStatus = {
+  NEEDS_EVIDENCE: 'NEEDS_EVIDENCE',
+  ACTIVE: 'ACTIVE',
+  AWAITING_APPEAL: 'AWAITING_APPEAL',
+  CLOSED_INCOMPLETE: 'CLOSED_INCOMPLETE',
+} as const;
+
+export type DisputeControllerOpen200Data = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  caseId: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  productId: string;
+  kind: DisputeControllerOpen200DataKind;
+  description: string;
+  status: DisputeControllerOpen200DataStatus;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  supplementBy: string;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  validAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  sellerNotifiedAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  sellerRespondBy: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  reviewDueAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  maxReviewDueAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  extendedAt: string | null;
+  /** @nullable */
+  extensionReason: string | null;
+  calendarMissing: boolean;
+  reviewOverdue: boolean;
+  sellerResponseOverdue: boolean;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  escalatedAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  escalationDueAt: string | null;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  createdAt: string;
+};
+
+export type DisputeControllerOpen200 = {
+  statusCode: DisputeControllerOpen200StatusCode;
+  message: string;
+  data: DisputeControllerOpen200Data;
+};
+
+export type DisputeControllerSupplementBody = {
+  /**
+   * @minItems 1
+   * @maxItems 10
+   * @items.pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+   */
+  evidenceIds: string[];
+};
+
+export type DisputeControllerSupplement200StatusCode =
+  (typeof DisputeControllerSupplement200StatusCode)[keyof typeof DisputeControllerSupplement200StatusCode];
+
+export const DisputeControllerSupplement200StatusCode = {
+  NUMBER_200: 200,
+} as const;
+
+export type DisputeControllerSupplement200DataKind =
+  (typeof DisputeControllerSupplement200DataKind)[keyof typeof DisputeControllerSupplement200DataKind];
+
+export const DisputeControllerSupplement200DataKind = {
+  WRONG_ITEM: 'WRONG_ITEM',
+  NOT_AS_DESCRIBED: 'NOT_AS_DESCRIBED',
+  MISSING_ITEM: 'MISSING_ITEM',
+  TRANSIT_DAMAGE: 'TRANSIT_DAMAGE',
+} as const;
+
+export type DisputeControllerSupplement200DataStatus =
+  (typeof DisputeControllerSupplement200DataStatus)[keyof typeof DisputeControllerSupplement200DataStatus];
+
+export const DisputeControllerSupplement200DataStatus = {
+  NEEDS_EVIDENCE: 'NEEDS_EVIDENCE',
+  ACTIVE: 'ACTIVE',
+  AWAITING_APPEAL: 'AWAITING_APPEAL',
+  CLOSED_INCOMPLETE: 'CLOSED_INCOMPLETE',
+} as const;
+
+export type DisputeControllerSupplement200Data = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  caseId: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  productId: string;
+  kind: DisputeControllerSupplement200DataKind;
+  description: string;
+  status: DisputeControllerSupplement200DataStatus;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  supplementBy: string;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  validAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  sellerNotifiedAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  sellerRespondBy: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  reviewDueAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  maxReviewDueAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  extendedAt: string | null;
+  /** @nullable */
+  extensionReason: string | null;
+  calendarMissing: boolean;
+  reviewOverdue: boolean;
+  sellerResponseOverdue: boolean;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  escalatedAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  escalationDueAt: string | null;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  createdAt: string;
+};
+
+export type DisputeControllerSupplement200 = {
+  statusCode: DisputeControllerSupplement200StatusCode;
+  message: string;
+  data: DisputeControllerSupplement200Data;
+};
+
+export type DisputeControllerReplyBody = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  requestId: string;
+  /**
+   * @minLength 1
+   * @maxLength 2000
+   */
+  text: string;
+  /**
+   * @maxItems 10
+   * @items.pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+   */
+  evidenceIds?: string[];
+};
+
+export type DisputeControllerReply200StatusCode =
+  (typeof DisputeControllerReply200StatusCode)[keyof typeof DisputeControllerReply200StatusCode];
+
+export const DisputeControllerReply200StatusCode = {
+  NUMBER_200: 200,
+} as const;
+
+export type DisputeControllerReply200DataParty =
+  (typeof DisputeControllerReply200DataParty)[keyof typeof DisputeControllerReply200DataParty];
+
+export const DisputeControllerReply200DataParty = {
+  BUYER: 'BUYER',
+  SELLER: 'SELLER',
+} as const;
+
+export type DisputeControllerReply200Data = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  issueId: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  actorId: string;
+  party: DisputeControllerReply200DataParty;
+  text: string;
+  /** @items.pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  evidenceIds: string[];
+  /** @nullable */
+  late: boolean | null;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  createdAt: string;
+};
+
+export type DisputeControllerReply200 = {
+  statusCode: DisputeControllerReply200StatusCode;
+  message: string;
+  data: DisputeControllerReply200Data;
+};
+
+export type DisputeControllerDetailParams = {
+  /**
+   * @minimum 0
+   * @maximum 100000
+   */
+  offset?: number;
+};
+
+export type DisputeControllerDetail200StatusCode =
+  (typeof DisputeControllerDetail200StatusCode)[keyof typeof DisputeControllerDetail200StatusCode];
+
+export const DisputeControllerDetail200StatusCode = {
+  NUMBER_200: 200,
+} as const;
+
+export type DisputeControllerDetail200DataState =
+  (typeof DisputeControllerDetail200DataState)[keyof typeof DisputeControllerDetail200DataState];
+
+export const DisputeControllerDetail200DataState = {
+  OPEN: 'OPEN',
+  CLOSED: 'CLOSED',
+} as const;
+
+export type DisputeControllerDetail200DataIssuesItemKind =
+  (typeof DisputeControllerDetail200DataIssuesItemKind)[keyof typeof DisputeControllerDetail200DataIssuesItemKind];
+
+export const DisputeControllerDetail200DataIssuesItemKind = {
+  WRONG_ITEM: 'WRONG_ITEM',
+  NOT_AS_DESCRIBED: 'NOT_AS_DESCRIBED',
+  MISSING_ITEM: 'MISSING_ITEM',
+  TRANSIT_DAMAGE: 'TRANSIT_DAMAGE',
+} as const;
+
+export type DisputeControllerDetail200DataIssuesItemStatus =
+  (typeof DisputeControllerDetail200DataIssuesItemStatus)[keyof typeof DisputeControllerDetail200DataIssuesItemStatus];
+
+export const DisputeControllerDetail200DataIssuesItemStatus = {
+  NEEDS_EVIDENCE: 'NEEDS_EVIDENCE',
+  ACTIVE: 'ACTIVE',
+  AWAITING_APPEAL: 'AWAITING_APPEAL',
+  CLOSED_INCOMPLETE: 'CLOSED_INCOMPLETE',
+} as const;
+
+export type DisputeControllerDetail200DataIssuesItem = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  caseId: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  productId: string;
+  kind: DisputeControllerDetail200DataIssuesItemKind;
+  description: string;
+  status: DisputeControllerDetail200DataIssuesItemStatus;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  supplementBy: string;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  validAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  sellerNotifiedAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  sellerRespondBy: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  reviewDueAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  maxReviewDueAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  extendedAt: string | null;
+  /** @nullable */
+  extensionReason: string | null;
+  calendarMissing: boolean;
+  reviewOverdue: boolean;
+  sellerResponseOverdue: boolean;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  escalatedAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  escalationDueAt: string | null;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  createdAt: string;
+};
+
+export type DisputeControllerDetail200DataDecisionsItemOutcome =
+  (typeof DisputeControllerDetail200DataDecisionsItemOutcome)[keyof typeof DisputeControllerDetail200DataDecisionsItemOutcome];
+
+export const DisputeControllerDetail200DataDecisionsItemOutcome = {
+  UPHOLD_CLAIM: 'UPHOLD_CLAIM',
+  REJECT_CLAIM: 'REJECT_CLAIM',
+  REQUIRE_RETURN: 'REQUIRE_RETURN',
+} as const;
+
+export type DisputeControllerDetail200DataDecisionsItemResponsibility =
+  (typeof DisputeControllerDetail200DataDecisionsItemResponsibility)[keyof typeof DisputeControllerDetail200DataDecisionsItemResponsibility];
+
+export const DisputeControllerDetail200DataDecisionsItemResponsibility = {
+  SELLER: 'SELLER',
+  BUYER: 'BUYER',
+  CARRIER: 'CARRIER',
+  UNDETERMINED: 'UNDETERMINED',
+} as const;
+
+export type DisputeControllerDetail200DataDecisionsItem = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  issueId: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  actorId: string;
+  outcome: DisputeControllerDetail200DataDecisionsItemOutcome;
+  responsibility: DisputeControllerDetail200DataDecisionsItemResponsibility;
+  reason: string;
+  evidenceAssessment: string;
+  /**
+   * @minimum 0
+   * @maximum 2147483647
+   */
+  itemPrice: number;
+  remedyKey: string;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  decidedAt: string;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  notifiedAt: string;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  appealUntil: string | null;
+  calendarMissing: boolean;
+  /** @nullable */
+  reviewLate: boolean | null;
+};
+
+export type DisputeControllerDetail200DataMessagesItemParty =
+  (typeof DisputeControllerDetail200DataMessagesItemParty)[keyof typeof DisputeControllerDetail200DataMessagesItemParty];
+
+export const DisputeControllerDetail200DataMessagesItemParty = {
+  BUYER: 'BUYER',
+  SELLER: 'SELLER',
+} as const;
+
+export type DisputeControllerDetail200DataMessagesItem = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  issueId: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  actorId: string;
+  party: DisputeControllerDetail200DataMessagesItemParty;
+  text: string;
+  /** @items.pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  evidenceIds: string[];
+  /** @nullable */
+  late: boolean | null;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  createdAt: string;
+};
+
+export type DisputeControllerDetail200DataEvidenceItemStatus =
+  (typeof DisputeControllerDetail200DataEvidenceItemStatus)[keyof typeof DisputeControllerDetail200DataEvidenceItemStatus];
+
+export const DisputeControllerDetail200DataEvidenceItemStatus = {
+  UPLOADING: 'UPLOADING',
+  READY: 'READY',
+} as const;
+
+export type DisputeControllerDetail200DataEvidenceItem = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  mimeType: string;
+  /**
+   * @maximum 9007199254740991
+   * @exclusiveMinimum 0
+   */
+  sizeBytes: number;
+  tags: string[];
+  status: DisputeControllerDetail200DataEvidenceItemStatus;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  readyAt: string | null;
+};
+
+export type DisputeControllerDetail200DataAttachmentsItem = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  issueId: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  evidenceId: string;
+};
+
+export type DisputeControllerDetail200DataNoticesItemAction =
+  (typeof DisputeControllerDetail200DataNoticesItemAction)[keyof typeof DisputeControllerDetail200DataNoticesItemAction];
+
+export const DisputeControllerDetail200DataNoticesItemAction = {
+  OPENED: 'OPENED',
+  VALIDATED: 'VALIDATED',
+  SUPPLEMENTED: 'SUPPLEMENTED',
+  CLOSED_INCOMPLETE: 'CLOSED_INCOMPLETE',
+  REPLIED: 'REPLIED',
+  EXTENDED: 'EXTENDED',
+  OVERDUE: 'OVERDUE',
+  ESCALATED: 'ESCALATED',
+  DECIDED: 'DECIDED',
+} as const;
+
+export type DisputeControllerDetail200DataNoticesItem = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  issueId: string;
+  action: DisputeControllerDetail200DataNoticesItemAction;
+  reason: string;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  createdAt: string;
+};
+
+export type DisputeControllerDetail200Data = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  orderId: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  buyerId: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  shopId: string;
+  state: DisputeControllerDetail200DataState;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  createdAt: string;
+  issues: DisputeControllerDetail200DataIssuesItem[];
+  decisions: DisputeControllerDetail200DataDecisionsItem[];
+  messages: DisputeControllerDetail200DataMessagesItem[];
+  evidence: DisputeControllerDetail200DataEvidenceItem[];
+  attachments: DisputeControllerDetail200DataAttachmentsItem[];
+  notices: DisputeControllerDetail200DataNoticesItem[];
+};
+
+export type DisputeControllerDetail200 = {
+  statusCode: DisputeControllerDetail200StatusCode;
+  message: string;
+  data: DisputeControllerDetail200Data;
+};
+
+export type DisputeControllerMineParams = {
+  /**
+   * @minimum 0
+   * @maximum 100000
+   */
+  offset?: number;
+};
+
+export type DisputeControllerMine200StatusCode =
+  (typeof DisputeControllerMine200StatusCode)[keyof typeof DisputeControllerMine200StatusCode];
+
+export const DisputeControllerMine200StatusCode = {
+  NUMBER_200: 200,
+} as const;
+
+export type DisputeControllerMine200DataItemState =
+  (typeof DisputeControllerMine200DataItemState)[keyof typeof DisputeControllerMine200DataItemState];
+
+export const DisputeControllerMine200DataItemState = {
+  OPEN: 'OPEN',
+  CLOSED: 'CLOSED',
+} as const;
+
+export type DisputeControllerMine200DataItemIssuesItemKind =
+  (typeof DisputeControllerMine200DataItemIssuesItemKind)[keyof typeof DisputeControllerMine200DataItemIssuesItemKind];
+
+export const DisputeControllerMine200DataItemIssuesItemKind = {
+  WRONG_ITEM: 'WRONG_ITEM',
+  NOT_AS_DESCRIBED: 'NOT_AS_DESCRIBED',
+  MISSING_ITEM: 'MISSING_ITEM',
+  TRANSIT_DAMAGE: 'TRANSIT_DAMAGE',
+} as const;
+
+export type DisputeControllerMine200DataItemIssuesItemStatus =
+  (typeof DisputeControllerMine200DataItemIssuesItemStatus)[keyof typeof DisputeControllerMine200DataItemIssuesItemStatus];
+
+export const DisputeControllerMine200DataItemIssuesItemStatus = {
+  NEEDS_EVIDENCE: 'NEEDS_EVIDENCE',
+  ACTIVE: 'ACTIVE',
+  AWAITING_APPEAL: 'AWAITING_APPEAL',
+  CLOSED_INCOMPLETE: 'CLOSED_INCOMPLETE',
+} as const;
+
+export type DisputeControllerMine200DataItemIssuesItem = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  caseId: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  productId: string;
+  kind: DisputeControllerMine200DataItemIssuesItemKind;
+  description: string;
+  status: DisputeControllerMine200DataItemIssuesItemStatus;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  supplementBy: string;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  validAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  sellerNotifiedAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  sellerRespondBy: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  reviewDueAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  maxReviewDueAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  extendedAt: string | null;
+  /** @nullable */
+  extensionReason: string | null;
+  calendarMissing: boolean;
+  reviewOverdue: boolean;
+  sellerResponseOverdue: boolean;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  escalatedAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  escalationDueAt: string | null;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  createdAt: string;
+};
+
+export type DisputeControllerMine200DataItem = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  orderId: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  buyerId: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  shopId: string;
+  state: DisputeControllerMine200DataItemState;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  createdAt: string;
+  issues: DisputeControllerMine200DataItemIssuesItem[];
+};
+
+export type DisputeControllerMine200 = {
+  statusCode: DisputeControllerMine200StatusCode;
+  message: string;
+  data: DisputeControllerMine200DataItem[];
+};
+
+export type DisputeControllerShopParams = {
+  /**
+   * @minimum 0
+   * @maximum 100000
+   */
+  offset?: number;
+};
+
+export type DisputeControllerShop200StatusCode =
+  (typeof DisputeControllerShop200StatusCode)[keyof typeof DisputeControllerShop200StatusCode];
+
+export const DisputeControllerShop200StatusCode = {
+  NUMBER_200: 200,
+} as const;
+
+export type DisputeControllerShop200DataItemState =
+  (typeof DisputeControllerShop200DataItemState)[keyof typeof DisputeControllerShop200DataItemState];
+
+export const DisputeControllerShop200DataItemState = {
+  OPEN: 'OPEN',
+  CLOSED: 'CLOSED',
+} as const;
+
+export type DisputeControllerShop200DataItemIssuesItemKind =
+  (typeof DisputeControllerShop200DataItemIssuesItemKind)[keyof typeof DisputeControllerShop200DataItemIssuesItemKind];
+
+export const DisputeControllerShop200DataItemIssuesItemKind = {
+  WRONG_ITEM: 'WRONG_ITEM',
+  NOT_AS_DESCRIBED: 'NOT_AS_DESCRIBED',
+  MISSING_ITEM: 'MISSING_ITEM',
+  TRANSIT_DAMAGE: 'TRANSIT_DAMAGE',
+} as const;
+
+export type DisputeControllerShop200DataItemIssuesItemStatus =
+  (typeof DisputeControllerShop200DataItemIssuesItemStatus)[keyof typeof DisputeControllerShop200DataItemIssuesItemStatus];
+
+export const DisputeControllerShop200DataItemIssuesItemStatus = {
+  NEEDS_EVIDENCE: 'NEEDS_EVIDENCE',
+  ACTIVE: 'ACTIVE',
+  AWAITING_APPEAL: 'AWAITING_APPEAL',
+  CLOSED_INCOMPLETE: 'CLOSED_INCOMPLETE',
+} as const;
+
+export type DisputeControllerShop200DataItemIssuesItem = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  caseId: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  productId: string;
+  kind: DisputeControllerShop200DataItemIssuesItemKind;
+  description: string;
+  status: DisputeControllerShop200DataItemIssuesItemStatus;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  supplementBy: string;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  validAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  sellerNotifiedAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  sellerRespondBy: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  reviewDueAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  maxReviewDueAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  extendedAt: string | null;
+  /** @nullable */
+  extensionReason: string | null;
+  calendarMissing: boolean;
+  reviewOverdue: boolean;
+  sellerResponseOverdue: boolean;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  escalatedAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  escalationDueAt: string | null;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  createdAt: string;
+};
+
+export type DisputeControllerShop200DataItem = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  orderId: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  buyerId: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  shopId: string;
+  state: DisputeControllerShop200DataItemState;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  createdAt: string;
+  issues: DisputeControllerShop200DataItemIssuesItem[];
+};
+
+export type DisputeControllerShop200 = {
+  statusCode: DisputeControllerShop200StatusCode;
+  message: string;
+  data: DisputeControllerShop200DataItem[];
+};
+
+export type DisputeControllerAdminListParams = {
+  /**
+   * @minimum 0
+   * @maximum 100000
+   */
+  offset?: number;
+};
+
+export type DisputeControllerAdminList200StatusCode =
+  (typeof DisputeControllerAdminList200StatusCode)[keyof typeof DisputeControllerAdminList200StatusCode];
+
+export const DisputeControllerAdminList200StatusCode = {
+  NUMBER_200: 200,
+} as const;
+
+export type DisputeControllerAdminList200DataItemState =
+  (typeof DisputeControllerAdminList200DataItemState)[keyof typeof DisputeControllerAdminList200DataItemState];
+
+export const DisputeControllerAdminList200DataItemState = {
+  OPEN: 'OPEN',
+  CLOSED: 'CLOSED',
+} as const;
+
+export type DisputeControllerAdminList200DataItemIssuesItemKind =
+  (typeof DisputeControllerAdminList200DataItemIssuesItemKind)[keyof typeof DisputeControllerAdminList200DataItemIssuesItemKind];
+
+export const DisputeControllerAdminList200DataItemIssuesItemKind = {
+  WRONG_ITEM: 'WRONG_ITEM',
+  NOT_AS_DESCRIBED: 'NOT_AS_DESCRIBED',
+  MISSING_ITEM: 'MISSING_ITEM',
+  TRANSIT_DAMAGE: 'TRANSIT_DAMAGE',
+} as const;
+
+export type DisputeControllerAdminList200DataItemIssuesItemStatus =
+  (typeof DisputeControllerAdminList200DataItemIssuesItemStatus)[keyof typeof DisputeControllerAdminList200DataItemIssuesItemStatus];
+
+export const DisputeControllerAdminList200DataItemIssuesItemStatus = {
+  NEEDS_EVIDENCE: 'NEEDS_EVIDENCE',
+  ACTIVE: 'ACTIVE',
+  AWAITING_APPEAL: 'AWAITING_APPEAL',
+  CLOSED_INCOMPLETE: 'CLOSED_INCOMPLETE',
+} as const;
+
+export type DisputeControllerAdminList200DataItemIssuesItem = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  caseId: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  productId: string;
+  kind: DisputeControllerAdminList200DataItemIssuesItemKind;
+  description: string;
+  status: DisputeControllerAdminList200DataItemIssuesItemStatus;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  supplementBy: string;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  validAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  sellerNotifiedAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  sellerRespondBy: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  reviewDueAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  maxReviewDueAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  extendedAt: string | null;
+  /** @nullable */
+  extensionReason: string | null;
+  calendarMissing: boolean;
+  reviewOverdue: boolean;
+  sellerResponseOverdue: boolean;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  escalatedAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  escalationDueAt: string | null;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  createdAt: string;
+};
+
+export type DisputeControllerAdminList200DataItem = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  orderId: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  buyerId: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  shopId: string;
+  state: DisputeControllerAdminList200DataItemState;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  createdAt: string;
+  issues: DisputeControllerAdminList200DataItemIssuesItem[];
+};
+
+export type DisputeControllerAdminList200 = {
+  statusCode: DisputeControllerAdminList200StatusCode;
+  message: string;
+  data: DisputeControllerAdminList200DataItem[];
+};
+
+export type DisputeControllerAdminDetailParams = {
+  /**
+   * @minimum 0
+   * @maximum 100000
+   */
+  offset?: number;
+};
+
+export type DisputeControllerAdminDetail200StatusCode =
+  (typeof DisputeControllerAdminDetail200StatusCode)[keyof typeof DisputeControllerAdminDetail200StatusCode];
+
+export const DisputeControllerAdminDetail200StatusCode = {
+  NUMBER_200: 200,
+} as const;
+
+export type DisputeControllerAdminDetail200DataState =
+  (typeof DisputeControllerAdminDetail200DataState)[keyof typeof DisputeControllerAdminDetail200DataState];
+
+export const DisputeControllerAdminDetail200DataState = {
+  OPEN: 'OPEN',
+  CLOSED: 'CLOSED',
+} as const;
+
+export type DisputeControllerAdminDetail200DataIssuesItemKind =
+  (typeof DisputeControllerAdminDetail200DataIssuesItemKind)[keyof typeof DisputeControllerAdminDetail200DataIssuesItemKind];
+
+export const DisputeControllerAdminDetail200DataIssuesItemKind = {
+  WRONG_ITEM: 'WRONG_ITEM',
+  NOT_AS_DESCRIBED: 'NOT_AS_DESCRIBED',
+  MISSING_ITEM: 'MISSING_ITEM',
+  TRANSIT_DAMAGE: 'TRANSIT_DAMAGE',
+} as const;
+
+export type DisputeControllerAdminDetail200DataIssuesItemStatus =
+  (typeof DisputeControllerAdminDetail200DataIssuesItemStatus)[keyof typeof DisputeControllerAdminDetail200DataIssuesItemStatus];
+
+export const DisputeControllerAdminDetail200DataIssuesItemStatus = {
+  NEEDS_EVIDENCE: 'NEEDS_EVIDENCE',
+  ACTIVE: 'ACTIVE',
+  AWAITING_APPEAL: 'AWAITING_APPEAL',
+  CLOSED_INCOMPLETE: 'CLOSED_INCOMPLETE',
+} as const;
+
+export type DisputeControllerAdminDetail200DataIssuesItem = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  caseId: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  productId: string;
+  kind: DisputeControllerAdminDetail200DataIssuesItemKind;
+  description: string;
+  status: DisputeControllerAdminDetail200DataIssuesItemStatus;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  supplementBy: string;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  validAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  sellerNotifiedAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  sellerRespondBy: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  reviewDueAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  maxReviewDueAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  extendedAt: string | null;
+  /** @nullable */
+  extensionReason: string | null;
+  calendarMissing: boolean;
+  reviewOverdue: boolean;
+  sellerResponseOverdue: boolean;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  escalatedAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  escalationDueAt: string | null;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  createdAt: string;
+};
+
+export type DisputeControllerAdminDetail200DataDecisionsItemOutcome =
+  (typeof DisputeControllerAdminDetail200DataDecisionsItemOutcome)[keyof typeof DisputeControllerAdminDetail200DataDecisionsItemOutcome];
+
+export const DisputeControllerAdminDetail200DataDecisionsItemOutcome = {
+  UPHOLD_CLAIM: 'UPHOLD_CLAIM',
+  REJECT_CLAIM: 'REJECT_CLAIM',
+  REQUIRE_RETURN: 'REQUIRE_RETURN',
+} as const;
+
+export type DisputeControllerAdminDetail200DataDecisionsItemResponsibility =
+  (typeof DisputeControllerAdminDetail200DataDecisionsItemResponsibility)[keyof typeof DisputeControllerAdminDetail200DataDecisionsItemResponsibility];
+
+export const DisputeControllerAdminDetail200DataDecisionsItemResponsibility = {
+  SELLER: 'SELLER',
+  BUYER: 'BUYER',
+  CARRIER: 'CARRIER',
+  UNDETERMINED: 'UNDETERMINED',
+} as const;
+
+export type DisputeControllerAdminDetail200DataDecisionsItem = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  issueId: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  actorId: string;
+  outcome: DisputeControllerAdminDetail200DataDecisionsItemOutcome;
+  responsibility: DisputeControllerAdminDetail200DataDecisionsItemResponsibility;
+  reason: string;
+  evidenceAssessment: string;
+  /**
+   * @minimum 0
+   * @maximum 2147483647
+   */
+  itemPrice: number;
+  remedyKey: string;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  decidedAt: string;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  notifiedAt: string;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  appealUntil: string | null;
+  calendarMissing: boolean;
+  /** @nullable */
+  reviewLate: boolean | null;
+};
+
+export type DisputeControllerAdminDetail200DataMessagesItemParty =
+  (typeof DisputeControllerAdminDetail200DataMessagesItemParty)[keyof typeof DisputeControllerAdminDetail200DataMessagesItemParty];
+
+export const DisputeControllerAdminDetail200DataMessagesItemParty = {
+  BUYER: 'BUYER',
+  SELLER: 'SELLER',
+} as const;
+
+export type DisputeControllerAdminDetail200DataMessagesItem = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  issueId: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  actorId: string;
+  party: DisputeControllerAdminDetail200DataMessagesItemParty;
+  text: string;
+  /** @items.pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  evidenceIds: string[];
+  /** @nullable */
+  late: boolean | null;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  createdAt: string;
+};
+
+export type DisputeControllerAdminDetail200DataEvidenceItemStatus =
+  (typeof DisputeControllerAdminDetail200DataEvidenceItemStatus)[keyof typeof DisputeControllerAdminDetail200DataEvidenceItemStatus];
+
+export const DisputeControllerAdminDetail200DataEvidenceItemStatus = {
+  UPLOADING: 'UPLOADING',
+  READY: 'READY',
+} as const;
+
+export type DisputeControllerAdminDetail200DataEvidenceItem = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  mimeType: string;
+  /**
+   * @maximum 9007199254740991
+   * @exclusiveMinimum 0
+   */
+  sizeBytes: number;
+  tags: string[];
+  status: DisputeControllerAdminDetail200DataEvidenceItemStatus;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  readyAt: string | null;
+};
+
+export type DisputeControllerAdminDetail200DataAttachmentsItem = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  issueId: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  evidenceId: string;
+};
+
+export type DisputeControllerAdminDetail200DataNoticesItemAction =
+  (typeof DisputeControllerAdminDetail200DataNoticesItemAction)[keyof typeof DisputeControllerAdminDetail200DataNoticesItemAction];
+
+export const DisputeControllerAdminDetail200DataNoticesItemAction = {
+  OPENED: 'OPENED',
+  VALIDATED: 'VALIDATED',
+  SUPPLEMENTED: 'SUPPLEMENTED',
+  CLOSED_INCOMPLETE: 'CLOSED_INCOMPLETE',
+  REPLIED: 'REPLIED',
+  EXTENDED: 'EXTENDED',
+  OVERDUE: 'OVERDUE',
+  ESCALATED: 'ESCALATED',
+  DECIDED: 'DECIDED',
+} as const;
+
+export type DisputeControllerAdminDetail200DataNoticesItem = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  issueId: string;
+  action: DisputeControllerAdminDetail200DataNoticesItemAction;
+  reason: string;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  createdAt: string;
+};
+
+export type DisputeControllerAdminDetail200Data = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  orderId: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  buyerId: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  shopId: string;
+  state: DisputeControllerAdminDetail200DataState;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  createdAt: string;
+  issues: DisputeControllerAdminDetail200DataIssuesItem[];
+  decisions: DisputeControllerAdminDetail200DataDecisionsItem[];
+  messages: DisputeControllerAdminDetail200DataMessagesItem[];
+  evidence: DisputeControllerAdminDetail200DataEvidenceItem[];
+  attachments: DisputeControllerAdminDetail200DataAttachmentsItem[];
+  notices: DisputeControllerAdminDetail200DataNoticesItem[];
+};
+
+export type DisputeControllerAdminDetail200 = {
+  statusCode: DisputeControllerAdminDetail200StatusCode;
+  message: string;
+  data: DisputeControllerAdminDetail200Data;
+};
+
+export type DisputeControllerExtendBody = {
+  /**
+   * @minLength 1
+   * @maxLength 1000
+   */
+  reason: string;
+};
+
+export type DisputeControllerExtend200StatusCode =
+  (typeof DisputeControllerExtend200StatusCode)[keyof typeof DisputeControllerExtend200StatusCode];
+
+export const DisputeControllerExtend200StatusCode = {
+  NUMBER_200: 200,
+} as const;
+
+export type DisputeControllerExtend200DataKind =
+  (typeof DisputeControllerExtend200DataKind)[keyof typeof DisputeControllerExtend200DataKind];
+
+export const DisputeControllerExtend200DataKind = {
+  WRONG_ITEM: 'WRONG_ITEM',
+  NOT_AS_DESCRIBED: 'NOT_AS_DESCRIBED',
+  MISSING_ITEM: 'MISSING_ITEM',
+  TRANSIT_DAMAGE: 'TRANSIT_DAMAGE',
+} as const;
+
+export type DisputeControllerExtend200DataStatus =
+  (typeof DisputeControllerExtend200DataStatus)[keyof typeof DisputeControllerExtend200DataStatus];
+
+export const DisputeControllerExtend200DataStatus = {
+  NEEDS_EVIDENCE: 'NEEDS_EVIDENCE',
+  ACTIVE: 'ACTIVE',
+  AWAITING_APPEAL: 'AWAITING_APPEAL',
+  CLOSED_INCOMPLETE: 'CLOSED_INCOMPLETE',
+} as const;
+
+export type DisputeControllerExtend200Data = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  caseId: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  productId: string;
+  kind: DisputeControllerExtend200DataKind;
+  description: string;
+  status: DisputeControllerExtend200DataStatus;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  supplementBy: string;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  validAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  sellerNotifiedAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  sellerRespondBy: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  reviewDueAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  maxReviewDueAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  extendedAt: string | null;
+  /** @nullable */
+  extensionReason: string | null;
+  calendarMissing: boolean;
+  reviewOverdue: boolean;
+  sellerResponseOverdue: boolean;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  escalatedAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  escalationDueAt: string | null;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  createdAt: string;
+};
+
+export type DisputeControllerExtend200 = {
+  statusCode: DisputeControllerExtend200StatusCode;
+  message: string;
+  data: DisputeControllerExtend200Data;
+};
+
+export type DisputeControllerUploadBodyMimeType =
+  (typeof DisputeControllerUploadBodyMimeType)[keyof typeof DisputeControllerUploadBodyMimeType];
+
+export const DisputeControllerUploadBodyMimeType = {
+  'image/jpeg': 'image/jpeg',
+  'image/png': 'image/png',
+  'image/webp': 'image/webp',
+  'video/mp4': 'video/mp4',
+  'video/webm': 'video/webm',
+} as const;
+
+export type DisputeControllerUploadBodyTagsItem =
+  (typeof DisputeControllerUploadBodyTagsItem)[keyof typeof DisputeControllerUploadBodyTagsItem];
+
+export const DisputeControllerUploadBodyTagsItem = {
+  ISSUE: 'ISSUE',
+  PARCEL: 'PARCEL',
+  LABEL: 'LABEL',
+  RECEIVED_ITEMS: 'RECEIVED_ITEMS',
+  DAMAGE: 'DAMAGE',
+  PACKING: 'PACKING',
+  UNBOX: 'UNBOX',
+} as const;
+
+export type DisputeControllerUploadBody = {
+  mimeType: DisputeControllerUploadBodyMimeType;
+  /**
+   * @maximum 9007199254740991
+   * @exclusiveMinimum 0
+   */
+  sizeBytes: number;
+  /**
+   * @minItems 1
+   * @maxItems 7
+   */
+  tags: DisputeControllerUploadBodyTagsItem[];
+};
+
+export type DisputeControllerUpload200StatusCode =
+  (typeof DisputeControllerUpload200StatusCode)[keyof typeof DisputeControllerUpload200StatusCode];
+
+export const DisputeControllerUpload200StatusCode = {
+  NUMBER_200: 200,
+} as const;
+
+export type DisputeControllerUpload200DataMethod =
+  (typeof DisputeControllerUpload200DataMethod)[keyof typeof DisputeControllerUpload200DataMethod];
+
+export const DisputeControllerUpload200DataMethod = {
+  PUT: 'PUT',
+} as const;
+
+export type DisputeControllerUpload200DataHeaders = { [key: string]: string };
+
+export type DisputeControllerUpload200Data = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  uploadUrl: string;
+  method: DisputeControllerUpload200DataMethod;
+  headers: DisputeControllerUpload200DataHeaders;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  expiresAt: string;
+};
+
+export type DisputeControllerUpload200 = {
+  statusCode: DisputeControllerUpload200StatusCode;
+  message: string;
+  data: DisputeControllerUpload200Data;
+};
+
+export type DisputeControllerConfirmBody = { [key: string]: unknown };
+
+export type DisputeControllerConfirm200StatusCode =
+  (typeof DisputeControllerConfirm200StatusCode)[keyof typeof DisputeControllerConfirm200StatusCode];
+
+export const DisputeControllerConfirm200StatusCode = {
+  NUMBER_200: 200,
+} as const;
+
+export type DisputeControllerConfirm200DataStatus =
+  (typeof DisputeControllerConfirm200DataStatus)[keyof typeof DisputeControllerConfirm200DataStatus];
+
+export const DisputeControllerConfirm200DataStatus = {
+  UPLOADING: 'UPLOADING',
+  READY: 'READY',
+} as const;
+
+export type DisputeControllerConfirm200Data = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  mimeType: string;
+  /**
+   * @maximum 9007199254740991
+   * @exclusiveMinimum 0
+   */
+  sizeBytes: number;
+  tags: string[];
+  status: DisputeControllerConfirm200DataStatus;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  readyAt: string | null;
+};
+
+export type DisputeControllerConfirm200 = {
+  statusCode: DisputeControllerConfirm200StatusCode;
+  message: string;
+  data: DisputeControllerConfirm200Data;
+};
+
+export type DisputeControllerDownload200StatusCode =
+  (typeof DisputeControllerDownload200StatusCode)[keyof typeof DisputeControllerDownload200StatusCode];
+
+export const DisputeControllerDownload200StatusCode = {
+  NUMBER_200: 200,
+} as const;
+
+export type DisputeControllerDownload200DataHeaders = { [key: string]: string };
+
+export type DisputeControllerDownload200Data = {
+  url: string;
+  headers: DisputeControllerDownload200DataHeaders;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  expiresAt: string;
+};
+
+export type DisputeControllerDownload200 = {
+  statusCode: DisputeControllerDownload200StatusCode;
+  message: string;
+  data: DisputeControllerDownload200Data;
+};
+
+export type DisputeControllerAdminDownload200StatusCode =
+  (typeof DisputeControllerAdminDownload200StatusCode)[keyof typeof DisputeControllerAdminDownload200StatusCode];
+
+export const DisputeControllerAdminDownload200StatusCode = {
+  NUMBER_200: 200,
+} as const;
+
+export type DisputeControllerAdminDownload200DataHeaders = {
+  [key: string]: string;
+};
+
+export type DisputeControllerAdminDownload200Data = {
+  url: string;
+  headers: DisputeControllerAdminDownload200DataHeaders;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  expiresAt: string;
+};
+
+export type DisputeControllerAdminDownload200 = {
+  statusCode: DisputeControllerAdminDownload200StatusCode;
+  message: string;
+  data: DisputeControllerAdminDownload200Data;
+};
+
+export type DisputeAdjudicationControllerReviewParams = {
+  /**
+   * @minimum 0
+   * @maximum 100000
+   */
+  offset?: number;
+};
+
+export type DisputeAdjudicationControllerReview200StatusCode =
+  (typeof DisputeAdjudicationControllerReview200StatusCode)[keyof typeof DisputeAdjudicationControllerReview200StatusCode];
+
+export const DisputeAdjudicationControllerReview200StatusCode = {
+  NUMBER_200: 200,
+} as const;
+
+export type DisputeAdjudicationControllerReview200DataIssueKind =
+  (typeof DisputeAdjudicationControllerReview200DataIssueKind)[keyof typeof DisputeAdjudicationControllerReview200DataIssueKind];
+
+export const DisputeAdjudicationControllerReview200DataIssueKind = {
+  WRONG_ITEM: 'WRONG_ITEM',
+  NOT_AS_DESCRIBED: 'NOT_AS_DESCRIBED',
+  MISSING_ITEM: 'MISSING_ITEM',
+  TRANSIT_DAMAGE: 'TRANSIT_DAMAGE',
+} as const;
+
+export type DisputeAdjudicationControllerReview200DataIssueStatus =
+  (typeof DisputeAdjudicationControllerReview200DataIssueStatus)[keyof typeof DisputeAdjudicationControllerReview200DataIssueStatus];
+
+export const DisputeAdjudicationControllerReview200DataIssueStatus = {
+  NEEDS_EVIDENCE: 'NEEDS_EVIDENCE',
+  ACTIVE: 'ACTIVE',
+  AWAITING_APPEAL: 'AWAITING_APPEAL',
+  CLOSED_INCOMPLETE: 'CLOSED_INCOMPLETE',
+} as const;
+
+export type DisputeAdjudicationControllerReview200DataIssue = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  caseId: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  productId: string;
+  kind: DisputeAdjudicationControllerReview200DataIssueKind;
+  description: string;
+  status: DisputeAdjudicationControllerReview200DataIssueStatus;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  supplementBy: string;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  validAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  sellerNotifiedAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  sellerRespondBy: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  reviewDueAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  maxReviewDueAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  extendedAt: string | null;
+  /** @nullable */
+  extensionReason: string | null;
+  calendarMissing: boolean;
+  reviewOverdue: boolean;
+  sellerResponseOverdue: boolean;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  escalatedAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  escalationDueAt: string | null;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  createdAt: string;
+};
+
+export type DisputeAdjudicationControllerReview200DataEvidenceItemStatus =
+  (typeof DisputeAdjudicationControllerReview200DataEvidenceItemStatus)[keyof typeof DisputeAdjudicationControllerReview200DataEvidenceItemStatus];
+
+export const DisputeAdjudicationControllerReview200DataEvidenceItemStatus = {
+  UPLOADING: 'UPLOADING',
+  READY: 'READY',
+} as const;
+
+export type DisputeAdjudicationControllerReview200DataEvidenceItem = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  mimeType: string;
+  /**
+   * @maximum 9007199254740991
+   * @exclusiveMinimum 0
+   */
+  sizeBytes: number;
+  tags: string[];
+  status: DisputeAdjudicationControllerReview200DataEvidenceItemStatus;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  readyAt: string | null;
+};
+
+export type DisputeAdjudicationControllerReview200DataMessagesItemParty =
+  (typeof DisputeAdjudicationControllerReview200DataMessagesItemParty)[keyof typeof DisputeAdjudicationControllerReview200DataMessagesItemParty];
+
+export const DisputeAdjudicationControllerReview200DataMessagesItemParty = {
+  BUYER: 'BUYER',
+  SELLER: 'SELLER',
+} as const;
+
+export type DisputeAdjudicationControllerReview200DataMessagesItem = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  issueId: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  actorId: string;
+  party: DisputeAdjudicationControllerReview200DataMessagesItemParty;
+  text: string;
+  /** @items.pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  evidenceIds: string[];
+  /** @nullable */
+  late: boolean | null;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  createdAt: string;
+};
+
+export type DisputeAdjudicationControllerReview200DataOrder = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  orderId: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  shopId: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  buyerId: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  productId: string;
+  /**
+   * @minimum 0
+   * @maximum 2147483647
+   */
+  itemPrice: number;
+  /**
+   * @minimum -9007199254740991
+   * @maximum 9007199254740991
+   */
+  commissionBasisPoints: number;
+};
+
+export type DisputeAdjudicationControllerReview200DataDecisionOutcome =
+  (typeof DisputeAdjudicationControllerReview200DataDecisionOutcome)[keyof typeof DisputeAdjudicationControllerReview200DataDecisionOutcome];
+
+export const DisputeAdjudicationControllerReview200DataDecisionOutcome = {
+  UPHOLD_CLAIM: 'UPHOLD_CLAIM',
+  REJECT_CLAIM: 'REJECT_CLAIM',
+  REQUIRE_RETURN: 'REQUIRE_RETURN',
+} as const;
+
+export type DisputeAdjudicationControllerReview200DataDecisionResponsibility =
+  (typeof DisputeAdjudicationControllerReview200DataDecisionResponsibility)[keyof typeof DisputeAdjudicationControllerReview200DataDecisionResponsibility];
+
+export const DisputeAdjudicationControllerReview200DataDecisionResponsibility =
+  {
+    SELLER: 'SELLER',
+    BUYER: 'BUYER',
+    CARRIER: 'CARRIER',
+    UNDETERMINED: 'UNDETERMINED',
+  } as const;
+
+/**
+ * @nullable
+ */
+export type DisputeAdjudicationControllerReview200DataDecision = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  issueId: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  actorId: string;
+  outcome: DisputeAdjudicationControllerReview200DataDecisionOutcome;
+  responsibility: DisputeAdjudicationControllerReview200DataDecisionResponsibility;
+  reason: string;
+  evidenceAssessment: string;
+  /**
+   * @minimum 0
+   * @maximum 2147483647
+   */
+  itemPrice: number;
+  remedyKey: string;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  decidedAt: string;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  notifiedAt: string;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  appealUntil: string | null;
+  calendarMissing: boolean;
+  /** @nullable */
+  reviewLate: boolean | null;
+} | null;
+
+export type DisputeAdjudicationControllerReview200Data = {
+  reviewToken: string;
+  issue: DisputeAdjudicationControllerReview200DataIssue;
+  evidence: DisputeAdjudicationControllerReview200DataEvidenceItem[];
+  messages: DisputeAdjudicationControllerReview200DataMessagesItem[];
+  /**
+   * @minimum 0
+   * @maximum 9007199254740991
+   */
+  messageCount: number;
+  /**
+   * @minimum 0
+   * @maximum 9007199254740991
+   */
+  messageOffset: number;
+  order: DisputeAdjudicationControllerReview200DataOrder;
+  /** @nullable */
+  decision: DisputeAdjudicationControllerReview200DataDecision;
+};
+
+export type DisputeAdjudicationControllerReview200 = {
+  statusCode: DisputeAdjudicationControllerReview200StatusCode;
+  message: string;
+  data: DisputeAdjudicationControllerReview200Data;
+};
+
+export type DisputeAdjudicationControllerDecideBodyOutcome =
+  (typeof DisputeAdjudicationControllerDecideBodyOutcome)[keyof typeof DisputeAdjudicationControllerDecideBodyOutcome];
+
+export const DisputeAdjudicationControllerDecideBodyOutcome = {
+  UPHOLD_CLAIM: 'UPHOLD_CLAIM',
+  REJECT_CLAIM: 'REJECT_CLAIM',
+  REQUIRE_RETURN: 'REQUIRE_RETURN',
+} as const;
+
+export type DisputeAdjudicationControllerDecideBodyResponsibility =
+  (typeof DisputeAdjudicationControllerDecideBodyResponsibility)[keyof typeof DisputeAdjudicationControllerDecideBodyResponsibility];
+
+export const DisputeAdjudicationControllerDecideBodyResponsibility = {
+  SELLER: 'SELLER',
+  BUYER: 'BUYER',
+  CARRIER: 'CARRIER',
+  UNDETERMINED: 'UNDETERMINED',
+} as const;
+
+export type DisputeAdjudicationControllerDecideBody = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  requestId: string;
+  /** @pattern ^[a-f0-9]{64}$ */
+  reviewToken: string;
+  outcome: DisputeAdjudicationControllerDecideBodyOutcome;
+  responsibility: DisputeAdjudicationControllerDecideBodyResponsibility;
+  /**
+   * @minLength 1
+   * @maxLength 2000
+   */
+  reason: string;
+  /**
+   * @minLength 1
+   * @maxLength 4000
+   */
+  evidenceAssessment: string;
+};
+
+export type DisputeAdjudicationControllerDecide200StatusCode =
+  (typeof DisputeAdjudicationControllerDecide200StatusCode)[keyof typeof DisputeAdjudicationControllerDecide200StatusCode];
+
+export const DisputeAdjudicationControllerDecide200StatusCode = {
+  NUMBER_200: 200,
+} as const;
+
+export type DisputeAdjudicationControllerDecide200DataOutcome =
+  (typeof DisputeAdjudicationControllerDecide200DataOutcome)[keyof typeof DisputeAdjudicationControllerDecide200DataOutcome];
+
+export const DisputeAdjudicationControllerDecide200DataOutcome = {
+  UPHOLD_CLAIM: 'UPHOLD_CLAIM',
+  REJECT_CLAIM: 'REJECT_CLAIM',
+  REQUIRE_RETURN: 'REQUIRE_RETURN',
+} as const;
+
+export type DisputeAdjudicationControllerDecide200DataResponsibility =
+  (typeof DisputeAdjudicationControllerDecide200DataResponsibility)[keyof typeof DisputeAdjudicationControllerDecide200DataResponsibility];
+
+export const DisputeAdjudicationControllerDecide200DataResponsibility = {
+  SELLER: 'SELLER',
+  BUYER: 'BUYER',
+  CARRIER: 'CARRIER',
+  UNDETERMINED: 'UNDETERMINED',
+} as const;
+
+export type DisputeAdjudicationControllerDecide200Data = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  issueId: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  actorId: string;
+  outcome: DisputeAdjudicationControllerDecide200DataOutcome;
+  responsibility: DisputeAdjudicationControllerDecide200DataResponsibility;
+  reason: string;
+  evidenceAssessment: string;
+  /**
+   * @minimum 0
+   * @maximum 2147483647
+   */
+  itemPrice: number;
+  remedyKey: string;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  decidedAt: string;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  notifiedAt: string;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  appealUntil: string | null;
+  calendarMissing: boolean;
+  /** @nullable */
+  reviewLate: boolean | null;
+};
+
+export type DisputeAdjudicationControllerDecide200 = {
+  statusCode: DisputeAdjudicationControllerDecide200StatusCode;
+  message: string;
+  data: DisputeAdjudicationControllerDecide200Data;
+};
+
+export type CodControllerPlaceBody = {
+  /**
+   * @minimum 0
+   * @maximum 2147483647
+   */
+  expectedTotal: number;
+};
+
+export type CodControllerPlace200StatusCode =
+  (typeof CodControllerPlace200StatusCode)[keyof typeof CodControllerPlace200StatusCode];
+
+export const CodControllerPlace200StatusCode = {
+  NUMBER_200: 200,
+} as const;
+
+export type CodControllerPlace200DataItemPaymentMethod =
+  (typeof CodControllerPlace200DataItemPaymentMethod)[keyof typeof CodControllerPlace200DataItemPaymentMethod];
+
+export const CodControllerPlace200DataItemPaymentMethod = {
+  MOMO: 'MOMO',
+  COD: 'COD',
+} as const;
+
+/**
+ * @nullable
+ */
+export type CodControllerPlace200DataItemCancelState =
+  | (typeof CodControllerPlace200DataItemCancelState)[keyof typeof CodControllerPlace200DataItemCancelState]
+  | null;
+
+export const CodControllerPlace200DataItemCancelState = {
+  PENDING: 'PENDING',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED',
+  ADMIN_REVIEW: 'ADMIN_REVIEW',
+  CLOSED: 'CLOSED',
+} as const;
+
+export type CodControllerPlace200DataItemStatus =
+  (typeof CodControllerPlace200DataItemStatus)[keyof typeof CodControllerPlace200DataItemStatus];
+
+export const CodControllerPlace200DataItemStatus = {
+  waiting: 'waiting',
+  pending: 'pending',
+  preparing: 'preparing',
+  shipping: 'shipping',
+  delivered: 'delivered',
+  completed: 'completed',
+  dispute: 'dispute',
+  returns: 'returns',
+  cancelled: 'cancelled',
+} as const;
+
+/**
+ * @nullable
+ */
+export type CodControllerPlace200DataItemCancellationReason =
+  | (typeof CodControllerPlace200DataItemCancellationReason)[keyof typeof CodControllerPlace200DataItemCancellationReason]
+  | null;
+
+export const CodControllerPlace200DataItemCancellationReason = {
+  SELLER_REJECTED: 'SELLER_REJECTED',
+  SELLER_CONFIRM_TIMEOUT: 'SELLER_CONFIRM_TIMEOUT',
+  BUYER_CANCELLED: 'BUYER_CANCELLED',
+  BUYER_CANCEL_APPROVED: 'BUYER_CANCEL_APPROVED',
+  CARRIER_RETURNED: 'CARRIER_RETURNED',
+} as const;
+
+export type CodControllerPlace200DataItemAddress = { [key: string]: unknown };
+
+export type CodControllerPlace200DataItemItemsItem = { [key: string]: unknown };
+
+/**
+ * @nullable
+ */
+export type CodControllerPlace200DataItemWalletRefund = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  /**
+   * @maximum 9007199254740991
+   * @exclusiveMinimum 0
+   */
+  amount: number;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  creditedAt: string;
+} | null;
+
+export type CodControllerPlace200DataItemEventsItemAction =
+  (typeof CodControllerPlace200DataItemEventsItemAction)[keyof typeof CodControllerPlace200DataItemEventsItemAction];
+
+export const CodControllerPlace200DataItemEventsItemAction = {
+  RECEIPT_CONFIRMED: 'RECEIPT_CONFIRMED',
+  DELIVERY_VERIFIED: 'DELIVERY_VERIFIED',
+  SETTLED: 'SETTLED',
+  COMPLETED: 'COMPLETED',
+  PAID: 'PAID',
+  PLACED: 'PLACED',
+  ACCEPTED: 'ACCEPTED',
+  REJECTED: 'REJECTED',
+  EXPIRED: 'EXPIRED',
+  BUYER_CANCELLED: 'BUYER_CANCELLED',
+  CANCEL_APPROVED: 'CANCEL_APPROVED',
+  SHIPPING: 'SHIPPING',
+  DELIVERED: 'DELIVERED',
+  RETURNING: 'RETURNING',
+  RETURN_INSPECTED: 'RETURN_INSPECTED',
+  CANCEL_REQUESTED: 'CANCEL_REQUESTED',
+  CANCEL_DECISION: 'CANCEL_DECISION',
+  CANCEL_REVIEW_REQUESTED: 'CANCEL_REVIEW_REQUESTED',
+  CANCEL_REVIEW_DECIDED: 'CANCEL_REVIEW_DECIDED',
+} as const;
+
+export type CodControllerPlace200DataItemEventsItem = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  action: CodControllerPlace200DataItemEventsItemAction;
+  /**
+   * @nullable
+   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+   */
+  actorId: string | null;
+  /** @nullable */
+  reason: string | null;
+  /** @nullable */
+  evidence: string | null;
+  /** @nullable */
+  approved: boolean | null;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  createdAt: string;
+};
+
+export type CodControllerPlace200DataItem = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  /**
+   * @nullable
+   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+   */
+  paymentId: string | null;
+  paymentMethod: CodControllerPlace200DataItemPaymentMethod;
+  /**
+   * @nullable
+   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+   */
+  checkoutId: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  handoverBy: string | null;
+  handoverReviewRequired: boolean;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  deliveryObservedAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  receiptConfirmedAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  deliveryVerifiedAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  disputeDeadlineAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  carrierReturnedAt: string | null;
+  /** @nullable */
+  cancelState: CodControllerPlace200DataItemCancelState;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  cancelRequestedAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  cancelRespondBy: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  cancelReviewUntil: string | null;
+  /** @nullable */
+  cancelDecisionReason: string | null;
+  /** @nullable */
+  cancelDecisionEvidence: string | null;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  shopId: string;
+  shopName: string;
+  status: CodControllerPlace200DataItemStatus;
+  /**
+   * @minimum -9007199254740991
+   * @maximum 9007199254740991
+   */
+  subtotal: number;
+  /**
+   * @minimum -9007199254740991
+   * @maximum 9007199254740991
+   */
+  shippingFee: number;
+  /**
+   * @minimum -9007199254740991
+   * @maximum 9007199254740991
+   */
+  total: number;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  sellerConfirmBy: string;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  acceptedAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  cancelledAt: string | null;
+  /** @nullable */
+  cancellationReason: CodControllerPlace200DataItemCancellationReason;
+  /** @nullable */
+  cancellationNote: string | null;
+  address: CodControllerPlace200DataItemAddress;
+  items: CodControllerPlace200DataItemItemsItem[];
+  /** @items.pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  stockReleaseReviewIds: string[];
+  /** @nullable */
+  walletRefund?: CodControllerPlace200DataItemWalletRefund;
+  events?: CodControllerPlace200DataItemEventsItem[];
+};
+
+export type CodControllerPlace200 = {
+  statusCode: CodControllerPlace200StatusCode;
+  message: string;
+  data: CodControllerPlace200DataItem[];
+};
+
+export type CodControllerCancelBodyReason =
+  (typeof CodControllerCancelBodyReason)[keyof typeof CodControllerCancelBodyReason];
+
+export const CodControllerCancelBodyReason = {
+  CHANGE_OF_MIND: 'CHANGE_OF_MIND',
+} as const;
+
+export type CodControllerCancelBody = {
+  reason: CodControllerCancelBodyReason;
+};
+
+export type CodControllerCancel200StatusCode =
+  (typeof CodControllerCancel200StatusCode)[keyof typeof CodControllerCancel200StatusCode];
+
+export const CodControllerCancel200StatusCode = {
+  NUMBER_200: 200,
+} as const;
+
+export type CodControllerCancel200DataPaymentMethod =
+  (typeof CodControllerCancel200DataPaymentMethod)[keyof typeof CodControllerCancel200DataPaymentMethod];
+
+export const CodControllerCancel200DataPaymentMethod = {
+  MOMO: 'MOMO',
+  COD: 'COD',
+} as const;
+
+/**
+ * @nullable
+ */
+export type CodControllerCancel200DataCancelState =
+  | (typeof CodControllerCancel200DataCancelState)[keyof typeof CodControllerCancel200DataCancelState]
+  | null;
+
+export const CodControllerCancel200DataCancelState = {
+  PENDING: 'PENDING',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED',
+  ADMIN_REVIEW: 'ADMIN_REVIEW',
+  CLOSED: 'CLOSED',
+} as const;
+
+export type CodControllerCancel200DataStatus =
+  (typeof CodControllerCancel200DataStatus)[keyof typeof CodControllerCancel200DataStatus];
+
+export const CodControllerCancel200DataStatus = {
+  waiting: 'waiting',
+  pending: 'pending',
+  preparing: 'preparing',
+  shipping: 'shipping',
+  delivered: 'delivered',
+  completed: 'completed',
+  dispute: 'dispute',
+  returns: 'returns',
+  cancelled: 'cancelled',
+} as const;
+
+/**
+ * @nullable
+ */
+export type CodControllerCancel200DataCancellationReason =
+  | (typeof CodControllerCancel200DataCancellationReason)[keyof typeof CodControllerCancel200DataCancellationReason]
+  | null;
+
+export const CodControllerCancel200DataCancellationReason = {
+  SELLER_REJECTED: 'SELLER_REJECTED',
+  SELLER_CONFIRM_TIMEOUT: 'SELLER_CONFIRM_TIMEOUT',
+  BUYER_CANCELLED: 'BUYER_CANCELLED',
+  BUYER_CANCEL_APPROVED: 'BUYER_CANCEL_APPROVED',
+  CARRIER_RETURNED: 'CARRIER_RETURNED',
+} as const;
+
+export type CodControllerCancel200DataAddress = { [key: string]: unknown };
+
+export type CodControllerCancel200DataItemsItem = { [key: string]: unknown };
+
+/**
+ * @nullable
+ */
+export type CodControllerCancel200DataWalletRefund = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  /**
+   * @maximum 9007199254740991
+   * @exclusiveMinimum 0
+   */
+  amount: number;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  creditedAt: string;
+} | null;
+
+export type CodControllerCancel200DataEventsItemAction =
+  (typeof CodControllerCancel200DataEventsItemAction)[keyof typeof CodControllerCancel200DataEventsItemAction];
+
+export const CodControllerCancel200DataEventsItemAction = {
+  RECEIPT_CONFIRMED: 'RECEIPT_CONFIRMED',
+  DELIVERY_VERIFIED: 'DELIVERY_VERIFIED',
+  SETTLED: 'SETTLED',
+  COMPLETED: 'COMPLETED',
+  PAID: 'PAID',
+  PLACED: 'PLACED',
+  ACCEPTED: 'ACCEPTED',
+  REJECTED: 'REJECTED',
+  EXPIRED: 'EXPIRED',
+  BUYER_CANCELLED: 'BUYER_CANCELLED',
+  CANCEL_APPROVED: 'CANCEL_APPROVED',
+  SHIPPING: 'SHIPPING',
+  DELIVERED: 'DELIVERED',
+  RETURNING: 'RETURNING',
+  RETURN_INSPECTED: 'RETURN_INSPECTED',
+  CANCEL_REQUESTED: 'CANCEL_REQUESTED',
+  CANCEL_DECISION: 'CANCEL_DECISION',
+  CANCEL_REVIEW_REQUESTED: 'CANCEL_REVIEW_REQUESTED',
+  CANCEL_REVIEW_DECIDED: 'CANCEL_REVIEW_DECIDED',
+} as const;
+
+export type CodControllerCancel200DataEventsItem = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  action: CodControllerCancel200DataEventsItemAction;
+  /**
+   * @nullable
+   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+   */
+  actorId: string | null;
+  /** @nullable */
+  reason: string | null;
+  /** @nullable */
+  evidence: string | null;
+  /** @nullable */
+  approved: boolean | null;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  createdAt: string;
+};
+
+export type CodControllerCancel200Data = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  /**
+   * @nullable
+   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+   */
+  paymentId: string | null;
+  paymentMethod: CodControllerCancel200DataPaymentMethod;
+  /**
+   * @nullable
+   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+   */
+  checkoutId: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  handoverBy: string | null;
+  handoverReviewRequired: boolean;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  deliveryObservedAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  receiptConfirmedAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  deliveryVerifiedAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  disputeDeadlineAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  carrierReturnedAt: string | null;
+  /** @nullable */
+  cancelState: CodControllerCancel200DataCancelState;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  cancelRequestedAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  cancelRespondBy: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  cancelReviewUntil: string | null;
+  /** @nullable */
+  cancelDecisionReason: string | null;
+  /** @nullable */
+  cancelDecisionEvidence: string | null;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  shopId: string;
+  shopName: string;
+  status: CodControllerCancel200DataStatus;
+  /**
+   * @minimum -9007199254740991
+   * @maximum 9007199254740991
+   */
+  subtotal: number;
+  /**
+   * @minimum -9007199254740991
+   * @maximum 9007199254740991
+   */
+  shippingFee: number;
+  /**
+   * @minimum -9007199254740991
+   * @maximum 9007199254740991
+   */
+  total: number;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  sellerConfirmBy: string;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  acceptedAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  cancelledAt: string | null;
+  /** @nullable */
+  cancellationReason: CodControllerCancel200DataCancellationReason;
+  /** @nullable */
+  cancellationNote: string | null;
+  address: CodControllerCancel200DataAddress;
+  items: CodControllerCancel200DataItemsItem[];
+  /** @items.pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  stockReleaseReviewIds: string[];
+  /** @nullable */
+  walletRefund?: CodControllerCancel200DataWalletRefund;
+  events?: CodControllerCancel200DataEventsItem[];
+};
+
+export type CodControllerCancel200 = {
+  statusCode: CodControllerCancel200StatusCode;
+  message: string;
+  data: CodControllerCancel200Data;
+};
+
+export type CodControllerMine200StatusCode =
+  (typeof CodControllerMine200StatusCode)[keyof typeof CodControllerMine200StatusCode];
+
+export const CodControllerMine200StatusCode = {
+  NUMBER_200: 200,
+} as const;
+
+export type CodControllerMine200DataItemCause =
+  (typeof CodControllerMine200DataItemCause)[keyof typeof CodControllerMine200DataItemCause];
+
+export const CodControllerMine200DataItemCause = {
+  REPEATED_CANCELLATION: 'REPEATED_CANCELLATION',
+} as const;
+
+export type CodControllerMine200DataItem = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  cause: CodControllerMine200DataItemCause;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  blockedUntil: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  resolvedAt: string | null;
+  /** @nullable */
+  resolutionReason: string | null;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  createdAt: string;
+};
+
+export type CodControllerMine200 = {
+  statusCode: CodControllerMine200StatusCode;
+  message: string;
+  data: CodControllerMine200DataItem[];
+};
+
+export type CodControllerResolveBody = {
+  /**
+   * @minLength 1
+   * @maxLength 1000
+   */
+  reason: string;
+};
+
+export type CodReconciliationControllerCollectBodyMode =
+  (typeof CodReconciliationControllerCollectBodyMode)[keyof typeof CodReconciliationControllerCollectBodyMode];
+
+export const CodReconciliationControllerCollectBodyMode = {
+  EVIDENCE: 'EVIDENCE',
+  SIMULATION: 'SIMULATION',
+} as const;
+
+export type CodReconciliationControllerCollectBody = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  requestId: string;
+  mode: CodReconciliationControllerCollectBodyMode;
+  /**
+   * @minLength 1
+   * @maxLength 50
+   */
+  waybillCode: string;
+  /**
+   * @minimum 0
+   * @maximum 2147483647
+   */
+  collectedAmount: number;
+  /**
+   * @minimum 0
+   * @maximum 2147483647
+   */
+  approvedCarrierFee: number;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z|([+-](?:[01]\d|2[0-3]):[0-5]\d)))$ */
+  collectedAt: string;
+  /**
+   * @minLength 1
+   * @maxLength 1000
+   */
+  reason: string;
+  /**
+   * @minLength 1
+   * @maxLength 4000
+   */
+  evidence: string;
+};
+
+export type CodReconciliationControllerCollect200StatusCode =
+  (typeof CodReconciliationControllerCollect200StatusCode)[keyof typeof CodReconciliationControllerCollect200StatusCode];
+
+export const CodReconciliationControllerCollect200StatusCode = {
+  NUMBER_200: 200,
+} as const;
+
+export type CodReconciliationControllerCollect200DataMode =
+  (typeof CodReconciliationControllerCollect200DataMode)[keyof typeof CodReconciliationControllerCollect200DataMode];
+
+export const CodReconciliationControllerCollect200DataMode = {
+  EVIDENCE: 'EVIDENCE',
+  SIMULATION: 'SIMULATION',
+} as const;
+
+export type CodReconciliationControllerCollect200DataStatus =
+  (typeof CodReconciliationControllerCollect200DataStatus)[keyof typeof CodReconciliationControllerCollect200DataStatus];
+
+export const CodReconciliationControllerCollect200DataStatus = {
+  REVIEW: 'REVIEW',
+  AWAITING: 'AWAITING',
+  PARTIAL: 'PARTIAL',
+  FUNDED_HELD: 'FUNDED_HELD',
+} as const;
+
+export type CodReconciliationControllerCollect200Data = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  orderId: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  shopId: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  shipmentId: string;
+  mode: CodReconciliationControllerCollect200DataMode;
+  status: CodReconciliationControllerCollect200DataStatus;
+  /**
+   * @minimum 0
+   * @maximum 2147483647
+   */
+  expectedAmount: number;
+  /**
+   * @minimum 0
+   * @maximum 2147483647
+   */
+  collectedAmount: number;
+  /**
+   * @minimum 0
+   * @maximum 2147483647
+   */
+  approvedCarrierFee: number;
+  /**
+   * @minimum 0
+   * @maximum 2147483647
+   */
+  gross: number;
+  /**
+   * @minimum 0
+   * @maximum 2147483647
+   */
+  commission: number;
+  /**
+   * @minimum 0
+   * @maximum 2147483647
+   */
+  sellerNet: number;
+  /**
+   * @minimum 0
+   * @maximum 2147483647
+   */
+  cashReceived: number;
+  /**
+   * @minimum 0
+   * @maximum 2147483647
+   */
+  feeDeducted: number;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  collectedAt: string;
+  /** @nullable */
+  reviewReason: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  fundedAt: string | null;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  createdAt: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  requestId: string;
+  waybillCode: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  actorId: string;
+  reason: string;
+  evidence: string;
+};
+
+export type CodReconciliationControllerCollect200 = {
+  statusCode: CodReconciliationControllerCollect200StatusCode;
+  message: string;
+  data: CodReconciliationControllerCollect200Data;
+};
+
+export type CodReconciliationControllerRemitBodyMode =
+  (typeof CodReconciliationControllerRemitBodyMode)[keyof typeof CodReconciliationControllerRemitBodyMode];
+
+export const CodReconciliationControllerRemitBodyMode = {
+  EVIDENCE: 'EVIDENCE',
+  SIMULATION: 'SIMULATION',
+} as const;
+
+export type CodReconciliationControllerRemitBodyAllocationsItem = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  orderId: string;
+  /**
+   * @minimum 0
+   * @maximum 2147483647
+   */
+  cashAmount: number;
+  /**
+   * @minimum 0
+   * @maximum 2147483647
+   */
+  feeDeducted: number;
+};
+
+export type CodReconciliationControllerRemitBody = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  requestId: string;
+  mode: CodReconciliationControllerRemitBodyMode;
+  /**
+   * @minLength 1
+   * @maxLength 120
+   */
+  reference: string;
+  /**
+   * @minimum 0
+   * @maximum 2147483647
+   */
+  netAmount: number;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z|([+-](?:[01]\d|2[0-3]):[0-5]\d)))$ */
+  receivedAt: string;
+  /**
+   * @minLength 1
+   * @maxLength 1000
+   */
+  reason: string;
+  /**
+   * @minLength 1
+   * @maxLength 4000
+   */
+  evidence: string;
+  /**
+   * @minItems 1
+   * @maxItems 100
+   */
+  allocations: CodReconciliationControllerRemitBodyAllocationsItem[];
+};
+
+export type CodReconciliationControllerRemit200StatusCode =
+  (typeof CodReconciliationControllerRemit200StatusCode)[keyof typeof CodReconciliationControllerRemit200StatusCode];
+
+export const CodReconciliationControllerRemit200StatusCode = {
+  NUMBER_200: 200,
+} as const;
+
+export type CodReconciliationControllerRemit200DataMode =
+  (typeof CodReconciliationControllerRemit200DataMode)[keyof typeof CodReconciliationControllerRemit200DataMode];
+
+export const CodReconciliationControllerRemit200DataMode = {
+  EVIDENCE: 'EVIDENCE',
+  SIMULATION: 'SIMULATION',
+} as const;
+
+export type CodReconciliationControllerRemit200DataAllocationsItem = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  orderId: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  remittanceId: string;
+  /**
+   * @minimum 0
+   * @maximum 2147483647
+   */
+  cashAmount: number;
+  /**
+   * @minimum 0
+   * @maximum 2147483647
+   */
+  feeDeducted: number;
+};
+
+export type CodReconciliationControllerRemit200Data = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  requestId: string;
+  mode: CodReconciliationControllerRemit200DataMode;
+  reference: string;
+  /**
+   * @minimum 0
+   * @maximum 2147483647
+   */
+  netAmount: number;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  receivedAt: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  actorId: string;
+  reason: string;
+  evidence: string;
+  allocations: CodReconciliationControllerRemit200DataAllocationsItem[];
+};
+
+export type CodReconciliationControllerRemit200 = {
+  statusCode: CodReconciliationControllerRemit200StatusCode;
+  message: string;
+  data: CodReconciliationControllerRemit200Data;
+};
+
+export type CodReconciliationControllerListParams = {
+  mode?: CodReconciliationControllerListMode;
+  /**
+   * @minimum 0
+   * @maximum 100000
+   */
+  offset?: number;
+};
+
+export type CodReconciliationControllerListMode =
+  (typeof CodReconciliationControllerListMode)[keyof typeof CodReconciliationControllerListMode];
+
+export const CodReconciliationControllerListMode = {
+  EVIDENCE: 'EVIDENCE',
+  SIMULATION: 'SIMULATION',
+} as const;
+
+export type CodReconciliationControllerList200StatusCode =
+  (typeof CodReconciliationControllerList200StatusCode)[keyof typeof CodReconciliationControllerList200StatusCode];
+
+export const CodReconciliationControllerList200StatusCode = {
+  NUMBER_200: 200,
+} as const;
+
+export type CodReconciliationControllerList200DataItemMode =
+  (typeof CodReconciliationControllerList200DataItemMode)[keyof typeof CodReconciliationControllerList200DataItemMode];
+
+export const CodReconciliationControllerList200DataItemMode = {
+  EVIDENCE: 'EVIDENCE',
+  SIMULATION: 'SIMULATION',
+} as const;
+
+export type CodReconciliationControllerList200DataItemStatus =
+  (typeof CodReconciliationControllerList200DataItemStatus)[keyof typeof CodReconciliationControllerList200DataItemStatus];
+
+export const CodReconciliationControllerList200DataItemStatus = {
+  REVIEW: 'REVIEW',
+  AWAITING: 'AWAITING',
+  PARTIAL: 'PARTIAL',
+  FUNDED_HELD: 'FUNDED_HELD',
+} as const;
+
+export type CodReconciliationControllerList200DataItem = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  orderId: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  shopId: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  shipmentId: string;
+  mode: CodReconciliationControllerList200DataItemMode;
+  status: CodReconciliationControllerList200DataItemStatus;
+  /**
+   * @minimum 0
+   * @maximum 2147483647
+   */
+  expectedAmount: number;
+  /**
+   * @minimum 0
+   * @maximum 2147483647
+   */
+  collectedAmount: number;
+  /**
+   * @minimum 0
+   * @maximum 2147483647
+   */
+  approvedCarrierFee: number;
+  /**
+   * @minimum 0
+   * @maximum 2147483647
+   */
+  gross: number;
+  /**
+   * @minimum 0
+   * @maximum 2147483647
+   */
+  commission: number;
+  /**
+   * @minimum 0
+   * @maximum 2147483647
+   */
+  sellerNet: number;
+  /**
+   * @minimum 0
+   * @maximum 2147483647
+   */
+  cashReceived: number;
+  /**
+   * @minimum 0
+   * @maximum 2147483647
+   */
+  feeDeducted: number;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  collectedAt: string;
+  /** @nullable */
+  reviewReason: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  fundedAt: string | null;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  createdAt: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  requestId: string;
+  waybillCode: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  actorId: string;
+  reason: string;
+  evidence: string;
+};
+
+export type CodReconciliationControllerList200 = {
+  statusCode: CodReconciliationControllerList200StatusCode;
+  message: string;
+  data: CodReconciliationControllerList200DataItem[];
+};
+
+export type CodReconciliationControllerDetailParams = {
+  /**
+   * @minimum 0
+   * @maximum 100000
+   */
+  offset?: number;
+};
+
+export type CodReconciliationControllerDetail200StatusCode =
+  (typeof CodReconciliationControllerDetail200StatusCode)[keyof typeof CodReconciliationControllerDetail200StatusCode];
+
+export const CodReconciliationControllerDetail200StatusCode = {
+  NUMBER_200: 200,
+} as const;
+
+export type CodReconciliationControllerDetail200DataCollectionMode =
+  (typeof CodReconciliationControllerDetail200DataCollectionMode)[keyof typeof CodReconciliationControllerDetail200DataCollectionMode];
+
+export const CodReconciliationControllerDetail200DataCollectionMode = {
+  EVIDENCE: 'EVIDENCE',
+  SIMULATION: 'SIMULATION',
+} as const;
+
+export type CodReconciliationControllerDetail200DataCollectionStatus =
+  (typeof CodReconciliationControllerDetail200DataCollectionStatus)[keyof typeof CodReconciliationControllerDetail200DataCollectionStatus];
+
+export const CodReconciliationControllerDetail200DataCollectionStatus = {
+  REVIEW: 'REVIEW',
+  AWAITING: 'AWAITING',
+  PARTIAL: 'PARTIAL',
+  FUNDED_HELD: 'FUNDED_HELD',
+} as const;
+
+export type CodReconciliationControllerDetail200DataCollection = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  orderId: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  shopId: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  shipmentId: string;
+  mode: CodReconciliationControllerDetail200DataCollectionMode;
+  status: CodReconciliationControllerDetail200DataCollectionStatus;
+  /**
+   * @minimum 0
+   * @maximum 2147483647
+   */
+  expectedAmount: number;
+  /**
+   * @minimum 0
+   * @maximum 2147483647
+   */
+  collectedAmount: number;
+  /**
+   * @minimum 0
+   * @maximum 2147483647
+   */
+  approvedCarrierFee: number;
+  /**
+   * @minimum 0
+   * @maximum 2147483647
+   */
+  gross: number;
+  /**
+   * @minimum 0
+   * @maximum 2147483647
+   */
+  commission: number;
+  /**
+   * @minimum 0
+   * @maximum 2147483647
+   */
+  sellerNet: number;
+  /**
+   * @minimum 0
+   * @maximum 2147483647
+   */
+  cashReceived: number;
+  /**
+   * @minimum 0
+   * @maximum 2147483647
+   */
+  feeDeducted: number;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  collectedAt: string;
+  /** @nullable */
+  reviewReason: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  fundedAt: string | null;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  createdAt: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  requestId: string;
+  waybillCode: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  actorId: string;
+  reason: string;
+  evidence: string;
+};
+
+export type CodReconciliationControllerDetail200DataRemittancesItemMode =
+  (typeof CodReconciliationControllerDetail200DataRemittancesItemMode)[keyof typeof CodReconciliationControllerDetail200DataRemittancesItemMode];
+
+export const CodReconciliationControllerDetail200DataRemittancesItemMode = {
+  EVIDENCE: 'EVIDENCE',
+  SIMULATION: 'SIMULATION',
+} as const;
+
+export type CodReconciliationControllerDetail200DataRemittancesItemAllocationsItem =
+  {
+    /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+    id: string;
+    /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+    orderId: string;
+    /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+    remittanceId: string;
+    /**
+     * @minimum 0
+     * @maximum 2147483647
+     */
+    cashAmount: number;
+    /**
+     * @minimum 0
+     * @maximum 2147483647
+     */
+    feeDeducted: number;
+  };
+
+export type CodReconciliationControllerDetail200DataRemittancesItem = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  requestId: string;
+  mode: CodReconciliationControllerDetail200DataRemittancesItemMode;
+  reference: string;
+  /**
+   * @minimum 0
+   * @maximum 2147483647
+   */
+  netAmount: number;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  receivedAt: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  actorId: string;
+  reason: string;
+  evidence: string;
+  allocations: CodReconciliationControllerDetail200DataRemittancesItemAllocationsItem[];
+};
+
+export type CodReconciliationControllerDetail200Data = {
+  collection: CodReconciliationControllerDetail200DataCollection;
+  remittances: CodReconciliationControllerDetail200DataRemittancesItem[];
+};
+
+export type CodReconciliationControllerDetail200 = {
+  statusCode: CodReconciliationControllerDetail200StatusCode;
+  message: string;
+  data: CodReconciliationControllerDetail200Data;
+};
+
+export type CodReconciliationControllerRefreshBody = { [key: string]: unknown };
+
+export type CodReconciliationControllerRefresh200StatusCode =
+  (typeof CodReconciliationControllerRefresh200StatusCode)[keyof typeof CodReconciliationControllerRefresh200StatusCode];
+
+export const CodReconciliationControllerRefresh200StatusCode = {
+  NUMBER_200: 200,
+} as const;
+
+export type CodReconciliationControllerRefresh200DataMode =
+  (typeof CodReconciliationControllerRefresh200DataMode)[keyof typeof CodReconciliationControllerRefresh200DataMode];
+
+export const CodReconciliationControllerRefresh200DataMode = {
+  EVIDENCE: 'EVIDENCE',
+  SIMULATION: 'SIMULATION',
+} as const;
+
+export type CodReconciliationControllerRefresh200DataStatus =
+  (typeof CodReconciliationControllerRefresh200DataStatus)[keyof typeof CodReconciliationControllerRefresh200DataStatus];
+
+export const CodReconciliationControllerRefresh200DataStatus = {
+  REVIEW: 'REVIEW',
+  AWAITING: 'AWAITING',
+  PARTIAL: 'PARTIAL',
+  FUNDED_HELD: 'FUNDED_HELD',
+} as const;
+
+export type CodReconciliationControllerRefresh200Data = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  orderId: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  shopId: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  shipmentId: string;
+  mode: CodReconciliationControllerRefresh200DataMode;
+  status: CodReconciliationControllerRefresh200DataStatus;
+  /**
+   * @minimum 0
+   * @maximum 2147483647
+   */
+  expectedAmount: number;
+  /**
+   * @minimum 0
+   * @maximum 2147483647
+   */
+  collectedAmount: number;
+  /**
+   * @minimum 0
+   * @maximum 2147483647
+   */
+  approvedCarrierFee: number;
+  /**
+   * @minimum 0
+   * @maximum 2147483647
+   */
+  gross: number;
+  /**
+   * @minimum 0
+   * @maximum 2147483647
+   */
+  commission: number;
+  /**
+   * @minimum 0
+   * @maximum 2147483647
+   */
+  sellerNet: number;
+  /**
+   * @minimum 0
+   * @maximum 2147483647
+   */
+  cashReceived: number;
+  /**
+   * @minimum 0
+   * @maximum 2147483647
+   */
+  feeDeducted: number;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  collectedAt: string;
+  /** @nullable */
+  reviewReason: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  fundedAt: string | null;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  createdAt: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  requestId: string;
+  waybillCode: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  actorId: string;
+  reason: string;
+  evidence: string;
+};
+
+export type CodReconciliationControllerRefresh200 = {
+  statusCode: CodReconciliationControllerRefresh200StatusCode;
+  message: string;
+  data: CodReconciliationControllerRefresh200Data;
+};
+
+export type ShopFinanceControllerViewParams = {
+  mode?: ShopFinanceControllerViewMode;
+  /**
+   * @minimum 0
+   * @maximum 100000
+   */
+  offset?: number;
+};
+
+export type ShopFinanceControllerViewMode =
+  (typeof ShopFinanceControllerViewMode)[keyof typeof ShopFinanceControllerViewMode];
+
+export const ShopFinanceControllerViewMode = {
+  EVIDENCE: 'EVIDENCE',
+  SIMULATION: 'SIMULATION',
+} as const;
+
+export type ShopFinanceControllerView200StatusCode =
+  (typeof ShopFinanceControllerView200StatusCode)[keyof typeof ShopFinanceControllerView200StatusCode];
+
+export const ShopFinanceControllerView200StatusCode = {
+  NUMBER_200: 200,
+} as const;
+
+export type ShopFinanceControllerView200DataMode =
+  (typeof ShopFinanceControllerView200DataMode)[keyof typeof ShopFinanceControllerView200DataMode];
+
+export const ShopFinanceControllerView200DataMode = {
+  EVIDENCE: 'EVIDENCE',
+  SIMULATION: 'SIMULATION',
+} as const;
+
+export type ShopFinanceControllerView200DataSettlementsItem = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  orderId: string;
+  /**
+   * @minimum 0
+   * @maximum 2147483647
+   */
+  amount: number;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  createdAt: string;
+};
+
+export type ShopFinanceControllerView200DataEntriesItemType =
+  (typeof ShopFinanceControllerView200DataEntriesItemType)[keyof typeof ShopFinanceControllerView200DataEntriesItemType];
+
+export const ShopFinanceControllerView200DataEntriesItemType = {
+  COD_FUNDED_HELD: 'COD_FUNDED_HELD',
+  MOMO_FUNDED_HELD: 'MOMO_FUNDED_HELD',
+} as const;
+
+export type ShopFinanceControllerView200DataEntriesItem = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  orderId: string;
+  type: ShopFinanceControllerView200DataEntriesItemType;
+  /**
+   * @minimum 0
+   * @maximum 2147483647
+   */
+  amount: number;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  createdAt: string;
+};
+
+export type ShopFinanceControllerView200DataCollectionsItemMode =
+  (typeof ShopFinanceControllerView200DataCollectionsItemMode)[keyof typeof ShopFinanceControllerView200DataCollectionsItemMode];
+
+export const ShopFinanceControllerView200DataCollectionsItemMode = {
+  EVIDENCE: 'EVIDENCE',
+  SIMULATION: 'SIMULATION',
+} as const;
+
+export type ShopFinanceControllerView200DataCollectionsItemStatus =
+  (typeof ShopFinanceControllerView200DataCollectionsItemStatus)[keyof typeof ShopFinanceControllerView200DataCollectionsItemStatus];
+
+export const ShopFinanceControllerView200DataCollectionsItemStatus = {
+  REVIEW: 'REVIEW',
+  AWAITING: 'AWAITING',
+  PARTIAL: 'PARTIAL',
+  FUNDED_HELD: 'FUNDED_HELD',
+} as const;
+
+export type ShopFinanceControllerView200DataCollectionsItem = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  orderId: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  shopId: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  shipmentId: string;
+  mode: ShopFinanceControllerView200DataCollectionsItemMode;
+  status: ShopFinanceControllerView200DataCollectionsItemStatus;
+  /**
+   * @minimum 0
+   * @maximum 2147483647
+   */
+  expectedAmount: number;
+  /**
+   * @minimum 0
+   * @maximum 2147483647
+   */
+  collectedAmount: number;
+  /**
+   * @minimum 0
+   * @maximum 2147483647
+   */
+  approvedCarrierFee: number;
+  /**
+   * @minimum 0
+   * @maximum 2147483647
+   */
+  gross: number;
+  /**
+   * @minimum 0
+   * @maximum 2147483647
+   */
+  commission: number;
+  /**
+   * @minimum 0
+   * @maximum 2147483647
+   */
+  sellerNet: number;
+  /**
+   * @minimum 0
+   * @maximum 2147483647
+   */
+  cashReceived: number;
+  /**
+   * @minimum 0
+   * @maximum 2147483647
+   */
+  feeDeducted: number;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  collectedAt: string;
+  /** @nullable */
+  reviewReason: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  fundedAt: string | null;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  createdAt: string;
+};
+
+export type ShopFinanceControllerView200Data = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  shopId: string;
+  mode: ShopFinanceControllerView200DataMode;
+  /**
+   * @minimum 0
+   * @maximum 9007199254740991
+   */
+  held: number;
+  /**
+   * @minimum 0
+   * @maximum 9007199254740991
+   */
+  receivable: number;
+  /**
+   * @minimum 0
+   * @maximum 9007199254740991
+   */
+  available: number;
+  settlements: ShopFinanceControllerView200DataSettlementsItem[];
+  entries: ShopFinanceControllerView200DataEntriesItem[];
+  collections: ShopFinanceControllerView200DataCollectionsItem[];
+};
+
+export type ShopFinanceControllerView200 = {
+  statusCode: ShopFinanceControllerView200StatusCode;
+  message: string;
+  data: ShopFinanceControllerView200Data;
 };
 
 export type ShopControllerFindAll200StatusCode =
@@ -1547,14 +7053,6 @@ export const ShopControllerFindMine200DataItemMemberRole = {
   STAFF: 'STAFF',
 } as const;
 
-export type ShopControllerFindMine200DataItemStatus =
-  (typeof ShopControllerFindMine200DataItemStatus)[keyof typeof ShopControllerFindMine200DataItemStatus];
-
-export const ShopControllerFindMine200DataItemStatus = {
-  ACTIVE: 'ACTIVE',
-  INACTIVE: 'INACTIVE',
-} as const;
-
 export type ShopControllerFindMine200DataItemShopStatus =
   (typeof ShopControllerFindMine200DataItemShopStatus)[keyof typeof ShopControllerFindMine200DataItemShopStatus];
 
@@ -1584,7 +7082,7 @@ export type ShopControllerFindMine200DataItem = {
   /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
   userId: string;
   memberRole: ShopControllerFindMine200DataItemMemberRole;
-  status: ShopControllerFindMine200DataItemStatus;
+  status: string;
   /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
   joinedAt: string;
   shop: ShopControllerFindMine200DataItemShop;
@@ -1707,13 +7205,11 @@ export const ShopControllerFindMembers200DataItemMemberRole = {
   STAFF: 'STAFF',
 } as const;
 
-export type ShopControllerFindMembers200DataItemStatus =
-  (typeof ShopControllerFindMembers200DataItemStatus)[keyof typeof ShopControllerFindMembers200DataItemStatus];
-
-export const ShopControllerFindMembers200DataItemStatus = {
-  ACTIVE: 'ACTIVE',
-  INACTIVE: 'INACTIVE',
-} as const;
+export type ShopControllerFindMembers200DataItemRolesItem = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  name: string;
+};
 
 export type ShopControllerFindMembers200DataItemUser = {
   /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
@@ -1731,7 +7227,7 @@ export type ShopControllerFindMembers200DataItem = {
   /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
   userId: string;
   memberRole: ShopControllerFindMembers200DataItemMemberRole;
-  status: ShopControllerFindMembers200DataItemStatus;
+  roles: ShopControllerFindMembers200DataItemRolesItem[];
   /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
   joinedAt: string;
   /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
@@ -1747,35 +7243,30 @@ export type ShopControllerFindMembers200 = {
   data: ShopControllerFindMembers200DataItem[];
 };
 
-export type ShopControllerAddStaffBody = {
-  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
-  userId: string;
+export type ShopControllerInviteBody = {
+  /** @pattern ^(?!\.)(?!.*\.\.)([A-Za-z0-9_'+\-\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\-]*\.)+[A-Za-z]{2,}$ */
+  email: string;
+  /** @items.pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  roleIds: string[];
 };
 
-export type ShopControllerAddStaff201StatusCode =
-  (typeof ShopControllerAddStaff201StatusCode)[keyof typeof ShopControllerAddStaff201StatusCode];
+export type ShopControllerInvite201StatusCode =
+  (typeof ShopControllerInvite201StatusCode)[keyof typeof ShopControllerInvite201StatusCode];
 
-export const ShopControllerAddStaff201StatusCode = {
+export const ShopControllerInvite201StatusCode = {
   NUMBER_201: 201,
 } as const;
 
-export type ShopControllerAddStaff201DataMemberRole =
-  (typeof ShopControllerAddStaff201DataMemberRole)[keyof typeof ShopControllerAddStaff201DataMemberRole];
+export type ShopControllerInvite201DataStatus =
+  (typeof ShopControllerInvite201DataStatus)[keyof typeof ShopControllerInvite201DataStatus];
 
-export const ShopControllerAddStaff201DataMemberRole = {
-  OWNER: 'OWNER',
-  STAFF: 'STAFF',
+export const ShopControllerInvite201DataStatus = {
+  PENDING: 'PENDING',
+  ACCEPTED: 'ACCEPTED',
+  REVOKED: 'REVOKED',
 } as const;
 
-export type ShopControllerAddStaff201DataStatus =
-  (typeof ShopControllerAddStaff201DataStatus)[keyof typeof ShopControllerAddStaff201DataStatus];
-
-export const ShopControllerAddStaff201DataStatus = {
-  ACTIVE: 'ACTIVE',
-  INACTIVE: 'INACTIVE',
-} as const;
-
-export type ShopControllerAddStaff201DataUser = {
+export type ShopControllerInvite201DataUser = {
   /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
   id: string;
   /** @pattern ^(?!\.)(?!.*\.\.)([A-Za-z0-9_'+\-\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\-]*\.)+[A-Za-z]{2,}$ */
@@ -1783,66 +7274,55 @@ export type ShopControllerAddStaff201DataUser = {
   fullName: string;
 };
 
-export type ShopControllerAddStaff201Data = {
+export type ShopControllerInvite201DataShop = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  name: string;
+};
+
+export type ShopControllerInvite201Data = {
   /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
   id: string;
   /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
   shopId: string;
   /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
   userId: string;
-  memberRole: ShopControllerAddStaff201DataMemberRole;
-  status: ShopControllerAddStaff201DataStatus;
+  status: ShopControllerInvite201DataStatus;
   /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
-  joinedAt: string;
+  expiresAt: string;
   /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
   createdAt: string;
   /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
   updatedAt: string;
-  user: ShopControllerAddStaff201DataUser;
+  /** @items.pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  roleIds: string[];
+  user?: ShopControllerInvite201DataUser;
+  shop?: ShopControllerInvite201DataShop;
 };
 
-export type ShopControllerAddStaff201 = {
-  statusCode: ShopControllerAddStaff201StatusCode;
+export type ShopControllerInvite201 = {
+  statusCode: ShopControllerInvite201StatusCode;
   message: string;
-  data: ShopControllerAddStaff201Data;
+  data: ShopControllerInvite201Data;
 };
 
-export type ShopControllerUpdateStaffBodyStatus =
-  (typeof ShopControllerUpdateStaffBodyStatus)[keyof typeof ShopControllerUpdateStaffBodyStatus];
+export type ShopControllerList200StatusCode =
+  (typeof ShopControllerList200StatusCode)[keyof typeof ShopControllerList200StatusCode];
 
-export const ShopControllerUpdateStaffBodyStatus = {
-  ACTIVE: 'ACTIVE',
-  INACTIVE: 'INACTIVE',
-} as const;
-
-export type ShopControllerUpdateStaffBody = {
-  status: ShopControllerUpdateStaffBodyStatus;
-};
-
-export type ShopControllerUpdateStaff200StatusCode =
-  (typeof ShopControllerUpdateStaff200StatusCode)[keyof typeof ShopControllerUpdateStaff200StatusCode];
-
-export const ShopControllerUpdateStaff200StatusCode = {
+export const ShopControllerList200StatusCode = {
   NUMBER_200: 200,
 } as const;
 
-export type ShopControllerUpdateStaff200DataMemberRole =
-  (typeof ShopControllerUpdateStaff200DataMemberRole)[keyof typeof ShopControllerUpdateStaff200DataMemberRole];
+export type ShopControllerList200DataItemStatus =
+  (typeof ShopControllerList200DataItemStatus)[keyof typeof ShopControllerList200DataItemStatus];
 
-export const ShopControllerUpdateStaff200DataMemberRole = {
-  OWNER: 'OWNER',
-  STAFF: 'STAFF',
+export const ShopControllerList200DataItemStatus = {
+  PENDING: 'PENDING',
+  ACCEPTED: 'ACCEPTED',
+  REVOKED: 'REVOKED',
 } as const;
 
-export type ShopControllerUpdateStaff200DataStatus =
-  (typeof ShopControllerUpdateStaff200DataStatus)[keyof typeof ShopControllerUpdateStaff200DataStatus];
-
-export const ShopControllerUpdateStaff200DataStatus = {
-  ACTIVE: 'ACTIVE',
-  INACTIVE: 'INACTIVE',
-} as const;
-
-export type ShopControllerUpdateStaff200DataUser = {
+export type ShopControllerList200DataItemUser = {
   /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
   id: string;
   /** @pattern ^(?!\.)(?!.*\.\.)([A-Za-z0-9_'+\-\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\-]*\.)+[A-Za-z]{2,}$ */
@@ -1850,28 +7330,173 @@ export type ShopControllerUpdateStaff200DataUser = {
   fullName: string;
 };
 
-export type ShopControllerUpdateStaff200Data = {
+export type ShopControllerList200DataItemShop = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  name: string;
+};
+
+export type ShopControllerList200DataItem = {
   /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
   id: string;
   /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
   shopId: string;
   /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
   userId: string;
-  memberRole: ShopControllerUpdateStaff200DataMemberRole;
-  status: ShopControllerUpdateStaff200DataStatus;
+  status: ShopControllerList200DataItemStatus;
   /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
-  joinedAt: string;
+  expiresAt: string;
   /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
   createdAt: string;
   /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
   updatedAt: string;
-  user: ShopControllerUpdateStaff200DataUser;
+  /** @items.pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  roleIds: string[];
+  user?: ShopControllerList200DataItemUser;
+  shop?: ShopControllerList200DataItemShop;
 };
 
-export type ShopControllerUpdateStaff200 = {
-  statusCode: ShopControllerUpdateStaff200StatusCode;
+export type ShopControllerList200 = {
+  statusCode: ShopControllerList200StatusCode;
   message: string;
-  data: ShopControllerUpdateStaff200Data;
+  data: ShopControllerList200DataItem[];
+};
+
+export type ShopControllerFindMyInvitations200StatusCode =
+  (typeof ShopControllerFindMyInvitations200StatusCode)[keyof typeof ShopControllerFindMyInvitations200StatusCode];
+
+export const ShopControllerFindMyInvitations200StatusCode = {
+  NUMBER_200: 200,
+} as const;
+
+export type ShopControllerFindMyInvitations200DataItemStatus =
+  (typeof ShopControllerFindMyInvitations200DataItemStatus)[keyof typeof ShopControllerFindMyInvitations200DataItemStatus];
+
+export const ShopControllerFindMyInvitations200DataItemStatus = {
+  PENDING: 'PENDING',
+  ACCEPTED: 'ACCEPTED',
+  REVOKED: 'REVOKED',
+} as const;
+
+export type ShopControllerFindMyInvitations200DataItemUser = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  /** @pattern ^(?!\.)(?!.*\.\.)([A-Za-z0-9_'+\-\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\-]*\.)+[A-Za-z]{2,}$ */
+  email: string;
+  fullName: string;
+};
+
+export type ShopControllerFindMyInvitations200DataItemShop = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  name: string;
+};
+
+export type ShopControllerFindMyInvitations200DataItem = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  shopId: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  userId: string;
+  status: ShopControllerFindMyInvitations200DataItemStatus;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  expiresAt: string;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  createdAt: string;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  updatedAt: string;
+  /** @items.pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  roleIds: string[];
+  user?: ShopControllerFindMyInvitations200DataItemUser;
+  shop?: ShopControllerFindMyInvitations200DataItemShop;
+};
+
+export type ShopControllerFindMyInvitations200 = {
+  statusCode: ShopControllerFindMyInvitations200StatusCode;
+  message: string;
+  data: ShopControllerFindMyInvitations200DataItem[];
+};
+
+export type ShopControllerRevoke200StatusCode =
+  (typeof ShopControllerRevoke200StatusCode)[keyof typeof ShopControllerRevoke200StatusCode];
+
+export const ShopControllerRevoke200StatusCode = {
+  NUMBER_200: 200,
+} as const;
+
+export type ShopControllerRevoke200DataStatus =
+  (typeof ShopControllerRevoke200DataStatus)[keyof typeof ShopControllerRevoke200DataStatus];
+
+export const ShopControllerRevoke200DataStatus = {
+  PENDING: 'PENDING',
+  ACCEPTED: 'ACCEPTED',
+  REVOKED: 'REVOKED',
+} as const;
+
+export type ShopControllerRevoke200DataUser = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  /** @pattern ^(?!\.)(?!.*\.\.)([A-Za-z0-9_'+\-\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\-]*\.)+[A-Za-z]{2,}$ */
+  email: string;
+  fullName: string;
+};
+
+export type ShopControllerRevoke200DataShop = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  name: string;
+};
+
+export type ShopControllerRevoke200Data = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  shopId: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  userId: string;
+  status: ShopControllerRevoke200DataStatus;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  expiresAt: string;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  createdAt: string;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  updatedAt: string;
+  /** @items.pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  roleIds: string[];
+  user?: ShopControllerRevoke200DataUser;
+  shop?: ShopControllerRevoke200DataShop;
+};
+
+export type ShopControllerRevoke200 = {
+  statusCode: ShopControllerRevoke200StatusCode;
+  message: string;
+  data: ShopControllerRevoke200Data;
+};
+
+export type ShopControllerAccept200StatusCode =
+  (typeof ShopControllerAccept200StatusCode)[keyof typeof ShopControllerAccept200StatusCode];
+
+export const ShopControllerAccept200StatusCode = {
+  NUMBER_200: 200,
+} as const;
+
+export type ShopControllerAccept200Data = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  shopId: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  userId: string;
+  memberRole: string;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  joinedAt: string;
+};
+
+export type ShopControllerAccept200 = {
+  statusCode: ShopControllerAccept200StatusCode;
+  message: string;
+  data: ShopControllerAccept200Data;
 };
 
 export type ShippingControllerUpdatePackageBody = {
@@ -6020,6 +11645,3041 @@ export type ProductControllerUpdateStatus200 = {
   data: ProductControllerUpdateStatus200Data;
 };
 
+export type ShipmentControllerInspectBodyCondition =
+  (typeof ShipmentControllerInspectBodyCondition)[keyof typeof ShipmentControllerInspectBodyCondition];
+
+export const ShipmentControllerInspectBodyCondition = {
+  SELLABLE: 'SELLABLE',
+  DAMAGED: 'DAMAGED',
+} as const;
+
+export type ShipmentControllerInspectBody = {
+  condition: ShipmentControllerInspectBodyCondition;
+  /**
+   * @minLength 1
+   * @maxLength 1000
+   */
+  reason: string;
+  /**
+   * @minLength 1
+   * @maxLength 2000
+   */
+  evidence: string;
+};
+
+export type ShipmentControllerInspect200StatusCode =
+  (typeof ShipmentControllerInspect200StatusCode)[keyof typeof ShipmentControllerInspect200StatusCode];
+
+export const ShipmentControllerInspect200StatusCode = {
+  NUMBER_200: 200,
+} as const;
+
+export type ShipmentControllerInspect200DataOrderPaymentMethod =
+  (typeof ShipmentControllerInspect200DataOrderPaymentMethod)[keyof typeof ShipmentControllerInspect200DataOrderPaymentMethod];
+
+export const ShipmentControllerInspect200DataOrderPaymentMethod = {
+  MOMO: 'MOMO',
+  COD: 'COD',
+} as const;
+
+/**
+ * @nullable
+ */
+export type ShipmentControllerInspect200DataOrderCancelState =
+  | (typeof ShipmentControllerInspect200DataOrderCancelState)[keyof typeof ShipmentControllerInspect200DataOrderCancelState]
+  | null;
+
+export const ShipmentControllerInspect200DataOrderCancelState = {
+  PENDING: 'PENDING',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED',
+  ADMIN_REVIEW: 'ADMIN_REVIEW',
+  CLOSED: 'CLOSED',
+} as const;
+
+export type ShipmentControllerInspect200DataOrderStatus =
+  (typeof ShipmentControllerInspect200DataOrderStatus)[keyof typeof ShipmentControllerInspect200DataOrderStatus];
+
+export const ShipmentControllerInspect200DataOrderStatus = {
+  waiting: 'waiting',
+  pending: 'pending',
+  preparing: 'preparing',
+  shipping: 'shipping',
+  delivered: 'delivered',
+  completed: 'completed',
+  dispute: 'dispute',
+  returns: 'returns',
+  cancelled: 'cancelled',
+} as const;
+
+/**
+ * @nullable
+ */
+export type ShipmentControllerInspect200DataOrderCancellationReason =
+  | (typeof ShipmentControllerInspect200DataOrderCancellationReason)[keyof typeof ShipmentControllerInspect200DataOrderCancellationReason]
+  | null;
+
+export const ShipmentControllerInspect200DataOrderCancellationReason = {
+  SELLER_REJECTED: 'SELLER_REJECTED',
+  SELLER_CONFIRM_TIMEOUT: 'SELLER_CONFIRM_TIMEOUT',
+  BUYER_CANCELLED: 'BUYER_CANCELLED',
+  BUYER_CANCEL_APPROVED: 'BUYER_CANCEL_APPROVED',
+  CARRIER_RETURNED: 'CARRIER_RETURNED',
+} as const;
+
+export type ShipmentControllerInspect200DataOrderAddress = {
+  [key: string]: unknown;
+};
+
+export type ShipmentControllerInspect200DataOrderItemsItem = {
+  [key: string]: unknown;
+};
+
+/**
+ * @nullable
+ */
+export type ShipmentControllerInspect200DataOrderWalletRefund = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  /**
+   * @maximum 9007199254740991
+   * @exclusiveMinimum 0
+   */
+  amount: number;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  creditedAt: string;
+} | null;
+
+export type ShipmentControllerInspect200DataOrderEventsItemAction =
+  (typeof ShipmentControllerInspect200DataOrderEventsItemAction)[keyof typeof ShipmentControllerInspect200DataOrderEventsItemAction];
+
+export const ShipmentControllerInspect200DataOrderEventsItemAction = {
+  RECEIPT_CONFIRMED: 'RECEIPT_CONFIRMED',
+  DELIVERY_VERIFIED: 'DELIVERY_VERIFIED',
+  SETTLED: 'SETTLED',
+  COMPLETED: 'COMPLETED',
+  PAID: 'PAID',
+  PLACED: 'PLACED',
+  ACCEPTED: 'ACCEPTED',
+  REJECTED: 'REJECTED',
+  EXPIRED: 'EXPIRED',
+  BUYER_CANCELLED: 'BUYER_CANCELLED',
+  CANCEL_APPROVED: 'CANCEL_APPROVED',
+  SHIPPING: 'SHIPPING',
+  DELIVERED: 'DELIVERED',
+  RETURNING: 'RETURNING',
+  RETURN_INSPECTED: 'RETURN_INSPECTED',
+  CANCEL_REQUESTED: 'CANCEL_REQUESTED',
+  CANCEL_DECISION: 'CANCEL_DECISION',
+  CANCEL_REVIEW_REQUESTED: 'CANCEL_REVIEW_REQUESTED',
+  CANCEL_REVIEW_DECIDED: 'CANCEL_REVIEW_DECIDED',
+} as const;
+
+export type ShipmentControllerInspect200DataOrderEventsItem = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  action: ShipmentControllerInspect200DataOrderEventsItemAction;
+  /**
+   * @nullable
+   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+   */
+  actorId: string | null;
+  /** @nullable */
+  reason: string | null;
+  /** @nullable */
+  evidence: string | null;
+  /** @nullable */
+  approved: boolean | null;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  createdAt: string;
+};
+
+export type ShipmentControllerInspect200DataOrder = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  /**
+   * @nullable
+   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+   */
+  paymentId: string | null;
+  paymentMethod: ShipmentControllerInspect200DataOrderPaymentMethod;
+  /**
+   * @nullable
+   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+   */
+  checkoutId: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  handoverBy: string | null;
+  handoverReviewRequired: boolean;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  deliveryObservedAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  receiptConfirmedAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  deliveryVerifiedAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  disputeDeadlineAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  carrierReturnedAt: string | null;
+  /** @nullable */
+  cancelState: ShipmentControllerInspect200DataOrderCancelState;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  cancelRequestedAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  cancelRespondBy: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  cancelReviewUntil: string | null;
+  /** @nullable */
+  cancelDecisionReason: string | null;
+  /** @nullable */
+  cancelDecisionEvidence: string | null;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  shopId: string;
+  shopName: string;
+  status: ShipmentControllerInspect200DataOrderStatus;
+  /**
+   * @minimum -9007199254740991
+   * @maximum 9007199254740991
+   */
+  subtotal: number;
+  /**
+   * @minimum -9007199254740991
+   * @maximum 9007199254740991
+   */
+  shippingFee: number;
+  /**
+   * @minimum -9007199254740991
+   * @maximum 9007199254740991
+   */
+  total: number;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  sellerConfirmBy: string;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  acceptedAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  cancelledAt: string | null;
+  /** @nullable */
+  cancellationReason: ShipmentControllerInspect200DataOrderCancellationReason;
+  /** @nullable */
+  cancellationNote: string | null;
+  address: ShipmentControllerInspect200DataOrderAddress;
+  items: ShipmentControllerInspect200DataOrderItemsItem[];
+  /** @items.pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  stockReleaseReviewIds: string[];
+  /** @nullable */
+  walletRefund?: ShipmentControllerInspect200DataOrderWalletRefund;
+  events?: ShipmentControllerInspect200DataOrderEventsItem[];
+};
+
+export type ShipmentControllerInspect200DataInspectionCondition =
+  (typeof ShipmentControllerInspect200DataInspectionCondition)[keyof typeof ShipmentControllerInspect200DataInspectionCondition];
+
+export const ShipmentControllerInspect200DataInspectionCondition = {
+  SELLABLE: 'SELLABLE',
+  DAMAGED: 'DAMAGED',
+} as const;
+
+/**
+ * @nullable
+ */
+export type ShipmentControllerInspect200DataInspection = {
+  condition: ShipmentControllerInspect200DataInspectionCondition;
+  /**
+   * @minLength 1
+   * @maxLength 1000
+   */
+  reason: string;
+  /**
+   * @minLength 1
+   * @maxLength 2000
+   */
+  evidence: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  orderId: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  actorId: string;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  createdAt: string;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  updatedAt: string;
+} | null;
+
+export type ShipmentControllerInspect200Data = {
+  order: ShipmentControllerInspect200DataOrder;
+  /** @nullable */
+  inspection: ShipmentControllerInspect200DataInspection;
+  requiresAdmin: boolean;
+};
+
+export type ShipmentControllerInspect200 = {
+  statusCode: ShipmentControllerInspect200StatusCode;
+  message: string;
+  data: ShipmentControllerInspect200Data;
+};
+
+export type ShipmentControllerCreateBodyParcel = {
+  /**
+   * @maximum 50000
+   * @exclusiveMinimum 0
+   */
+  weightGrams: number;
+  /**
+   * @maximum 200
+   * @exclusiveMinimum 0
+   */
+  lengthCm: number;
+  /**
+   * @maximum 200
+   * @exclusiveMinimum 0
+   */
+  widthCm: number;
+  /**
+   * @maximum 200
+   * @exclusiveMinimum 0
+   */
+  heightCm: number;
+};
+
+export type ShipmentControllerCreateBody = {
+  parcel?: ShipmentControllerCreateBodyParcel;
+};
+
+export type ShipmentControllerCreate200StatusCode =
+  (typeof ShipmentControllerCreate200StatusCode)[keyof typeof ShipmentControllerCreate200StatusCode];
+
+export const ShipmentControllerCreate200StatusCode = {
+  NUMBER_200: 200,
+} as const;
+
+export type ShipmentControllerCreate200DataState =
+  (typeof ShipmentControllerCreate200DataState)[keyof typeof ShipmentControllerCreate200DataState];
+
+export const ShipmentControllerCreate200DataState = {
+  CREATING: 'CREATING',
+  UNKNOWN: 'UNKNOWN',
+  BOOKED: 'BOOKED',
+  CANCEL_PENDING: 'CANCEL_PENDING',
+  CANCELLED: 'CANCELLED',
+} as const;
+
+export type ShipmentControllerCreate200DataParcel = {
+  /**
+   * @maximum 50000
+   * @exclusiveMinimum 0
+   */
+  weightGrams: number;
+  /**
+   * @maximum 200
+   * @exclusiveMinimum 0
+   */
+  lengthCm: number;
+  /**
+   * @maximum 200
+   * @exclusiveMinimum 0
+   */
+  widthCm: number;
+  /**
+   * @maximum 200
+   * @exclusiveMinimum 0
+   */
+  heightCm: number;
+};
+
+export type ShipmentControllerCreate200DataQuotedParcel = {
+  /**
+   * @maximum 50000
+   * @exclusiveMinimum 0
+   */
+  weightGrams: number;
+  /**
+   * @maximum 200
+   * @exclusiveMinimum 0
+   */
+  lengthCm: number;
+  /**
+   * @maximum 200
+   * @exclusiveMinimum 0
+   */
+  widthCm: number;
+  /**
+   * @maximum 200
+   * @exclusiveMinimum 0
+   */
+  heightCm: number;
+};
+
+export type ShipmentControllerCreate200Data = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  orderId: string;
+  state: ShipmentControllerCreate200DataState;
+  /** @nullable */
+  orderCode: string | null;
+  /**
+   * @minimum 0
+   * @maximum 9007199254740991
+   */
+  codAmount: number;
+  /**
+   * @minimum -9007199254740991
+   * @maximum 9007199254740991
+   * @nullable
+   */
+  carrierFee: number | null;
+  /** @nullable */
+  providerStatus: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  providerUpdatedAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  pickedObservedAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  codCollectedAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  carrierTransferredAt: string | null;
+  /** @nullable */
+  reviewReason: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  cancelRequestedAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  returnRequestedAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  returnInspectionBy: string | null;
+  returnInspectionCalendarMissing: boolean;
+  returnInspectionOverdue: boolean;
+  parcel: ShipmentControllerCreate200DataParcel;
+  quotedParcel: ShipmentControllerCreate200DataQuotedParcel;
+};
+
+export type ShipmentControllerCreate200 = {
+  statusCode: ShipmentControllerCreate200StatusCode;
+  message: string;
+  data: ShipmentControllerCreate200Data;
+};
+
+export type ShipmentControllerShopView200StatusCode =
+  (typeof ShipmentControllerShopView200StatusCode)[keyof typeof ShipmentControllerShopView200StatusCode];
+
+export const ShipmentControllerShopView200StatusCode = {
+  NUMBER_200: 200,
+} as const;
+
+export type ShipmentControllerShopView200DataState =
+  (typeof ShipmentControllerShopView200DataState)[keyof typeof ShipmentControllerShopView200DataState];
+
+export const ShipmentControllerShopView200DataState = {
+  CREATING: 'CREATING',
+  UNKNOWN: 'UNKNOWN',
+  BOOKED: 'BOOKED',
+  CANCEL_PENDING: 'CANCEL_PENDING',
+  CANCELLED: 'CANCELLED',
+} as const;
+
+export type ShipmentControllerShopView200DataParcel = {
+  /**
+   * @maximum 50000
+   * @exclusiveMinimum 0
+   */
+  weightGrams: number;
+  /**
+   * @maximum 200
+   * @exclusiveMinimum 0
+   */
+  lengthCm: number;
+  /**
+   * @maximum 200
+   * @exclusiveMinimum 0
+   */
+  widthCm: number;
+  /**
+   * @maximum 200
+   * @exclusiveMinimum 0
+   */
+  heightCm: number;
+};
+
+export type ShipmentControllerShopView200DataQuotedParcel = {
+  /**
+   * @maximum 50000
+   * @exclusiveMinimum 0
+   */
+  weightGrams: number;
+  /**
+   * @maximum 200
+   * @exclusiveMinimum 0
+   */
+  lengthCm: number;
+  /**
+   * @maximum 200
+   * @exclusiveMinimum 0
+   */
+  widthCm: number;
+  /**
+   * @maximum 200
+   * @exclusiveMinimum 0
+   */
+  heightCm: number;
+};
+
+export type ShipmentControllerShopView200Data = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  orderId: string;
+  state: ShipmentControllerShopView200DataState;
+  /** @nullable */
+  orderCode: string | null;
+  /**
+   * @minimum 0
+   * @maximum 9007199254740991
+   */
+  codAmount: number;
+  /**
+   * @minimum -9007199254740991
+   * @maximum 9007199254740991
+   * @nullable
+   */
+  carrierFee: number | null;
+  /** @nullable */
+  providerStatus: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  providerUpdatedAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  pickedObservedAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  codCollectedAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  carrierTransferredAt: string | null;
+  /** @nullable */
+  reviewReason: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  cancelRequestedAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  returnRequestedAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  returnInspectionBy: string | null;
+  returnInspectionCalendarMissing: boolean;
+  returnInspectionOverdue: boolean;
+  parcel: ShipmentControllerShopView200DataParcel;
+  quotedParcel: ShipmentControllerShopView200DataQuotedParcel;
+};
+
+export type ShipmentControllerShopView200 = {
+  statusCode: ShipmentControllerShopView200StatusCode;
+  message: string;
+  data: ShipmentControllerShopView200Data;
+};
+
+export type ShipmentControllerBuyerView200StatusCode =
+  (typeof ShipmentControllerBuyerView200StatusCode)[keyof typeof ShipmentControllerBuyerView200StatusCode];
+
+export const ShipmentControllerBuyerView200StatusCode = {
+  NUMBER_200: 200,
+} as const;
+
+export type ShipmentControllerBuyerView200DataState =
+  (typeof ShipmentControllerBuyerView200DataState)[keyof typeof ShipmentControllerBuyerView200DataState];
+
+export const ShipmentControllerBuyerView200DataState = {
+  CREATING: 'CREATING',
+  UNKNOWN: 'UNKNOWN',
+  BOOKED: 'BOOKED',
+  CANCEL_PENDING: 'CANCEL_PENDING',
+  CANCELLED: 'CANCELLED',
+} as const;
+
+export type ShipmentControllerBuyerView200DataParcel = {
+  /**
+   * @maximum 50000
+   * @exclusiveMinimum 0
+   */
+  weightGrams: number;
+  /**
+   * @maximum 200
+   * @exclusiveMinimum 0
+   */
+  lengthCm: number;
+  /**
+   * @maximum 200
+   * @exclusiveMinimum 0
+   */
+  widthCm: number;
+  /**
+   * @maximum 200
+   * @exclusiveMinimum 0
+   */
+  heightCm: number;
+};
+
+export type ShipmentControllerBuyerView200DataQuotedParcel = {
+  /**
+   * @maximum 50000
+   * @exclusiveMinimum 0
+   */
+  weightGrams: number;
+  /**
+   * @maximum 200
+   * @exclusiveMinimum 0
+   */
+  lengthCm: number;
+  /**
+   * @maximum 200
+   * @exclusiveMinimum 0
+   */
+  widthCm: number;
+  /**
+   * @maximum 200
+   * @exclusiveMinimum 0
+   */
+  heightCm: number;
+};
+
+export type ShipmentControllerBuyerView200Data = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  orderId: string;
+  state: ShipmentControllerBuyerView200DataState;
+  /** @nullable */
+  orderCode: string | null;
+  /**
+   * @minimum 0
+   * @maximum 9007199254740991
+   */
+  codAmount: number;
+  /**
+   * @minimum -9007199254740991
+   * @maximum 9007199254740991
+   * @nullable
+   */
+  carrierFee: number | null;
+  /** @nullable */
+  providerStatus: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  providerUpdatedAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  pickedObservedAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  codCollectedAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  carrierTransferredAt: string | null;
+  /** @nullable */
+  reviewReason: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  cancelRequestedAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  returnRequestedAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  returnInspectionBy: string | null;
+  returnInspectionCalendarMissing: boolean;
+  returnInspectionOverdue: boolean;
+  parcel: ShipmentControllerBuyerView200DataParcel;
+  quotedParcel: ShipmentControllerBuyerView200DataQuotedParcel;
+};
+
+export type ShipmentControllerBuyerView200 = {
+  statusCode: ShipmentControllerBuyerView200StatusCode;
+  message: string;
+  data: ShipmentControllerBuyerView200Data;
+};
+
+export type ShipmentControllerReconcileBody = { [key: string]: unknown };
+
+export type ShipmentControllerReconcile200StatusCode =
+  (typeof ShipmentControllerReconcile200StatusCode)[keyof typeof ShipmentControllerReconcile200StatusCode];
+
+export const ShipmentControllerReconcile200StatusCode = {
+  NUMBER_200: 200,
+} as const;
+
+export type ShipmentControllerReconcile200DataState =
+  (typeof ShipmentControllerReconcile200DataState)[keyof typeof ShipmentControllerReconcile200DataState];
+
+export const ShipmentControllerReconcile200DataState = {
+  CREATING: 'CREATING',
+  UNKNOWN: 'UNKNOWN',
+  BOOKED: 'BOOKED',
+  CANCEL_PENDING: 'CANCEL_PENDING',
+  CANCELLED: 'CANCELLED',
+} as const;
+
+export type ShipmentControllerReconcile200DataParcel = {
+  /**
+   * @maximum 50000
+   * @exclusiveMinimum 0
+   */
+  weightGrams: number;
+  /**
+   * @maximum 200
+   * @exclusiveMinimum 0
+   */
+  lengthCm: number;
+  /**
+   * @maximum 200
+   * @exclusiveMinimum 0
+   */
+  widthCm: number;
+  /**
+   * @maximum 200
+   * @exclusiveMinimum 0
+   */
+  heightCm: number;
+};
+
+export type ShipmentControllerReconcile200DataQuotedParcel = {
+  /**
+   * @maximum 50000
+   * @exclusiveMinimum 0
+   */
+  weightGrams: number;
+  /**
+   * @maximum 200
+   * @exclusiveMinimum 0
+   */
+  lengthCm: number;
+  /**
+   * @maximum 200
+   * @exclusiveMinimum 0
+   */
+  widthCm: number;
+  /**
+   * @maximum 200
+   * @exclusiveMinimum 0
+   */
+  heightCm: number;
+};
+
+export type ShipmentControllerReconcile200Data = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  orderId: string;
+  state: ShipmentControllerReconcile200DataState;
+  /** @nullable */
+  orderCode: string | null;
+  /**
+   * @minimum 0
+   * @maximum 9007199254740991
+   */
+  codAmount: number;
+  /**
+   * @minimum -9007199254740991
+   * @maximum 9007199254740991
+   * @nullable
+   */
+  carrierFee: number | null;
+  /** @nullable */
+  providerStatus: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  providerUpdatedAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  pickedObservedAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  codCollectedAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  carrierTransferredAt: string | null;
+  /** @nullable */
+  reviewReason: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  cancelRequestedAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  returnRequestedAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  returnInspectionBy: string | null;
+  returnInspectionCalendarMissing: boolean;
+  returnInspectionOverdue: boolean;
+  parcel: ShipmentControllerReconcile200DataParcel;
+  quotedParcel: ShipmentControllerReconcile200DataQuotedParcel;
+};
+
+export type ShipmentControllerReconcile200 = {
+  statusCode: ShipmentControllerReconcile200StatusCode;
+  message: string;
+  data: ShipmentControllerReconcile200Data;
+};
+
+export type ShipmentControllerIncidents200StatusCode =
+  (typeof ShipmentControllerIncidents200StatusCode)[keyof typeof ShipmentControllerIncidents200StatusCode];
+
+export const ShipmentControllerIncidents200StatusCode = {
+  NUMBER_200: 200,
+} as const;
+
+export type ShipmentControllerIncidents200DataShipmentsItemState =
+  (typeof ShipmentControllerIncidents200DataShipmentsItemState)[keyof typeof ShipmentControllerIncidents200DataShipmentsItemState];
+
+export const ShipmentControllerIncidents200DataShipmentsItemState = {
+  CREATING: 'CREATING',
+  UNKNOWN: 'UNKNOWN',
+  BOOKED: 'BOOKED',
+  CANCEL_PENDING: 'CANCEL_PENDING',
+  CANCELLED: 'CANCELLED',
+} as const;
+
+export type ShipmentControllerIncidents200DataShipmentsItemParcel = {
+  /**
+   * @maximum 50000
+   * @exclusiveMinimum 0
+   */
+  weightGrams: number;
+  /**
+   * @maximum 200
+   * @exclusiveMinimum 0
+   */
+  lengthCm: number;
+  /**
+   * @maximum 200
+   * @exclusiveMinimum 0
+   */
+  widthCm: number;
+  /**
+   * @maximum 200
+   * @exclusiveMinimum 0
+   */
+  heightCm: number;
+};
+
+export type ShipmentControllerIncidents200DataShipmentsItemQuotedParcel = {
+  /**
+   * @maximum 50000
+   * @exclusiveMinimum 0
+   */
+  weightGrams: number;
+  /**
+   * @maximum 200
+   * @exclusiveMinimum 0
+   */
+  lengthCm: number;
+  /**
+   * @maximum 200
+   * @exclusiveMinimum 0
+   */
+  widthCm: number;
+  /**
+   * @maximum 200
+   * @exclusiveMinimum 0
+   */
+  heightCm: number;
+};
+
+export type ShipmentControllerIncidents200DataShipmentsItem = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  orderId: string;
+  state: ShipmentControllerIncidents200DataShipmentsItemState;
+  /** @nullable */
+  orderCode: string | null;
+  /**
+   * @minimum 0
+   * @maximum 9007199254740991
+   */
+  codAmount: number;
+  /**
+   * @minimum -9007199254740991
+   * @maximum 9007199254740991
+   * @nullable
+   */
+  carrierFee: number | null;
+  /** @nullable */
+  providerStatus: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  providerUpdatedAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  pickedObservedAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  codCollectedAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  carrierTransferredAt: string | null;
+  /** @nullable */
+  reviewReason: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  cancelRequestedAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  returnRequestedAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  returnInspectionBy: string | null;
+  returnInspectionCalendarMissing: boolean;
+  returnInspectionOverdue: boolean;
+  parcel: ShipmentControllerIncidents200DataShipmentsItemParcel;
+  quotedParcel: ShipmentControllerIncidents200DataShipmentsItemQuotedParcel;
+};
+
+export type ShipmentControllerIncidents200DataOrdersItemPaymentMethod =
+  (typeof ShipmentControllerIncidents200DataOrdersItemPaymentMethod)[keyof typeof ShipmentControllerIncidents200DataOrdersItemPaymentMethod];
+
+export const ShipmentControllerIncidents200DataOrdersItemPaymentMethod = {
+  MOMO: 'MOMO',
+  COD: 'COD',
+} as const;
+
+/**
+ * @nullable
+ */
+export type ShipmentControllerIncidents200DataOrdersItemCancelState =
+  | (typeof ShipmentControllerIncidents200DataOrdersItemCancelState)[keyof typeof ShipmentControllerIncidents200DataOrdersItemCancelState]
+  | null;
+
+export const ShipmentControllerIncidents200DataOrdersItemCancelState = {
+  PENDING: 'PENDING',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED',
+  ADMIN_REVIEW: 'ADMIN_REVIEW',
+  CLOSED: 'CLOSED',
+} as const;
+
+export type ShipmentControllerIncidents200DataOrdersItemStatus =
+  (typeof ShipmentControllerIncidents200DataOrdersItemStatus)[keyof typeof ShipmentControllerIncidents200DataOrdersItemStatus];
+
+export const ShipmentControllerIncidents200DataOrdersItemStatus = {
+  waiting: 'waiting',
+  pending: 'pending',
+  preparing: 'preparing',
+  shipping: 'shipping',
+  delivered: 'delivered',
+  completed: 'completed',
+  dispute: 'dispute',
+  returns: 'returns',
+  cancelled: 'cancelled',
+} as const;
+
+/**
+ * @nullable
+ */
+export type ShipmentControllerIncidents200DataOrdersItemCancellationReason =
+  | (typeof ShipmentControllerIncidents200DataOrdersItemCancellationReason)[keyof typeof ShipmentControllerIncidents200DataOrdersItemCancellationReason]
+  | null;
+
+export const ShipmentControllerIncidents200DataOrdersItemCancellationReason = {
+  SELLER_REJECTED: 'SELLER_REJECTED',
+  SELLER_CONFIRM_TIMEOUT: 'SELLER_CONFIRM_TIMEOUT',
+  BUYER_CANCELLED: 'BUYER_CANCELLED',
+  BUYER_CANCEL_APPROVED: 'BUYER_CANCEL_APPROVED',
+  CARRIER_RETURNED: 'CARRIER_RETURNED',
+} as const;
+
+export type ShipmentControllerIncidents200DataOrdersItemAddress = {
+  [key: string]: unknown;
+};
+
+export type ShipmentControllerIncidents200DataOrdersItemItemsItem = {
+  [key: string]: unknown;
+};
+
+/**
+ * @nullable
+ */
+export type ShipmentControllerIncidents200DataOrdersItemWalletRefund = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  /**
+   * @maximum 9007199254740991
+   * @exclusiveMinimum 0
+   */
+  amount: number;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  creditedAt: string;
+} | null;
+
+export type ShipmentControllerIncidents200DataOrdersItemEventsItemAction =
+  (typeof ShipmentControllerIncidents200DataOrdersItemEventsItemAction)[keyof typeof ShipmentControllerIncidents200DataOrdersItemEventsItemAction];
+
+export const ShipmentControllerIncidents200DataOrdersItemEventsItemAction = {
+  RECEIPT_CONFIRMED: 'RECEIPT_CONFIRMED',
+  DELIVERY_VERIFIED: 'DELIVERY_VERIFIED',
+  SETTLED: 'SETTLED',
+  COMPLETED: 'COMPLETED',
+  PAID: 'PAID',
+  PLACED: 'PLACED',
+  ACCEPTED: 'ACCEPTED',
+  REJECTED: 'REJECTED',
+  EXPIRED: 'EXPIRED',
+  BUYER_CANCELLED: 'BUYER_CANCELLED',
+  CANCEL_APPROVED: 'CANCEL_APPROVED',
+  SHIPPING: 'SHIPPING',
+  DELIVERED: 'DELIVERED',
+  RETURNING: 'RETURNING',
+  RETURN_INSPECTED: 'RETURN_INSPECTED',
+  CANCEL_REQUESTED: 'CANCEL_REQUESTED',
+  CANCEL_DECISION: 'CANCEL_DECISION',
+  CANCEL_REVIEW_REQUESTED: 'CANCEL_REVIEW_REQUESTED',
+  CANCEL_REVIEW_DECIDED: 'CANCEL_REVIEW_DECIDED',
+} as const;
+
+export type ShipmentControllerIncidents200DataOrdersItemEventsItem = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  action: ShipmentControllerIncidents200DataOrdersItemEventsItemAction;
+  /**
+   * @nullable
+   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+   */
+  actorId: string | null;
+  /** @nullable */
+  reason: string | null;
+  /** @nullable */
+  evidence: string | null;
+  /** @nullable */
+  approved: boolean | null;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  createdAt: string;
+};
+
+export type ShipmentControllerIncidents200DataOrdersItem = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  /**
+   * @nullable
+   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+   */
+  paymentId: string | null;
+  paymentMethod: ShipmentControllerIncidents200DataOrdersItemPaymentMethod;
+  /**
+   * @nullable
+   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+   */
+  checkoutId: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  handoverBy: string | null;
+  handoverReviewRequired: boolean;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  deliveryObservedAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  receiptConfirmedAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  deliveryVerifiedAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  disputeDeadlineAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  carrierReturnedAt: string | null;
+  /** @nullable */
+  cancelState: ShipmentControllerIncidents200DataOrdersItemCancelState;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  cancelRequestedAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  cancelRespondBy: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  cancelReviewUntil: string | null;
+  /** @nullable */
+  cancelDecisionReason: string | null;
+  /** @nullable */
+  cancelDecisionEvidence: string | null;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  shopId: string;
+  shopName: string;
+  status: ShipmentControllerIncidents200DataOrdersItemStatus;
+  /**
+   * @minimum -9007199254740991
+   * @maximum 9007199254740991
+   */
+  subtotal: number;
+  /**
+   * @minimum -9007199254740991
+   * @maximum 9007199254740991
+   */
+  shippingFee: number;
+  /**
+   * @minimum -9007199254740991
+   * @maximum 9007199254740991
+   */
+  total: number;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  sellerConfirmBy: string;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  acceptedAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  cancelledAt: string | null;
+  /** @nullable */
+  cancellationReason: ShipmentControllerIncidents200DataOrdersItemCancellationReason;
+  /** @nullable */
+  cancellationNote: string | null;
+  address: ShipmentControllerIncidents200DataOrdersItemAddress;
+  items: ShipmentControllerIncidents200DataOrdersItemItemsItem[];
+  /** @items.pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  stockReleaseReviewIds: string[];
+  /** @nullable */
+  walletRefund?: ShipmentControllerIncidents200DataOrdersItemWalletRefund;
+  events?: ShipmentControllerIncidents200DataOrdersItemEventsItem[];
+};
+
+export type ShipmentControllerIncidents200Data = {
+  shipments: ShipmentControllerIncidents200DataShipmentsItem[];
+  orders: ShipmentControllerIncidents200DataOrdersItem[];
+};
+
+export type ShipmentControllerIncidents200 = {
+  statusCode: ShipmentControllerIncidents200StatusCode;
+  message: string;
+  data: ShipmentControllerIncidents200Data;
+};
+
+export type ShipmentControllerLabelBody = { [key: string]: unknown };
+
+export type ShipmentControllerLabel200StatusCode =
+  (typeof ShipmentControllerLabel200StatusCode)[keyof typeof ShipmentControllerLabel200StatusCode];
+
+export const ShipmentControllerLabel200StatusCode = {
+  NUMBER_200: 200,
+} as const;
+
+export type ShipmentControllerLabel200Data = {
+  url: string;
+};
+
+export type ShipmentControllerLabel200 = {
+  statusCode: ShipmentControllerLabel200StatusCode;
+  message: string;
+  data: ShipmentControllerLabel200Data;
+};
+
+export type ShipmentControllerRequestBody = { [key: string]: unknown };
+
+export type ShipmentControllerRequest200StatusCode =
+  (typeof ShipmentControllerRequest200StatusCode)[keyof typeof ShipmentControllerRequest200StatusCode];
+
+export const ShipmentControllerRequest200StatusCode = {
+  NUMBER_200: 200,
+} as const;
+
+export type ShipmentControllerRequest200DataPaymentMethod =
+  (typeof ShipmentControllerRequest200DataPaymentMethod)[keyof typeof ShipmentControllerRequest200DataPaymentMethod];
+
+export const ShipmentControllerRequest200DataPaymentMethod = {
+  MOMO: 'MOMO',
+  COD: 'COD',
+} as const;
+
+/**
+ * @nullable
+ */
+export type ShipmentControllerRequest200DataCancelState =
+  | (typeof ShipmentControllerRequest200DataCancelState)[keyof typeof ShipmentControllerRequest200DataCancelState]
+  | null;
+
+export const ShipmentControllerRequest200DataCancelState = {
+  PENDING: 'PENDING',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED',
+  ADMIN_REVIEW: 'ADMIN_REVIEW',
+  CLOSED: 'CLOSED',
+} as const;
+
+export type ShipmentControllerRequest200DataStatus =
+  (typeof ShipmentControllerRequest200DataStatus)[keyof typeof ShipmentControllerRequest200DataStatus];
+
+export const ShipmentControllerRequest200DataStatus = {
+  waiting: 'waiting',
+  pending: 'pending',
+  preparing: 'preparing',
+  shipping: 'shipping',
+  delivered: 'delivered',
+  completed: 'completed',
+  dispute: 'dispute',
+  returns: 'returns',
+  cancelled: 'cancelled',
+} as const;
+
+/**
+ * @nullable
+ */
+export type ShipmentControllerRequest200DataCancellationReason =
+  | (typeof ShipmentControllerRequest200DataCancellationReason)[keyof typeof ShipmentControllerRequest200DataCancellationReason]
+  | null;
+
+export const ShipmentControllerRequest200DataCancellationReason = {
+  SELLER_REJECTED: 'SELLER_REJECTED',
+  SELLER_CONFIRM_TIMEOUT: 'SELLER_CONFIRM_TIMEOUT',
+  BUYER_CANCELLED: 'BUYER_CANCELLED',
+  BUYER_CANCEL_APPROVED: 'BUYER_CANCEL_APPROVED',
+  CARRIER_RETURNED: 'CARRIER_RETURNED',
+} as const;
+
+export type ShipmentControllerRequest200DataAddress = {
+  [key: string]: unknown;
+};
+
+export type ShipmentControllerRequest200DataItemsItem = {
+  [key: string]: unknown;
+};
+
+/**
+ * @nullable
+ */
+export type ShipmentControllerRequest200DataWalletRefund = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  /**
+   * @maximum 9007199254740991
+   * @exclusiveMinimum 0
+   */
+  amount: number;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  creditedAt: string;
+} | null;
+
+export type ShipmentControllerRequest200DataEventsItemAction =
+  (typeof ShipmentControllerRequest200DataEventsItemAction)[keyof typeof ShipmentControllerRequest200DataEventsItemAction];
+
+export const ShipmentControllerRequest200DataEventsItemAction = {
+  RECEIPT_CONFIRMED: 'RECEIPT_CONFIRMED',
+  DELIVERY_VERIFIED: 'DELIVERY_VERIFIED',
+  SETTLED: 'SETTLED',
+  COMPLETED: 'COMPLETED',
+  PAID: 'PAID',
+  PLACED: 'PLACED',
+  ACCEPTED: 'ACCEPTED',
+  REJECTED: 'REJECTED',
+  EXPIRED: 'EXPIRED',
+  BUYER_CANCELLED: 'BUYER_CANCELLED',
+  CANCEL_APPROVED: 'CANCEL_APPROVED',
+  SHIPPING: 'SHIPPING',
+  DELIVERED: 'DELIVERED',
+  RETURNING: 'RETURNING',
+  RETURN_INSPECTED: 'RETURN_INSPECTED',
+  CANCEL_REQUESTED: 'CANCEL_REQUESTED',
+  CANCEL_DECISION: 'CANCEL_DECISION',
+  CANCEL_REVIEW_REQUESTED: 'CANCEL_REVIEW_REQUESTED',
+  CANCEL_REVIEW_DECIDED: 'CANCEL_REVIEW_DECIDED',
+} as const;
+
+export type ShipmentControllerRequest200DataEventsItem = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  action: ShipmentControllerRequest200DataEventsItemAction;
+  /**
+   * @nullable
+   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+   */
+  actorId: string | null;
+  /** @nullable */
+  reason: string | null;
+  /** @nullable */
+  evidence: string | null;
+  /** @nullable */
+  approved: boolean | null;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  createdAt: string;
+};
+
+export type ShipmentControllerRequest200Data = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  /**
+   * @nullable
+   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+   */
+  paymentId: string | null;
+  paymentMethod: ShipmentControllerRequest200DataPaymentMethod;
+  /**
+   * @nullable
+   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+   */
+  checkoutId: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  handoverBy: string | null;
+  handoverReviewRequired: boolean;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  deliveryObservedAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  receiptConfirmedAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  deliveryVerifiedAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  disputeDeadlineAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  carrierReturnedAt: string | null;
+  /** @nullable */
+  cancelState: ShipmentControllerRequest200DataCancelState;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  cancelRequestedAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  cancelRespondBy: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  cancelReviewUntil: string | null;
+  /** @nullable */
+  cancelDecisionReason: string | null;
+  /** @nullable */
+  cancelDecisionEvidence: string | null;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  shopId: string;
+  shopName: string;
+  status: ShipmentControllerRequest200DataStatus;
+  /**
+   * @minimum -9007199254740991
+   * @maximum 9007199254740991
+   */
+  subtotal: number;
+  /**
+   * @minimum -9007199254740991
+   * @maximum 9007199254740991
+   */
+  shippingFee: number;
+  /**
+   * @minimum -9007199254740991
+   * @maximum 9007199254740991
+   */
+  total: number;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  sellerConfirmBy: string;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  acceptedAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  cancelledAt: string | null;
+  /** @nullable */
+  cancellationReason: ShipmentControllerRequest200DataCancellationReason;
+  /** @nullable */
+  cancellationNote: string | null;
+  address: ShipmentControllerRequest200DataAddress;
+  items: ShipmentControllerRequest200DataItemsItem[];
+  /** @items.pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  stockReleaseReviewIds: string[];
+  /** @nullable */
+  walletRefund?: ShipmentControllerRequest200DataWalletRefund;
+  events?: ShipmentControllerRequest200DataEventsItem[];
+};
+
+export type ShipmentControllerRequest200 = {
+  statusCode: ShipmentControllerRequest200StatusCode;
+  message: string;
+  data: ShipmentControllerRequest200Data;
+};
+
+export type ShipmentControllerRespondBody = {
+  approve: boolean;
+  /**
+   * @minLength 1
+   * @maxLength 1000
+   */
+  reason: string;
+  /**
+   * @minLength 1
+   * @maxLength 2000
+   */
+  evidence: string;
+};
+
+export type ShipmentControllerRespond200StatusCode =
+  (typeof ShipmentControllerRespond200StatusCode)[keyof typeof ShipmentControllerRespond200StatusCode];
+
+export const ShipmentControllerRespond200StatusCode = {
+  NUMBER_200: 200,
+} as const;
+
+export type ShipmentControllerRespond200DataPaymentMethod =
+  (typeof ShipmentControllerRespond200DataPaymentMethod)[keyof typeof ShipmentControllerRespond200DataPaymentMethod];
+
+export const ShipmentControllerRespond200DataPaymentMethod = {
+  MOMO: 'MOMO',
+  COD: 'COD',
+} as const;
+
+/**
+ * @nullable
+ */
+export type ShipmentControllerRespond200DataCancelState =
+  | (typeof ShipmentControllerRespond200DataCancelState)[keyof typeof ShipmentControllerRespond200DataCancelState]
+  | null;
+
+export const ShipmentControllerRespond200DataCancelState = {
+  PENDING: 'PENDING',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED',
+  ADMIN_REVIEW: 'ADMIN_REVIEW',
+  CLOSED: 'CLOSED',
+} as const;
+
+export type ShipmentControllerRespond200DataStatus =
+  (typeof ShipmentControllerRespond200DataStatus)[keyof typeof ShipmentControllerRespond200DataStatus];
+
+export const ShipmentControllerRespond200DataStatus = {
+  waiting: 'waiting',
+  pending: 'pending',
+  preparing: 'preparing',
+  shipping: 'shipping',
+  delivered: 'delivered',
+  completed: 'completed',
+  dispute: 'dispute',
+  returns: 'returns',
+  cancelled: 'cancelled',
+} as const;
+
+/**
+ * @nullable
+ */
+export type ShipmentControllerRespond200DataCancellationReason =
+  | (typeof ShipmentControllerRespond200DataCancellationReason)[keyof typeof ShipmentControllerRespond200DataCancellationReason]
+  | null;
+
+export const ShipmentControllerRespond200DataCancellationReason = {
+  SELLER_REJECTED: 'SELLER_REJECTED',
+  SELLER_CONFIRM_TIMEOUT: 'SELLER_CONFIRM_TIMEOUT',
+  BUYER_CANCELLED: 'BUYER_CANCELLED',
+  BUYER_CANCEL_APPROVED: 'BUYER_CANCEL_APPROVED',
+  CARRIER_RETURNED: 'CARRIER_RETURNED',
+} as const;
+
+export type ShipmentControllerRespond200DataAddress = {
+  [key: string]: unknown;
+};
+
+export type ShipmentControllerRespond200DataItemsItem = {
+  [key: string]: unknown;
+};
+
+/**
+ * @nullable
+ */
+export type ShipmentControllerRespond200DataWalletRefund = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  /**
+   * @maximum 9007199254740991
+   * @exclusiveMinimum 0
+   */
+  amount: number;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  creditedAt: string;
+} | null;
+
+export type ShipmentControllerRespond200DataEventsItemAction =
+  (typeof ShipmentControllerRespond200DataEventsItemAction)[keyof typeof ShipmentControllerRespond200DataEventsItemAction];
+
+export const ShipmentControllerRespond200DataEventsItemAction = {
+  RECEIPT_CONFIRMED: 'RECEIPT_CONFIRMED',
+  DELIVERY_VERIFIED: 'DELIVERY_VERIFIED',
+  SETTLED: 'SETTLED',
+  COMPLETED: 'COMPLETED',
+  PAID: 'PAID',
+  PLACED: 'PLACED',
+  ACCEPTED: 'ACCEPTED',
+  REJECTED: 'REJECTED',
+  EXPIRED: 'EXPIRED',
+  BUYER_CANCELLED: 'BUYER_CANCELLED',
+  CANCEL_APPROVED: 'CANCEL_APPROVED',
+  SHIPPING: 'SHIPPING',
+  DELIVERED: 'DELIVERED',
+  RETURNING: 'RETURNING',
+  RETURN_INSPECTED: 'RETURN_INSPECTED',
+  CANCEL_REQUESTED: 'CANCEL_REQUESTED',
+  CANCEL_DECISION: 'CANCEL_DECISION',
+  CANCEL_REVIEW_REQUESTED: 'CANCEL_REVIEW_REQUESTED',
+  CANCEL_REVIEW_DECIDED: 'CANCEL_REVIEW_DECIDED',
+} as const;
+
+export type ShipmentControllerRespond200DataEventsItem = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  action: ShipmentControllerRespond200DataEventsItemAction;
+  /**
+   * @nullable
+   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+   */
+  actorId: string | null;
+  /** @nullable */
+  reason: string | null;
+  /** @nullable */
+  evidence: string | null;
+  /** @nullable */
+  approved: boolean | null;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  createdAt: string;
+};
+
+export type ShipmentControllerRespond200Data = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  /**
+   * @nullable
+   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+   */
+  paymentId: string | null;
+  paymentMethod: ShipmentControllerRespond200DataPaymentMethod;
+  /**
+   * @nullable
+   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+   */
+  checkoutId: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  handoverBy: string | null;
+  handoverReviewRequired: boolean;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  deliveryObservedAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  receiptConfirmedAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  deliveryVerifiedAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  disputeDeadlineAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  carrierReturnedAt: string | null;
+  /** @nullable */
+  cancelState: ShipmentControllerRespond200DataCancelState;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  cancelRequestedAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  cancelRespondBy: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  cancelReviewUntil: string | null;
+  /** @nullable */
+  cancelDecisionReason: string | null;
+  /** @nullable */
+  cancelDecisionEvidence: string | null;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  shopId: string;
+  shopName: string;
+  status: ShipmentControllerRespond200DataStatus;
+  /**
+   * @minimum -9007199254740991
+   * @maximum 9007199254740991
+   */
+  subtotal: number;
+  /**
+   * @minimum -9007199254740991
+   * @maximum 9007199254740991
+   */
+  shippingFee: number;
+  /**
+   * @minimum -9007199254740991
+   * @maximum 9007199254740991
+   */
+  total: number;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  sellerConfirmBy: string;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  acceptedAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  cancelledAt: string | null;
+  /** @nullable */
+  cancellationReason: ShipmentControllerRespond200DataCancellationReason;
+  /** @nullable */
+  cancellationNote: string | null;
+  address: ShipmentControllerRespond200DataAddress;
+  items: ShipmentControllerRespond200DataItemsItem[];
+  /** @items.pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  stockReleaseReviewIds: string[];
+  /** @nullable */
+  walletRefund?: ShipmentControllerRespond200DataWalletRefund;
+  events?: ShipmentControllerRespond200DataEventsItem[];
+};
+
+export type ShipmentControllerRespond200 = {
+  statusCode: ShipmentControllerRespond200StatusCode;
+  message: string;
+  data: ShipmentControllerRespond200Data;
+};
+
+export type ShipmentControllerReviewBody = {
+  /**
+   * @minLength 1
+   * @maxLength 1000
+   */
+  reason: string;
+};
+
+export type ShipmentControllerReview200StatusCode =
+  (typeof ShipmentControllerReview200StatusCode)[keyof typeof ShipmentControllerReview200StatusCode];
+
+export const ShipmentControllerReview200StatusCode = {
+  NUMBER_200: 200,
+} as const;
+
+export type ShipmentControllerReview200DataPaymentMethod =
+  (typeof ShipmentControllerReview200DataPaymentMethod)[keyof typeof ShipmentControllerReview200DataPaymentMethod];
+
+export const ShipmentControllerReview200DataPaymentMethod = {
+  MOMO: 'MOMO',
+  COD: 'COD',
+} as const;
+
+/**
+ * @nullable
+ */
+export type ShipmentControllerReview200DataCancelState =
+  | (typeof ShipmentControllerReview200DataCancelState)[keyof typeof ShipmentControllerReview200DataCancelState]
+  | null;
+
+export const ShipmentControllerReview200DataCancelState = {
+  PENDING: 'PENDING',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED',
+  ADMIN_REVIEW: 'ADMIN_REVIEW',
+  CLOSED: 'CLOSED',
+} as const;
+
+export type ShipmentControllerReview200DataStatus =
+  (typeof ShipmentControllerReview200DataStatus)[keyof typeof ShipmentControllerReview200DataStatus];
+
+export const ShipmentControllerReview200DataStatus = {
+  waiting: 'waiting',
+  pending: 'pending',
+  preparing: 'preparing',
+  shipping: 'shipping',
+  delivered: 'delivered',
+  completed: 'completed',
+  dispute: 'dispute',
+  returns: 'returns',
+  cancelled: 'cancelled',
+} as const;
+
+/**
+ * @nullable
+ */
+export type ShipmentControllerReview200DataCancellationReason =
+  | (typeof ShipmentControllerReview200DataCancellationReason)[keyof typeof ShipmentControllerReview200DataCancellationReason]
+  | null;
+
+export const ShipmentControllerReview200DataCancellationReason = {
+  SELLER_REJECTED: 'SELLER_REJECTED',
+  SELLER_CONFIRM_TIMEOUT: 'SELLER_CONFIRM_TIMEOUT',
+  BUYER_CANCELLED: 'BUYER_CANCELLED',
+  BUYER_CANCEL_APPROVED: 'BUYER_CANCEL_APPROVED',
+  CARRIER_RETURNED: 'CARRIER_RETURNED',
+} as const;
+
+export type ShipmentControllerReview200DataAddress = { [key: string]: unknown };
+
+export type ShipmentControllerReview200DataItemsItem = {
+  [key: string]: unknown;
+};
+
+/**
+ * @nullable
+ */
+export type ShipmentControllerReview200DataWalletRefund = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  /**
+   * @maximum 9007199254740991
+   * @exclusiveMinimum 0
+   */
+  amount: number;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  creditedAt: string;
+} | null;
+
+export type ShipmentControllerReview200DataEventsItemAction =
+  (typeof ShipmentControllerReview200DataEventsItemAction)[keyof typeof ShipmentControllerReview200DataEventsItemAction];
+
+export const ShipmentControllerReview200DataEventsItemAction = {
+  RECEIPT_CONFIRMED: 'RECEIPT_CONFIRMED',
+  DELIVERY_VERIFIED: 'DELIVERY_VERIFIED',
+  SETTLED: 'SETTLED',
+  COMPLETED: 'COMPLETED',
+  PAID: 'PAID',
+  PLACED: 'PLACED',
+  ACCEPTED: 'ACCEPTED',
+  REJECTED: 'REJECTED',
+  EXPIRED: 'EXPIRED',
+  BUYER_CANCELLED: 'BUYER_CANCELLED',
+  CANCEL_APPROVED: 'CANCEL_APPROVED',
+  SHIPPING: 'SHIPPING',
+  DELIVERED: 'DELIVERED',
+  RETURNING: 'RETURNING',
+  RETURN_INSPECTED: 'RETURN_INSPECTED',
+  CANCEL_REQUESTED: 'CANCEL_REQUESTED',
+  CANCEL_DECISION: 'CANCEL_DECISION',
+  CANCEL_REVIEW_REQUESTED: 'CANCEL_REVIEW_REQUESTED',
+  CANCEL_REVIEW_DECIDED: 'CANCEL_REVIEW_DECIDED',
+} as const;
+
+export type ShipmentControllerReview200DataEventsItem = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  action: ShipmentControllerReview200DataEventsItemAction;
+  /**
+   * @nullable
+   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+   */
+  actorId: string | null;
+  /** @nullable */
+  reason: string | null;
+  /** @nullable */
+  evidence: string | null;
+  /** @nullable */
+  approved: boolean | null;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  createdAt: string;
+};
+
+export type ShipmentControllerReview200Data = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  /**
+   * @nullable
+   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+   */
+  paymentId: string | null;
+  paymentMethod: ShipmentControllerReview200DataPaymentMethod;
+  /**
+   * @nullable
+   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+   */
+  checkoutId: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  handoverBy: string | null;
+  handoverReviewRequired: boolean;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  deliveryObservedAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  receiptConfirmedAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  deliveryVerifiedAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  disputeDeadlineAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  carrierReturnedAt: string | null;
+  /** @nullable */
+  cancelState: ShipmentControllerReview200DataCancelState;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  cancelRequestedAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  cancelRespondBy: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  cancelReviewUntil: string | null;
+  /** @nullable */
+  cancelDecisionReason: string | null;
+  /** @nullable */
+  cancelDecisionEvidence: string | null;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  shopId: string;
+  shopName: string;
+  status: ShipmentControllerReview200DataStatus;
+  /**
+   * @minimum -9007199254740991
+   * @maximum 9007199254740991
+   */
+  subtotal: number;
+  /**
+   * @minimum -9007199254740991
+   * @maximum 9007199254740991
+   */
+  shippingFee: number;
+  /**
+   * @minimum -9007199254740991
+   * @maximum 9007199254740991
+   */
+  total: number;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  sellerConfirmBy: string;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  acceptedAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  cancelledAt: string | null;
+  /** @nullable */
+  cancellationReason: ShipmentControllerReview200DataCancellationReason;
+  /** @nullable */
+  cancellationNote: string | null;
+  address: ShipmentControllerReview200DataAddress;
+  items: ShipmentControllerReview200DataItemsItem[];
+  /** @items.pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  stockReleaseReviewIds: string[];
+  /** @nullable */
+  walletRefund?: ShipmentControllerReview200DataWalletRefund;
+  events?: ShipmentControllerReview200DataEventsItem[];
+};
+
+export type ShipmentControllerReview200 = {
+  statusCode: ShipmentControllerReview200StatusCode;
+  message: string;
+  data: ShipmentControllerReview200Data;
+};
+
+export type ShipmentControllerDecideBody = {
+  approve: boolean;
+  /**
+   * @minLength 1
+   * @maxLength 1000
+   */
+  reason: string;
+  /**
+   * @minLength 1
+   * @maxLength 2000
+   */
+  evidence: string;
+};
+
+export type ShipmentControllerDecide200StatusCode =
+  (typeof ShipmentControllerDecide200StatusCode)[keyof typeof ShipmentControllerDecide200StatusCode];
+
+export const ShipmentControllerDecide200StatusCode = {
+  NUMBER_200: 200,
+} as const;
+
+export type ShipmentControllerDecide200DataPaymentMethod =
+  (typeof ShipmentControllerDecide200DataPaymentMethod)[keyof typeof ShipmentControllerDecide200DataPaymentMethod];
+
+export const ShipmentControllerDecide200DataPaymentMethod = {
+  MOMO: 'MOMO',
+  COD: 'COD',
+} as const;
+
+/**
+ * @nullable
+ */
+export type ShipmentControllerDecide200DataCancelState =
+  | (typeof ShipmentControllerDecide200DataCancelState)[keyof typeof ShipmentControllerDecide200DataCancelState]
+  | null;
+
+export const ShipmentControllerDecide200DataCancelState = {
+  PENDING: 'PENDING',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED',
+  ADMIN_REVIEW: 'ADMIN_REVIEW',
+  CLOSED: 'CLOSED',
+} as const;
+
+export type ShipmentControllerDecide200DataStatus =
+  (typeof ShipmentControllerDecide200DataStatus)[keyof typeof ShipmentControllerDecide200DataStatus];
+
+export const ShipmentControllerDecide200DataStatus = {
+  waiting: 'waiting',
+  pending: 'pending',
+  preparing: 'preparing',
+  shipping: 'shipping',
+  delivered: 'delivered',
+  completed: 'completed',
+  dispute: 'dispute',
+  returns: 'returns',
+  cancelled: 'cancelled',
+} as const;
+
+/**
+ * @nullable
+ */
+export type ShipmentControllerDecide200DataCancellationReason =
+  | (typeof ShipmentControllerDecide200DataCancellationReason)[keyof typeof ShipmentControllerDecide200DataCancellationReason]
+  | null;
+
+export const ShipmentControllerDecide200DataCancellationReason = {
+  SELLER_REJECTED: 'SELLER_REJECTED',
+  SELLER_CONFIRM_TIMEOUT: 'SELLER_CONFIRM_TIMEOUT',
+  BUYER_CANCELLED: 'BUYER_CANCELLED',
+  BUYER_CANCEL_APPROVED: 'BUYER_CANCEL_APPROVED',
+  CARRIER_RETURNED: 'CARRIER_RETURNED',
+} as const;
+
+export type ShipmentControllerDecide200DataAddress = { [key: string]: unknown };
+
+export type ShipmentControllerDecide200DataItemsItem = {
+  [key: string]: unknown;
+};
+
+/**
+ * @nullable
+ */
+export type ShipmentControllerDecide200DataWalletRefund = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  /**
+   * @maximum 9007199254740991
+   * @exclusiveMinimum 0
+   */
+  amount: number;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  creditedAt: string;
+} | null;
+
+export type ShipmentControllerDecide200DataEventsItemAction =
+  (typeof ShipmentControllerDecide200DataEventsItemAction)[keyof typeof ShipmentControllerDecide200DataEventsItemAction];
+
+export const ShipmentControllerDecide200DataEventsItemAction = {
+  RECEIPT_CONFIRMED: 'RECEIPT_CONFIRMED',
+  DELIVERY_VERIFIED: 'DELIVERY_VERIFIED',
+  SETTLED: 'SETTLED',
+  COMPLETED: 'COMPLETED',
+  PAID: 'PAID',
+  PLACED: 'PLACED',
+  ACCEPTED: 'ACCEPTED',
+  REJECTED: 'REJECTED',
+  EXPIRED: 'EXPIRED',
+  BUYER_CANCELLED: 'BUYER_CANCELLED',
+  CANCEL_APPROVED: 'CANCEL_APPROVED',
+  SHIPPING: 'SHIPPING',
+  DELIVERED: 'DELIVERED',
+  RETURNING: 'RETURNING',
+  RETURN_INSPECTED: 'RETURN_INSPECTED',
+  CANCEL_REQUESTED: 'CANCEL_REQUESTED',
+  CANCEL_DECISION: 'CANCEL_DECISION',
+  CANCEL_REVIEW_REQUESTED: 'CANCEL_REVIEW_REQUESTED',
+  CANCEL_REVIEW_DECIDED: 'CANCEL_REVIEW_DECIDED',
+} as const;
+
+export type ShipmentControllerDecide200DataEventsItem = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  action: ShipmentControllerDecide200DataEventsItemAction;
+  /**
+   * @nullable
+   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+   */
+  actorId: string | null;
+  /** @nullable */
+  reason: string | null;
+  /** @nullable */
+  evidence: string | null;
+  /** @nullable */
+  approved: boolean | null;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  createdAt: string;
+};
+
+export type ShipmentControllerDecide200Data = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  /**
+   * @nullable
+   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+   */
+  paymentId: string | null;
+  paymentMethod: ShipmentControllerDecide200DataPaymentMethod;
+  /**
+   * @nullable
+   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+   */
+  checkoutId: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  handoverBy: string | null;
+  handoverReviewRequired: boolean;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  deliveryObservedAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  receiptConfirmedAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  deliveryVerifiedAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  disputeDeadlineAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  carrierReturnedAt: string | null;
+  /** @nullable */
+  cancelState: ShipmentControllerDecide200DataCancelState;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  cancelRequestedAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  cancelRespondBy: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  cancelReviewUntil: string | null;
+  /** @nullable */
+  cancelDecisionReason: string | null;
+  /** @nullable */
+  cancelDecisionEvidence: string | null;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  shopId: string;
+  shopName: string;
+  status: ShipmentControllerDecide200DataStatus;
+  /**
+   * @minimum -9007199254740991
+   * @maximum 9007199254740991
+   */
+  subtotal: number;
+  /**
+   * @minimum -9007199254740991
+   * @maximum 9007199254740991
+   */
+  shippingFee: number;
+  /**
+   * @minimum -9007199254740991
+   * @maximum 9007199254740991
+   */
+  total: number;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  sellerConfirmBy: string;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  acceptedAt: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  cancelledAt: string | null;
+  /** @nullable */
+  cancellationReason: ShipmentControllerDecide200DataCancellationReason;
+  /** @nullable */
+  cancellationNote: string | null;
+  address: ShipmentControllerDecide200DataAddress;
+  items: ShipmentControllerDecide200DataItemsItem[];
+  /** @items.pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  stockReleaseReviewIds: string[];
+  /** @nullable */
+  walletRefund?: ShipmentControllerDecide200DataWalletRefund;
+  events?: ShipmentControllerDecide200DataEventsItem[];
+};
+
+export type ShipmentControllerDecide200 = {
+  statusCode: ShipmentControllerDecide200StatusCode;
+  message: string;
+  data: ShipmentControllerDecide200Data;
+};
+
+export type LateHandoverControllerStopBody = {
+  /**
+   * @minLength 1
+   * @maxLength 1000
+   */
+  reason: string;
+  /**
+   * @minLength 1
+   * @maxLength 2000
+   */
+  evidence: string;
+};
+
+export type LateHandoverControllerStop200StatusCode =
+  (typeof LateHandoverControllerStop200StatusCode)[keyof typeof LateHandoverControllerStop200StatusCode];
+
+export const LateHandoverControllerStop200StatusCode = {
+  NUMBER_200: 200,
+} as const;
+
+export type LateHandoverControllerStop200DataState =
+  (typeof LateHandoverControllerStop200DataState)[keyof typeof LateHandoverControllerStop200DataState];
+
+export const LateHandoverControllerStop200DataState = {
+  REVIEW: 'REVIEW',
+  OFFERED: 'OFFERED',
+  CONSENTED: 'CONSENTED',
+  CANCEL_PENDING: 'CANCEL_PENDING',
+  RETURN_PENDING: 'RETURN_PENDING',
+  CLOSED: 'CLOSED',
+} as const;
+
+export type LateHandoverControllerStop200DataEventsItemAction =
+  (typeof LateHandoverControllerStop200DataEventsItemAction)[keyof typeof LateHandoverControllerStop200DataEventsItemAction];
+
+export const LateHandoverControllerStop200DataEventsItemAction = {
+  OVERDUE: 'OVERDUE',
+  PROPOSED: 'PROPOSED',
+  BUYER_ACCEPTED: 'BUYER_ACCEPTED',
+  BUYER_REFUSED: 'BUYER_REFUSED',
+  ADMIN_STOPPED: 'ADMIN_STOPPED',
+  SAFE_STOP: 'SAFE_STOP',
+  CLOSED: 'CLOSED',
+  PICKUP_VERIFIED: 'PICKUP_VERIFIED',
+} as const;
+
+export type LateHandoverControllerStop200DataEventsItem = {
+  action: LateHandoverControllerStop200DataEventsItemAction;
+  /**
+   * @nullable
+   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+   */
+  actorId: string | null;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  at: string;
+  reason: string;
+};
+
+export type LateHandoverControllerStop200Data = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  orderId: string;
+  state: LateHandoverControllerStop200DataState;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  detectedAt: string;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  reviewDueAt: string | null;
+  calendarMissing: boolean;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  proposedDeadline: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  respondBy: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  consentedAt: string | null;
+  /** @nullable */
+  reason: string | null;
+  events: LateHandoverControllerStop200DataEventsItem[];
+};
+
+export type LateHandoverControllerStop200 = {
+  statusCode: LateHandoverControllerStop200StatusCode;
+  message: string;
+  data: LateHandoverControllerStop200Data;
+};
+
+export type LateHandoverControllerNoticesParams = {
+  /**
+   * @minimum 0
+   * @maximum 100000
+   */
+  offset?: number;
+};
+
+export type LateHandoverControllerNotices200StatusCode =
+  (typeof LateHandoverControllerNotices200StatusCode)[keyof typeof LateHandoverControllerNotices200StatusCode];
+
+export const LateHandoverControllerNotices200StatusCode = {
+  NUMBER_200: 200,
+} as const;
+
+export type LateHandoverControllerNotices200DataItemAction =
+  (typeof LateHandoverControllerNotices200DataItemAction)[keyof typeof LateHandoverControllerNotices200DataItemAction];
+
+export const LateHandoverControllerNotices200DataItemAction = {
+  OVERDUE: 'OVERDUE',
+  PROPOSED: 'PROPOSED',
+  BUYER_ACCEPTED: 'BUYER_ACCEPTED',
+  BUYER_REFUSED: 'BUYER_REFUSED',
+  ADMIN_STOPPED: 'ADMIN_STOPPED',
+  SAFE_STOP: 'SAFE_STOP',
+  CLOSED: 'CLOSED',
+  PICKUP_VERIFIED: 'PICKUP_VERIFIED',
+} as const;
+
+export type LateHandoverControllerNotices200DataItem = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  orderId: string;
+  action: LateHandoverControllerNotices200DataItemAction;
+  reason: string;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  createdAt: string;
+};
+
+export type LateHandoverControllerNotices200 = {
+  statusCode: LateHandoverControllerNotices200StatusCode;
+  message: string;
+  data: LateHandoverControllerNotices200DataItem[];
+};
+
+export type LateHandoverControllerConfigureCalendarBody = {
+  /**
+   * @minimum 2026
+   * @maximum 2100
+   */
+  year: number;
+  /**
+   * @maxItems 366
+   * @items.pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))$
+   */
+  closedDates: string[];
+  /**
+   * @minLength 1
+   * @maxLength 2000
+   */
+  source: string;
+};
+
+export type LateHandoverControllerIncidentsParams = {
+  /**
+   * @minimum 0
+   * @maximum 100000
+   */
+  offset?: number;
+};
+
+export type LateHandoverControllerIncidents200StatusCode =
+  (typeof LateHandoverControllerIncidents200StatusCode)[keyof typeof LateHandoverControllerIncidents200StatusCode];
+
+export const LateHandoverControllerIncidents200StatusCode = {
+  NUMBER_200: 200,
+} as const;
+
+export type LateHandoverControllerIncidents200DataItemState =
+  (typeof LateHandoverControllerIncidents200DataItemState)[keyof typeof LateHandoverControllerIncidents200DataItemState];
+
+export const LateHandoverControllerIncidents200DataItemState = {
+  REVIEW: 'REVIEW',
+  OFFERED: 'OFFERED',
+  CONSENTED: 'CONSENTED',
+  CANCEL_PENDING: 'CANCEL_PENDING',
+  RETURN_PENDING: 'RETURN_PENDING',
+  CLOSED: 'CLOSED',
+} as const;
+
+export type LateHandoverControllerIncidents200DataItemEventsItemAction =
+  (typeof LateHandoverControllerIncidents200DataItemEventsItemAction)[keyof typeof LateHandoverControllerIncidents200DataItemEventsItemAction];
+
+export const LateHandoverControllerIncidents200DataItemEventsItemAction = {
+  OVERDUE: 'OVERDUE',
+  PROPOSED: 'PROPOSED',
+  BUYER_ACCEPTED: 'BUYER_ACCEPTED',
+  BUYER_REFUSED: 'BUYER_REFUSED',
+  ADMIN_STOPPED: 'ADMIN_STOPPED',
+  SAFE_STOP: 'SAFE_STOP',
+  CLOSED: 'CLOSED',
+  PICKUP_VERIFIED: 'PICKUP_VERIFIED',
+} as const;
+
+export type LateHandoverControllerIncidents200DataItemEventsItem = {
+  action: LateHandoverControllerIncidents200DataItemEventsItemAction;
+  /**
+   * @nullable
+   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+   */
+  actorId: string | null;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  at: string;
+  reason: string;
+};
+
+export type LateHandoverControllerIncidents200DataItem = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  orderId: string;
+  state: LateHandoverControllerIncidents200DataItemState;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  detectedAt: string;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  reviewDueAt: string | null;
+  calendarMissing: boolean;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  proposedDeadline: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  respondBy: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  consentedAt: string | null;
+  /** @nullable */
+  reason: string | null;
+  events: LateHandoverControllerIncidents200DataItemEventsItem[];
+};
+
+export type LateHandoverControllerIncidents200 = {
+  statusCode: LateHandoverControllerIncidents200StatusCode;
+  message: string;
+  data: LateHandoverControllerIncidents200DataItem[];
+};
+
+export type LateHandoverControllerBuyerView200StatusCode =
+  (typeof LateHandoverControllerBuyerView200StatusCode)[keyof typeof LateHandoverControllerBuyerView200StatusCode];
+
+export const LateHandoverControllerBuyerView200StatusCode = {
+  NUMBER_200: 200,
+} as const;
+
+export type LateHandoverControllerBuyerView200DataState =
+  (typeof LateHandoverControllerBuyerView200DataState)[keyof typeof LateHandoverControllerBuyerView200DataState];
+
+export const LateHandoverControllerBuyerView200DataState = {
+  REVIEW: 'REVIEW',
+  OFFERED: 'OFFERED',
+  CONSENTED: 'CONSENTED',
+  CANCEL_PENDING: 'CANCEL_PENDING',
+  RETURN_PENDING: 'RETURN_PENDING',
+  CLOSED: 'CLOSED',
+} as const;
+
+export type LateHandoverControllerBuyerView200DataEventsItemAction =
+  (typeof LateHandoverControllerBuyerView200DataEventsItemAction)[keyof typeof LateHandoverControllerBuyerView200DataEventsItemAction];
+
+export const LateHandoverControllerBuyerView200DataEventsItemAction = {
+  OVERDUE: 'OVERDUE',
+  PROPOSED: 'PROPOSED',
+  BUYER_ACCEPTED: 'BUYER_ACCEPTED',
+  BUYER_REFUSED: 'BUYER_REFUSED',
+  ADMIN_STOPPED: 'ADMIN_STOPPED',
+  SAFE_STOP: 'SAFE_STOP',
+  CLOSED: 'CLOSED',
+  PICKUP_VERIFIED: 'PICKUP_VERIFIED',
+} as const;
+
+export type LateHandoverControllerBuyerView200DataEventsItem = {
+  action: LateHandoverControllerBuyerView200DataEventsItemAction;
+  /**
+   * @nullable
+   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+   */
+  actorId: string | null;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  at: string;
+  reason: string;
+};
+
+export type LateHandoverControllerBuyerView200Data = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  orderId: string;
+  state: LateHandoverControllerBuyerView200DataState;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  detectedAt: string;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  reviewDueAt: string | null;
+  calendarMissing: boolean;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  proposedDeadline: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  respondBy: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  consentedAt: string | null;
+  /** @nullable */
+  reason: string | null;
+  events: LateHandoverControllerBuyerView200DataEventsItem[];
+};
+
+export type LateHandoverControllerBuyerView200 = {
+  statusCode: LateHandoverControllerBuyerView200StatusCode;
+  message: string;
+  data: LateHandoverControllerBuyerView200Data;
+};
+
+export type LateHandoverControllerShopView200StatusCode =
+  (typeof LateHandoverControllerShopView200StatusCode)[keyof typeof LateHandoverControllerShopView200StatusCode];
+
+export const LateHandoverControllerShopView200StatusCode = {
+  NUMBER_200: 200,
+} as const;
+
+export type LateHandoverControllerShopView200DataState =
+  (typeof LateHandoverControllerShopView200DataState)[keyof typeof LateHandoverControllerShopView200DataState];
+
+export const LateHandoverControllerShopView200DataState = {
+  REVIEW: 'REVIEW',
+  OFFERED: 'OFFERED',
+  CONSENTED: 'CONSENTED',
+  CANCEL_PENDING: 'CANCEL_PENDING',
+  RETURN_PENDING: 'RETURN_PENDING',
+  CLOSED: 'CLOSED',
+} as const;
+
+export type LateHandoverControllerShopView200DataEventsItemAction =
+  (typeof LateHandoverControllerShopView200DataEventsItemAction)[keyof typeof LateHandoverControllerShopView200DataEventsItemAction];
+
+export const LateHandoverControllerShopView200DataEventsItemAction = {
+  OVERDUE: 'OVERDUE',
+  PROPOSED: 'PROPOSED',
+  BUYER_ACCEPTED: 'BUYER_ACCEPTED',
+  BUYER_REFUSED: 'BUYER_REFUSED',
+  ADMIN_STOPPED: 'ADMIN_STOPPED',
+  SAFE_STOP: 'SAFE_STOP',
+  CLOSED: 'CLOSED',
+  PICKUP_VERIFIED: 'PICKUP_VERIFIED',
+} as const;
+
+export type LateHandoverControllerShopView200DataEventsItem = {
+  action: LateHandoverControllerShopView200DataEventsItemAction;
+  /**
+   * @nullable
+   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+   */
+  actorId: string | null;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  at: string;
+  reason: string;
+};
+
+export type LateHandoverControllerShopView200Data = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  orderId: string;
+  state: LateHandoverControllerShopView200DataState;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  detectedAt: string;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  reviewDueAt: string | null;
+  calendarMissing: boolean;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  proposedDeadline: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  respondBy: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  consentedAt: string | null;
+  /** @nullable */
+  reason: string | null;
+  events: LateHandoverControllerShopView200DataEventsItem[];
+};
+
+export type LateHandoverControllerShopView200 = {
+  statusCode: LateHandoverControllerShopView200StatusCode;
+  message: string;
+  data: LateHandoverControllerShopView200Data;
+};
+
+export type LateHandoverControllerProposeBody = {
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z|([+-](?:[01]\d|2[0-3]):[0-5]\d)))$ */
+  deadline: string;
+  /**
+   * @minLength 1
+   * @maxLength 1000
+   */
+  reason: string;
+};
+
+export type LateHandoverControllerPropose200StatusCode =
+  (typeof LateHandoverControllerPropose200StatusCode)[keyof typeof LateHandoverControllerPropose200StatusCode];
+
+export const LateHandoverControllerPropose200StatusCode = {
+  NUMBER_200: 200,
+} as const;
+
+export type LateHandoverControllerPropose200DataState =
+  (typeof LateHandoverControllerPropose200DataState)[keyof typeof LateHandoverControllerPropose200DataState];
+
+export const LateHandoverControllerPropose200DataState = {
+  REVIEW: 'REVIEW',
+  OFFERED: 'OFFERED',
+  CONSENTED: 'CONSENTED',
+  CANCEL_PENDING: 'CANCEL_PENDING',
+  RETURN_PENDING: 'RETURN_PENDING',
+  CLOSED: 'CLOSED',
+} as const;
+
+export type LateHandoverControllerPropose200DataEventsItemAction =
+  (typeof LateHandoverControllerPropose200DataEventsItemAction)[keyof typeof LateHandoverControllerPropose200DataEventsItemAction];
+
+export const LateHandoverControllerPropose200DataEventsItemAction = {
+  OVERDUE: 'OVERDUE',
+  PROPOSED: 'PROPOSED',
+  BUYER_ACCEPTED: 'BUYER_ACCEPTED',
+  BUYER_REFUSED: 'BUYER_REFUSED',
+  ADMIN_STOPPED: 'ADMIN_STOPPED',
+  SAFE_STOP: 'SAFE_STOP',
+  CLOSED: 'CLOSED',
+  PICKUP_VERIFIED: 'PICKUP_VERIFIED',
+} as const;
+
+export type LateHandoverControllerPropose200DataEventsItem = {
+  action: LateHandoverControllerPropose200DataEventsItemAction;
+  /**
+   * @nullable
+   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+   */
+  actorId: string | null;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  at: string;
+  reason: string;
+};
+
+export type LateHandoverControllerPropose200Data = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  orderId: string;
+  state: LateHandoverControllerPropose200DataState;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  detectedAt: string;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  reviewDueAt: string | null;
+  calendarMissing: boolean;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  proposedDeadline: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  respondBy: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  consentedAt: string | null;
+  /** @nullable */
+  reason: string | null;
+  events: LateHandoverControllerPropose200DataEventsItem[];
+};
+
+export type LateHandoverControllerPropose200 = {
+  statusCode: LateHandoverControllerPropose200StatusCode;
+  message: string;
+  data: LateHandoverControllerPropose200Data;
+};
+
+export type LateHandoverControllerRespondBody = {
+  accept: boolean;
+};
+
+export type LateHandoverControllerRespond200StatusCode =
+  (typeof LateHandoverControllerRespond200StatusCode)[keyof typeof LateHandoverControllerRespond200StatusCode];
+
+export const LateHandoverControllerRespond200StatusCode = {
+  NUMBER_200: 200,
+} as const;
+
+export type LateHandoverControllerRespond200DataState =
+  (typeof LateHandoverControllerRespond200DataState)[keyof typeof LateHandoverControllerRespond200DataState];
+
+export const LateHandoverControllerRespond200DataState = {
+  REVIEW: 'REVIEW',
+  OFFERED: 'OFFERED',
+  CONSENTED: 'CONSENTED',
+  CANCEL_PENDING: 'CANCEL_PENDING',
+  RETURN_PENDING: 'RETURN_PENDING',
+  CLOSED: 'CLOSED',
+} as const;
+
+export type LateHandoverControllerRespond200DataEventsItemAction =
+  (typeof LateHandoverControllerRespond200DataEventsItemAction)[keyof typeof LateHandoverControllerRespond200DataEventsItemAction];
+
+export const LateHandoverControllerRespond200DataEventsItemAction = {
+  OVERDUE: 'OVERDUE',
+  PROPOSED: 'PROPOSED',
+  BUYER_ACCEPTED: 'BUYER_ACCEPTED',
+  BUYER_REFUSED: 'BUYER_REFUSED',
+  ADMIN_STOPPED: 'ADMIN_STOPPED',
+  SAFE_STOP: 'SAFE_STOP',
+  CLOSED: 'CLOSED',
+  PICKUP_VERIFIED: 'PICKUP_VERIFIED',
+} as const;
+
+export type LateHandoverControllerRespond200DataEventsItem = {
+  action: LateHandoverControllerRespond200DataEventsItemAction;
+  /**
+   * @nullable
+   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+   */
+  actorId: string | null;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  at: string;
+  reason: string;
+};
+
+export type LateHandoverControllerRespond200Data = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  orderId: string;
+  state: LateHandoverControllerRespond200DataState;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  detectedAt: string;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  reviewDueAt: string | null;
+  calendarMissing: boolean;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  proposedDeadline: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  respondBy: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  consentedAt: string | null;
+  /** @nullable */
+  reason: string | null;
+  events: LateHandoverControllerRespond200DataEventsItem[];
+};
+
+export type LateHandoverControllerRespond200 = {
+  statusCode: LateHandoverControllerRespond200StatusCode;
+  message: string;
+  data: LateHandoverControllerRespond200Data;
+};
+
+export type CarrierIncidentControllerIncidentsParams = {
+  /**
+   * @minimum 0
+   * @maximum 100000
+   */
+  offset?: number;
+};
+
+export type CarrierIncidentControllerIncidents200StatusCode =
+  (typeof CarrierIncidentControllerIncidents200StatusCode)[keyof typeof CarrierIncidentControllerIncidents200StatusCode];
+
+export const CarrierIncidentControllerIncidents200StatusCode = {
+  NUMBER_200: 200,
+} as const;
+
+export type CarrierIncidentControllerIncidents200DataItemState =
+  (typeof CarrierIncidentControllerIncidents200DataItemState)[keyof typeof CarrierIncidentControllerIncidents200DataItemState];
+
+export const CarrierIncidentControllerIncidents200DataItemState = {
+  REVIEW: 'REVIEW',
+  RESOLVED: 'RESOLVED',
+} as const;
+
+export type CarrierIncidentControllerIncidents200DataItemEventsItemOutcome =
+  (typeof CarrierIncidentControllerIncidents200DataItemEventsItemOutcome)[keyof typeof CarrierIncidentControllerIncidents200DataItemEventsItemOutcome];
+
+export const CarrierIncidentControllerIncidents200DataItemEventsItemOutcome = {
+  CANCELLED_BEFORE_PICKUP: 'CANCELLED_BEFORE_PICKUP',
+  KEEP_REVIEW: 'KEEP_REVIEW',
+} as const;
+
+export type CarrierIncidentControllerIncidents200DataItemEventsItem = {
+  outcome: CarrierIncidentControllerIncidents200DataItemEventsItemOutcome;
+  /**
+   * @minLength 1
+   * @maxLength 2000
+   */
+  reason: string;
+  /**
+   * @minLength 1
+   * @maxLength 4000
+   */
+  evidence: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  actorId: string;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  at: string;
+};
+
+export type CarrierIncidentControllerIncidents200DataItem = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  shipmentId: string;
+  state: CarrierIncidentControllerIncidents200DataItemState;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  openedAt: string;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  reviewDueAt: string | null;
+  calendarMissing: boolean;
+  overdue: boolean;
+  events: CarrierIncidentControllerIncidents200DataItemEventsItem[];
+};
+
+export type CarrierIncidentControllerIncidents200 = {
+  statusCode: CarrierIncidentControllerIncidents200StatusCode;
+  message: string;
+  data: CarrierIncidentControllerIncidents200DataItem[];
+};
+
+export type CarrierIncidentControllerDecideBodyOutcome =
+  (typeof CarrierIncidentControllerDecideBodyOutcome)[keyof typeof CarrierIncidentControllerDecideBodyOutcome];
+
+export const CarrierIncidentControllerDecideBodyOutcome = {
+  CANCELLED_BEFORE_PICKUP: 'CANCELLED_BEFORE_PICKUP',
+  KEEP_REVIEW: 'KEEP_REVIEW',
+} as const;
+
+export type CarrierIncidentControllerDecideBody = {
+  outcome: CarrierIncidentControllerDecideBodyOutcome;
+  /**
+   * @minLength 1
+   * @maxLength 2000
+   */
+  reason: string;
+  /**
+   * @minLength 1
+   * @maxLength 4000
+   */
+  evidence: string;
+};
+
+export type CarrierIncidentControllerDecide200StatusCode =
+  (typeof CarrierIncidentControllerDecide200StatusCode)[keyof typeof CarrierIncidentControllerDecide200StatusCode];
+
+export const CarrierIncidentControllerDecide200StatusCode = {
+  NUMBER_200: 200,
+} as const;
+
+export type CarrierIncidentControllerDecide200DataState =
+  (typeof CarrierIncidentControllerDecide200DataState)[keyof typeof CarrierIncidentControllerDecide200DataState];
+
+export const CarrierIncidentControllerDecide200DataState = {
+  REVIEW: 'REVIEW',
+  RESOLVED: 'RESOLVED',
+} as const;
+
+export type CarrierIncidentControllerDecide200DataEventsItemOutcome =
+  (typeof CarrierIncidentControllerDecide200DataEventsItemOutcome)[keyof typeof CarrierIncidentControllerDecide200DataEventsItemOutcome];
+
+export const CarrierIncidentControllerDecide200DataEventsItemOutcome = {
+  CANCELLED_BEFORE_PICKUP: 'CANCELLED_BEFORE_PICKUP',
+  KEEP_REVIEW: 'KEEP_REVIEW',
+} as const;
+
+export type CarrierIncidentControllerDecide200DataEventsItem = {
+  outcome: CarrierIncidentControllerDecide200DataEventsItemOutcome;
+  /**
+   * @minLength 1
+   * @maxLength 2000
+   */
+  reason: string;
+  /**
+   * @minLength 1
+   * @maxLength 4000
+   */
+  evidence: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  actorId: string;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  at: string;
+};
+
+export type CarrierIncidentControllerDecide200Data = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  shipmentId: string;
+  state: CarrierIncidentControllerDecide200DataState;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  openedAt: string;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  reviewDueAt: string | null;
+  calendarMissing: boolean;
+  overdue: boolean;
+  events: CarrierIncidentControllerDecide200DataEventsItem[];
+};
+
+export type CarrierIncidentControllerDecide200 = {
+  statusCode: CarrierIncidentControllerDecide200StatusCode;
+  message: string;
+  data: CarrierIncidentControllerDecide200Data;
+};
+
 export type MediaControllerFindAll200StatusCode =
   (typeof MediaControllerFindAll200StatusCode)[keyof typeof MediaControllerFindAll200StatusCode];
 
@@ -6439,6 +15099,59 @@ export type MediaControllerSetCover200 = {
   data: MediaControllerSetCover200Data;
 };
 
+export type MediaControllerDelete200StatusCode =
+  (typeof MediaControllerDelete200StatusCode)[keyof typeof MediaControllerDelete200StatusCode];
+
+export const MediaControllerDelete200StatusCode = {
+  NUMBER_200: 200,
+} as const;
+
+export type MediaControllerDelete200DataItemMediaType =
+  (typeof MediaControllerDelete200DataItemMediaType)[keyof typeof MediaControllerDelete200DataItemMediaType];
+
+export const MediaControllerDelete200DataItemMediaType = {
+  IMAGE: 'IMAGE',
+} as const;
+
+export type MediaControllerDelete200DataItemRole =
+  (typeof MediaControllerDelete200DataItemRole)[keyof typeof MediaControllerDelete200DataItemRole];
+
+export const MediaControllerDelete200DataItemRole = {
+  COVER: 'COVER',
+  GALLERY: 'GALLERY',
+} as const;
+
+export type MediaControllerDelete200DataItem = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  url: string;
+  mediaType: MediaControllerDelete200DataItemMediaType;
+  mimeType: string;
+  /**
+   * @minimum 0
+   * @maximum 9007199254740991
+   */
+  sizeBytes: number;
+  role: MediaControllerDelete200DataItemRole;
+  /** @nullable */
+  angle: string | null;
+  /**
+   * @minimum 0
+   * @maximum 9007199254740991
+   */
+  sortOrder: number;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  createdAt: string;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  updatedAt: string;
+};
+
+export type MediaControllerDelete200 = {
+  statusCode: MediaControllerDelete200StatusCode;
+  message: string;
+  data: MediaControllerDelete200DataItem[];
+};
+
 export type UserControllerGetMe200StatusCode =
   (typeof UserControllerGetMe200StatusCode)[keyof typeof UserControllerGetMe200StatusCode];
 
@@ -6470,6 +15183,24 @@ export const UserControllerGetMe200DataStatus = {
   INACTIVE: 'INACTIVE',
 } as const;
 
+export type UserControllerGetMe200DataShopMemberRole =
+  (typeof UserControllerGetMe200DataShopMemberRole)[keyof typeof UserControllerGetMe200DataShopMemberRole];
+
+export const UserControllerGetMe200DataShopMemberRole = {
+  OWNER: 'OWNER',
+  STAFF: 'STAFF',
+} as const;
+
+/**
+ * @nullable
+ */
+export type UserControllerGetMe200DataShop = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  name: string;
+  memberRole: UserControllerGetMe200DataShopMemberRole;
+} | null;
+
 export type UserControllerGetMe200Data = {
   /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
   id: string;
@@ -6483,6 +15214,8 @@ export type UserControllerGetMe200Data = {
   createdAt: string;
   /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
   updatedAt: string;
+  /** @nullable */
+  shop: UserControllerGetMe200DataShop;
 };
 
 export type UserControllerGetMe200 = {
@@ -7271,6 +16004,269 @@ export type UserAddressControllerUpdate200 = {
   statusCode: UserAddressControllerUpdate200StatusCode;
   message: string;
   data: UserAddressControllerUpdate200Data;
+};
+
+export type WishlistControllerFindMine200StatusCode =
+  (typeof WishlistControllerFindMine200StatusCode)[keyof typeof WishlistControllerFindMine200StatusCode];
+
+export const WishlistControllerFindMine200StatusCode = {
+  NUMBER_200: 200,
+} as const;
+
+export type WishlistControllerFindMine200DataItemsItemAvailability =
+  (typeof WishlistControllerFindMine200DataItemsItemAvailability)[keyof typeof WishlistControllerFindMine200DataItemsItemAvailability];
+
+export const WishlistControllerFindMine200DataItemsItemAvailability = {
+  AVAILABLE: 'AVAILABLE',
+  HELD: 'HELD',
+  SOLD: 'SOLD',
+  UNAVAILABLE: 'UNAVAILABLE',
+  OWN_PRODUCT: 'OWN_PRODUCT',
+} as const;
+
+export type WishlistControllerFindMine200DataItemsItemProductCondition =
+  (typeof WishlistControllerFindMine200DataItemsItemProductCondition)[keyof typeof WishlistControllerFindMine200DataItemsItemProductCondition];
+
+export const WishlistControllerFindMine200DataItemsItemProductCondition = {
+  FAIR: 'FAIR',
+  GOOD: 'GOOD',
+  EXCELLENT: 'EXCELLENT',
+  PRISTINE: 'PRISTINE',
+} as const;
+
+/**
+ * @nullable
+ */
+export type WishlistControllerFindMine200DataItemsItemProductShop = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  name: string;
+} | null;
+
+/**
+ * @nullable
+ */
+export type WishlistControllerFindMine200DataItemsItemProduct = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  title: string;
+  /**
+   * @maximum 9007199254740991
+   * @exclusiveMinimum 0
+   */
+  price: number;
+  condition: WishlistControllerFindMine200DataItemsItemProductCondition;
+  /** @nullable */
+  size: string | null;
+  /** @nullable */
+  color: string | null;
+  /** @nullable */
+  coverUrl: string | null;
+  /** @nullable */
+  shop: WishlistControllerFindMine200DataItemsItemProductShop;
+} | null;
+
+export type WishlistControllerFindMine200DataItemsItem = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  productId: string;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  addedAt: string;
+  availability: WishlistControllerFindMine200DataItemsItemAvailability;
+  /** @nullable */
+  product: WishlistControllerFindMine200DataItemsItemProduct;
+};
+
+export type WishlistControllerFindMine200Data = {
+  items: WishlistControllerFindMine200DataItemsItem[];
+  /**
+   * @minimum 0
+   * @maximum 9007199254740991
+   */
+  totalCount: number;
+};
+
+export type WishlistControllerFindMine200 = {
+  statusCode: WishlistControllerFindMine200StatusCode;
+  message: string;
+  data: WishlistControllerFindMine200Data;
+};
+
+export type WishlistControllerAddBody = { [key: string]: unknown };
+
+export type WishlistControllerAdd200StatusCode =
+  (typeof WishlistControllerAdd200StatusCode)[keyof typeof WishlistControllerAdd200StatusCode];
+
+export const WishlistControllerAdd200StatusCode = {
+  NUMBER_200: 200,
+} as const;
+
+export type WishlistControllerAdd200DataItemsItemAvailability =
+  (typeof WishlistControllerAdd200DataItemsItemAvailability)[keyof typeof WishlistControllerAdd200DataItemsItemAvailability];
+
+export const WishlistControllerAdd200DataItemsItemAvailability = {
+  AVAILABLE: 'AVAILABLE',
+  HELD: 'HELD',
+  SOLD: 'SOLD',
+  UNAVAILABLE: 'UNAVAILABLE',
+  OWN_PRODUCT: 'OWN_PRODUCT',
+} as const;
+
+export type WishlistControllerAdd200DataItemsItemProductCondition =
+  (typeof WishlistControllerAdd200DataItemsItemProductCondition)[keyof typeof WishlistControllerAdd200DataItemsItemProductCondition];
+
+export const WishlistControllerAdd200DataItemsItemProductCondition = {
+  FAIR: 'FAIR',
+  GOOD: 'GOOD',
+  EXCELLENT: 'EXCELLENT',
+  PRISTINE: 'PRISTINE',
+} as const;
+
+/**
+ * @nullable
+ */
+export type WishlistControllerAdd200DataItemsItemProductShop = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  name: string;
+} | null;
+
+/**
+ * @nullable
+ */
+export type WishlistControllerAdd200DataItemsItemProduct = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  title: string;
+  /**
+   * @maximum 9007199254740991
+   * @exclusiveMinimum 0
+   */
+  price: number;
+  condition: WishlistControllerAdd200DataItemsItemProductCondition;
+  /** @nullable */
+  size: string | null;
+  /** @nullable */
+  color: string | null;
+  /** @nullable */
+  coverUrl: string | null;
+  /** @nullable */
+  shop: WishlistControllerAdd200DataItemsItemProductShop;
+} | null;
+
+export type WishlistControllerAdd200DataItemsItem = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  productId: string;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  addedAt: string;
+  availability: WishlistControllerAdd200DataItemsItemAvailability;
+  /** @nullable */
+  product: WishlistControllerAdd200DataItemsItemProduct;
+};
+
+export type WishlistControllerAdd200Data = {
+  items: WishlistControllerAdd200DataItemsItem[];
+  /**
+   * @minimum 0
+   * @maximum 9007199254740991
+   */
+  totalCount: number;
+};
+
+export type WishlistControllerAdd200 = {
+  statusCode: WishlistControllerAdd200StatusCode;
+  message: string;
+  data: WishlistControllerAdd200Data;
+};
+
+export type WishlistControllerRemove200StatusCode =
+  (typeof WishlistControllerRemove200StatusCode)[keyof typeof WishlistControllerRemove200StatusCode];
+
+export const WishlistControllerRemove200StatusCode = {
+  NUMBER_200: 200,
+} as const;
+
+export type WishlistControllerRemove200DataItemsItemAvailability =
+  (typeof WishlistControllerRemove200DataItemsItemAvailability)[keyof typeof WishlistControllerRemove200DataItemsItemAvailability];
+
+export const WishlistControllerRemove200DataItemsItemAvailability = {
+  AVAILABLE: 'AVAILABLE',
+  HELD: 'HELD',
+  SOLD: 'SOLD',
+  UNAVAILABLE: 'UNAVAILABLE',
+  OWN_PRODUCT: 'OWN_PRODUCT',
+} as const;
+
+export type WishlistControllerRemove200DataItemsItemProductCondition =
+  (typeof WishlistControllerRemove200DataItemsItemProductCondition)[keyof typeof WishlistControllerRemove200DataItemsItemProductCondition];
+
+export const WishlistControllerRemove200DataItemsItemProductCondition = {
+  FAIR: 'FAIR',
+  GOOD: 'GOOD',
+  EXCELLENT: 'EXCELLENT',
+  PRISTINE: 'PRISTINE',
+} as const;
+
+/**
+ * @nullable
+ */
+export type WishlistControllerRemove200DataItemsItemProductShop = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  name: string;
+} | null;
+
+/**
+ * @nullable
+ */
+export type WishlistControllerRemove200DataItemsItemProduct = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  title: string;
+  /**
+   * @maximum 9007199254740991
+   * @exclusiveMinimum 0
+   */
+  price: number;
+  condition: WishlistControllerRemove200DataItemsItemProductCondition;
+  /** @nullable */
+  size: string | null;
+  /** @nullable */
+  color: string | null;
+  /** @nullable */
+  coverUrl: string | null;
+  /** @nullable */
+  shop: WishlistControllerRemove200DataItemsItemProductShop;
+} | null;
+
+export type WishlistControllerRemove200DataItemsItem = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  productId: string;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  addedAt: string;
+  availability: WishlistControllerRemove200DataItemsItemAvailability;
+  /** @nullable */
+  product: WishlistControllerRemove200DataItemsItemProduct;
+};
+
+export type WishlistControllerRemove200Data = {
+  items: WishlistControllerRemove200DataItemsItem[];
+  /**
+   * @minimum 0
+   * @maximum 9007199254740991
+   */
+  totalCount: number;
+};
+
+export type WishlistControllerRemove200 = {
+  statusCode: WishlistControllerRemove200StatusCode;
+  message: string;
+  data: WishlistControllerRemove200Data;
 };
 
 export type AuthControllerRegisterBody = {

@@ -18,7 +18,11 @@ function ToastIcon({ type }: { type: TToast['type'] }) {
   if (type === 'success') {
     return (
       <div className="flex size-7 shrink-0 items-center justify-center bg-[#c4f82a] text-[#181a1b]">
-        <HugeiconsIcon icon={CheckmarkCircle01Icon} size={16} strokeWidth={2.25} />
+        <HugeiconsIcon
+          icon={CheckmarkCircle01Icon}
+          size={16}
+          strokeWidth={2.25}
+        />
       </div>
     );
   }
@@ -104,7 +108,7 @@ function ToastItem({ toast }: { toast: TToast }) {
 
         <div className="min-w-0 flex-1">
           <div className="flex items-baseline justify-between gap-2">
-            <p className="font-heading text-sm font-semibold leading-tight">
+            <p className="font-heading text-sm leading-tight font-semibold">
               {toast.title}
             </p>
             {toast.meta && (
@@ -137,14 +141,18 @@ function ToastItem({ toast }: { toast: TToast }) {
           )}
 
           {(toast.actionLabel || toast.href) && (
-            <div className="-ml-2 mt-2">
+            <div className="mt-2 -ml-2">
               {toast.href ? (
                 <Link
                   href={toast.href}
                   className={`inline-flex min-h-[44px] items-center gap-1.5 px-2 text-[13px] font-semibold transition-opacity ${actionTextClasses}`}
                 >
                   <span>{toast.actionLabel ?? 'Xem chi tiết'}</span>
-                  <HugeiconsIcon icon={ArrowRight01Icon} size={14} strokeWidth={2} />
+                  <HugeiconsIcon
+                    icon={ArrowRight01Icon}
+                    size={14}
+                    strokeWidth={2}
+                  />
                 </Link>
               ) : (
                 <button
@@ -156,7 +164,11 @@ function ToastItem({ toast }: { toast: TToast }) {
                   className={`inline-flex min-h-[44px] items-center gap-1.5 px-2 text-[13px] font-semibold transition-opacity ${actionTextClasses}`}
                 >
                   <span>{toast.actionLabel}</span>
-                  <HugeiconsIcon icon={ArrowRight01Icon} size={14} strokeWidth={2} />
+                  <HugeiconsIcon
+                    icon={ArrowRight01Icon}
+                    size={14}
+                    strokeWidth={2}
+                  />
                 </button>
               )}
             </div>
@@ -167,7 +179,7 @@ function ToastItem({ toast }: { toast: TToast }) {
           type="button"
           onClick={() => removeToast(toast.id)}
           aria-label="Đóng thông báo"
-          className={`-mr-2 -mt-2 flex size-11 shrink-0 items-center justify-center transition-colors ${closeButtonClasses}`}
+          className={`-mt-2 -mr-2 flex size-11 shrink-0 items-center justify-center transition-colors ${closeButtonClasses}`}
         >
           <HugeiconsIcon icon={Cancel01Icon} size={16} strokeWidth={2} />
         </button>
@@ -195,7 +207,7 @@ export function ToastViewport() {
   return (
     <div
       aria-live="polite"
-      className="pointer-events-none fixed inset-x-4 top-4 z-[100] flex flex-col gap-2.5 sm:left-auto sm:right-6 sm:w-[400px]"
+      className="pointer-events-none fixed inset-x-4 top-4 z-[100] flex flex-col gap-2.5 sm:right-6 sm:left-auto sm:w-[400px]"
     >
       {toasts.map((toast) => (
         <ToastItem key={toast.id} toast={toast} />
@@ -203,4 +215,3 @@ export function ToastViewport() {
     </div>
   );
 }
-

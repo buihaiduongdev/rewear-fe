@@ -67,24 +67,24 @@ export const productControllerFindMine = (
   );
 };
 export const productControllerFindManaged = (
-  id: string,
+  productId: string,
   options?: SecondParameter<
     typeof orvalRequest<ProductControllerFindManaged200>
   >,
 ) => {
   return orvalRequest<ProductControllerFindManaged200>(
-    { url: `/api/products/manage/${id}`, method: 'GET' },
+    { url: `/api/products/manage/${productId}`, method: 'GET' },
     options,
   );
 };
 export const productControllerModerationForOwner = (
-  id: string,
+  productId: string,
   options?: SecondParameter<
     typeof orvalRequest<ProductControllerModerationForOwner200>
   >,
 ) => {
   return orvalRequest<ProductControllerModerationForOwner200>(
-    { url: `/api/products/manage/${id}/moderation`, method: 'GET' },
+    { url: `/api/products/manage/${productId}/moderation`, method: 'GET' },
     options,
   );
 };
@@ -100,35 +100,35 @@ export const productControllerReviewQueue = (
   );
 };
 export const productControllerReviewDetail = (
-  id: string,
+  productId: string,
   options?: SecondParameter<
     typeof orvalRequest<ProductControllerReviewDetail200>
   >,
 ) => {
   return orvalRequest<ProductControllerReviewDetail200>(
-    { url: `/api/products/admin/${id}`, method: 'GET' },
+    { url: `/api/products/admin/${productId}`, method: 'GET' },
     options,
   );
 };
 export const productControllerModerationForAdmin = (
-  id: string,
+  productId: string,
   options?: SecondParameter<
     typeof orvalRequest<ProductControllerModerationForAdmin200>
   >,
 ) => {
   return orvalRequest<ProductControllerModerationForAdmin200>(
-    { url: `/api/products/admin/${id}/moderation`, method: 'GET' },
+    { url: `/api/products/admin/${productId}/moderation`, method: 'GET' },
     options,
   );
 };
 export const productControllerModerate = (
-  id: string,
+  productId: string,
   productControllerModerateBody: ProductControllerModerateBody,
   options?: SecondParameter<typeof orvalRequest<ProductControllerModerate200>>,
 ) => {
   return orvalRequest<ProductControllerModerate200>(
     {
-      url: `/api/products/admin/${id}/moderation`,
+      url: `/api/products/admin/${productId}/moderation`,
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       data: productControllerModerateBody,
@@ -137,33 +137,33 @@ export const productControllerModerate = (
   );
 };
 export const productControllerSubmit = (
-  id: string,
+  productId: string,
   options?: SecondParameter<typeof orvalRequest<ProductControllerSubmit200>>,
 ) => {
   return orvalRequest<ProductControllerSubmit200>(
-    { url: `/api/products/${id}/submit`, method: 'POST' },
+    { url: `/api/products/${productId}/submit`, method: 'POST' },
     options,
   );
 };
 export const productControllerCancelSubmission = (
-  id: string,
+  productId: string,
   options?: SecondParameter<
     typeof orvalRequest<ProductControllerCancelSubmission200>
   >,
 ) => {
   return orvalRequest<ProductControllerCancelSubmission200>(
-    { url: `/api/products/${id}/cancel-submission`, method: 'POST' },
+    { url: `/api/products/${productId}/cancel-submission`, method: 'POST' },
     options,
   );
 };
 export const productControllerSuspend = (
-  id: string,
+  productId: string,
   productControllerSuspendBody: ProductControllerSuspendBody,
   options?: SecondParameter<typeof orvalRequest<ProductControllerSuspend200>>,
 ) => {
   return orvalRequest<ProductControllerSuspend200>(
     {
-      url: `/api/products/admin/${id}/suspend`,
+      url: `/api/products/admin/${productId}/suspend`,
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       data: productControllerSuspendBody,
@@ -172,22 +172,22 @@ export const productControllerSuspend = (
   );
 };
 export const productControllerFindOne = (
-  id: string,
+  productId: string,
   options?: SecondParameter<typeof orvalRequest<ProductControllerFindOne200>>,
 ) => {
   return orvalRequest<ProductControllerFindOne200>(
-    { url: `/api/products/${id}`, method: 'GET' },
+    { url: `/api/products/${productId}`, method: 'GET' },
     options,
   );
 };
 export const productControllerUpdate = (
-  id: string,
+  productId: string,
   productControllerUpdateBody: ProductControllerUpdateBody,
   options?: SecondParameter<typeof orvalRequest<ProductControllerUpdate200>>,
 ) => {
   return orvalRequest<ProductControllerUpdate200>(
     {
-      url: `/api/products/${id}`,
+      url: `/api/products/${productId}`,
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       data: productControllerUpdateBody,
@@ -196,7 +196,7 @@ export const productControllerUpdate = (
   );
 };
 export const productControllerUpdateStatus = (
-  id: string,
+  productId: string,
   productControllerUpdateStatusBody: ProductControllerUpdateStatusBody,
   options?: SecondParameter<
     typeof orvalRequest<ProductControllerUpdateStatus200>
@@ -204,7 +204,7 @@ export const productControllerUpdateStatus = (
 ) => {
   return orvalRequest<ProductControllerUpdateStatus200>(
     {
-      url: `/api/products/${id}/status`,
+      url: `/api/products/${productId}/status`,
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       data: productControllerUpdateStatusBody,

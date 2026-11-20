@@ -227,7 +227,14 @@ export const CheckoutControllerCreateResponse = zod.object({
   message: zod.string(),
   data: zod.object({
     id: zod.uuid().regex(checkoutControllerCreateResponseDataIdRegExp),
-    status: zod.enum(['HELD', 'EMPTY', 'CANCELLED', 'EXPIRED', 'PAID']),
+    status: zod.enum([
+      'HELD',
+      'EMPTY',
+      'CANCELLED',
+      'EXPIRED',
+      'PAID',
+      'COD_PLACED',
+    ]),
     expiresAt: zod.iso
       .datetime({ offset: true })
       .regex(checkoutControllerCreateResponseDataExpiresAtRegExp)
@@ -428,7 +435,14 @@ export const CheckoutControllerFindResponse = zod.object({
   message: zod.string(),
   data: zod.object({
     id: zod.uuid().regex(checkoutControllerFindResponseDataIdRegExp),
-    status: zod.enum(['HELD', 'EMPTY', 'CANCELLED', 'EXPIRED', 'PAID']),
+    status: zod.enum([
+      'HELD',
+      'EMPTY',
+      'CANCELLED',
+      'EXPIRED',
+      'PAID',
+      'COD_PLACED',
+    ]),
     expiresAt: zod.iso
       .datetime({ offset: true })
       .regex(checkoutControllerFindResponseDataExpiresAtRegExp)
@@ -631,7 +645,14 @@ export const CheckoutControllerCancelResponse = zod.object({
   message: zod.string(),
   data: zod.object({
     id: zod.uuid().regex(checkoutControllerCancelResponseDataIdRegExp),
-    status: zod.enum(['HELD', 'EMPTY', 'CANCELLED', 'EXPIRED', 'PAID']),
+    status: zod.enum([
+      'HELD',
+      'EMPTY',
+      'CANCELLED',
+      'EXPIRED',
+      'PAID',
+      'COD_PLACED',
+    ]),
     expiresAt: zod.iso
       .datetime({ offset: true })
       .regex(checkoutControllerCancelResponseDataExpiresAtRegExp)

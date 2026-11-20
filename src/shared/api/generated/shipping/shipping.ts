@@ -14,7 +14,7 @@ import { orvalRequest } from '../../orval-request';
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
 export const shippingControllerUpdatePackage = (
-  id: string,
+  productId: string,
   shippingControllerUpdatePackageBody: ShippingControllerUpdatePackageBody,
   options?: SecondParameter<
     typeof orvalRequest<ShippingControllerUpdatePackage200>
@@ -22,7 +22,7 @@ export const shippingControllerUpdatePackage = (
 ) => {
   return orvalRequest<ShippingControllerUpdatePackage200>(
     {
-      url: `/api/shipping/products/${id}/package`,
+      url: `/api/shipping/products/${productId}/package`,
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       data: shippingControllerUpdatePackageBody,

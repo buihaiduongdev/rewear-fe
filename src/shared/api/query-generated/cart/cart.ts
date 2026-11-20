@@ -25,6 +25,7 @@ import type {
   CartControllerAdd200,
   CartControllerAddBody,
   CartControllerFindMine200,
+  CartControllerRemove200,
 } from '../../models/index';
 import { orvalRequest } from '../../orval-request';
 
@@ -288,7 +289,7 @@ export const cartControllerRemove = (
   options?: SecondParameter<typeof orvalRequest>,
   signal?: AbortSignal,
 ) => {
-  return orvalRequest<void>(
+  return orvalRequest<CartControllerRemove200>(
     { url: `/api/cart/items/${productId}`, method: 'DELETE', signal },
     options,
   );
