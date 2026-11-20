@@ -72,8 +72,8 @@ export function AdministrativeDivisionFields({
   wards,
   errors,
   disabled = false,
-  provinceLabel = 'Tỉnh / Thành phố',
-  wardLabel = 'Phường / Xã',
+  provinceLabel = 'Province / City',
+  wardLabel = 'Ward / Commune',
   rounded = false,
   className = '',
   errorClassName = 'text-destructive',
@@ -134,8 +134,8 @@ export function AdministrativeDivisionFields({
             <ComboboxInput
               placeholder={
                 provinces.isPending
-                  ? 'Đang tải danh sách tỉnh thành…'
-                  : 'Gõ để tìm tỉnh hoặc thành phố…'
+                  ? 'Loading provinces…'
+                  : 'Type to search province or city…'
               }
               showTrigger
               showClear={!!provinceCode}
@@ -143,7 +143,7 @@ export function AdministrativeDivisionFields({
             />
             <ComboboxContent className="max-h-60 overflow-y-auto">
               <ComboboxEmpty className="text-rewear-muted py-3 text-center text-xs">
-                Không tìm thấy tỉnh / thành phố phù hợp
+                No province or city found
               </ComboboxEmpty>
               <ComboboxList>
                 {provinceOptions.map((item) => (
@@ -190,10 +190,10 @@ export function AdministrativeDivisionFields({
             <ComboboxInput
               placeholder={
                 !provinceCode
-                  ? 'Vui lòng chọn tỉnh / thành phố trước'
+                  ? 'Please select a province or city first'
                   : wards.isPending
-                    ? 'Đang tải danh sách phường xã…'
-                    : 'Gõ để tìm phường hoặc xã…'
+                    ? 'Loading wards…'
+                    : 'Type to search ward or commune…'
               }
               showTrigger
               showClear={!!wardCode}
@@ -201,7 +201,7 @@ export function AdministrativeDivisionFields({
             />
             <ComboboxContent className="max-h-60 overflow-y-auto">
               <ComboboxEmpty className="text-rewear-muted py-3 text-center text-xs">
-                Không tìm thấy phường / xã phù hợp
+                No ward or commune found
               </ComboboxEmpty>
               <ComboboxList>
                 {wardOptions.map((item) => (

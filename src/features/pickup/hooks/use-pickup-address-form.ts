@@ -15,7 +15,7 @@ export type PickupAddressFormValues = zod.infer<
 >;
 
 export type UsePickupAddressFormProps = {
-  initial: PickupLocationControllerSaveShop200['data']['location'];
+  initial?: PickupLocationControllerSaveShop200['data']['location'] | null;
   shopId: string;
   onBeforeSave: () => Promise<void>;
   onSaving: (saving: boolean) => void;
@@ -52,6 +52,9 @@ export function usePickupAddressForm({
 
   const provinceCode = useWatch({ control, name: 'provinceCode' }) ?? '';
   const wardCode = useWatch({ control, name: 'wardCode' }) ?? '';
+  const contactName = useWatch({ control, name: 'contactName' }) ?? '';
+  const phone = useWatch({ control, name: 'phone' }) ?? '';
+  const addressLine1 = useWatch({ control, name: 'addressLine1' }) ?? '';
 
   const {
     provinces,
@@ -65,10 +68,18 @@ export function usePickupAddressForm({
     onWardChange: () => setMessage(''),
   });
 
+  const provinceName =
+    provinces.data?.data.find((p) => p.code === provinceCode)?.name ?? '';
+  const wardName =
+    wards.data?.data.find((w) => w.code === wardCode)?.name ?? '';
+
   const config = {
     mutation: {
       onMutate: onBeforeSave,
       meta: { skipErrorToast: true, skipSuccessToast: true },
+    },
+    request: {
+      headers: shopId ? { 'x-shop-id': shopId } : undefined,
     },
   };
   const shopSave = usePickupLocationControllerSaveShop(config);
@@ -112,6 +123,11 @@ export function usePickupAddressForm({
     setMessage,
     provinceCode,
     wardCode,
+    contactName,
+    phone,
+    addressLine1,
+    provinceName,
+    wardName,
     handleProvinceChange,
     handleWardChange,
     provinces,
