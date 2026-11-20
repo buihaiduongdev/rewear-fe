@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+
 import { WishlistPage } from '@/features/wishlist/components/WishlistPage';
 
 export const metadata: Metadata = {

@@ -56,7 +56,7 @@ export function DeliveryAddressModal({
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogContent className="max-h-[90dvh] overflow-y-auto sm:max-w-[480px] p-6 space-y-6">
+      <DialogContent className="max-h-[90dvh] space-y-6 overflow-y-auto p-6 sm:max-w-[480px]">
         <DialogHeader>
           <DialogTitle className="text-[28px] leading-[34px] font-semibold tracking-[-0.02em]">
             Delivery address
@@ -81,28 +81,31 @@ export function DeliveryAddressModal({
                   }
                 }}
                 className={cn(
-                  'border cursor-pointer p-4 text-left transition-all',
+                  'cursor-pointer border p-4 text-left transition-all',
                   isSelected
-                    ? 'border-rewear-text bg-rewear-soft/50 ring-1 ring-rewear-text'
+                    ? 'border-rewear-text bg-rewear-soft/50 ring-rewear-text ring-1'
                     : 'border-rewear-border/40 hover:border-rewear-border bg-rewear-surface',
                 )}
               >
                 <div className="flex items-center justify-between gap-2">
                   <div className="flex items-center gap-2">
-                    <span className="text-base font-semibold text-rewear-text">
+                    <span className="text-rewear-text text-base font-semibold">
                       {address.recipientName}
                     </span>
-                    <span className="text-sm text-rewear-muted">
+                    <span className="text-rewear-muted text-sm">
                       {address.phone}
                     </span>
                   </div>
                   {address.isDefault && (
-                    <Badge variant="secondary" className="text-[11px] px-1.5 h-5">
+                    <Badge
+                      variant="secondary"
+                      className="h-5 px-1.5 text-[11px]"
+                    >
                       Default
                     </Badge>
                   )}
                 </div>
-                <p className="mt-1 text-sm text-rewear-muted leading-relaxed">
+                <p className="text-rewear-muted mt-1 text-sm leading-relaxed">
                   {address.addressLine1}, {address.wardName},{' '}
                   {address.provinceName}
                 </p>
@@ -116,7 +119,7 @@ export function DeliveryAddressModal({
             type="button"
             disabled={disabled || !tempSelectedId}
             onClick={handleConfirm}
-            className="bg-rewear-accent text-rewear-text flex h-12 w-full cursor-pointer items-center justify-center text-sm font-semibold disabled:opacity-50 transition-opacity"
+            className="bg-rewear-accent text-rewear-text flex h-12 w-full cursor-pointer items-center justify-center text-sm font-semibold transition-opacity disabled:opacity-50"
           >
             Use this address
           </button>

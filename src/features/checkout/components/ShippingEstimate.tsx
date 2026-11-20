@@ -102,7 +102,7 @@ export function ShippingEstimateForOrder({
           {quoted ? (
             formatPrice(order.fee)
           ) : order?.status === 'UNAVAILABLE' ? (
-            <span className="text-amber-600 text-xs">Unavailable</span>
+            <span className="text-xs text-amber-600">Unavailable</span>
           ) : (
             <span className="text-rewear-muted animate-pulse text-xs">
               Calculating…
@@ -117,13 +117,13 @@ export function ShippingEstimateForOrder({
         <button
           type="button"
           onClick={() => setDeliveryModalOpen(true)}
-          className="text-sm font-semibold hover:underline cursor-pointer"
+          className="cursor-pointer text-sm font-semibold hover:underline"
         >
           Change &rarr;
         </button>
       </div>
       {!state.invalid && order?.reason && (
-        <p className="text-xs text-amber-600 pt-1">
+        <p className="pt-1 text-xs text-amber-600">
           {reasons[order.reason] ?? 'Shipping estimate is unavailable.'}
         </p>
       )}
@@ -191,7 +191,7 @@ export function ShippingEstimateSummary({
           ) : hasQuotedFee ? (
             formatPrice(quote!.totalShippingFee)
           ) : quote?.status === 'UNAVAILABLE' ? (
-            <span className="text-amber-600 text-xs">Unavailable</span>
+            <span className="text-xs text-amber-600">Unavailable</span>
           ) : (
             <span className="text-rewear-muted animate-pulse">
               Calculating…
@@ -200,7 +200,7 @@ export function ShippingEstimateSummary({
         </span>
       </div>
 
-      <div className="flex items-center justify-between border-t border-rewear-border/20 pt-4">
+      <div className="border-rewear-border/20 flex items-center justify-between border-t pt-4">
         <span className="text-base font-normal">Total</span>
         <span
           aria-label="Estimated checkout total"
@@ -226,7 +226,7 @@ export function ShippingEstimateSummary({
           <button
             type="button"
             onClick={onChangePaymentMethod}
-            className="text-rewear-text font-semibold hover:underline cursor-pointer"
+            className="text-rewear-text cursor-pointer font-semibold hover:underline"
           >
             Change
           </button>

@@ -6,9 +6,9 @@ import { CartLink } from '@/modules/cart/components/CartLink';
 import { MarketplaceFooter } from '@/shared/components/marketplace/MarketplaceFooter';
 import { MarketplaceHeader } from '@/shared/components/marketplace/MarketplaceHeader';
 import { MobileNavigation } from '@/shared/components/marketplace/MobileNavigation';
+import type { Product } from '@/shared/utils/product';
 import { Dialog } from '@base-ui/react/dialog';
 
-import type { Product } from '@/shared/utils/product';
 import { useHomeCatalog } from '../hooks/use-home-catalog';
 import { ProductCard } from './ProductCard';
 import { ProductPreview } from './ProductPreview';

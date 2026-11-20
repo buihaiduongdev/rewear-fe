@@ -2,7 +2,6 @@
 
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { Trash2 } from 'lucide-react';
 
 import { CartLink } from '@/modules/cart/components/CartLink';
 import { useAddCartItem } from '@/modules/cart/hooks/use-cart';
@@ -16,6 +15,8 @@ import { MobileNavigation } from '@/shared/components/marketplace/MobileNavigati
 import { ProductPhoto } from '@/shared/components/marketplace/ProductPhoto';
 import { Badge } from '@/shared/components/ui/badge';
 import { formatCondition, formatPrice } from '@/shared/utils/product';
+import { Trash2 } from 'lucide-react';
+
 import { WishlistSkeleton } from '../skeletons/WishlistSkeleton';
 
 const availabilityLabels: Record<string, string> = {
@@ -59,13 +60,14 @@ export function WishlistPage() {
         id="main-content"
         className="mx-auto min-h-[60vh] max-w-[1280px] px-4 pt-4 pb-12 md:px-12 md:py-12"
       >
-        <div className="flex flex-col gap-2 border-b border-rewear-border/60 pb-6 md:flex-row md:items-baseline md:justify-between">
+        <div className="border-rewear-border/60 flex flex-col gap-2 border-b pb-6 md:flex-row md:items-baseline md:justify-between">
           <h1 className="text-[28px] leading-[34px] font-semibold tracking-[-0.02em] md:text-[40px] md:leading-[46px]">
             Wishlist
           </h1>
           {data && (
             <span className="text-rewear-muted text-sm font-semibold">
-              {items.length} {items.length === 1 ? 'saved piece' : 'saved pieces'}
+              {items.length}{' '}
+              {items.length === 1 ? 'saved piece' : 'saved pieces'}
             </span>
           )}
         </div>
@@ -87,13 +89,16 @@ export function WishlistPage() {
 
         {data && items.length === 0 && (
           <div className="bg-rewear-soft mt-8 p-8 md:p-12">
-            <h2 className="text-xl font-bold tracking-tight">Your wishlist is empty</h2>
-            <p className="text-rewear-muted mt-2 text-sm leading-relaxed max-w-md">
-              Save unique pre-loved and vintage items you love to keep track of them and buy later.
+            <h2 className="text-xl font-bold tracking-tight">
+              Your wishlist is empty
+            </h2>
+            <p className="text-rewear-muted mt-2 max-w-md text-sm leading-relaxed">
+              Save unique pre-loved and vintage items you love to keep track of
+              them and buy later.
             </p>
             <Link
               href="/products"
-              className="bg-rewear-accent text-rewear-text mt-6 inline-flex h-11 items-center justify-center px-6 text-sm font-semibold hover:opacity-90 transition-opacity"
+              className="bg-rewear-accent text-rewear-text mt-6 inline-flex h-11 items-center justify-center px-6 text-sm font-semibold transition-opacity hover:opacity-90"
             >
               Explore pieces
             </Link>
@@ -109,7 +114,7 @@ export function WishlistPage() {
               return (
                 <article
                   key={item.productId}
-                  className="group flex flex-col justify-between border border-rewear-border/60 bg-white p-3 sm:p-4 transition-shadow hover:shadow-sm"
+                  className="group border-rewear-border/60 flex flex-col justify-between border bg-white p-3 transition-shadow hover:shadow-sm sm:p-4"
                 >
                   <div className="space-y-3">
                     <div className="bg-rewear-soft relative aspect-[278/348] w-full overflow-hidden">
@@ -131,9 +136,11 @@ export function WishlistPage() {
                         aria-label="Remove from wishlist"
                         disabled={removeFromWishlist.isPending}
                         onClick={() =>
-                          removeFromWishlist.mutate({ productId: item.productId })
+                          removeFromWishlist.mutate({
+                            productId: item.productId,
+                          })
                         }
-                        className="absolute top-2 right-2 flex size-8 cursor-pointer items-center justify-center rounded-full bg-white/90 text-rewear-muted shadow-sm backdrop-blur-xs transition-colors hover:text-red-600 disabled:opacity-50"
+                        className="text-rewear-muted absolute top-2 right-2 flex size-8 cursor-pointer items-center justify-center rounded-full bg-white/90 shadow-sm backdrop-blur-xs transition-colors hover:text-red-600 disabled:opacity-50"
                       >
                         <Trash2 className="size-4" />
                       </button>
@@ -142,7 +149,8 @@ export function WishlistPage() {
                       {!isAvailable && (
                         <div className="absolute bottom-2 left-2">
                           <Badge variant="destructive" className="text-xs">
-                            {availabilityLabels[item.availability] ?? item.availability}
+                            {availabilityLabels[item.availability] ??
+                              item.availability}
                           </Badge>
                         </div>
                       )}
@@ -150,24 +158,28 @@ export function WishlistPage() {
 
                     <div className="space-y-1">
                       {product?.shop?.name && (
-                        <p className="text-rewear-muted text-xs font-semibold uppercase tracking-wider">
+                        <p className="text-rewear-muted text-xs font-semibold tracking-wider uppercase">
                           {product.shop.name}
                         </p>
                       )}
-                      <h3 className="line-clamp-2 text-sm font-semibold leading-snug group-hover:underline">
+                      <h3 className="line-clamp-2 text-sm leading-snug font-semibold group-hover:underline">
                         <Link href={`/products/${item.productId}`}>
                           {product?.title ?? 'Unavailable piece'}
                         </Link>
                       </h3>
                       {product && (
                         <p className="text-rewear-muted text-xs">
-                          {[product.size, product.color, formatCondition(product.condition)]
+                          {[
+                            product.size,
+                            product.color,
+                            formatCondition(product.condition),
+                          ]
                             .filter(Boolean)
                             .join(' · ')}
                         </p>
                       )}
                       {product && (
-                        <p className="text-sm font-bold text-rewear-text pt-0.5">
+                        <p className="text-rewear-text pt-0.5 text-sm font-bold">
                           {formatPrice(product.price)}
                         </p>
                       )}
@@ -178,7 +190,9 @@ export function WishlistPage() {
                     {isAvailable ? (
                       <button
                         type="button"
-                        disabled={addToCart.isPending || removeFromWishlist.isPending}
+                        disabled={
+                          addToCart.isPending || removeFromWishlist.isPending
+                        }
                         onClick={() => handleMoveToCart(item.productId)}
                         className="bg-rewear-accent text-rewear-text hover:bg-rewear-accent/90 flex h-10 w-full cursor-pointer items-center justify-center text-xs font-semibold transition-colors disabled:opacity-50"
                       >

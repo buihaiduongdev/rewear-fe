@@ -81,7 +81,7 @@ export function PaymentMethodModal({
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogContent className="max-w-[480px] p-6 space-y-6">
+      <DialogContent className="max-w-[480px] space-y-6 p-6">
         <DialogHeader>
           <DialogTitle className="text-[28px] leading-[34px] font-semibold tracking-[-0.02em]">
             Payment method
@@ -106,23 +106,26 @@ export function PaymentMethodModal({
                   }
                 }}
                 onKeyDown={(e) => {
-                  if (method.available && (e.key === 'Enter' || e.key === ' ')) {
+                  if (
+                    method.available &&
+                    (e.key === 'Enter' || e.key === ' ')
+                  ) {
                     setTempMethod(method.id);
                   }
                 }}
                 className={cn(
-                  'border p-4 text-left transition-all flex items-center justify-between gap-3',
+                  'flex items-center justify-between gap-3 border p-4 text-left transition-all',
                   method.available
                     ? 'cursor-pointer'
-                    : 'cursor-not-allowed opacity-50 bg-rewear-soft/30',
+                    : 'bg-rewear-soft/30 cursor-not-allowed opacity-50',
                   isSelected && method.available
-                    ? 'border-rewear-text bg-rewear-soft/50 ring-1 ring-rewear-text'
+                    ? 'border-rewear-text bg-rewear-soft/50 ring-rewear-text ring-1'
                     : method.available
                       ? 'border-rewear-border/40 hover:border-rewear-border bg-rewear-surface'
                       : 'border-rewear-border/20',
                 )}
               >
-                <div className="flex items-center gap-3 min-w-0">
+                <div className="flex min-w-0 items-center gap-3">
                   <span
                     className={cn(
                       'text-lg font-bold',
@@ -133,17 +136,20 @@ export function PaymentMethodModal({
                     {isSelected ? '◉' : '○'}
                   </span>
                   <div className="min-w-0">
-                    <p className="text-base font-semibold text-rewear-text">
+                    <p className="text-rewear-text text-base font-semibold">
                       {method.name}
                     </p>
-                    <p className="text-xs text-rewear-muted truncate">
+                    <p className="text-rewear-muted truncate text-xs">
                       {method.category}
                     </p>
                   </div>
                 </div>
 
                 {!method.available && method.statusText && (
-                  <Badge variant="outline" className="text-[11px] px-1.5 h-5 shrink-0 text-amber-700 bg-amber-50 border-amber-200">
+                  <Badge
+                    variant="outline"
+                    className="h-5 shrink-0 border-amber-200 bg-amber-50 px-1.5 text-[11px] text-amber-700"
+                  >
                     {method.statusText}
                   </Badge>
                 )}

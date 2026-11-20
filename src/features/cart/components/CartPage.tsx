@@ -4,8 +4,6 @@ import { useState, useSyncExternalStore } from 'react';
 
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useSession } from 'next-auth/react';
-import { useQueryClient } from '@tanstack/react-query';
 
 import { DeliveryAddressModal } from '@/modules/address';
 import { CartLink } from '@/modules/cart/components/CartLink';
@@ -14,8 +12,8 @@ import {
   useCart,
   useRemoveCartItem,
 } from '@/modules/cart/hooks/use-cart';
-import { useAddToWishlist } from '@/modules/wishlist/hooks/use-wishlist';
 import { CartSkeleton } from '@/modules/cart/skeletons/CartSkeleton';
+import { useAddToWishlist } from '@/modules/wishlist/hooks/use-wishlist';
 import { getApiErrorMessage } from '@/shared/api/api-error';
 import { useCheckoutControllerCreate } from '@/shared/api/query-generated/checkout/checkout';
 import { useUserAddressControllerFindAll } from '@/shared/api/query-generated/user-addresses/user-addresses';
@@ -23,6 +21,8 @@ import { MarketplaceHeader } from '@/shared/components/marketplace/MarketplaceHe
 import { MobileNavigation } from '@/shared/components/marketplace/MobileNavigation';
 import { ProductPhoto } from '@/shared/components/marketplace/ProductPhoto';
 import { formatCondition, formatPrice } from '@/shared/utils/product';
+import { useQueryClient } from '@tanstack/react-query';
+import { useSession } from 'next-auth/react';
 
 const availabilityLabels: Record<string, string> = {
   HELD: 'Temporarily reserved',
@@ -72,10 +72,7 @@ export function CartPage() {
   const displayTotal =
     (data?.summary.totalPrice ?? 0) > 0
       ? data!.summary.totalPrice
-      : allCartItems.reduce(
-          (sum, item) => sum + (item.product?.price ?? 0),
-          0,
-        );
+      : allCartItems.reduce((sum, item) => sum + (item.product?.price ?? 0), 0);
 
   const handleContinueToCheckout = (customAddressId?: string) => {
     setCreateError(null);
@@ -162,7 +159,7 @@ export function CartPage() {
             <p>{getApiErrorMessage(cart.error)}</p>
             <button
               type="button"
-              className="underline cursor-pointer"
+              className="cursor-pointer underline"
               onClick={() => void cart.refetch()}
             >
               Try again

@@ -92,7 +92,7 @@ export function UserAddressForm({
         <label className="flex min-h-11 items-center gap-3 text-sm font-medium">
           <input
             type="checkbox"
-            className="size-4 rounded border-rewear-border"
+            className="border-rewear-border size-4 rounded"
             {...register('isDefault')}
           />
           Set as default

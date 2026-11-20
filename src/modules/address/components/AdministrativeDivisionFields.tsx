@@ -119,7 +119,7 @@ export function AdministrativeDivisionFields({
       {/* Province / City Searchable Combobox */}
       <div>
         <div className={containerClass}>
-          <span className="text-rewear-muted block text-xs font-semibold uppercase tracking-wider">
+          <span className="text-rewear-muted block text-xs font-semibold tracking-wider uppercase">
             {provinceLabel}
           </span>
           <Combobox<DivisionOption>
@@ -173,7 +173,7 @@ export function AdministrativeDivisionFields({
       {/* Ward / Commune Searchable Combobox */}
       <div>
         <div className={containerClass}>
-          <span className="text-rewear-muted block text-xs font-semibold uppercase tracking-wider">
+          <span className="text-rewear-muted block text-xs font-semibold tracking-wider uppercase">
             {wardLabel}
           </span>
           <Combobox<DivisionOption>

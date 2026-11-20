@@ -14,7 +14,9 @@ describe('Public marketplace access', () => {
     ).toEqual({ action: 'next' });
     expect(
       getProxyDecision(
-        new URL('http://localhost:5000/products/b0c16928-8686-4e58-86fc-b7ef5d89fb0e'),
+        new URL(
+          'http://localhost:5000/products/b0c16928-8686-4e58-86fc-b7ef5d89fb0e',
+        ),
         false,
       ),
     ).toEqual({ action: 'next' });

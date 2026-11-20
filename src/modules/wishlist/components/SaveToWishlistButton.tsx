@@ -1,9 +1,11 @@
 'use client';
 
-import { usePathname, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
+import { usePathname, useSearchParams } from 'next/navigation';
+
 import { Bookmark } from 'lucide-react';
 import { useSession } from 'next-auth/react';
+
 import {
   useAddToWishlist,
   useRemoveFromWishlist,
@@ -35,7 +37,7 @@ export function SaveToWishlistButton({
         href={`/login?callbackUrl=${encodeURIComponent(callbackUrl)}`}
         className={
           className ??
-          'flex h-[52px] w-full items-center justify-center gap-2 border border-rewear-border bg-white px-5 text-sm font-semibold text-rewear-text hover:bg-rewear-soft'
+          'border-rewear-border text-rewear-text hover:bg-rewear-soft flex h-[52px] w-full items-center justify-center gap-2 border bg-white px-5 text-sm font-semibold'
         }
       >
         <Bookmark className="size-4" />
@@ -61,10 +63,10 @@ export function SaveToWishlistButton({
       onClick={handleToggle}
       className={
         className ??
-        `flex h-[52px] w-full cursor-pointer items-center justify-center gap-2 border transition-colors text-sm font-semibold ${
+        `flex h-[52px] w-full cursor-pointer items-center justify-center gap-2 border text-sm font-semibold transition-colors ${
           isSaved
-            ? 'border-rewear-text bg-rewear-text text-white hover:bg-rewear-text/90'
-            : 'border-rewear-border bg-white text-rewear-text hover:bg-rewear-soft'
+            ? 'border-rewear-text bg-rewear-text hover:bg-rewear-text/90 text-white'
+            : 'border-rewear-border text-rewear-text hover:bg-rewear-soft bg-white'
         } disabled:opacity-50`
       }
     >

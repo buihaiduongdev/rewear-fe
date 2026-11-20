@@ -6,18 +6,18 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 import { CartLink } from '@/modules/cart/components/CartLink';
+import { ShopCard } from '@/modules/shop';
 import { MarketplaceFooter } from '@/shared/components/marketplace/MarketplaceFooter';
 import { MarketplaceHeader } from '@/shared/components/marketplace/MarketplaceHeader';
 import { Button } from '@/shared/components/ui/button';
+import type { Product } from '@/shared/utils/product';
 import { Dialog } from '@base-ui/react/dialog';
 import { useSession } from 'next-auth/react';
 
-import type { Product } from '@/shared/utils/product';
 import { useHomeCatalog } from '../hooks/use-home-catalog';
 import { ProductCard } from './ProductCard';
 import { ProductPreview } from './ProductPreview';
 import { SectionState } from './SectionState';
-import { ShopCard } from '@/modules/shop';
 
 const primaryButtonClass =
   'h-[52px] w-full rounded-none border-0 bg-rewear-accent px-5 py-3 text-sm leading-5 font-normal text-rewear-text shadow-none hover:bg-rewear-accent/90 md:w-52';

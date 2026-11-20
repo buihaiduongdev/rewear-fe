@@ -11,7 +11,7 @@ export function CheckoutSkeleton() {
       <span className="sr-only">Đang tải trang thanh toán…</span>
 
       {/* Mock Header skeleton */}
-      <header className="border-b border-rewear-border">
+      <header className="border-rewear-border border-b">
         <div className="mx-auto flex h-16 max-w-[1280px] items-center justify-between px-4 md:px-12">
           <Skeleton className="h-6 w-28" />
           <div className="flex items-center gap-4">
@@ -34,7 +34,7 @@ export function CheckoutSkeleton() {
           {/* Left Column: Items & Address (7 cols) */}
           <div className="space-y-6 lg:col-span-7">
             {/* Delivery Address Card Skeleton */}
-            <div className="border border-rewear-border p-4 space-y-3">
+            <div className="border-rewear-border space-y-3 border p-4">
               <Skeleton className="h-4 w-32" />
               <Skeleton className="h-5 w-3/4" />
               <Skeleton className="h-4 w-1/2" />
@@ -46,11 +46,11 @@ export function CheckoutSkeleton() {
               {[1, 2].map((i) => (
                 <div
                   key={i}
-                  className="bg-rewear-soft/50 border border-rewear-border flex items-center gap-4 p-4"
+                  className="bg-rewear-soft/50 border-rewear-border flex items-center gap-4 border p-4"
                 >
                   <Skeleton className="size-5" />
                   <Skeleton className="size-16 shrink-0" />
-                  <div className="flex-1 space-y-2 min-w-0">
+                  <div className="min-w-0 flex-1 space-y-2">
                     <Skeleton className="h-5 w-4/5" />
                     <Skeleton className="h-4 w-1/3" />
                   </div>
@@ -62,10 +62,10 @@ export function CheckoutSkeleton() {
 
           {/* Right Column: Order Summary (5 cols) */}
           <div className="lg:col-span-5">
-            <div className="border border-rewear-border p-6 space-y-5">
+            <div className="border-rewear-border space-y-5 border p-6">
               <Skeleton className="h-6 w-36" />
 
-              <div className="space-y-3 border-y border-rewear-border py-4">
+              <div className="border-rewear-border space-y-3 border-y py-4">
                 <div className="flex justify-between">
                   <Skeleton className="h-4 w-20" />
                   <Skeleton className="h-4 w-24" />

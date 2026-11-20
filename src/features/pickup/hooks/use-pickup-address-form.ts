@@ -1,14 +1,14 @@
 'use client';
 
 import { useState } from 'react';
-import { useForm, useWatch } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import type * as zod from 'zod';
 
 import { useAdministrativeDivisions } from '@/modules/address';
 import type { PickupLocationControllerSaveShop200 } from '@/shared/api/models';
 import { usePickupLocationControllerSaveShop } from '@/shared/api/query-generated/pickup-locations/pickup-locations';
 import { PickupLocationControllerSaveShopBody } from '@/shared/api/zod-generated/pickup-locations/pickup-locations';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm, useWatch } from 'react-hook-form';
+import type * as zod from 'zod';
 
 export type PickupAddressFormValues = zod.infer<
   typeof PickupLocationControllerSaveShopBody

@@ -28,15 +28,12 @@ import { Dialog } from '@base-ui/react/dialog';
 import { useQueryClient } from '@tanstack/react-query';
 import { useSession } from 'next-auth/react';
 
+import { type PaymentMethodId, PaymentMethodModal } from './PaymentMethodModal';
 import {
   ShippingEstimateForOrder,
   ShippingEstimateSummary,
   useShippingEstimateState,
 } from './ShippingEstimate';
-import {
-  PaymentMethodModal,
-  type PaymentMethodId,
-} from './PaymentMethodModal';
 
 const actionClass =
   'bg-rewear-accent text-rewear-text flex h-[52px] w-full cursor-pointer items-center justify-center text-sm font-semibold disabled:opacity-50 md:h-12';
@@ -52,7 +49,7 @@ function Countdown({ deadline }: { deadline: string }) {
     Math.ceil((new Date(deadline).getTime() - now) / 1000),
   );
   return (
-    <span className="text-sm md:text-base font-normal">
+    <span className="text-sm font-normal md:text-base">
       Reserved ·{' '}
       {Math.floor(seconds / 60)
         .toString()
@@ -110,7 +107,9 @@ export function CheckoutPage() {
     }
   }, [id, router]);
 
-  const handleAddressCreated = (address: UserAddressControllerCreate201Data) => {
+  const handleAddressCreated = (
+    address: UserAddressControllerCreate201Data,
+  ) => {
     client.setQueryData<UserAddressControllerFindAll200>(
       ['/api/user-addresses', session?.user.id],
       (previous) => ({
@@ -160,7 +159,11 @@ export function CheckoutPage() {
   }, [id, router]);
 
   useEffect(() => {
-    if (data?.status && data.status !== 'HELD' && typeof window !== 'undefined') {
+    if (
+      data?.status &&
+      data.status !== 'HELD' &&
+      typeof window !== 'undefined'
+    ) {
       sessionStorage.removeItem('activeCheckoutId');
     }
   }, [data?.status]);
@@ -252,7 +255,7 @@ export function CheckoutPage() {
                 type="button"
                 disabled={cancel.isPending}
                 onClick={handleCancelAndReturnToCart}
-                className="text-rewear-muted hover:text-rewear-text inline-flex items-center gap-1.5 text-sm font-semibold cursor-pointer disabled:opacity-50"
+                className="text-rewear-muted hover:text-rewear-text inline-flex cursor-pointer items-center gap-1.5 text-sm font-semibold disabled:opacity-50"
               >
                 <span aria-hidden="true">&larr;</span>{' '}
                 {cancel.isPending ? 'Cancelling…' : 'Back to cart'}
@@ -318,7 +321,7 @@ export function CheckoutPage() {
           <>
             {data.status !== 'HELD' && (
               <div
-                className={`bg-rewear-soft space-y-4 p-6 border border-rewear-border/30 ${
+                className={`bg-rewear-soft border-rewear-border/30 space-y-4 border p-6 ${
                   data.status === 'CANCELLED' &&
                   typeof window !== 'undefined' &&
                   !(window as unknown as { Cypress?: unknown }).Cypress
@@ -540,10 +543,7 @@ export function CheckoutPage() {
                                 : 'Cancel checkout'}
                             </button>
                             {cancel.isError && (
-                              <p
-                                role="alert"
-                                className="text-sm text-red-600"
-                              >
+                              <p role="alert" className="text-sm text-red-600">
                                 {getApiErrorMessage(cancel.error)}
                               </p>
                             )}

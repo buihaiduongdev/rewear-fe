@@ -15,7 +15,7 @@ export function CartSkeleton() {
         {[1, 2, 3].map((i) => (
           <div
             key={i}
-            className="border border-rewear-border p-4 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
+            className="border-rewear-border flex flex-col gap-4 border p-4 sm:flex-row sm:items-center sm:justify-between"
           >
             <div className="flex items-center gap-4">
               <Skeleton className="size-20 shrink-0" />
@@ -34,7 +34,7 @@ export function CartSkeleton() {
       </div>
 
       {/* Cart Summary skeleton */}
-      <div className="border-t border-rewear-border pt-6 flex flex-col items-end gap-3">
+      <div className="border-rewear-border flex flex-col items-end gap-3 border-t pt-6">
         <Skeleton className="h-6 w-40" />
         <Skeleton className="h-12 w-48" />
       </div>

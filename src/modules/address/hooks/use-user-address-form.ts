@@ -1,12 +1,11 @@
 'use client';
 
-import { useForm, useWatch } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import type * as zod from 'zod';
-
 import type { UserAddressControllerCreate201Data } from '@/shared/api/models';
 import { useUserAddressControllerCreate } from '@/shared/api/query-generated/user-addresses/user-addresses';
 import { UserAddressControllerCreateBody } from '@/shared/api/zod-generated/user-addresses/user-addresses';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm, useWatch } from 'react-hook-form';
+import type * as zod from 'zod';
 
 import { useAdministrativeDivisions } from './use-administrative-divisions';
 

@@ -17,7 +17,7 @@ export function CatalogSkeleton() {
       </div>
 
       {/* Filter / Search mock bar */}
-      <div className="flex flex-wrap items-center gap-3 border-y border-rewear-border py-4">
+      <div className="border-rewear-border flex flex-wrap items-center gap-3 border-y py-4">
         {[1, 2, 3, 4, 5].map((i) => (
           <Skeleton key={i} className="h-9 w-24" />
         ))}

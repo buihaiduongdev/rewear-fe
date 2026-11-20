@@ -17,16 +17,16 @@ export function ShopSummaryCard({
 }: ShopSummaryCardProps) {
   return (
     <div
-      className={`rounded-lg border border-rewear-border bg-rewear-soft/30 p-4 ${className}`}
+      className={`border-rewear-border bg-rewear-soft/30 rounded-lg border p-4 ${className}`}
     >
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-3">
-          <div className="flex size-11 items-center justify-center rounded-full bg-rewear-soft text-rewear-text border border-rewear-border">
+          <div className="bg-rewear-soft text-rewear-text border-rewear-border flex size-11 items-center justify-center rounded-full border">
             <Store size={20} />
           </div>
           <div>
-            <p className="text-xs text-rewear-muted">{subtitle}</p>
-            <p className="font-semibold text-rewear-text">{name}</p>
+            <p className="text-rewear-muted text-xs">{subtitle}</p>
+            <p className="text-rewear-text font-semibold">{name}</p>
           </div>
         </div>
         {verified && <SellerVerifiedBadge />}
