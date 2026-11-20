@@ -26,9 +26,9 @@ function SellAction() {
   const { status } = useSession();
   return status === 'authenticated' ? (
     <Button
-      disabled
+      render={<Link href="/selling" />}
+      nativeButton={false}
       className={primaryButtonClass}
-      title="Listing tools are coming soon"
     >
       Start selling
     </Button>
@@ -101,12 +101,19 @@ export function HomePage() {
               >
                 Explore clothing
               </Button>
-              {sessionStatus !== 'authenticated' && (
+              {sessionStatus !== 'authenticated' ? (
                 <Link
                   href="/register"
                   className="hidden shrink-0 text-sm leading-5 font-semibold hover:underline md:block"
                 >
                   Start selling <span aria-hidden="true">↗</span>
+                </Link>
+              ) : (
+                <Link
+                  href="/selling"
+                  className="hidden shrink-0 text-sm leading-5 font-semibold hover:underline md:block"
+                >
+                  Seller workspace <span aria-hidden="true">↗</span>
                 </Link>
               )}
             </div>

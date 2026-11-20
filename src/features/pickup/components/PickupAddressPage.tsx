@@ -1,9 +1,10 @@
 'use client';
 
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 
 import Image from 'next/image';
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 
 import { getApiErrorMessage } from '@/shared/api/api-error';
 import { usePickupLocationControllerFindShop } from '@/shared/api/query-generated/pickup-locations/pickup-locations';
@@ -14,11 +15,30 @@ import { useSession } from 'next-auth/react';
 import { PickupAddressForm } from './PickupAddressForm';
 
 export function PickupAddressPage() {
+  const searchParams = useSearchParams();
+  const queryShopId = searchParams.get('shopId') || '';
   const { data: session, status } = useSession();
   const client = useQueryClient();
-  const [shopId, setShopId] = useState('');
+  const [selectedShopId, setSelectedShopId] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
   const enabled = status === 'authenticated' && !session?.error;
+
+  const memberships = useShopControllerFindMine({
+    query: { enabled, queryKey: ['pickup-shop-memberships', session?.user.id] },
+  });
+
+  const shopId = useMemo(() => {
+    if (selectedShopId !== null) return selectedShopId;
+    if (queryShopId) return queryShopId;
+    const owned = memberships.data?.data.filter(
+      (m) => m.memberRole === 'OWNER' && m.status === 'ACTIVE',
+    );
+    if (owned && owned.length === 1) {
+      return owned[0].shopId;
+    }
+    return '';
+  }, [selectedShopId, queryShopId, memberships.data?.data]);
+
   const shopKey = ['pickup-location', session?.user.id, 'shop', shopId];
   const key = shopKey;
   const shop = usePickupLocationControllerFindShop(shopId, {
@@ -29,9 +49,7 @@ export function PickupAddressPage() {
       refetchOnWindowFocus: false,
     },
   });
-  const memberships = useShopControllerFindMine({
-    query: { enabled, queryKey: ['pickup-shop-memberships', session?.user.id] },
-  });
+
   const selected = shop;
   const error = selected.error || memberships.error;
   return (
@@ -78,7 +96,7 @@ export function PickupAddressPage() {
             className="border-rewear-border min-h-11 w-full min-w-0 border bg-transparent px-3 text-base"
             value={shopId}
             disabled={saving || memberships.isPending}
-            onChange={(e) => setShopId(e.target.value)}
+            onChange={(e) => setSelectedShopId(e.target.value)}
           >
             <option value="">Choose a shop</option>
             {memberships.data?.data

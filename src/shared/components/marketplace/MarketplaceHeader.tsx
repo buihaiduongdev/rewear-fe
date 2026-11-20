@@ -126,6 +126,12 @@ export function MarketplaceHeader({
                   Wishlist
                 </Link>
                 <Link
+                  href="/selling"
+                  className="flex min-h-11 items-center underline underline-offset-4"
+                >
+                  Seller workspace
+                </Link>
+                <Link
                   href="/selling/packages"
                   className="flex min-h-11 items-center underline underline-offset-4"
                 >
