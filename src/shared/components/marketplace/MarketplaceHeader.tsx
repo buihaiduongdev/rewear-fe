@@ -100,6 +100,12 @@ export function MarketplaceHeader({
           aria-label="Account navigation"
           className="hidden items-center gap-6 whitespace-nowrap md:flex"
         >
+          <Link
+            href="/wishlist"
+            className="inline-flex min-h-11 items-center hover:underline"
+          >
+            Wishlist
+          </Link>
           <button type="button" disabled title="Messages are coming soon">
             Messages
           </button>
@@ -113,6 +119,12 @@ export function MarketplaceHeader({
                 <p className="mb-3 max-w-48 truncate">
                   {session.user.fullName}
                 </p>
+                <Link
+                  href="/wishlist"
+                  className="flex min-h-11 items-center underline underline-offset-4"
+                >
+                  Wishlist
+                </Link>
                 <Link
                   href="/selling/packages"
                   className="flex min-h-11 items-center underline underline-offset-4"

@@ -11,15 +11,10 @@ import { DeliveryAddressModal } from '@/modules/address';
 import { CartLink } from '@/modules/cart/components/CartLink';
 import {
   cartQueryKey,
-  useAddCartItem,
   useCart,
   useRemoveCartItem,
 } from '@/modules/cart/hooks/use-cart';
-import {
-  useAddToWishlist,
-  useRemoveFromWishlist,
-  useWishlist,
-} from '@/modules/wishlist/hooks/use-wishlist';
+import { useAddToWishlist } from '@/modules/wishlist/hooks/use-wishlist';
 import { CartSkeleton } from '@/modules/cart/skeletons/CartSkeleton';
 import { getApiErrorMessage } from '@/shared/api/api-error';
 import { useCheckoutControllerCreate } from '@/shared/api/query-generated/checkout/checkout';
@@ -40,10 +35,7 @@ export function CartPage() {
   const router = useRouter();
   const cart = useCart();
   const remove = useRemoveCartItem();
-  const addToCart = useAddCartItem();
-  const wishlist = useWishlist();
   const addToWishlist = useAddToWishlist();
-  const removeFromWishlist = useRemoveFromWishlist();
   const data = cart.data?.data;
   const activeCheckoutId = useSyncExternalStore(
     (onStoreChange) => {
@@ -148,109 +140,6 @@ export function CartPage() {
     remove.mutate({ productId });
   };
 
-  const handleMoveToCart = (productId: string) => {
-    if (!enabled) {
-      router.push('/login?callbackUrl=/cart');
-      return;
-    }
-    addToCart.mutate({ productId, data: {} });
-    removeFromWishlist.mutate({ productId });
-  };
-
-  const savedItems = wishlist.data?.data.items ?? [];
-
-  const savedItemsSection = savedItems.length > 0 && (
-    <section
-      id="saved-for-later"
-      className="border-rewear-border/60 mt-12 space-y-6 border-t pt-8"
-    >
-      <div className="flex items-baseline justify-between">
-        <h2 className="text-rewear-text text-xl font-bold tracking-tight md:text-2xl">
-          Saved for later ({savedItems.length})
-        </h2>
-      </div>
-
-      <div className="space-y-6">
-        {savedItems.map((item) => (
-          <article
-            key={item.productId}
-            className="grid grid-cols-[80px_minmax(0,1fr)] gap-x-4 gap-y-2.5 md:grid-cols-[148px_minmax(0,1fr)] md:items-start md:gap-x-6 md:gap-y-3"
-          >
-            <div className="bg-rewear-soft relative aspect-[4/5] w-20 shrink-0 self-start md:w-[148px]">
-              <ProductPhoto
-                url={item.product?.coverUrl ?? null}
-                title={item.product?.title ?? null}
-                sizes="(min-width: 768px) 148px, 80px"
-              />
-            </div>
-
-            <div className="flex min-w-0 flex-1 flex-col items-start gap-1.5 md:gap-2.5">
-              <h3 className="text-base leading-6 md:text-[22px] md:leading-[28px] md:font-semibold md:tracking-[-0.02em]">
-                {item.product?.title ?? 'Unavailable item'}
-              </h3>
-              {item.product && (
-                <p className="text-rewear-muted text-sm font-normal md:text-base">
-                  {[
-                    item.product.shop?.name,
-                    item.product.size,
-                    item.product.color,
-                    formatCondition(item.product.condition),
-                  ]
-                    .filter(Boolean)
-                    .join(' · ')}
-                </p>
-              )}
-              {item.product && (
-                <p className="text-base leading-6 font-semibold md:text-[22px] md:leading-[28px] md:tracking-[-0.02em]">
-                  {formatPrice(item.product.price)}
-                </p>
-              )}
-              {item.availability !== 'AVAILABLE' && (
-                <p
-                  className="text-sm font-medium text-amber-600"
-                  role="status"
-                >
-                  {availabilityLabels[item.availability] ?? item.availability}
-                </p>
-              )}
-            </div>
-
-            <div className="col-span-2 flex items-center gap-6 pt-1 md:col-span-2 md:col-start-1">
-              {item.availability === 'AVAILABLE' && (
-                <button
-                  type="button"
-                  disabled={
-                    addToCart.isPending || removeFromWishlist.isPending
-                  }
-                  onClick={() => handleMoveToCart(item.productId)}
-                  className="bg-rewear-accent text-rewear-text hover:bg-rewear-accent/90 cursor-pointer px-3.5 py-1.5 text-xs font-semibold transition-colors disabled:opacity-50"
-                >
-                  {addToCart.isPending &&
-                  addToCart.variables?.productId === item.productId
-                    ? 'Moving…'
-                    : 'Move to cart'}
-                </button>
-              )}
-              <button
-                type="button"
-                disabled={removeFromWishlist.isPending}
-                onClick={() =>
-                  removeFromWishlist.mutate({ productId: item.productId })
-                }
-                className="text-rewear-muted hover:text-rewear-text cursor-pointer text-sm font-semibold transition-colors hover:underline disabled:opacity-50"
-              >
-                {removeFromWishlist.isPending &&
-                removeFromWishlist.variables?.productId === item.productId
-                  ? 'Removing…'
-                  : 'Remove'}
-              </button>
-            </div>
-          </article>
-        ))}
-      </div>
-    </section>
-  );
-
   return (
     <div className="bg-rewear-surface text-rewear-text min-h-dvh">
       <MarketplaceHeader
@@ -281,17 +170,14 @@ export function CartPage() {
           </div>
         )}
         {data && data.summary.itemCount === 0 && (
-          <div className="space-y-8">
-            <div className="bg-rewear-soft mt-8 p-8">
-              <p>Your cart is empty.</p>
-              <Link
-                href="/"
-                className="mt-4 inline-block font-semibold underline underline-offset-4"
-              >
-                Explore pieces
-              </Link>
-            </div>
-            {savedItemsSection}
+          <div className="bg-rewear-soft mt-8 p-8">
+            <p>Your cart is empty.</p>
+            <Link
+              href="/"
+              className="mt-4 inline-block font-semibold underline underline-offset-4"
+            >
+              Explore pieces
+            </Link>
           </div>
         )}
         {data && data.summary.itemCount > 0 && (
@@ -415,7 +301,6 @@ export function CartPage() {
                     {getApiErrorMessage(remove.error)}
                   </p>
                 )}
-                {savedItemsSection}
               </div>
 
               <aside
