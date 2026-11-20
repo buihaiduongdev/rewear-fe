@@ -1,15 +1,20 @@
 'use client';
 
+import { useEffect, useState } from 'react';
+
 import { getApiErrorMessage } from '@/shared/api/api-error';
 import type {
   CheckoutControllerFind200,
   CheckoutControllerQuote200Data,
 } from '@/shared/api/models';
 import { useCheckoutControllerQuote } from '@/shared/api/query-generated/checkout/checkout';
-import { Button } from '@/shared/components/ui/button';
 import { formatPrice } from '@/shared/utils/product';
 
+import { DeliveryMethodModal } from './DeliveryMethodModal';
+import type { PaymentMethodId } from './PaymentMethodModal';
+
 type Checkout = CheckoutControllerFind200['data'];
+
 export function useShippingEstimateState(
   quote: CheckoutControllerQuote200Data | undefined,
   status: Checkout['status'],
@@ -24,7 +29,9 @@ export function useShippingEstimateState(
     invalid,
   };
 }
+
 type State = ReturnType<typeof useShippingEstimateState>;
+
 const reasons: Record<string, string> = {
   PACKAGE_REQUIRED: 'Seller needs to declare packaging for every item.',
   PARCEL_LIMIT_EXCEEDED:
@@ -38,52 +45,114 @@ const reasons: Record<string, string> = {
   CARRIER_REJECTED: 'The carrier could not quote this route or parcel.',
   CARRIER_UNAVAILABLE: 'The carrier is temporarily unavailable. Try again.',
 };
+
+export function formatEstimatedDelivery(estimatedDeliveryAt?: string | null) {
+  const months = [
+    'Jan',
+    'Feb',
+    'Mar',
+    'Apr',
+    'May',
+    'Jun',
+    'Jul',
+    'Aug',
+    'Sep',
+    'Oct',
+    'Nov',
+    'Dec',
+  ];
+  if (estimatedDeliveryAt) {
+    const target = new Date(estimatedDeliveryAt);
+    if (!isNaN(target.getTime())) {
+      const start = new Date(target.getTime() - 2 * 24 * 60 * 60 * 1000);
+      return `${start.getDate()}–${target.getDate()} ${months[target.getMonth()]}`;
+    }
+  }
+  const now = new Date();
+  const d1 = new Date(now.getTime() + 2 * 24 * 60 * 60 * 1000);
+  const d2 = new Date(now.getTime() + 4 * 24 * 60 * 60 * 1000);
+  return `${d1.getDate()}–${d2.getDate()} ${months[d2.getMonth()]}`;
+}
+
+export function getEstimatedDeliveryText(estimatedDeliveryAt?: string | null) {
+  return `GHN Standard · Estimated ${formatEstimatedDelivery(estimatedDeliveryAt)}`;
+}
+
 export function ShippingEstimateForOrder({
   quote,
   state,
   orderId,
+  shopName,
 }: {
   quote: CheckoutControllerQuote200Data | undefined;
   state: State;
   orderId: string;
+  shopName?: string;
 }) {
+  const [deliveryModalOpen, setDeliveryModalOpen] = useState(false);
   const order = quote?.orders.find((row) => row.orderId === orderId);
   const quoted =
     state.fresh && order?.status === 'QUOTED' && order.fee !== null;
+
   return (
-    <div className="space-y-2">
-      {order?.parcel && (
-        <p className="text-rewear-muted text-sm">
-          1 parcel · {order.itemCount}{' '}
-          {order.itemCount === 1 ? 'item' : 'items'} ·{' '}
-          {order.parcel.weightGrams} g · {order.parcel.lengthCm} ×{' '}
-          {order.parcel.widthCm} × {order.parcel.heightCm} cm
-        </p>
-      )}
-      <div className="flex justify-between gap-3">
-        <span className="text-rewear-muted">Shipping estimate</span>
-        <span className="shrink-0 text-sm font-semibold">
-          {quoted ? formatPrice(order.fee) : 'Not available'}
+    <div className="bg-rewear-soft/40 border-rewear-text/70 mt-3 space-y-1.5 border p-4 transition-colors">
+      <div className="flex items-center justify-between text-base">
+        <span className="font-semibold">Delivery method</span>
+        <span className="text-sm font-semibold">
+          {quoted ? (
+            formatPrice(order.fee)
+          ) : order?.status === 'UNAVAILABLE' ? (
+            <span className="text-xs text-amber-600">Unavailable</span>
+          ) : (
+            <span className="text-rewear-muted animate-pulse text-xs">
+              Calculating…
+            </span>
+          )}
         </span>
       </div>
+      <p className="text-rewear-muted text-sm">
+        {getEstimatedDeliveryText(order?.estimatedDeliveryAt)}
+      </p>
+      <div className="pt-1">
+        <button
+          type="button"
+          onClick={() => setDeliveryModalOpen(true)}
+          className="cursor-pointer text-sm font-semibold hover:underline"
+        >
+          Change &rarr;
+        </button>
+      </div>
       {!state.invalid && order?.reason && (
-        <p className="text-rewear-muted text-sm">
+        <p className="pt-1 text-xs text-amber-600">
           {reasons[order.reason] ?? 'Shipping estimate is unavailable.'}
         </p>
       )}
+
+      <DeliveryMethodModal
+        open={deliveryModalOpen}
+        onOpenChange={setDeliveryModalOpen}
+        shopName={shopName ?? 'Order'}
+        fee={order?.fee ?? null}
+        estimatedDateText={formatEstimatedDelivery(order?.estimatedDeliveryAt)}
+      />
     </div>
   );
 }
+
 export function ShippingEstimateSummary({
   checkout,
   quote,
   state,
   onQuote,
+  selectedPaymentMethod = 'MOMO',
+  onChangePaymentMethod,
 }: {
   checkout: Checkout;
   state: State;
   quote: CheckoutControllerQuote200Data | undefined;
   onQuote: (quote: CheckoutControllerQuote200Data) => void;
+  selectedPaymentMethod?: PaymentMethodId;
+  onChangePaymentMethod?: () => void;
 }) {
   const refresh = useCheckoutControllerQuote({
     mutation: {
@@ -91,76 +160,97 @@ export function ShippingEstimateSummary({
       onSuccess: (response) => onQuote(response.data),
     },
   });
+
+  // Tự động tính phí vận chuyển GHN ngay khi vào trang checkout
+  useEffect(() => {
+    if (
+      checkout.status === 'HELD' &&
+      !quote &&
+      !refresh.isPending &&
+      !refresh.isSuccess &&
+      !refresh.isError
+    ) {
+      refresh.mutate({ id: checkout.id, data: {} });
+    }
+  }, [checkout.id, checkout.status, quote, refresh]);
+
+  const sellerCount = checkout.orders.length;
+  const hasQuotedFee = state.complete && quote?.totalShippingFee !== null;
+
   return (
-    <>
-      <div className="flex justify-between gap-3">
-        <span className="text-rewear-muted">Shipping</span>
-        <span className="shrink-0 text-sm font-semibold">
-          {state.complete && quote?.totalShippingFee !== null
-            ? formatPrice(quote!.totalShippingFee)
-            : 'Not available'}
+    <div className="space-y-4">
+      <div className="flex items-center justify-between text-base">
+        <span className="text-rewear-muted">
+          Shipping · {sellerCount} {sellerCount === 1 ? 'seller' : 'sellers'}
+        </span>
+        <span className="text-sm font-semibold">
+          {refresh.isPending ? (
+            <span className="text-rewear-muted animate-pulse">
+              Calculating…
+            </span>
+          ) : hasQuotedFee ? (
+            formatPrice(quote!.totalShippingFee)
+          ) : quote?.status === 'UNAVAILABLE' ? (
+            <span className="text-xs text-amber-600">Unavailable</span>
+          ) : (
+            <span className="text-rewear-muted animate-pulse">
+              Calculating…
+            </span>
+          )}
         </span>
       </div>
-      {state.complete && quote?.grandTotal !== null ? (
-        <>
-          <p
-            aria-label="Estimated checkout total"
-            className="text-[40px] leading-[46px] font-semibold tracking-[-0.02em]"
-          >
-            {formatPrice(quote!.grandTotal)}
-          </p>
-          <p className="text-sm">
-            GHN sandbox estimate. This is not a payable total.
-          </p>
-        </>
-      ) : (
-        <>
-          <p className="text-[40px] leading-[46px] font-semibold tracking-[-0.02em]">
-            {formatPrice(checkout.subtotal)}
-          </p>
-          <p className="text-sm">
-            Item subtotal. A complete shipping estimate is required for a
-            combined total.
-          </p>
-        </>
-      )}
-      <p className="text-rewear-muted text-sm">
-        One parcel per seller or shop. Parcel dimensions are a conservative
-        estimate from the declared item boxes; actual packing may differ.
-      </p>
-      {state.invalid && (
-        <p role="status">
-          Shipping details changed or this reservation is no longer active.
-          Refresh before using an estimate.
-        </p>
-      )}
-      {quote?.status === 'PARTIAL' && state.fresh && (
-        <p role="status">
-          Some sellers could not be quoted. A complete total is unavailable.
-        </p>
-      )}
-      {checkout.status === 'HELD' && (
-        <Button
-          type="button"
-          variant="ghost"
-          loading={refresh.isPending}
-          disabled={state.pending}
-          className="bg-rewear-accent text-rewear-text hover:bg-rewear-accent h-[52px] w-full rounded-none px-5 text-sm font-normal"
-          onClick={() => refresh.mutate({ id: checkout.id, data: {} })}
+
+      <div className="border-rewear-border/20 flex items-center justify-between border-t pt-4">
+        <span className="text-base font-normal">Total</span>
+        <span
+          aria-label="Estimated checkout total"
+          className="text-[28px] leading-[34px] font-semibold tracking-[-0.02em]"
         >
-          {state.pending
-            ? 'Getting shipping estimate…'
-            : quote
-              ? 'Refresh shipping estimate'
-              : 'Get shipping estimate'}
-        </Button>
+          {hasQuotedFee && quote?.grandTotal !== null
+            ? formatPrice(quote!.grandTotal)
+            : formatPrice(checkout.subtotal)}
+        </span>
+      </div>
+
+      <div className="space-y-1 pt-2">
+        <p className="text-sm font-semibold">Payment method &rsaquo;</p>
+        <p className="text-rewear-muted text-base">
+          {selectedPaymentMethod === 'CARD'
+            ? 'Bank card'
+            : selectedPaymentMethod === 'VNPAY'
+              ? 'VNPAY'
+              : selectedPaymentMethod === 'ZALOPAY'
+                ? 'ZaloPay'
+                : 'MoMo'}
+          {' · '}
+          <button
+            type="button"
+            onClick={onChangePaymentMethod}
+            className="text-rewear-text cursor-pointer font-semibold hover:underline"
+          >
+            Change
+          </button>
+        </p>
+      </div>
+
+      {state.invalid && (
+        <p role="status" className="text-xs text-amber-600">
+          Shipping details changed or this reservation is no longer active.
+        </p>
       )}
-      {refresh.isError && !state.complete && (
-        <p role="alert">{getApiErrorMessage(refresh.error)}</p>
+
+      {refresh.isError && (
+        <div className="flex items-center justify-between text-xs text-red-600">
+          <span>{getApiErrorMessage(refresh.error)}</span>
+          <button
+            type="button"
+            className="cursor-pointer font-semibold underline"
+            onClick={() => refresh.mutate({ id: checkout.id, data: {} })}
+          >
+            Retry
+          </button>
+        </div>
       )}
-      <p className="text-sm">
-        Sandbox only. Shipping registration and payment are not enabled.
-      </p>
-    </>
+    </div>
   );
 }

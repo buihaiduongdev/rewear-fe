@@ -1,19 +1,18 @@
 'use client';
 
 import Link from 'next/link';
+
 import { AddToCartAction } from '@/modules/cart/components/AddToCartAction';
 import { ProductPhoto } from '@/shared/components/marketplace/ProductPhoto';
-import { formatCondition, formatPrice } from '@/shared/utils/product';
+import {
+  formatCondition,
+  formatPrice,
+  type Product,
+} from '@/shared/utils/product';
 import { Dialog } from '@base-ui/react/dialog';
 import { X } from 'lucide-react';
 
-import type { HomeProduct } from '../lib/product';
-
-export function ProductPreview({
-  handle,
-}: {
-  handle: Dialog.Handle<HomeProduct>;
-}) {
+export function ProductPreview({ handle }: { handle: Dialog.Handle<Product> }) {
   return (
     <Dialog.Root handle={handle}>
       {({ payload: product }) => (
@@ -61,7 +60,7 @@ export function ProductPreview({
                     />
                     <Link
                       href={`/products/${product.id}`}
-                      className="flex h-11 w-full items-center justify-center border border-rewear-border text-sm font-medium text-rewear-text hover:bg-rewear-soft transition-colors"
+                      className="border-rewear-border text-rewear-text hover:bg-rewear-soft flex h-11 w-full items-center justify-center border text-sm font-medium transition-colors"
                       onClick={() => handle.close()}
                     >
                       Xem trang chi tiết đầy đủ

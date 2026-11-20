@@ -9,6 +9,7 @@ import type {
   CartControllerAdd200,
   CartControllerAddBody,
   CartControllerFindMine200,
+  CartControllerRemove200,
 } from '../../models/index';
 import { orvalRequest } from '../../orval-request';
 
@@ -39,9 +40,9 @@ export const cartControllerAdd = (
 };
 export const cartControllerRemove = (
   productId: string,
-  options?: SecondParameter<typeof orvalRequest<void>>,
+  options?: SecondParameter<typeof orvalRequest<CartControllerRemove200>>,
 ) => {
-  return orvalRequest<void>(
+  return orvalRequest<CartControllerRemove200>(
     { url: `/api/cart/items/${productId}`, method: 'DELETE' },
     options,
   );

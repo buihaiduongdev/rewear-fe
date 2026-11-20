@@ -478,25 +478,25 @@ export function useProductControllerFindMine<
 }
 
 export const productControllerFindManaged = (
-  id: string,
+  productId: string,
   options?: SecondParameter<typeof orvalRequest>,
   signal?: AbortSignal,
 ) => {
   return orvalRequest<ProductControllerFindManaged200>(
-    { url: `/api/products/manage/${id}`, method: 'GET', signal },
+    { url: `/api/products/manage/${productId}`, method: 'GET', signal },
     options,
   );
 };
 
-export const getProductControllerFindManagedQueryKey = (id: string) => {
-  return [`/api/products/manage/${id}`] as const;
+export const getProductControllerFindManagedQueryKey = (productId: string) => {
+  return [`/api/products/manage/${productId}`] as const;
 };
 
 export const getProductControllerFindManagedQueryOptions = <
   TData = Awaited<ReturnType<typeof productControllerFindManaged>>,
   TError = unknown,
 >(
-  id: string,
+  productId: string,
   options?: {
     query?: Partial<
       UseQueryOptions<
@@ -511,16 +511,18 @@ export const getProductControllerFindManagedQueryOptions = <
   const { query: queryOptions, request: requestOptions } = options ?? {};
 
   const queryKey =
-    queryOptions?.queryKey ?? getProductControllerFindManagedQueryKey(id);
+    queryOptions?.queryKey ??
+    getProductControllerFindManagedQueryKey(productId);
 
   const queryFn: QueryFunction<
     Awaited<ReturnType<typeof productControllerFindManaged>>
-  > = ({ signal }) => productControllerFindManaged(id, requestOptions, signal);
+  > = ({ signal }) =>
+    productControllerFindManaged(productId, requestOptions, signal);
 
   return {
     queryKey,
     queryFn,
-    enabled: id !== null && id !== undefined,
+    enabled: productId !== null && productId !== undefined,
     ...queryOptions,
   } as UseQueryOptions<
     Awaited<ReturnType<typeof productControllerFindManaged>>,
@@ -538,7 +540,7 @@ export function useProductControllerFindManaged<
   TData = Awaited<ReturnType<typeof productControllerFindManaged>>,
   TError = unknown,
 >(
-  id: string,
+  productId: string,
   options: {
     query: Partial<
       UseQueryOptions<
@@ -565,7 +567,7 @@ export function useProductControllerFindManaged<
   TData = Awaited<ReturnType<typeof productControllerFindManaged>>,
   TError = unknown,
 >(
-  id: string,
+  productId: string,
   options?: {
     query?: Partial<
       UseQueryOptions<
@@ -592,7 +594,7 @@ export function useProductControllerFindManaged<
   TData = Awaited<ReturnType<typeof productControllerFindManaged>>,
   TError = unknown,
 >(
-  id: string,
+  productId: string,
   options?: {
     query?: Partial<
       UseQueryOptions<
@@ -612,7 +614,7 @@ export function useProductControllerFindManaged<
   TData = Awaited<ReturnType<typeof productControllerFindManaged>>,
   TError = unknown,
 >(
-  id: string,
+  productId: string,
   options?: {
     query?: Partial<
       UseQueryOptions<
@@ -627,7 +629,10 @@ export function useProductControllerFindManaged<
 ): UseQueryResult<TData, TError> & {
   queryKey: DataTag<QueryKey, TData, TError>;
 } {
-  const queryOptions = getProductControllerFindManagedQueryOptions(id, options);
+  const queryOptions = getProductControllerFindManagedQueryOptions(
+    productId,
+    options,
+  );
 
   const query = useQuery(queryOptions, queryClient) as UseQueryResult<
     TData,
@@ -638,25 +643,31 @@ export function useProductControllerFindManaged<
 }
 
 export const productControllerModerationForOwner = (
-  id: string,
+  productId: string,
   options?: SecondParameter<typeof orvalRequest>,
   signal?: AbortSignal,
 ) => {
   return orvalRequest<ProductControllerModerationForOwner200>(
-    { url: `/api/products/manage/${id}/moderation`, method: 'GET', signal },
+    {
+      url: `/api/products/manage/${productId}/moderation`,
+      method: 'GET',
+      signal,
+    },
     options,
   );
 };
 
-export const getProductControllerModerationForOwnerQueryKey = (id: string) => {
-  return [`/api/products/manage/${id}/moderation`] as const;
+export const getProductControllerModerationForOwnerQueryKey = (
+  productId: string,
+) => {
+  return [`/api/products/manage/${productId}/moderation`] as const;
 };
 
 export const getProductControllerModerationForOwnerQueryOptions = <
   TData = Awaited<ReturnType<typeof productControllerModerationForOwner>>,
   TError = unknown,
 >(
-  id: string,
+  productId: string,
   options?: {
     query?: Partial<
       UseQueryOptions<
@@ -672,17 +683,17 @@ export const getProductControllerModerationForOwnerQueryOptions = <
 
   const queryKey =
     queryOptions?.queryKey ??
-    getProductControllerModerationForOwnerQueryKey(id);
+    getProductControllerModerationForOwnerQueryKey(productId);
 
   const queryFn: QueryFunction<
     Awaited<ReturnType<typeof productControllerModerationForOwner>>
   > = ({ signal }) =>
-    productControllerModerationForOwner(id, requestOptions, signal);
+    productControllerModerationForOwner(productId, requestOptions, signal);
 
   return {
     queryKey,
     queryFn,
-    enabled: id !== null && id !== undefined,
+    enabled: productId !== null && productId !== undefined,
     ...queryOptions,
   } as UseQueryOptions<
     Awaited<ReturnType<typeof productControllerModerationForOwner>>,
@@ -700,7 +711,7 @@ export function useProductControllerModerationForOwner<
   TData = Awaited<ReturnType<typeof productControllerModerationForOwner>>,
   TError = unknown,
 >(
-  id: string,
+  productId: string,
   options: {
     query: Partial<
       UseQueryOptions<
@@ -727,7 +738,7 @@ export function useProductControllerModerationForOwner<
   TData = Awaited<ReturnType<typeof productControllerModerationForOwner>>,
   TError = unknown,
 >(
-  id: string,
+  productId: string,
   options?: {
     query?: Partial<
       UseQueryOptions<
@@ -754,7 +765,7 @@ export function useProductControllerModerationForOwner<
   TData = Awaited<ReturnType<typeof productControllerModerationForOwner>>,
   TError = unknown,
 >(
-  id: string,
+  productId: string,
   options?: {
     query?: Partial<
       UseQueryOptions<
@@ -774,7 +785,7 @@ export function useProductControllerModerationForOwner<
   TData = Awaited<ReturnType<typeof productControllerModerationForOwner>>,
   TError = unknown,
 >(
-  id: string,
+  productId: string,
   options?: {
     query?: Partial<
       UseQueryOptions<
@@ -790,7 +801,7 @@ export function useProductControllerModerationForOwner<
   queryKey: DataTag<QueryKey, TData, TError>;
 } {
   const queryOptions = getProductControllerModerationForOwnerQueryOptions(
-    id,
+    productId,
     options,
   );
 
@@ -964,25 +975,25 @@ export function useProductControllerReviewQueue<
 }
 
 export const productControllerReviewDetail = (
-  id: string,
+  productId: string,
   options?: SecondParameter<typeof orvalRequest>,
   signal?: AbortSignal,
 ) => {
   return orvalRequest<ProductControllerReviewDetail200>(
-    { url: `/api/products/admin/${id}`, method: 'GET', signal },
+    { url: `/api/products/admin/${productId}`, method: 'GET', signal },
     options,
   );
 };
 
-export const getProductControllerReviewDetailQueryKey = (id: string) => {
-  return [`/api/products/admin/${id}`] as const;
+export const getProductControllerReviewDetailQueryKey = (productId: string) => {
+  return [`/api/products/admin/${productId}`] as const;
 };
 
 export const getProductControllerReviewDetailQueryOptions = <
   TData = Awaited<ReturnType<typeof productControllerReviewDetail>>,
   TError = unknown,
 >(
-  id: string,
+  productId: string,
   options?: {
     query?: Partial<
       UseQueryOptions<
@@ -997,16 +1008,18 @@ export const getProductControllerReviewDetailQueryOptions = <
   const { query: queryOptions, request: requestOptions } = options ?? {};
 
   const queryKey =
-    queryOptions?.queryKey ?? getProductControllerReviewDetailQueryKey(id);
+    queryOptions?.queryKey ??
+    getProductControllerReviewDetailQueryKey(productId);
 
   const queryFn: QueryFunction<
     Awaited<ReturnType<typeof productControllerReviewDetail>>
-  > = ({ signal }) => productControllerReviewDetail(id, requestOptions, signal);
+  > = ({ signal }) =>
+    productControllerReviewDetail(productId, requestOptions, signal);
 
   return {
     queryKey,
     queryFn,
-    enabled: id !== null && id !== undefined,
+    enabled: productId !== null && productId !== undefined,
     ...queryOptions,
   } as UseQueryOptions<
     Awaited<ReturnType<typeof productControllerReviewDetail>>,
@@ -1024,7 +1037,7 @@ export function useProductControllerReviewDetail<
   TData = Awaited<ReturnType<typeof productControllerReviewDetail>>,
   TError = unknown,
 >(
-  id: string,
+  productId: string,
   options: {
     query: Partial<
       UseQueryOptions<
@@ -1051,7 +1064,7 @@ export function useProductControllerReviewDetail<
   TData = Awaited<ReturnType<typeof productControllerReviewDetail>>,
   TError = unknown,
 >(
-  id: string,
+  productId: string,
   options?: {
     query?: Partial<
       UseQueryOptions<
@@ -1078,7 +1091,7 @@ export function useProductControllerReviewDetail<
   TData = Awaited<ReturnType<typeof productControllerReviewDetail>>,
   TError = unknown,
 >(
-  id: string,
+  productId: string,
   options?: {
     query?: Partial<
       UseQueryOptions<
@@ -1098,7 +1111,7 @@ export function useProductControllerReviewDetail<
   TData = Awaited<ReturnType<typeof productControllerReviewDetail>>,
   TError = unknown,
 >(
-  id: string,
+  productId: string,
   options?: {
     query?: Partial<
       UseQueryOptions<
@@ -1114,7 +1127,7 @@ export function useProductControllerReviewDetail<
   queryKey: DataTag<QueryKey, TData, TError>;
 } {
   const queryOptions = getProductControllerReviewDetailQueryOptions(
-    id,
+    productId,
     options,
   );
 
@@ -1127,25 +1140,31 @@ export function useProductControllerReviewDetail<
 }
 
 export const productControllerModerationForAdmin = (
-  id: string,
+  productId: string,
   options?: SecondParameter<typeof orvalRequest>,
   signal?: AbortSignal,
 ) => {
   return orvalRequest<ProductControllerModerationForAdmin200>(
-    { url: `/api/products/admin/${id}/moderation`, method: 'GET', signal },
+    {
+      url: `/api/products/admin/${productId}/moderation`,
+      method: 'GET',
+      signal,
+    },
     options,
   );
 };
 
-export const getProductControllerModerationForAdminQueryKey = (id: string) => {
-  return [`/api/products/admin/${id}/moderation`] as const;
+export const getProductControllerModerationForAdminQueryKey = (
+  productId: string,
+) => {
+  return [`/api/products/admin/${productId}/moderation`] as const;
 };
 
 export const getProductControllerModerationForAdminQueryOptions = <
   TData = Awaited<ReturnType<typeof productControllerModerationForAdmin>>,
   TError = unknown,
 >(
-  id: string,
+  productId: string,
   options?: {
     query?: Partial<
       UseQueryOptions<
@@ -1161,17 +1180,17 @@ export const getProductControllerModerationForAdminQueryOptions = <
 
   const queryKey =
     queryOptions?.queryKey ??
-    getProductControllerModerationForAdminQueryKey(id);
+    getProductControllerModerationForAdminQueryKey(productId);
 
   const queryFn: QueryFunction<
     Awaited<ReturnType<typeof productControllerModerationForAdmin>>
   > = ({ signal }) =>
-    productControllerModerationForAdmin(id, requestOptions, signal);
+    productControllerModerationForAdmin(productId, requestOptions, signal);
 
   return {
     queryKey,
     queryFn,
-    enabled: id !== null && id !== undefined,
+    enabled: productId !== null && productId !== undefined,
     ...queryOptions,
   } as UseQueryOptions<
     Awaited<ReturnType<typeof productControllerModerationForAdmin>>,
@@ -1189,7 +1208,7 @@ export function useProductControllerModerationForAdmin<
   TData = Awaited<ReturnType<typeof productControllerModerationForAdmin>>,
   TError = unknown,
 >(
-  id: string,
+  productId: string,
   options: {
     query: Partial<
       UseQueryOptions<
@@ -1216,7 +1235,7 @@ export function useProductControllerModerationForAdmin<
   TData = Awaited<ReturnType<typeof productControllerModerationForAdmin>>,
   TError = unknown,
 >(
-  id: string,
+  productId: string,
   options?: {
     query?: Partial<
       UseQueryOptions<
@@ -1243,7 +1262,7 @@ export function useProductControllerModerationForAdmin<
   TData = Awaited<ReturnType<typeof productControllerModerationForAdmin>>,
   TError = unknown,
 >(
-  id: string,
+  productId: string,
   options?: {
     query?: Partial<
       UseQueryOptions<
@@ -1263,7 +1282,7 @@ export function useProductControllerModerationForAdmin<
   TData = Awaited<ReturnType<typeof productControllerModerationForAdmin>>,
   TError = unknown,
 >(
-  id: string,
+  productId: string,
   options?: {
     query?: Partial<
       UseQueryOptions<
@@ -1279,7 +1298,7 @@ export function useProductControllerModerationForAdmin<
   queryKey: DataTag<QueryKey, TData, TError>;
 } {
   const queryOptions = getProductControllerModerationForAdminQueryOptions(
-    id,
+    productId,
     options,
   );
 
@@ -1292,14 +1311,14 @@ export function useProductControllerModerationForAdmin<
 }
 
 export const productControllerModerate = (
-  id: string,
+  productId: string,
   productControllerModerateBody: ProductControllerModerateBody,
   options?: SecondParameter<typeof orvalRequest>,
   signal?: AbortSignal,
 ) => {
   return orvalRequest<ProductControllerModerate200>(
     {
-      url: `/api/products/admin/${id}/moderation`,
+      url: `/api/products/admin/${productId}/moderation`,
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       data: productControllerModerateBody,
@@ -1342,9 +1361,9 @@ export const getProductControllerModerateMutationOptions = <
     Awaited<ReturnType<typeof productControllerModerate>>,
     ProductControllerModerateMutationVariables
   > = (props) => {
-    const { id, data } = props ?? {};
+    const { productId, data } = props ?? {};
 
-    return productControllerModerate(id, data, requestOptions);
+    return productControllerModerate(productId, data, requestOptions);
   };
 
   return { mutationFn, ...mutationOptions };
@@ -1357,7 +1376,7 @@ export type ProductControllerModerateMutationBody =
   ProductControllerModerateBody;
 export type ProductControllerModerateMutationError = unknown;
 export type ProductControllerModerateMutationVariables = {
-  id: string;
+  productId: string;
   data: ProductControllerModerateBody;
 };
 
@@ -1387,12 +1406,12 @@ export const useProductControllerModerate = <
   );
 };
 export const productControllerSubmit = (
-  id: string,
+  productId: string,
   options?: SecondParameter<typeof orvalRequest>,
   signal?: AbortSignal,
 ) => {
   return orvalRequest<ProductControllerSubmit200>(
-    { url: `/api/products/${id}/submit`, method: 'POST', signal },
+    { url: `/api/products/${productId}/submit`, method: 'POST', signal },
     options,
   );
 };
@@ -1430,9 +1449,9 @@ export const getProductControllerSubmitMutationOptions = <
     Awaited<ReturnType<typeof productControllerSubmit>>,
     ProductControllerSubmitMutationVariables
   > = (props) => {
-    const { id } = props ?? {};
+    const { productId } = props ?? {};
 
-    return productControllerSubmit(id, requestOptions);
+    return productControllerSubmit(productId, requestOptions);
   };
 
   return { mutationFn, ...mutationOptions };
@@ -1443,7 +1462,7 @@ export type ProductControllerSubmitMutationResult = NonNullable<
 >;
 
 export type ProductControllerSubmitMutationError = unknown;
-export type ProductControllerSubmitMutationVariables = { id: string };
+export type ProductControllerSubmitMutationVariables = { productId: string };
 
 export const useProductControllerSubmit = <
   TError = unknown,
@@ -1471,12 +1490,16 @@ export const useProductControllerSubmit = <
   );
 };
 export const productControllerCancelSubmission = (
-  id: string,
+  productId: string,
   options?: SecondParameter<typeof orvalRequest>,
   signal?: AbortSignal,
 ) => {
   return orvalRequest<ProductControllerCancelSubmission200>(
-    { url: `/api/products/${id}/cancel-submission`, method: 'POST', signal },
+    {
+      url: `/api/products/${productId}/cancel-submission`,
+      method: 'POST',
+      signal,
+    },
     options,
   );
 };
@@ -1514,9 +1537,9 @@ export const getProductControllerCancelSubmissionMutationOptions = <
     Awaited<ReturnType<typeof productControllerCancelSubmission>>,
     ProductControllerCancelSubmissionMutationVariables
   > = (props) => {
-    const { id } = props ?? {};
+    const { productId } = props ?? {};
 
-    return productControllerCancelSubmission(id, requestOptions);
+    return productControllerCancelSubmission(productId, requestOptions);
   };
 
   return { mutationFn, ...mutationOptions };
@@ -1527,7 +1550,9 @@ export type ProductControllerCancelSubmissionMutationResult = NonNullable<
 >;
 
 export type ProductControllerCancelSubmissionMutationError = unknown;
-export type ProductControllerCancelSubmissionMutationVariables = { id: string };
+export type ProductControllerCancelSubmissionMutationVariables = {
+  productId: string;
+};
 
 export const useProductControllerCancelSubmission = <
   TError = unknown,
@@ -1555,14 +1580,14 @@ export const useProductControllerCancelSubmission = <
   );
 };
 export const productControllerSuspend = (
-  id: string,
+  productId: string,
   productControllerSuspendBody: ProductControllerSuspendBody,
   options?: SecondParameter<typeof orvalRequest>,
   signal?: AbortSignal,
 ) => {
   return orvalRequest<ProductControllerSuspend200>(
     {
-      url: `/api/products/admin/${id}/suspend`,
+      url: `/api/products/admin/${productId}/suspend`,
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       data: productControllerSuspendBody,
@@ -1605,9 +1630,9 @@ export const getProductControllerSuspendMutationOptions = <
     Awaited<ReturnType<typeof productControllerSuspend>>,
     ProductControllerSuspendMutationVariables
   > = (props) => {
-    const { id, data } = props ?? {};
+    const { productId, data } = props ?? {};
 
-    return productControllerSuspend(id, data, requestOptions);
+    return productControllerSuspend(productId, data, requestOptions);
   };
 
   return { mutationFn, ...mutationOptions };
@@ -1619,7 +1644,7 @@ export type ProductControllerSuspendMutationResult = NonNullable<
 export type ProductControllerSuspendMutationBody = ProductControllerSuspendBody;
 export type ProductControllerSuspendMutationError = unknown;
 export type ProductControllerSuspendMutationVariables = {
-  id: string;
+  productId: string;
   data: ProductControllerSuspendBody;
 };
 
@@ -1649,25 +1674,25 @@ export const useProductControllerSuspend = <
   );
 };
 export const productControllerFindOne = (
-  id: string,
+  productId: string,
   options?: SecondParameter<typeof orvalRequest>,
   signal?: AbortSignal,
 ) => {
   return orvalRequest<ProductControllerFindOne200>(
-    { url: `/api/products/${id}`, method: 'GET', signal },
+    { url: `/api/products/${productId}`, method: 'GET', signal },
     options,
   );
 };
 
-export const getProductControllerFindOneQueryKey = (id: string) => {
-  return [`/api/products/${id}`] as const;
+export const getProductControllerFindOneQueryKey = (productId: string) => {
+  return [`/api/products/${productId}`] as const;
 };
 
 export const getProductControllerFindOneQueryOptions = <
   TData = Awaited<ReturnType<typeof productControllerFindOne>>,
   TError = unknown,
 >(
-  id: string,
+  productId: string,
   options?: {
     query?: Partial<
       UseQueryOptions<
@@ -1682,16 +1707,17 @@ export const getProductControllerFindOneQueryOptions = <
   const { query: queryOptions, request: requestOptions } = options ?? {};
 
   const queryKey =
-    queryOptions?.queryKey ?? getProductControllerFindOneQueryKey(id);
+    queryOptions?.queryKey ?? getProductControllerFindOneQueryKey(productId);
 
   const queryFn: QueryFunction<
     Awaited<ReturnType<typeof productControllerFindOne>>
-  > = ({ signal }) => productControllerFindOne(id, requestOptions, signal);
+  > = ({ signal }) =>
+    productControllerFindOne(productId, requestOptions, signal);
 
   return {
     queryKey,
     queryFn,
-    enabled: id !== null && id !== undefined,
+    enabled: productId !== null && productId !== undefined,
     ...queryOptions,
   } as UseQueryOptions<
     Awaited<ReturnType<typeof productControllerFindOne>>,
@@ -1709,7 +1735,7 @@ export function useProductControllerFindOne<
   TData = Awaited<ReturnType<typeof productControllerFindOne>>,
   TError = unknown,
 >(
-  id: string,
+  productId: string,
   options: {
     query: Partial<
       UseQueryOptions<
@@ -1736,7 +1762,7 @@ export function useProductControllerFindOne<
   TData = Awaited<ReturnType<typeof productControllerFindOne>>,
   TError = unknown,
 >(
-  id: string,
+  productId: string,
   options?: {
     query?: Partial<
       UseQueryOptions<
@@ -1763,7 +1789,7 @@ export function useProductControllerFindOne<
   TData = Awaited<ReturnType<typeof productControllerFindOne>>,
   TError = unknown,
 >(
-  id: string,
+  productId: string,
   options?: {
     query?: Partial<
       UseQueryOptions<
@@ -1783,7 +1809,7 @@ export function useProductControllerFindOne<
   TData = Awaited<ReturnType<typeof productControllerFindOne>>,
   TError = unknown,
 >(
-  id: string,
+  productId: string,
   options?: {
     query?: Partial<
       UseQueryOptions<
@@ -1798,7 +1824,10 @@ export function useProductControllerFindOne<
 ): UseQueryResult<TData, TError> & {
   queryKey: DataTag<QueryKey, TData, TError>;
 } {
-  const queryOptions = getProductControllerFindOneQueryOptions(id, options);
+  const queryOptions = getProductControllerFindOneQueryOptions(
+    productId,
+    options,
+  );
 
   const query = useQuery(queryOptions, queryClient) as UseQueryResult<
     TData,
@@ -1809,14 +1838,14 @@ export function useProductControllerFindOne<
 }
 
 export const productControllerUpdate = (
-  id: string,
+  productId: string,
   productControllerUpdateBody: ProductControllerUpdateBody,
   options?: SecondParameter<typeof orvalRequest>,
   signal?: AbortSignal,
 ) => {
   return orvalRequest<ProductControllerUpdate200>(
     {
-      url: `/api/products/${id}`,
+      url: `/api/products/${productId}`,
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       data: productControllerUpdateBody,
@@ -1859,9 +1888,9 @@ export const getProductControllerUpdateMutationOptions = <
     Awaited<ReturnType<typeof productControllerUpdate>>,
     ProductControllerUpdateMutationVariables
   > = (props) => {
-    const { id, data } = props ?? {};
+    const { productId, data } = props ?? {};
 
-    return productControllerUpdate(id, data, requestOptions);
+    return productControllerUpdate(productId, data, requestOptions);
   };
 
   return { mutationFn, ...mutationOptions };
@@ -1873,7 +1902,7 @@ export type ProductControllerUpdateMutationResult = NonNullable<
 export type ProductControllerUpdateMutationBody = ProductControllerUpdateBody;
 export type ProductControllerUpdateMutationError = unknown;
 export type ProductControllerUpdateMutationVariables = {
-  id: string;
+  productId: string;
   data: ProductControllerUpdateBody;
 };
 
@@ -1903,14 +1932,14 @@ export const useProductControllerUpdate = <
   );
 };
 export const productControllerUpdateStatus = (
-  id: string,
+  productId: string,
   productControllerUpdateStatusBody: ProductControllerUpdateStatusBody,
   options?: SecondParameter<typeof orvalRequest>,
   signal?: AbortSignal,
 ) => {
   return orvalRequest<ProductControllerUpdateStatus200>(
     {
-      url: `/api/products/${id}/status`,
+      url: `/api/products/${productId}/status`,
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       data: productControllerUpdateStatusBody,
@@ -1953,9 +1982,9 @@ export const getProductControllerUpdateStatusMutationOptions = <
     Awaited<ReturnType<typeof productControllerUpdateStatus>>,
     ProductControllerUpdateStatusMutationVariables
   > = (props) => {
-    const { id, data } = props ?? {};
+    const { productId, data } = props ?? {};
 
-    return productControllerUpdateStatus(id, data, requestOptions);
+    return productControllerUpdateStatus(productId, data, requestOptions);
   };
 
   return { mutationFn, ...mutationOptions };
@@ -1968,7 +1997,7 @@ export type ProductControllerUpdateStatusMutationBody =
   ProductControllerUpdateStatusBody;
 export type ProductControllerUpdateStatusMutationError = unknown;
 export type ProductControllerUpdateStatusMutationVariables = {
-  id: string;
+  productId: string;
   data: ProductControllerUpdateStatusBody;
 };
 

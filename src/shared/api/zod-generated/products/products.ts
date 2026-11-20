@@ -439,6 +439,10 @@ export const ProductControllerFindAllResponse = zod.object({
   }),
 });
 
+export const ProductControllerCreateHeader = zod.object({
+  'X-Shop-Id': zod.uuid(),
+});
+
 export const productControllerCreateBodyCategoryIdRegExp = new RegExp(
   '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
 );
@@ -1293,12 +1297,16 @@ export const ProductControllerFindMineResponse = zod.object({
   }),
 });
 
-export const productControllerFindManagedPathIdRegExp = new RegExp(
+export const productControllerFindManagedPathProductIdRegExp = new RegExp(
   '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
 );
 
 export const ProductControllerFindManagedParams = zod.object({
-  id: zod.uuid().regex(productControllerFindManagedPathIdRegExp),
+  productId: zod.uuid().regex(productControllerFindManagedPathProductIdRegExp),
+});
+
+export const ProductControllerFindManagedHeader = zod.object({
+  'X-Shop-Id': zod.uuid(),
 });
 
 export const productControllerFindManagedResponseDataIdRegExp = new RegExp(
@@ -1577,12 +1585,19 @@ export const ProductControllerFindManagedResponse = zod.object({
   }),
 });
 
-export const productControllerModerationForOwnerPathIdRegExp = new RegExp(
-  '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
-);
+export const productControllerModerationForOwnerPathProductIdRegExp =
+  new RegExp(
+    '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
+  );
 
 export const ProductControllerModerationForOwnerParams = zod.object({
-  id: zod.uuid().regex(productControllerModerationForOwnerPathIdRegExp),
+  productId: zod
+    .uuid()
+    .regex(productControllerModerationForOwnerPathProductIdRegExp),
+});
+
+export const ProductControllerModerationForOwnerHeader = zod.object({
+  'X-Shop-Id': zod.uuid(),
 });
 
 export const productControllerModerationForOwnerResponseDataProductIdRegExp =
@@ -2062,12 +2077,12 @@ export const ProductControllerReviewQueueResponse = zod.object({
   }),
 });
 
-export const productControllerReviewDetailPathIdRegExp = new RegExp(
+export const productControllerReviewDetailPathProductIdRegExp = new RegExp(
   '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
 );
 
 export const ProductControllerReviewDetailParams = zod.object({
-  id: zod.uuid().regex(productControllerReviewDetailPathIdRegExp),
+  productId: zod.uuid().regex(productControllerReviewDetailPathProductIdRegExp),
 });
 
 export const productControllerReviewDetailResponseDataIdRegExp = new RegExp(
@@ -2348,12 +2363,15 @@ export const ProductControllerReviewDetailResponse = zod.object({
   }),
 });
 
-export const productControllerModerationForAdminPathIdRegExp = new RegExp(
-  '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
-);
+export const productControllerModerationForAdminPathProductIdRegExp =
+  new RegExp(
+    '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
+  );
 
 export const ProductControllerModerationForAdminParams = zod.object({
-  id: zod.uuid().regex(productControllerModerationForAdminPathIdRegExp),
+  productId: zod
+    .uuid()
+    .regex(productControllerModerationForAdminPathProductIdRegExp),
 });
 
 export const productControllerModerationForAdminResponseDataProductIdRegExp =
@@ -2386,12 +2404,12 @@ export const ProductControllerModerationForAdminResponse = zod.object({
   }),
 });
 
-export const productControllerModeratePathIdRegExp = new RegExp(
+export const productControllerModeratePathProductIdRegExp = new RegExp(
   '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
 );
 
 export const ProductControllerModerateParams = zod.object({
-  id: zod.uuid().regex(productControllerModeratePathIdRegExp),
+  productId: zod.uuid().regex(productControllerModeratePathProductIdRegExp),
 });
 
 export const productControllerModerateBodyVersionExclusiveMin = 0;
@@ -2662,12 +2680,16 @@ export const ProductControllerModerateResponse = zod.object({
   }),
 });
 
-export const productControllerSubmitPathIdRegExp = new RegExp(
+export const productControllerSubmitPathProductIdRegExp = new RegExp(
   '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
 );
 
 export const ProductControllerSubmitParams = zod.object({
-  id: zod.uuid().regex(productControllerSubmitPathIdRegExp),
+  productId: zod.uuid().regex(productControllerSubmitPathProductIdRegExp),
+});
+
+export const ProductControllerSubmitHeader = zod.object({
+  'X-Shop-Id': zod.uuid(),
 });
 
 export const productControllerSubmitResponseDataIdRegExp = new RegExp(
@@ -2915,12 +2937,18 @@ export const ProductControllerSubmitResponse = zod.object({
   }),
 });
 
-export const productControllerCancelSubmissionPathIdRegExp = new RegExp(
+export const productControllerCancelSubmissionPathProductIdRegExp = new RegExp(
   '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
 );
 
 export const ProductControllerCancelSubmissionParams = zod.object({
-  id: zod.uuid().regex(productControllerCancelSubmissionPathIdRegExp),
+  productId: zod
+    .uuid()
+    .regex(productControllerCancelSubmissionPathProductIdRegExp),
+});
+
+export const ProductControllerCancelSubmissionHeader = zod.object({
+  'X-Shop-Id': zod.uuid(),
 });
 
 export const productControllerCancelSubmissionResponseDataIdRegExp = new RegExp(
@@ -3211,12 +3239,12 @@ export const ProductControllerCancelSubmissionResponse = zod.object({
   }),
 });
 
-export const productControllerSuspendPathIdRegExp = new RegExp(
+export const productControllerSuspendPathProductIdRegExp = new RegExp(
   '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
 );
 
 export const ProductControllerSuspendParams = zod.object({
-  id: zod.uuid().regex(productControllerSuspendPathIdRegExp),
+  productId: zod.uuid().regex(productControllerSuspendPathProductIdRegExp),
 });
 
 export const productControllerSuspendBodyReasonMax = 2000;
@@ -3472,12 +3500,12 @@ export const ProductControllerSuspendResponse = zod.object({
   }),
 });
 
-export const productControllerFindOnePathIdRegExp = new RegExp(
+export const productControllerFindOnePathProductIdRegExp = new RegExp(
   '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
 );
 
 export const ProductControllerFindOneParams = zod.object({
-  id: zod.uuid().regex(productControllerFindOnePathIdRegExp),
+  productId: zod.uuid().regex(productControllerFindOnePathProductIdRegExp),
 });
 
 export const productControllerFindOneResponseDataIdRegExp = new RegExp(
@@ -3727,12 +3755,16 @@ export const ProductControllerFindOneResponse = zod.object({
   }),
 });
 
-export const productControllerUpdatePathIdRegExp = new RegExp(
+export const productControllerUpdatePathProductIdRegExp = new RegExp(
   '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
 );
 
 export const ProductControllerUpdateParams = zod.object({
-  id: zod.uuid().regex(productControllerUpdatePathIdRegExp),
+  productId: zod.uuid().regex(productControllerUpdatePathProductIdRegExp),
+});
+
+export const ProductControllerUpdateHeader = zod.object({
+  'X-Shop-Id': zod.uuid(),
 });
 
 export const productControllerUpdateBodyCategoryIdRegExp = new RegExp(
@@ -4149,12 +4181,16 @@ export const ProductControllerUpdateResponse = zod.object({
   }),
 });
 
-export const productControllerUpdateStatusPathIdRegExp = new RegExp(
+export const productControllerUpdateStatusPathProductIdRegExp = new RegExp(
   '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
 );
 
 export const ProductControllerUpdateStatusParams = zod.object({
-  id: zod.uuid().regex(productControllerUpdateStatusPathIdRegExp),
+  productId: zod.uuid().regex(productControllerUpdateStatusPathProductIdRegExp),
+});
+
+export const ProductControllerUpdateStatusHeader = zod.object({
+  'X-Shop-Id': zod.uuid(),
 });
 
 export const ProductControllerUpdateStatusBody = zod.strictObject({

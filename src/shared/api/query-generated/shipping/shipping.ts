@@ -22,14 +22,14 @@ import { orvalRequest } from '../../orval-request';
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
 export const shippingControllerUpdatePackage = (
-  id: string,
+  productId: string,
   shippingControllerUpdatePackageBody: ShippingControllerUpdatePackageBody,
   options?: SecondParameter<typeof orvalRequest>,
   signal?: AbortSignal,
 ) => {
   return orvalRequest<ShippingControllerUpdatePackage200>(
     {
-      url: `/api/shipping/products/${id}/package`,
+      url: `/api/shipping/products/${productId}/package`,
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       data: shippingControllerUpdatePackageBody,
@@ -72,9 +72,9 @@ export const getShippingControllerUpdatePackageMutationOptions = <
     Awaited<ReturnType<typeof shippingControllerUpdatePackage>>,
     ShippingControllerUpdatePackageMutationVariables
   > = (props) => {
-    const { id, data } = props ?? {};
+    const { productId, data } = props ?? {};
 
-    return shippingControllerUpdatePackage(id, data, requestOptions);
+    return shippingControllerUpdatePackage(productId, data, requestOptions);
   };
 
   return { mutationFn, ...mutationOptions };
@@ -87,7 +87,7 @@ export type ShippingControllerUpdatePackageMutationBody =
   ShippingControllerUpdatePackageBody;
 export type ShippingControllerUpdatePackageMutationError = unknown;
 export type ShippingControllerUpdatePackageMutationVariables = {
-  id: string;
+  productId: string;
   data: ShippingControllerUpdatePackageBody;
 };
 

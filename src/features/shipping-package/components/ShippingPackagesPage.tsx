@@ -212,7 +212,7 @@ export function ShippingPackagesPage() {
                   }
                   onClick={() =>
                     submit.mutate(
-                      { id },
+                      { productId: id },
                       {
                         onSuccess: (response) => {
                           client.setQueryData(detailKey, response);

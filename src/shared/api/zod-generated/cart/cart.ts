@@ -238,4 +238,107 @@ export const CartControllerRemoveParams = zod.object({
   productId: zod.uuid().regex(cartControllerRemovePathProductIdRegExp),
 });
 
-export const CartControllerRemoveResponse = zod.void();
+export const cartControllerRemoveResponseDataGroupsItemShopIdRegExp =
+  new RegExp(
+    '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
+  );
+export const cartControllerRemoveResponseDataGroupsItemItemsItemProductIdRegExp =
+  new RegExp(
+    '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
+  );
+export const cartControllerRemoveResponseDataGroupsItemItemsItemAddedAtRegExp =
+  new RegExp(
+    '^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$',
+  );
+export const cartControllerRemoveResponseDataGroupsItemItemsItemProductIdRegExpOne =
+  new RegExp(
+    '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
+  );
+export const cartControllerRemoveResponseDataGroupsItemItemsItemProductPriceExclusiveMin = 0;
+export const cartControllerRemoveResponseDataGroupsItemItemsItemProductPriceMax = 9007199254740991;
+
+export const cartControllerRemoveResponseDataSummaryItemCountMin = 0;
+export const cartControllerRemoveResponseDataSummaryItemCountMax = 9007199254740991;
+
+export const cartControllerRemoveResponseDataSummaryAvailableItemCountMin = 0;
+export const cartControllerRemoveResponseDataSummaryAvailableItemCountMax = 9007199254740991;
+
+export const cartControllerRemoveResponseDataSummaryTotalPriceMin = 0;
+export const cartControllerRemoveResponseDataSummaryTotalPriceMax = 9007199254740991;
+
+export const CartControllerRemoveResponse = zod.object({
+  statusCode: zod.literal(200),
+  message: zod.string(),
+  data: zod.object({
+    groups: zod.array(
+      zod.object({
+        shop: zod
+          .object({
+            id: zod
+              .uuid()
+              .regex(cartControllerRemoveResponseDataGroupsItemShopIdRegExp),
+            name: zod.string(),
+          })
+          .nullable(),
+        items: zod.array(
+          zod.object({
+            productId: zod
+              .uuid()
+              .regex(
+                cartControllerRemoveResponseDataGroupsItemItemsItemProductIdRegExp,
+              ),
+            addedAt: zod.iso
+              .datetime({ offset: true })
+              .regex(
+                cartControllerRemoveResponseDataGroupsItemItemsItemAddedAtRegExp,
+              ),
+            availability: zod.enum([
+              'AVAILABLE',
+              'HELD',
+              'SOLD',
+              'UNAVAILABLE',
+              'OWN_PRODUCT',
+            ]),
+            product: zod
+              .object({
+                id: zod
+                  .uuid()
+                  .regex(
+                    cartControllerRemoveResponseDataGroupsItemItemsItemProductIdRegExpOne,
+                  ),
+                title: zod.string(),
+                price: zod
+                  .int()
+                  .gt(
+                    cartControllerRemoveResponseDataGroupsItemItemsItemProductPriceExclusiveMin,
+                  )
+                  .max(
+                    cartControllerRemoveResponseDataGroupsItemItemsItemProductPriceMax,
+                  ),
+                condition: zod.enum(['FAIR', 'GOOD', 'EXCELLENT', 'PRISTINE']),
+                size: zod.string().nullable(),
+                color: zod.string().nullable(),
+                coverUrl: zod.url().nullable(),
+              })
+              .nullable(),
+          }),
+        ),
+      }),
+    ),
+    summary: zod.object({
+      itemCount: zod
+        .int()
+        .min(cartControllerRemoveResponseDataSummaryItemCountMin)
+        .max(cartControllerRemoveResponseDataSummaryItemCountMax),
+      availableItemCount: zod
+        .int()
+        .min(cartControllerRemoveResponseDataSummaryAvailableItemCountMin)
+        .max(cartControllerRemoveResponseDataSummaryAvailableItemCountMax),
+      totalPrice: zod
+        .int()
+        .min(cartControllerRemoveResponseDataSummaryTotalPriceMin)
+        .max(cartControllerRemoveResponseDataSummaryTotalPriceMax),
+      currency: zod.enum(['VND']),
+    }),
+  }),
+});

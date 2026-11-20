@@ -68,6 +68,10 @@ export const MediaControllerConfirmUploadParams = zod.object({
   productId: zod.uuid().regex(mediaControllerConfirmUploadPathProductIdRegExp),
 });
 
+export const MediaControllerConfirmUploadHeader = zod.object({
+  'X-Shop-Id': zod.uuid(),
+});
+
 export const mediaControllerConfirmUploadBodyMimeTypeMax = 100;
 
 export const mediaControllerConfirmUploadBodySizeBytesMax = 9007199254740991;
@@ -145,6 +149,10 @@ export const MediaControllerFindForManagementParams = zod.object({
     .regex(mediaControllerFindForManagementPathProductIdRegExp),
 });
 
+export const MediaControllerFindForManagementHeader = zod.object({
+  'X-Shop-Id': zod.uuid(),
+});
+
 export const mediaControllerFindForManagementResponseDataItemIdRegExp =
   new RegExp(
     '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
@@ -205,6 +213,10 @@ export const mediaControllerUpdateMetadataPathMediaIdRegExp = new RegExp(
 export const MediaControllerUpdateMetadataParams = zod.object({
   productId: zod.uuid().regex(mediaControllerUpdateMetadataPathProductIdRegExp),
   mediaId: zod.uuid().regex(mediaControllerUpdateMetadataPathMediaIdRegExp),
+});
+
+export const MediaControllerUpdateMetadataHeader = zod.object({
+  'X-Shop-Id': zod.uuid(),
 });
 
 export const MediaControllerUpdateMetadataBody = zod.strictObject({
@@ -275,6 +287,10 @@ export const MediaControllerCreateUploadTicketParams = zod.object({
     .regex(mediaControllerCreateUploadTicketPathProductIdRegExp),
 });
 
+export const MediaControllerCreateUploadTicketHeader = zod.object({
+  'X-Shop-Id': zod.uuid(),
+});
+
 export const mediaControllerCreateUploadTicketBodyMimeTypeMax = 100;
 
 export const mediaControllerCreateUploadTicketBodySizeBytesMax = 9007199254740991;
@@ -313,6 +329,10 @@ export const mediaControllerReorderPathProductIdRegExp = new RegExp(
 
 export const MediaControllerReorderParams = zod.object({
   productId: zod.uuid().regex(mediaControllerReorderPathProductIdRegExp),
+});
+
+export const MediaControllerReorderHeader = zod.object({
+  'X-Shop-Id': zod.uuid(),
 });
 
 export const mediaControllerReorderBodyMediaIdsItemRegExp = new RegExp(
@@ -383,6 +403,10 @@ export const MediaControllerSetCoverParams = zod.object({
   mediaId: zod.uuid().regex(mediaControllerSetCoverPathMediaIdRegExp),
 });
 
+export const MediaControllerSetCoverHeader = zod.object({
+  'X-Shop-Id': zod.uuid(),
+});
+
 export const mediaControllerSetCoverResponseDataIdRegExp = new RegExp(
   '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
 );
@@ -438,4 +462,51 @@ export const MediaControllerDeleteParams = zod.object({
   mediaId: zod.uuid().regex(mediaControllerDeletePathMediaIdRegExp),
 });
 
-export const MediaControllerDeleteResponse = zod.void();
+export const MediaControllerDeleteHeader = zod.object({
+  'X-Shop-Id': zod.uuid(),
+});
+
+export const mediaControllerDeleteResponseDataItemIdRegExp = new RegExp(
+  '^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
+);
+export const mediaControllerDeleteResponseDataItemSizeBytesMin = 0;
+export const mediaControllerDeleteResponseDataItemSizeBytesMax = 9007199254740991;
+
+export const mediaControllerDeleteResponseDataItemSortOrderMin = 0;
+export const mediaControllerDeleteResponseDataItemSortOrderMax = 9007199254740991;
+
+export const mediaControllerDeleteResponseDataItemCreatedAtRegExp = new RegExp(
+  '^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$',
+);
+export const mediaControllerDeleteResponseDataItemUpdatedAtRegExp = new RegExp(
+  '^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$',
+);
+
+export const MediaControllerDeleteResponse = zod.object({
+  statusCode: zod.literal(200),
+  message: zod.string(),
+  data: zod.array(
+    zod.object({
+      id: zod.uuid().regex(mediaControllerDeleteResponseDataItemIdRegExp),
+      url: zod.url(),
+      mediaType: zod.enum(['IMAGE']),
+      mimeType: zod.string(),
+      sizeBytes: zod
+        .int()
+        .min(mediaControllerDeleteResponseDataItemSizeBytesMin)
+        .max(mediaControllerDeleteResponseDataItemSizeBytesMax),
+      role: zod.enum(['COVER', 'GALLERY']),
+      angle: zod.string().nullable(),
+      sortOrder: zod
+        .int()
+        .min(mediaControllerDeleteResponseDataItemSortOrderMin)
+        .max(mediaControllerDeleteResponseDataItemSortOrderMax),
+      createdAt: zod.iso
+        .datetime({ offset: true })
+        .regex(mediaControllerDeleteResponseDataItemCreatedAtRegExp),
+      updatedAt: zod.iso
+        .datetime({ offset: true })
+        .regex(mediaControllerDeleteResponseDataItemUpdatedAtRegExp),
+    }),
+  ),
+});
