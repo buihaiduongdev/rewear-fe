@@ -511,10 +511,8 @@ export function ProductsPage() {
         isOpen={isFilterModalOpen}
         onClose={() => setIsFilterModalOpen(false)}
         categories={categories.data?.data ?? []}
-        shops={shops.data?.data ?? []}
         currentFilters={{
           categoryId: categoryId || undefined,
-          shopId: shopId || undefined,
           size: size || undefined,
           condition: condition || undefined,
           minPrice: minPrice || undefined,
