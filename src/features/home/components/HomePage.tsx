@@ -214,6 +214,9 @@ export function HomePage() {
                     key={product.id}
                     product={product}
                     handle={previewHandle}
+                    onSelectShop={(selectedShopId) =>
+                      updateFilters({ shopId: selectedShopId })
+                    }
                   />
                 ))}
               </div>

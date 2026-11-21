@@ -360,3 +360,20 @@ Ghi một mục cho mỗi task có dùng AI. Cập nhật liên kết PR/commit 
 - **Phần tự làm hoặc đã chỉnh sửa:** Thiết kế cờ `isInitialMount` để tránh trigger lọc thừa khi vừa mở trang lần đầu.
 - **Cách kiểm chứng:** Chạy `pnpm check` (pass TypeScript và ESLint 0 lỗi), `pnpm test` (6/6 suites, 12/12 unit tests pass 100%), `pnpm build` (compile và static prerender 19/19 routes thành công).
 - **Minh chứng:** Commit trên branch `feat/seller-dashboard` thuộc [PR #15](https://github.com/buihaiduongdev/rewear-fe/pull/15) (rewear-fe).
+
+### 2026-11-22 — Hiển thị Shop trên ProductCard và hỗ trợ lọc nhanh theo Shop
+
+- **Người thực hiện:** Bùi Hải Dương.
+- **Công cụ:** Antigravity (Gemini 3.8 Flash).
+- **Mục đích và phạm vi:** Thể hiện rõ tính chất sàn thương mại đa người bán (multi-vendor marketplace) trên danh mục sản phẩm: bổ sung nhãn người bán (`by @shop_name`) vào phụ đề của ProductCard và cho phép bấm trực tiếp vào tên Shop để đưa ngay vào bộ lọc đang có; bổ sung chọn Shop vào Filter Modal và tính `shopId` vào bộ đếm badge của nút Filters.
+- **Prompt chính:** thôi ko cần thêm nhiều, click vào 1 shop thì cho vào filter đang có là ok, ok thực hiện card và shop filder là đủ.
+- **Phần AI hỗ trợ:**
+  - Cập nhật [ProductCard.tsx](file:///Users/buihaiduong/Workspace/projects/rewear/rewear-fe/src/features/home/components/ProductCard.tsx): hiển thị `by @{product.shop.name} · {size} · {condition}`, gắn sự kiện click có `e.stopPropagation()` gọi callback `onSelectShop` để lọc nhanh mà không kích hoạt mở ProductPreview modal.
+  - Cập nhật [ProductFilterModal.tsx](file:///Users/buihaiduong/Workspace/projects/rewear/rewear-fe/src/features/home/components/ProductFilterModal.tsx): bổ sung trường "Shop / Seller" select dropdown để chọn shop trong modal lọc.
+  - Cập nhật [ProductsPage.tsx](file:///Users/buihaiduong/Workspace/projects/rewear/rewear-fe/src/features/home/components/ProductsPage.tsx): tính `shopId` vào `activeFilterCount`, truyền `onSelectShop` và danh sách `shops` vào Filter Modal.
+  - Cập nhật [HomePage.tsx](file:///Users/buihaiduong/Workspace/projects/rewear/rewear-fe/src/features/home/components/HomePage.tsx): kết nối `onSelectShop` để chuyển hướng mượt mà sang catalog lọc theo shop.
+  - Cập nhật [ProductPreview.tsx](file:///Users/buihaiduong/Workspace/projects/rewear/rewear-fe/src/features/home/components/ProductPreview.tsx): chuyển dòng "Sold by {shop}" thành đường link lọc trực tiếp theo shop.
+  - Viết 3 unit tests trong [product-card.test.tsx](file:///Users/buihaiduong/Workspace/projects/rewear/rewear-fe/tests/product-card.test.tsx) kiểm thử hiển thị chi tiết sản phẩm, bắt sự kiện click shop name và xử lý an toàn khi sản phẩm không có shop.
+- **Phần tự làm hoặc đã chỉnh sửa:** Thiết kế nút `by @{shop.name}` với keyboard accessibility (`Enter`, `Space`) và tooltip, kết hợp mượt mà với dải ruy-băng tag `Shop: @name ✕` có sẵn.
+- **Cách kiểm chứng:** Chạy `pnpm check` (pass TypeScript và ESLint 0 lỗi), `pnpm test` (7/7 suites, 15/15 unit tests pass 100%), `pnpm build` (compile và static prerender 19/19 routes thành công).
+- **Minh chứng:** Commit trên branch `feat/seller-dashboard` thuộc [PR #15](https://github.com/buihaiduongdev/rewear-fe/pull/15) (rewear-fe).

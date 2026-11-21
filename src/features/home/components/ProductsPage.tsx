@@ -140,6 +140,7 @@ export function ProductsPage() {
 
   const activeFilterCount =
     (categoryId ? 1 : 0) +
+    (shopId ? 1 : 0) +
     (size ? 1 : 0) +
     (condition ? 1 : 0) +
     (minPrice || maxPrice ? 1 : 0);
@@ -444,6 +445,9 @@ export function ProductsPage() {
                     key={product.id}
                     product={product}
                     handle={previewHandle}
+                    onSelectShop={(selectedShopId) =>
+                      updateFilters({ shopId: selectedShopId })
+                    }
                   />
                 ))}
               </div>
@@ -507,8 +511,10 @@ export function ProductsPage() {
         isOpen={isFilterModalOpen}
         onClose={() => setIsFilterModalOpen(false)}
         categories={categories.data?.data ?? []}
+        shops={shops.data?.data ?? []}
         currentFilters={{
           categoryId: categoryId || undefined,
+          shopId: shopId || undefined,
           size: size || undefined,
           condition: condition || undefined,
           minPrice: minPrice || undefined,

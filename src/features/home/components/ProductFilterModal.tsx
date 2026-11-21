@@ -24,8 +24,10 @@ type Props = {
   isOpen: boolean;
   onClose: () => void;
   categories: Array<{ id: string; name: string }>;
+  shops?: Array<{ id: string; name: string }>;
   currentFilters: {
     categoryId?: string;
+    shopId?: string;
     size?: string;
     condition?: string;
     minPrice?: string;
@@ -33,6 +35,7 @@ type Props = {
   };
   onApply: (filters: {
     categoryId?: string;
+    shopId?: string;
     size?: string;
     condition?: string;
     minPrice?: string;
@@ -42,12 +45,16 @@ type Props = {
 
 function FilterForm({
   categories,
+  shops,
   currentFilters,
   onApply,
   onClose,
 }: Omit<Props, 'isOpen'>) {
   const [selectedCategory, setSelectedCategory] = useState(
     currentFilters.categoryId ?? '',
+  );
+  const [selectedShop, setSelectedShop] = useState(
+    currentFilters.shopId ?? '',
   );
   const [selectedSize, setSelectedSize] = useState(currentFilters.size ?? '');
   const [selectedCondition, setSelectedCondition] = useState(
@@ -63,6 +70,7 @@ function FilterForm({
   const handleApply = () => {
     onApply({
       categoryId: selectedCategory || undefined,
+      shopId: selectedShop || undefined,
       size: selectedSize || undefined,
       condition: selectedCondition || undefined,
       minPrice: selectedMinPrice || undefined,
@@ -115,6 +123,31 @@ function FilterForm({
             ))}
           </select>
         </div>
+
+        {/* Shop / Seller Field */}
+        {shops && shops.length > 0 && (
+          <div className="bg-rewear-soft border-rewear-border flex h-20 flex-col justify-between border p-3 px-4">
+            <label
+              htmlFor="filter-shop"
+              className="text-rewear-text text-sm leading-5 font-semibold"
+            >
+              Shop / Seller
+            </label>
+            <select
+              id="filter-shop"
+              value={selectedShop}
+              onChange={(e) => setSelectedShop(e.target.value)}
+              className="text-rewear-text w-full cursor-pointer bg-transparent text-base leading-6 outline-none"
+            >
+              <option value="">All shops</option>
+              {shops.map((shop) => (
+                <option key={shop.id} value={shop.id}>
+                  {shop.name}
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
 
         {/* Size Field */}
         <div className="bg-rewear-soft border-rewear-border flex h-20 flex-col justify-between border p-3 px-4">
@@ -272,6 +305,7 @@ export function ProductFilterModal({
   isOpen,
   onClose,
   categories,
+  shops,
   currentFilters,
   onApply,
 }: Props) {
@@ -289,6 +323,7 @@ export function ProductFilterModal({
         {isOpen && (
           <FilterForm
             categories={categories}
+            shops={shops}
             currentFilters={currentFilters}
             onApply={onApply}
             onClose={onClose}

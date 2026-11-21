@@ -11,10 +11,37 @@ import { Dialog } from '@base-ui/react/dialog';
 export function ProductCard({
   product,
   handle,
+  onSelectShop,
 }: {
   product: Product;
   handle: Dialog.Handle<Product>;
+  onSelectShop?: (shopId: string) => void;
 }) {
+  const shopElement = product.shop?.name ? (
+    <>
+      <span
+        role="button"
+        tabIndex={0}
+        onClick={(e) => {
+          e.stopPropagation();
+          onSelectShop?.(product.shop.id);
+        }}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            e.stopPropagation();
+            onSelectShop?.(product.shop.id);
+          }
+        }}
+        className="hover:text-rewear-text cursor-pointer hover:underline"
+        title={`Filter by @${product.shop.name}`}
+      >
+        by @{product.shop.name}
+      </span>
+      {' · '}
+    </>
+  ) : null;
+
   return (
     <article className="min-w-0">
       <Dialog.Trigger
@@ -32,6 +59,7 @@ export function ProductCard({
               {product.title ?? 'Untitled piece'}
             </h3>
             <p className="text-rewear-muted hidden text-sm leading-5 font-semibold md:block">
+              {shopElement}
               {[product.size, formatCondition(product.condition)]
                 .filter(Boolean)
                 .join(' · ')}
@@ -41,6 +69,7 @@ export function ProductCard({
             {formatPrice(product.price)}
           </p>
           <p className="text-rewear-muted text-sm leading-5 font-semibold md:hidden">
+            {shopElement}
             {[product.size, formatCondition(product.condition)]
               .filter(Boolean)
               .join(' · ')}
