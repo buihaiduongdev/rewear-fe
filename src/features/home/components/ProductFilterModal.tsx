@@ -10,6 +10,10 @@ import {
   DialogTitle,
 } from '@/shared/components/ui/dialog';
 import { PRODUCT_CONDITION_LABELS } from '@/shared/utils/product';
+import { Slider } from '@base-ui/react/slider';
+
+const MAX_SLIDER_PRICE = 2000000;
+const SLIDER_STEP = 50000;
 
 export const SIZE_OPTIONS = ['XS', 'S', 'M', 'L', 'XL', 'XXL', 'Free size'];
 
@@ -59,6 +63,26 @@ function FilterForm({
   const [selectedMaxPrice, setSelectedMaxPrice] = useState(
     currentFilters.maxPrice ?? '',
   );
+
+  const minVal = selectedMinPrice
+    ? Math.min(Math.max(Number(selectedMinPrice), 0), MAX_SLIDER_PRICE)
+    : 0;
+  const maxVal = selectedMaxPrice
+    ? Math.min(Math.max(Number(selectedMaxPrice), 0), MAX_SLIDER_PRICE)
+    : MAX_SLIDER_PRICE;
+
+  const formatVnd = (num: number) =>
+    new Intl.NumberFormat('vi-VN', { maximumFractionDigits: 0 }).format(num) +
+    '₫';
+
+  const priceRangeText =
+    !selectedMinPrice && !selectedMaxPrice
+      ? 'All prices'
+      : selectedMinPrice && selectedMaxPrice
+        ? `${formatVnd(Number(selectedMinPrice))} – ${formatVnd(Number(selectedMaxPrice))}`
+        : selectedMinPrice
+          ? `From ${formatVnd(Number(selectedMinPrice))}`
+          : `Up to ${formatVnd(Number(selectedMaxPrice))}`;
 
   const handleApply = () => {
     onApply({
@@ -162,8 +186,8 @@ function FilterForm({
           </select>
         </div>
 
-        {/* Price Section: Min - Max + Quick Presets */}
-        <div className="bg-rewear-soft border-rewear-border flex flex-col gap-3 border p-3 px-4">
+        {/* Price Section: Slider + Quick Presets Grid */}
+        <div className="bg-rewear-soft border-rewear-border flex flex-col gap-4 border p-4">
           <div className="flex items-center justify-between">
             <span className="text-rewear-text text-sm leading-5 font-semibold">
               Price (₫)
@@ -182,48 +206,48 @@ function FilterForm({
             )}
           </div>
 
-          <div className="grid grid-cols-2 gap-3">
-            <div className="bg-rewear-surface flex h-14 flex-col justify-between px-3 py-1.5">
-              <label
-                htmlFor="filter-min-price"
-                className="text-rewear-muted text-[11px] font-medium"
-              >
-                From
-              </label>
-              <input
-                id="filter-min-price"
-                type="number"
-                min="0"
-                step="10000"
-                placeholder="0"
-                value={selectedMinPrice}
-                onChange={(e) => setSelectedMinPrice(e.target.value)}
-                className="text-rewear-text w-full bg-transparent text-sm leading-5 font-normal outline-none [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
-              />
+          {/* Range Slider & Value Display */}
+          <div className="space-y-3 py-1">
+            <div className="flex items-center justify-between text-xs">
+              <span className="text-rewear-text font-semibold">
+                {priceRangeText}
+              </span>
+              <span className="text-rewear-muted text-[11px]">
+                0₫ – {formatVnd(MAX_SLIDER_PRICE)}+
+              </span>
             </div>
-
-            <div className="bg-rewear-surface flex h-14 flex-col justify-between px-3 py-1.5">
-              <label
-                htmlFor="filter-max-price"
-                className="text-rewear-muted text-[11px] font-medium"
-              >
-                To
-              </label>
-              <input
-                id="filter-max-price"
-                type="number"
-                min="0"
-                step="10000"
-                placeholder="No max"
-                value={selectedMaxPrice}
-                onChange={(e) => setSelectedMaxPrice(e.target.value)}
-                className="text-rewear-text w-full bg-transparent text-sm leading-5 font-normal outline-none [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
-              />
-            </div>
+            <Slider.Root
+              value={[minVal, maxVal]}
+              onValueChange={(val) => {
+                const [min, max] = val as [number, number];
+                setSelectedMinPrice(min === 0 ? '' : String(min));
+                setSelectedMaxPrice(max >= MAX_SLIDER_PRICE ? '' : String(max));
+              }}
+              min={0}
+              max={MAX_SLIDER_PRICE}
+              step={SLIDER_STEP}
+              className="relative flex w-full touch-none select-none items-center py-2"
+            >
+              <Slider.Control className="relative flex w-full items-center">
+                <Slider.Track className="bg-rewear-border relative h-1.5 w-full grow overflow-hidden rounded-full">
+                  <Slider.Indicator className="bg-rewear-text absolute h-full rounded-full" />
+                </Slider.Track>
+                <Slider.Thumb
+                  index={0}
+                  aria-label="Minimum price"
+                  className="border-rewear-text bg-rewear-surface focus-visible:ring-rewear-text block size-5 cursor-grab rounded-full border-2 shadow-sm transition hover:scale-110 active:cursor-grabbing focus-visible:ring-2 focus-visible:outline-none"
+                />
+                <Slider.Thumb
+                  index={1}
+                  aria-label="Maximum price"
+                  className="border-rewear-text bg-rewear-surface focus-visible:ring-rewear-text block size-5 cursor-grab rounded-full border-2 shadow-sm transition hover:scale-110 active:cursor-grabbing focus-visible:ring-2 focus-visible:outline-none"
+                />
+              </Slider.Control>
+            </Slider.Root>
           </div>
 
-          {/* Quick presets */}
-          <div className="flex flex-wrap gap-1.5 pt-1">
+          {/* Quick presets as rectangular boxes filling parent width */}
+          <div className="grid grid-cols-2 gap-2 w-full sm:grid-cols-4">
             {QUICK_PRICE_PRESETS.map((preset) => {
               const isSelected =
                 selectedMinPrice === preset.min &&
@@ -241,10 +265,10 @@ function FilterForm({
                       setSelectedMaxPrice(preset.max);
                     }
                   }}
-                  className={`cursor-pointer rounded-full px-2.5 py-1 text-xs transition-colors ${
+                  className={`flex h-11 w-full cursor-pointer items-center justify-center border text-xs font-semibold transition-colors ${
                     isSelected
-                      ? 'bg-rewear-text text-rewear-surface font-semibold'
-                      : 'bg-rewear-surface text-rewear-text hover:bg-rewear-soft font-normal'
+                      ? 'border-rewear-text bg-rewear-text text-rewear-surface shadow-sm'
+                      : 'border-rewear-border bg-rewear-surface text-rewear-text hover:bg-rewear-soft'
                   }`}
                 >
                   {preset.label}
