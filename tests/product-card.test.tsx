@@ -40,7 +40,7 @@ describe('ProductCard', () => {
     render(<ProductCard product={mockProduct} handle={handle} />);
 
     expect(screen.getByText('Vintage Leather Jacket')).toBeInTheDocument();
-    expect(screen.getAllByText(/by @hanoivintage/)).toHaveLength(2); // desktop & mobile
+    expect(screen.getAllByText(/@hanoivintage/)).toHaveLength(2); // desktop & mobile
     expect(screen.getAllByText(/L · Very good/)).toHaveLength(2);
   });
 
@@ -66,7 +66,7 @@ describe('ProductCard', () => {
     const noShopProduct = { ...mockProduct, shop: undefined as unknown as Product['shop'] };
     render(<ProductCard product={noShopProduct} handle={handle} />);
 
-    expect(screen.queryByText(/by @/)).not.toBeInTheDocument();
+    expect(screen.queryByText(/@/)).not.toBeInTheDocument();
     expect(screen.getAllByText(/L · Very good/)).toHaveLength(2);
   });
 });

@@ -36,7 +36,7 @@ export function ProductCard({
         className="hover:text-rewear-text cursor-pointer hover:underline"
         title={`Filter by @${product.shop.name}`}
       >
-        by @{product.shop.name}
+        @{product.shop.name}
       </span>
       {' · '}
     </>
