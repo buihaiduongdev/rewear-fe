@@ -16,6 +16,7 @@ export function useHomeCatalog(catalog = false) {
   const shopId = searchParams.get('shopId') ?? '';
   const size = searchParams.get('size') ?? '';
   const condition = searchParams.get('condition') ?? '';
+  const minPrice = searchParams.get('minPrice') ?? '';
   const maxPrice = searchParams.get('maxPrice') ?? '';
   const sortBy = searchParams.get('sortBy') ?? '';
   const pageValue = Number(searchParams.get('page') ?? 1);
@@ -31,6 +32,10 @@ export function useHomeCatalog(catalog = false) {
       ? [sortBy as ProductControllerFindAllSortByItem]
       : undefined;
 
+  const priceFilters: string[] = [];
+  if (minPrice) priceFilters.push(`$gte:${minPrice}`);
+  if (maxPrice) priceFilters.push(`$lte:${maxPrice}`);
+
   const products = useProductControllerFindAll(
     {
       page,
@@ -40,7 +45,7 @@ export function useHomeCatalog(catalog = false) {
       ...(shopId ? { 'filter.shopId': [shopId] } : {}),
       ...(size ? { 'filter.size': [`$ilike:${size}`] } : {}),
       ...(condition ? { 'filter.condition': [condition] } : {}),
-      ...(maxPrice ? { 'filter.price': [`$lte:${maxPrice}`] } : {}),
+      ...(priceFilters.length > 0 ? { 'filter.price': priceFilters } : {}),
       ...(validSortBy ? { sortBy: validSortBy } : {}),
     },
     {
@@ -71,6 +76,7 @@ export function useHomeCatalog(catalog = false) {
     shopId,
     size,
     condition,
+    minPrice,
     maxPrice,
     sortBy,
     page,

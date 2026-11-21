@@ -29,6 +29,7 @@ export function ProductsPage() {
     shopId,
     size,
     condition,
+    minPrice,
     maxPrice,
     sortBy,
     page,
@@ -68,14 +69,21 @@ export function ProductsPage() {
   );
 
   const hasFilters = Boolean(
-    search || categoryId || shopId || size || condition || maxPrice || sortBy,
+    search ||
+      categoryId ||
+      shopId ||
+      size ||
+      condition ||
+      minPrice ||
+      maxPrice ||
+      sortBy,
   );
 
   const activeFilterCount =
     (categoryId ? 1 : 0) +
     (size ? 1 : 0) +
     (condition ? 1 : 0) +
-    (maxPrice ? 1 : 0);
+    (minPrice || maxPrice ? 1 : 0);
 
   const sortLabel =
     SORT_OPTIONS.find((opt) => opt.value === (sortBy || ''))?.label ?? 'Newest';
@@ -293,12 +301,19 @@ export function ProductsPage() {
                   </button>
                 </span>
               )}
-              {maxPrice && (
+              {(minPrice || maxPrice) && (
                 <span className="bg-rewear-card text-rewear-text inline-flex items-center gap-1.5 rounded-full px-3 py-1 font-medium">
-                  Price: Up to {Number(maxPrice).toLocaleString('vi-VN')}₫
+                  Price:{' '}
+                  {minPrice && maxPrice
+                    ? `${Number(minPrice).toLocaleString('vi-VN')}₫ – ${Number(maxPrice).toLocaleString('vi-VN')}₫`
+                    : minPrice
+                      ? `From ${Number(minPrice).toLocaleString('vi-VN')}₫`
+                      : `Up to ${Number(maxPrice).toLocaleString('vi-VN')}₫`}
                   <button
                     type="button"
-                    onClick={() => updateFilters({ maxPrice: undefined })}
+                    onClick={() =>
+                      updateFilters({ minPrice: undefined, maxPrice: undefined })
+                    }
                     className="text-rewear-muted hover:text-rewear-text ml-0.5 cursor-pointer"
                     aria-label="Remove price filter"
                   >
@@ -330,6 +345,7 @@ export function ProductsPage() {
                     shopId: undefined,
                     size: undefined,
                     condition: undefined,
+                    minPrice: undefined,
                     maxPrice: undefined,
                     sortBy: undefined,
                   });
@@ -419,6 +435,7 @@ export function ProductsPage() {
           categoryId: categoryId || undefined,
           size: size || undefined,
           condition: condition || undefined,
+          minPrice: minPrice || undefined,
           maxPrice: maxPrice || undefined,
         }}
         onApply={(filters) => updateFilters(filters)}
@@ -427,6 +444,7 @@ export function ProductsPage() {
             categoryId: undefined,
             size: undefined,
             condition: undefined,
+            minPrice: undefined,
             maxPrice: undefined,
           })
         }
