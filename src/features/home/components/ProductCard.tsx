@@ -1,5 +1,7 @@
 'use client';
 
+import { useSyncExternalStore } from 'react';
+
 import { ProductPhoto } from '@/shared/components/marketplace/ProductPhoto';
 import {
   formatCondition,
@@ -7,6 +9,21 @@ import {
   type Product,
 } from '@/shared/utils/product';
 import { Dialog } from '@base-ui/react/dialog';
+
+function subscribeToStorage(callback: () => void) {
+  if (typeof window === 'undefined') return () => {};
+  window.addEventListener('storage', callback);
+  return () => window.removeEventListener('storage', callback);
+}
+
+function getShopLogo(shopId: string | undefined): string | null {
+  if (typeof window === 'undefined' || !shopId) return null;
+  try {
+    return localStorage.getItem(`rewear_shop_logo_${shopId}`);
+  } catch {
+    return null;
+  }
+}
 
 export function ProductCard({
   product,
@@ -17,6 +34,13 @@ export function ProductCard({
   handle: Dialog.Handle<Product>;
   onSelectShop?: (shopId: string) => void;
 }) {
+  const shopId = product.shop?.id;
+  const logoUrl = useSyncExternalStore(
+    subscribeToStorage,
+    () => getShopLogo(shopId),
+    () => null,
+  );
+
   const shopElement = product.shop?.name ? (
     <>
       <span
@@ -33,10 +57,22 @@ export function ProductCard({
             onSelectShop?.(product.shop.id);
           }
         }}
-        className="hover:text-rewear-text cursor-pointer hover:underline"
+        className="hover:text-rewear-text inline-flex items-center gap-1.5 cursor-pointer hover:underline align-middle"
         title={`Filter by @${product.shop.name}`}
       >
-        @{product.shop.name}
+        <span className="border-rewear-border bg-rewear-text text-rewear-accent relative inline-flex size-4 shrink-0 items-center justify-center overflow-hidden rounded-full text-[9px] font-bold">
+          {logoUrl ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={logoUrl}
+              alt={product.shop.name}
+              className="size-full object-cover"
+            />
+          ) : (
+            product.shop.name.charAt(0).toUpperCase()
+          )}
+        </span>
+        <span>@{product.shop.name}</span>
       </span>
       {' · '}
     </>

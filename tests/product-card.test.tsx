@@ -69,4 +69,16 @@ describe('ProductCard', () => {
     expect(screen.queryByText(/@/)).not.toBeInTheDocument();
     expect(screen.getAllByText(/L · Very good/)).toHaveLength(2);
   });
+
+  it('renders shop logo if found in localStorage or fallback initial', () => {
+    const handle = Dialog.createHandle<Product>();
+    localStorage.setItem('rewear_shop_logo_shop-123', 'data:image/png;base64,mock');
+    const { unmount } = render(<ProductCard product={mockProduct} handle={handle} />);
+    expect(screen.getAllByAltText('hanoivintage')).toHaveLength(2);
+    unmount();
+    localStorage.clear();
+
+    render(<ProductCard product={mockProduct} handle={handle} />);
+    expect(screen.getAllByText('H')).toHaveLength(2);
+  });
 });
