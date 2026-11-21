@@ -89,7 +89,7 @@ export function HomePage() {
             <p className="hidden text-base leading-6 md:block">
               Discover pre-owned clothing from
               <br />
-              independent sellers across Vietnam.
+              independent sellers.
             </p>
             <p className="text-base leading-6 md:hidden">
               Pre-owned clothing. Ready to wear.

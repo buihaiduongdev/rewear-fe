@@ -148,9 +148,6 @@ export function MarketplaceHeader({
               Account
             </Link>
           )}
-          <span>
-            <span lang="en">EN</span> / <span lang="vi">VI</span>
-          </span>
         </nav>
         <button
           type="button"

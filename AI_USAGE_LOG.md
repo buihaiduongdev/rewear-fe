@@ -220,3 +220,18 @@ Ghi một mục cho mỗi task có dùng AI. Cập nhật liên kết PR/commit 
 - **Cách kiểm chứng:** Chạy `pnpm check` (pass TypeScript và ESLint 0 lỗi), `pnpm test` (5/5 suites, 9/9 unit tests pass 100%), `pnpm build` (compile và static prerender 19/19 routes thành công).
 - **Lỗi hoặc đề xuất sai của AI đã phát hiện:** Nhầm lẫn ban đầu khi xem `/selling/packages` là trang độc lập cho người bán mới đăng ký; sau khi tra cứu Figma qua Figwright đã phát hiện trang này chỉ thuộc khâu xác nhận đơn hàng (`Confirm package`), từ đó dọn dẹp các đường link gây rối rắm.
 - **Minh chứng:** Commit trên branch `feat/seller-dashboard` thuộc [PR #15](https://github.com/buihaiduongdev/rewear-fe/pull/15) (rewear-fe).
+
+### 2026-11-21 — Tinh gọn Marketplace Header và chuẩn hóa Footer 1 dòng theo Figma 48:684
+
+- **Người thực hiện:** Bùi Hải Dương.
+- **Công cụ:** Antigravity (Gemini 3.8 Flash) kết nối Figwright MCP Server.
+- **Mục đích và phạm vi:** Khắc phục phản hồi thiết kế trên trang chủ (`/`): gỡ bỏ chuyển đổi ngôn ngữ `EN / VI` khỏi `MarketplaceHeader`; loại bỏ chữ `across Vietnam` trong lời giới thiệu trên `HomePage`; chuẩn hóa Footer trang chủ sang mẫu 1 dòng tối giản thanh lịch đúng chuẩn Figma (`UX / Footer` Frame `48:684`, `48:314`), xóa bỏ khối Footer 2 tầng cồng kềnh trước đó.
+- **Prompt chính:** figma chỉ có 1 dòng mà đúng ko; bỏ khỏi header; bỏ text vietnam; sao tới tận 2 footer.
+- **Phần AI hỗ trợ:**
+  - Kiểm tra trực tiếp qua Figwright MCP trên node Figma `48:684` (*UX / Footer*) và `1:4134`: xác nhận thiết kế chuẩn của Figma toàn bộ hệ thống đều dùng Footer 1 dòng ngang (`layout: HORIZONTAL`, `height: 64px`, `justify-between`) gồm `© 2026 RE.WEAR` bên trái và `Help · Returns · Privacy` bên phải; khối Footer 2 tầng trước đây là do triển khai nhầm từ các bản nháp cũ.
+  - Tái cấu trúc [MarketplaceFooter.tsx](file:///Users/buihaiduong/Workspace/projects/rewear/rewear-fe/src/shared/components/marketplace/MarketplaceFooter.tsx) thành chuẩn 1 dòng thanh lịch đồng bộ với các trang Cart, Checkout, Wishlist.
+  - Cập nhật [MarketplaceHeader.tsx](file:///Users/buihaiduong/Workspace/projects/rewear/rewear-fe/src/shared/components/marketplace/MarketplaceHeader.tsx): gỡ bỏ thẻ `<span>EN / VI</span>`.
+  - Cập nhật [HomePage.tsx](file:///Users/buihaiduong/Workspace/projects/rewear/rewear-fe/src/features/home/components/HomePage.tsx): xóa cụm từ `across Vietnam` trong subtitle hero.
+- **Phần tự làm hoặc đã chỉnh sửa:** Định hướng chuyển đổi toàn bộ footer về chuẩn tối giản thống nhất của dự án.
+- **Cách kiểm chứng:** Chạy `pnpm check` (pass TypeScript và ESLint 0 lỗi), `pnpm test` (5/5 suites, 9/9 unit tests pass 100%), `pnpm build` (compile và static prerender 19/19 routes thành công).
+- **Minh chứng:** Commit trên branch `feat/seller-dashboard` thuộc [PR #15](https://github.com/buihaiduongdev/rewear-fe/pull/15) (rewear-fe).
