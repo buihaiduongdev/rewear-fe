@@ -81,4 +81,19 @@ describe('ProductCard', () => {
     render(<ProductCard product={mockProduct} handle={handle} />);
     expect(screen.getAllByText('H')).toHaveLength(2);
   });
+
+  it('renders shop logo if provided directly by server in product.shop.logoUrl', () => {
+    const handle = Dialog.createHandle<Product>();
+    const productWithLogo = {
+      ...mockProduct,
+      shop: { ...mockProduct.shop, logoUrl: 'https://cdn.example.com/logo.jpg' },
+    };
+    render(
+      <ProductCard
+        product={productWithLogo as unknown as Product}
+        handle={handle}
+      />,
+    );
+    expect(screen.getAllByAltText('hanoivintage')).toHaveLength(2);
+  });
 });

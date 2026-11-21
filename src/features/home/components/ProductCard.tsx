@@ -35,11 +35,14 @@ export function ProductCard({
   onSelectShop?: (shopId: string) => void;
 }) {
   const shopId = product.shop?.id;
-  const logoUrl = useSyncExternalStore(
+  const localLogo = useSyncExternalStore(
     subscribeToStorage,
     () => getShopLogo(shopId),
     () => null,
   );
+  const logoUrl =
+    (product.shop as { logoUrl?: string | null } | undefined)?.logoUrl ??
+    localLogo;
 
   const shopElement = product.shop?.name ? (
     <>
