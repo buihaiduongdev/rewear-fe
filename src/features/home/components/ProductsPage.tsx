@@ -6,6 +6,16 @@ import { CartLink } from '@/modules/cart/components/CartLink';
 import { MarketplaceFooter } from '@/shared/components/marketplace/MarketplaceFooter';
 import { MarketplaceHeader } from '@/shared/components/marketplace/MarketplaceHeader';
 import { MobileNavigation } from '@/shared/components/marketplace/MobileNavigation';
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPageSize,
+  PaginationPrevious,
+} from '@/shared/components/ui/pagination';
 import { PRODUCT_CONDITION_LABELS } from '@/shared/utils/product';
 import type { Product } from '@/shared/utils/product';
 import { Dialog } from '@base-ui/react/dialog';
@@ -22,6 +32,37 @@ const SORT_OPTIONS = [
   { label: 'Price: High to low', value: 'price:DESC' },
 ];
 
+function getPageNumbers(
+  currentPage: number,
+  totalPages: number,
+): (number | 'ellipsis')[] {
+  if (totalPages <= 5) {
+    return Array.from({ length: totalPages }, (_, i) => i + 1);
+  }
+  if (currentPage <= 3) {
+    return [1, 2, 3, 4, 'ellipsis', totalPages];
+  }
+  if (currentPage >= totalPages - 2) {
+    return [
+      1,
+      'ellipsis',
+      totalPages - 3,
+      totalPages - 2,
+      totalPages - 1,
+      totalPages,
+    ];
+  }
+  return [
+    1,
+    'ellipsis',
+    currentPage - 1,
+    currentPage,
+    currentPage + 1,
+    'ellipsis',
+    totalPages,
+  ];
+}
+
 export function ProductsPage() {
   const {
     search,
@@ -33,6 +74,7 @@ export function ProductsPage() {
     maxPrice,
     sortBy,
     page,
+    limit,
     categories,
     shops,
     products,
@@ -392,32 +434,50 @@ export function ProductsPage() {
             )}
           </div>
 
-          {/* Pagination */}
-          {meta && (meta.totalPages ?? 1) > 1 && (
-            <nav
-              aria-label="Product pages"
-              className="flex items-center justify-center gap-6 text-sm font-semibold"
-            >
-              <button
-                type="button"
-                disabled={page <= 1 || products.isFetching}
-                onClick={() => updateFilters({ page: String(page - 1) })}
-                className="min-h-11 cursor-pointer disabled:cursor-default disabled:opacity-40"
-              >
-                ← Previous
-              </button>
-              <p aria-live="polite">
-                Page {page} of {meta.totalPages}
-              </p>
-              <button
-                type="button"
-                disabled={page >= (meta.totalPages ?? 1) || products.isFetching}
-                onClick={() => updateFilters({ page: String(page + 1) })}
-                className="min-h-11 cursor-pointer disabled:cursor-default disabled:opacity-40"
-              >
-                Next →
-              </button>
-            </nav>
+          {/* Pagination - Figma 86:1606 */}
+          {meta && (meta.totalItems ?? 0) > 0 && (
+            <Pagination className="pt-6">
+              <PaginationPageSize
+                value={limit}
+                options={[12, 24, 48]}
+                onChange={(val) =>
+                  updateFilters({ limit: String(val), page: '1' })
+                }
+              />
+
+              <PaginationContent>
+                <PaginationItem>
+                  <PaginationPrevious
+                    disabled={page <= 1 || products.isFetching}
+                    onClick={() => updateFilters({ page: String(page - 1) })}
+                  />
+                </PaginationItem>
+
+                {getPageNumbers(page, meta.totalPages ?? 1).map((item, idx) => (
+                  <PaginationItem key={idx}>
+                    {item === 'ellipsis' ? (
+                      <PaginationEllipsis />
+                    ) : (
+                      <PaginationLink
+                        isActive={page === item}
+                        onClick={() => updateFilters({ page: String(item) })}
+                      >
+                        {item}
+                      </PaginationLink>
+                    )}
+                  </PaginationItem>
+                ))}
+
+                <PaginationItem>
+                  <PaginationNext
+                    disabled={
+                      page >= (meta.totalPages ?? 1) || products.isFetching
+                    }
+                    onClick={() => updateFilters({ page: String(page + 1) })}
+                  />
+                </PaginationItem>
+              </PaginationContent>
+            </Pagination>
           )}
         </section>
       </main>

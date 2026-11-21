@@ -277,3 +277,18 @@ Ghi một mục cho mỗi task có dùng AI. Cập nhật liên kết PR/commit 
 - **Phần tự làm hoặc đã chỉnh sửa:** Định hướng cấu trúc form tách biệt trong modal để tránh cascading renders theo chuẩn React 19; kiểm tra khớp nối chính xác với NestJS `nestjs-paginate` backend.
 - **Cách kiểm chứng:** Chạy `pnpm check` (pass TypeScript và ESLint 0 lỗi), `pnpm test` (5/5 suites, 9/9 unit tests pass 100%), `pnpm build` (compile và static prerender 19/19 routes thành công). Kiểm tra gọi trực tiếp API `filter.condition`, `filter.size`, `filter.price`, `sortBy` trên backend.
 - **Minh chứng:** Commit trên branch `feat/seller-dashboard` thuộc [PR #15](https://github.com/buihaiduongdev/rewear-fe/pull/15) (rewear-fe).
+
+### 2026-11-21 — Tích hợp shadcn pagination và tùy biến chuẩn Pagination Footer Figma 86:1606
+
+- **Người thực hiện:** Bùi Hải Dương.
+- **Công cụ:** Antigravity (Gemini 3.8 Flash) kết nối Figwright MCP Server & shadcn CLI.
+- **Mục đích và phạm vi:** Tải component phân trang shadcn (`@/shared/components/ui/pagination.tsx`) và tùy biến lại giao diện theo đúng Figma Node `86:1606` (*Pagination footer*): gồm cụm bên trái điều khiển `Items per page` (12, 24, 48) và cụm bên phải gồm các nút thẻ `‹ Previous`, các số trang (active trang nền xanh neon `#c3f832`), và `Next ›`.
+- **Prompt chính:** ok tai paginate shadcn ve roi custom lai thoi cho it code.
+- **Phần AI hỗ trợ:**
+  - Chạy `pnpm dlx shadcn@latest add pagination` tải component nền tảng chuẩn của thư viện.
+  - Tùy biến [pagination.tsx](file:///Users/buihaiduong/Workspace/projects/rewear/rewear-fe/src/shared/components/ui/pagination.tsx): bổ sung sub-component `PaginationPageSize` theo chuẩn thiết kế Figma Node `86:1607`, tùy biến các nút `PaginationLink`, `PaginationPrevious`, `PaginationNext` theo phong cách `RE.WEAR/Button/Secondary` vuông góc (cao 40px, padding 20px, trạng thái disabled `opacity-45`).
+  - Cập nhật [use-home-catalog.ts](file:///Users/buihaiduong/Workspace/projects/rewear/rewear-fe/src/features/home/hooks/use-home-catalog.ts) hỗ trợ param `limit` (12, 24, 48).
+  - Tích hợp component vào [ProductsPage.tsx](file:///Users/buihaiduong/Workspace/projects/rewear/rewear-fe/src/features/home/components/ProductsPage.tsx) thay thế phân trang viết tay cũ.
+- **Phần tự làm hoặc đã chỉnh sửa:** Định hướng giữ nguyên `button.tsx` gốc của dự án khi shadcn CLI nhắc ghi đè, thuật toán chia trang thông minh `getPageNumbers` với dấu chấm lửng `ellipsis`.
+- **Cách kiểm chứng:** Chạy `pnpm check` (pass TypeScript và ESLint 0 lỗi), `pnpm test` (5/5 suites, 9/9 unit tests pass 100%), `pnpm build` (compile và static prerender 19/19 routes thành công).
+- **Minh chứng:** Commit trên branch `feat/seller-dashboard` thuộc [PR #15](https://github.com/buihaiduongdev/rewear-fe/pull/15) (rewear-fe).

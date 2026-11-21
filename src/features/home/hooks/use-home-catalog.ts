@@ -21,6 +21,13 @@ export function useHomeCatalog(catalog = false) {
   const sortBy = searchParams.get('sortBy') ?? '';
   const pageValue = Number(searchParams.get('page') ?? 1);
   const page = Number.isSafeInteger(pageValue) && pageValue > 0 ? pageValue : 1;
+  const limitValue = Number(searchParams.get('limit') ?? (catalog ? 12 : 4));
+  const limit =
+    Number.isSafeInteger(limitValue) && limitValue > 0
+      ? limitValue
+      : catalog
+        ? 12
+        : 4;
   const categories = useCategoryControllerFindAll({
     query: { meta: { skipErrorToast: true } },
   });
@@ -39,7 +46,7 @@ export function useHomeCatalog(catalog = false) {
   const products = useProductControllerFindAll(
     {
       page,
-      limit: catalog ? 12 : 4,
+      limit,
       ...(search ? { search } : {}),
       ...(categoryId ? { 'filter.categoryId': [categoryId] } : {}),
       ...(shopId ? { 'filter.shopId': [shopId] } : {}),
@@ -80,6 +87,7 @@ export function useHomeCatalog(catalog = false) {
     maxPrice,
     sortBy,
     page,
+    limit,
     categories,
     shops,
     products,
