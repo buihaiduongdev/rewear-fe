@@ -243,9 +243,6 @@ function FilterForm({
             </Slider.Root>
           </div>
 
-          {/* Vạch phân cách ở giữa */}
-          <div className="border-t border-rewear-border" />
-
           {/* Quick presets as rectangular boxes filling parent width */}
           <div className="grid grid-cols-2 gap-2 w-full sm:grid-cols-4">
             {QUICK_PRICE_PRESETS.map((preset) => {
