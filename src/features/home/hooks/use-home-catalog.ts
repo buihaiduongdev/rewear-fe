@@ -2,6 +2,7 @@
 
 import { useRouter, useSearchParams } from 'next/navigation';
 
+import { ProductControllerFindAllSortByItem } from '@/shared/api/models';
 import { useCategoryControllerFindAll } from '@/shared/api/query-generated/categories/categories';
 import { useProductControllerFindAll } from '@/shared/api/query-generated/products/products';
 import { useShopControllerFindAll } from '@/shared/api/query-generated/shops/shops';
@@ -13,6 +14,10 @@ export function useHomeCatalog(catalog = false) {
   const search = searchParams.get('search') ?? '';
   const categoryId = searchParams.get('categoryId') ?? '';
   const shopId = searchParams.get('shopId') ?? '';
+  const size = searchParams.get('size') ?? '';
+  const condition = searchParams.get('condition') ?? '';
+  const maxPrice = searchParams.get('maxPrice') ?? '';
+  const sortBy = searchParams.get('sortBy') ?? '';
   const pageValue = Number(searchParams.get('page') ?? 1);
   const page = Number.isSafeInteger(pageValue) && pageValue > 0 ? pageValue : 1;
   const categories = useCategoryControllerFindAll({
@@ -21,6 +26,11 @@ export function useHomeCatalog(catalog = false) {
   const shops = useShopControllerFindAll({
     query: { meta: { skipErrorToast: true } },
   });
+  const validSortBy =
+    sortBy && sortBy in ProductControllerFindAllSortByItem
+      ? [sortBy as ProductControllerFindAllSortByItem]
+      : undefined;
+
   const products = useProductControllerFindAll(
     {
       page,
@@ -28,6 +38,10 @@ export function useHomeCatalog(catalog = false) {
       ...(search ? { search } : {}),
       ...(categoryId ? { 'filter.categoryId': [categoryId] } : {}),
       ...(shopId ? { 'filter.shopId': [shopId] } : {}),
+      ...(size ? { 'filter.size': [`$ilike:${size}`] } : {}),
+      ...(condition ? { 'filter.condition': [condition] } : {}),
+      ...(maxPrice ? { 'filter.price': [`$lte:${maxPrice}`] } : {}),
+      ...(validSortBy ? { sortBy: validSortBy } : {}),
     },
     {
       query: {
@@ -55,6 +69,10 @@ export function useHomeCatalog(catalog = false) {
     search,
     categoryId,
     shopId,
+    size,
+    condition,
+    maxPrice,
+    sortBy,
     page,
     categories,
     shops,

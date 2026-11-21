@@ -262,3 +262,18 @@ Ghi một mục cho mỗi task có dùng AI. Cập nhật liên kết PR/commit 
 - **Phần tự làm hoặc đã chỉnh sửa:** Định hướng trải nghiệm tại chỗ không reload trang, tối ưu hóa hiển thị trên cả desktop và mobile.
 - **Cách kiểm chứng:** Chạy `pnpm check` (pass TypeScript và ESLint 0 lỗi), `pnpm test` (5/5 suites, 9/9 unit tests pass 100%), `pnpm build` (compile và static prerender 19/19 routes thành công).
 - **Minh chứng:** Commit trên branch `feat/seller-dashboard` thuộc [PR #15](https://github.com/buihaiduongdev/rewear-fe/pull/15) (rewear-fe).
+
+### 2026-11-21 — Triển khai bộ lọc sản phẩm (Search & Filters) và Filter Modal chuẩn Figma 53:1061 & 48:143
+
+- **Người thực hiện:** Bùi Hải Dương.
+- **Công cụ:** Antigravity (Gemini 3.8 Flash) kết nối Figwright MCP Server.
+- **Mục đích và phạm vi:** Triển khai đầy đủ thanh công cụ tìm kiếm và lọc sản phẩm (*Search and filters* - Figma Node `53:1061`) trên trang danh mục All clothing (`/products`), tích hợp Modal lọc chi tiết (*Filters modal* - Figma Node `48:143` desktop & `48:2559` mobile) bao gồm Category, Size, Condition, Price và menu sắp xếp Sort: Newest / Price low to high / Price high to low.
+- **Prompt chính:** https://www.figma.com/design/xjyTlIecBwx0SdTILgBkFL/Re.wear-design?node-id=53-1061&t=S07OybIvWfKNzBCm-11 thiếu filter.
+- **Phần AI hỗ trợ:**
+  - Khảo sát trực tiếp cấu trúc cây node Figma qua Figwright MCP trên Node `53:1052` (*Refined / All clothing*), `53:1061` (*Search and filters*), `53:1065` (*Filter controls*), `48:143` (*Filters modal*): xác định đầy đủ các trường thuộc tính lọc (Category, Size, Condition, Price), nút hành động chính *Show items*, liên kết mở modal `Filters  ↓` và menu `Sort: Newest  ↓`.
+  - Khởi tạo component [ProductFilterModal.tsx](file:///Users/buihaiduong/Workspace/projects/rewear/rewear-fe/src/features/home/components/ProductFilterModal.tsx): triển khai Modal lọc chuẩn Figma với 4 trường `RE.WEAR/Field` (Category, Size, Condition, Price) và nút bấm `Show items` màu xanh neon `bg-rewear-accent`.
+  - Cập nhật hook [use-home-catalog.ts](file:///Users/buihaiduong/Workspace/projects/rewear/rewear-fe/src/features/home/hooks/use-home-catalog.ts): mở rộng hỗ trợ nhận và đồng bộ các query parameters `size`, `condition`, `maxPrice`, `sortBy` khớp với API contract phân trang của backend.
+  - Tái cấu trúc [ProductsPage.tsx](file:///Users/buihaiduong/Workspace/projects/rewear/rewear-fe/src/features/home/components/ProductsPage.tsx): đổi tiêu đề thành `All clothing` chuẩn Figma `53:1053`, bổ sung khung Search lớn (Figma `53:1062`), tích hợp nút mở bộ lọc `Filters  ↓`, menu sắp xếp giá/mới nhất `Sort  ↓` và dải ruy-băng hiển thị các tag lọc đang kích hoạt kèm nút xóa tiện lợi.
+- **Phần tự làm hoặc đã chỉnh sửa:** Định hướng cấu trúc form tách biệt trong modal để tránh cascading renders theo chuẩn React 19; kiểm tra khớp nối chính xác với NestJS `nestjs-paginate` backend.
+- **Cách kiểm chứng:** Chạy `pnpm check` (pass TypeScript và ESLint 0 lỗi), `pnpm test` (5/5 suites, 9/9 unit tests pass 100%), `pnpm build` (compile và static prerender 19/19 routes thành công). Kiểm tra gọi trực tiếp API `filter.condition`, `filter.size`, `filter.price`, `sortBy` trên backend.
+- **Minh chứng:** Commit trên branch `feat/seller-dashboard` thuộc [PR #15](https://github.com/buihaiduongdev/rewear-fe/pull/15) (rewear-fe).
