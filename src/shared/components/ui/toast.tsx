@@ -147,7 +147,7 @@ function ToastItem({ toast }: { toast: TToast }) {
                   href={toast.href}
                   className={`inline-flex min-h-[44px] items-center gap-1.5 px-2 text-[13px] font-semibold transition-opacity ${actionTextClasses}`}
                 >
-                  <span>{toast.actionLabel ?? 'Xem chi tiết'}</span>
+                  <span>{toast.actionLabel ?? 'View details'}</span>
                   <HugeiconsIcon
                     icon={ArrowRight01Icon}
                     size={14}
@@ -178,7 +178,7 @@ function ToastItem({ toast }: { toast: TToast }) {
         <button
           type="button"
           onClick={() => removeToast(toast.id)}
-          aria-label="Đóng thông báo"
+          aria-label="Close notification"
           className={`-mt-2 -mr-2 flex size-11 shrink-0 items-center justify-center transition-colors ${closeButtonClasses}`}
         >
           <HugeiconsIcon icon={Cancel01Icon} size={16} strokeWidth={2} />

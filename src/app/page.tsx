@@ -8,7 +8,7 @@ import { CatalogSkeleton } from '@/features/home/skeletons/CatalogSkeleton';
 export const metadata: Metadata = {
   title: 'RE.WEAR — Good pieces. Next chapter.',
   description:
-    'Discover pre-owned clothing from independent sellers across Vietnam. Find your next piece on RE.WEAR.',
+    'Discover pre-owned clothing from independent sellers. Find your next piece on RE.WEAR.',
 };
 
 export default function Home() {

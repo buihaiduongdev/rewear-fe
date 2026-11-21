@@ -12,8 +12,8 @@ interface Props {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { id } = await params;
   return {
-    title: `Sản phẩm | RE.WEAR`,
-    description: `Chi tiết sản phẩm ${id} trên sàn thời trang cũ RE.WEAR`,
+    title: `Piece | RE.WEAR`,
+    description: `Pre-owned clothing piece ${id} on RE.WEAR`,
   };
 }
 

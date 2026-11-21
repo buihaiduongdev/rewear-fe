@@ -50,7 +50,18 @@ export function ProductPreview({ handle }: { handle: Dialog.Handle<Product> }) {
                     {product.description || 'No additional description.'}
                   </p>
                   <p className="text-sm">
-                    Sold by {product.shop?.name ?? 'an independent seller'}
+                    Sold by{' '}
+                    {product.shop?.name ? (
+                      <Link
+                        href={`/products?shopId=${product.shop.id}`}
+                        onClick={() => handle.close()}
+                        className="font-medium underline underline-offset-2 hover:opacity-80"
+                      >
+                        @{product.shop.name}
+                      </Link>
+                    ) : (
+                      'an independent seller'
+                    )}
                   </p>
                   <div className="flex flex-col gap-2.5">
                     <AddToCartAction
@@ -63,7 +74,7 @@ export function ProductPreview({ handle }: { handle: Dialog.Handle<Product> }) {
                       className="border-rewear-border text-rewear-text hover:bg-rewear-soft flex h-11 w-full items-center justify-center border text-sm font-medium transition-colors"
                       onClick={() => handle.close()}
                     >
-                      Xem trang chi tiết đầy đủ
+                      View full piece details
                     </Link>
                   </div>
                   {product.brand && (

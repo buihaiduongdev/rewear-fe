@@ -146,6 +146,7 @@ Ghi một mục cho mỗi task có dùng AI. Cập nhật liên kết PR/commit 
 - **Cách kiểm chứng:** Chạy `next --version` xác nhận `16.4.6`, `pnpm check` (tsc + eslint) 0 lỗi, `pnpm test` pass 3/3 test suites (5 tests), `pnpm build` biên dịch và prerender thành công 14/14 static pages qua Turbopack.
 - **Lỗi hoặc đề xuất sai của AI đã phát hiện:** Không phát hiện.
 - **Minh chứng:** Nhánh `fix/security-upgrade-next-16.4.6`.
+
 ### 2026-11-19 — Tái cấu trúc tách module Address và Shop dùng chung chống lặp mã (DRY)
 
 - **Người thực hiện:** Bùi Hải Dương.
@@ -183,3 +184,196 @@ Ghi một mục cho mỗi task có dùng AI. Cập nhật liên kết PR/commit 
 - **Cách kiểm chứng:** Chạy `pnpm check` và `test:unit` trên cả BE và FE; chạy `pnpm build` trên FE thành công 15/15 static pages; kiểm thử tích hợp thực tế bằng HTTP request thêm/xóa/truy vấn sản phẩm trong danh sách lưu.
 - **Lỗi hoặc đề xuất sai của AI đã phát hiện:** Lỗi sai tên biến param khi đồng bộ Orval (`productId` thay vì `id`) trong `PackageForm` và `ShippingPackagesPage`; lỗi vi phạm import restricted zone trong `MobileNavigation`; đã kịp thời hiệu chỉnh để `pnpm check` pass hoàn toàn.
 - **Minh chứng:** Branch `feat/wishlist` (rewear-be) và [PR #13](https://github.com/buihaiduongdev/rewear-fe/pull/13) trên branch `refactor/extract-shared-modules` (rewear-fe).
+
+### 2026-11-20 — Triển khai luồng Mở shop (Shop Onboarding) và Seller Dashboard
+
+- **Người thực hiện:** Bùi Hải Dương.
+- **Công cụ:** Antigravity (Gemini 3.8 Flash).
+- **Mục đích và phạm vi:** Triển khai luồng Mở shop / Thiết lập cửa hàng người bán (`/selling/open`, `/selling/new`) và Bảng điều khiển người bán (`/selling`) khớp 100% với Figma Design (Section `12 · Seller / Open shop & pickup` Frame `63:2226`, `66:311` và Section `11 · Seller / Dashboard` Frame `1:1162`); kết nối gọi API tạo shop `POST /api/shops`, tự động chuyển hướng và điền `shopId` vào trang thiết lập địa chỉ lấy hàng GHN (`/selling/pickup?shopId=...`); liên kết điều hướng từ trang chủ và header.
+- **Prompt chính:** Mở shop / tạo shopid và làm seller dashboard theo đúng Figma design; kết nối luồng tạo shop sang cấu hình địa chỉ lấy hàng; hiển thị trạng thái shop đã có và thông số hoạt động của người bán.
+- **Phần AI hỗ trợ:**
+  - Khởi tạo `OpenShopPage.tsx` và route `/selling/open`, `/selling/new`: Stepper timeline 3 bước (`Shop details`, `Pickup address`, `Shop ready`), form nhập tên shop, tự động sinh slug URL `rewear.vn/shops/[slug]` hỗ trợ tiếng Việt có dấu kèm nút copy, mô tả shop, avatar chữ cái đầu; thẻ xem trước trực quan `Your shop, at a glance` và nút `Continue to pickup address` gọi API `useShopControllerCreate`; hỗ trợ thông báo `Your shop is already set up` (Figma `66:311`) khi user đã sở hữu shop.
+  - Cập nhật `PickupAddressPage.tsx` và route `/selling/pickup`: Tự động đọc và chọn `shopId` từ URL search parameters, tối ưu hóa việc suy diễn `shopId` trong render để tránh re-render cascading theo chuẩn React 19; bao bọc `Suspense` trên route.
+  - Khởi tạo `SellerDashboardPage.tsx` và route `/selling`: Banner chào mừng không gian làm việc (`● SELLER WORKSPACE`, tên shop, huy hiệu `VERIFIED BOUTIQUE`, nút thêm sản phẩm `+ List New Archive Piece` và `Pickup Settings`), 4 thẻ chỉ số hiệu suất (`NET REVENUE (MTD)`, `ORDERS TO DISPATCH`, `ACTIVE LISTINGS`, `AUTHENTICITY PASS`), bảng danh sách đơn hàng cần xử lý `Orders Awaiting Action` kèm SLA đếm ngược, thẻ chấm điểm chất lượng `Quality Scorecard` và khối liên kết cài đặt workspace; hỗ trợ giao diện zero-state hướng dẫn mở shop khi tài khoản chưa có shop.
+  - Cập nhật `MarketplaceHeader.tsx` và `HomePage.tsx`: Thêm liên kết `Seller workspace` vào menu tài khoản, kích hoạt nút "Start selling" chuyển thẳng vào dashboard người bán khi đã đăng nhập.
+  - Bổ sung unit tests `tests/shop-onboarding.test.ts` kiểm thử logic sinh URL slug tiếng Việt và avatar monogram.
+- **Phần tự làm hoặc đã chỉnh sửa:** Định hướng trải nghiệm liền mạch từ tạo shop sang cài đặt địa chỉ lấy hàng GHN; xử lý cấu trúc derive state thay vì `useEffect` lồng `setState` theo đúng khuyến nghị của React Compiler / ESLint; kiểm chứng giao diện so với Figma frame gốc.
+- **Cách kiểm chứng:** Chạy `pnpm check` (pass TypeScript và ESLint 0 lỗi), `pnpm test` (4/4 test suites, 7/7 unit tests pass 100%), `pnpm build` (compile và static prerender 18/18 static pages thành công).
+- **Lỗi hoặc đề xuất sai của AI đã phát hiện:** Lỗi type checking do ép kiểu `unknown` trong biểu thức JSX `{createShop.error && ...}` (đã sửa thành `!!createShop.error`); lỗi cảnh báo ESLint `react-hooks/set-state-in-effect` khi cập nhật `shopId` từ URL trong effect (đã chuyển sang `useMemo` suy diễn trực tiếp trong render); thiếu header `X-Shop-Id` khi truy cập endpoint cấu hình địa chỉ kho lấy hàng GHN của shop dẫn đến lỗi NestJS PermissionGuard 400 `X-Shop-Id must be a UUID` (đã bổ sung interceptor tự động trích xuất `x-shop-id` từ route `/shops/:shopId` trong `axios-client.ts` và gán tường minh trong `usePickupLocationControllerFindShop` / `usePickupLocationControllerSaveShop`); thiếu cơ chế interceptor tự làm mới (auto-refresh) session và access token khi hết hạn (đã bổ sung route `/api/auth/refresh-session` gọi `unstable_update`, cơ chế chủ động xin lại token trước 60 giây hết hạn trong request interceptor, và interceptor 401 tự gọi refresh rồi retry request mượt mà không làm gián đoạn người dùng); loại bỏ dropdown thừa `Selling as`, chuyển toàn bộ placeholder của Combobox tỉnh thành / phường xã sang full tiếng Anh, bổ sung placeholder chuẩn Figma cho các trường nhập liệu trên `/selling/pickup` và đồng bộ layout với Frame `63:2256` / `63:2291`; đồng bộ layout live preview card 2 cột và bổ sung placeholder sang `PackageForm` (`/selling/packages`) và `UserAddressForm`; sửa lỗi Combobox tìm kiếm Tỉnh / Thành phố và Phường / Xã không lọc danh sách theo text nhập do render tĩnh bằng `map()` thay vì dùng `ComboboxCollection` render callback của Base UI, đồng thời bổ sung unit test `tests/administrative-division-fields.test.tsx` kiểm thử tự động; sửa lỗi không load được danh sách Phường / Xã khi chọn Tỉnh / Thành phố do `useAdministrativeDivisions` chỉ khởi tạo state 1 lần mà không đồng bộ theo `provinceCode` thay đổi ở parent, kèm lỗi validate sớm `wardCode` rỗng kích hoạt thông báo regex thô `Invalid string: must match pattern /^\d{5}$/` (đã đồng bộ `provinceCode` dạng controlled trong `useAdministrativeDivisions`, tắt validate sớm khi reset ward và chuẩn hóa thông báo lỗi người dùng sang tiếng Anh thân thiện).
+- **Minh chứng:** [PR #15](https://github.com/buihaiduongdev/rewear-fe/pull/15) trên branch `feat/seller-dashboard` (rewear-fe).
+
+### 2026-11-21 — Đồng bộ hóa luồng Mở shop và Cài đặt địa chỉ lấy hàng theo Figma (Frames 63:2315, 63:2256, 63:2291)
+
+- **Người thực hiện:** Bùi Hải Dương.
+- **Công cụ:** Antigravity (Gemini 3.8 Flash) kết nối Figwright MCP Server.
+- **Mục đích và phạm vi:** Khắc phục triệt để các bất cập trong luồng người bán (`/selling/pickup`, `/selling/new`, `/selling`) và dọn dẹp điều hướng trên `MarketplaceHeader`: phân tách rành mạch chế độ Thiết lập lần đầu (Onboarding - Figma `63:2256`) và Cập nhật địa chỉ kho khi đã có shop (Settings - Figma `63:2315`); sửa lỗi form địa chỉ bị trắng do mất đồng bộ bất đồng bộ khi nạp dữ liệu từ API; gỡ bỏ liên kết sai trỏ nhầm vào `/selling/packages` và chuẩn hóa điểm đến cho nút *"Create your first listing"* và *"+ List New Archive Piece"*.
+- **Prompt chính:** figwright đang mở á, làm theo figma 90% thấy thiết kế có gì bất logic gì báo tôi; ok lên branch hiện tại luôn.
+- **Phần AI hỗ trợ:**
+  - Đối chiếu trực tiếp cấu trúc cây node Figma qua Figwright MCP: phát hiện Frame `63:2315` (*Seller / Update pickup address*) dành riêng cho việc cập nhật địa chỉ kho khi shop đã tồn tại, đối lập với Frame `63:2256` (*Seller / Set your pickup address*) chỉ dùng khi mở shop lần đầu; phát hiện luồng `Package` trong Figma vốn nằm trong flow xử lý đơn hàng (`Order → package → review → label` - Figma `66:329`, `63:2410`), không phải trang độc lập nhét trên Header.
+  - Tái cấu trúc `PickupAddressPage.tsx`: nhận diện trạng thái `isSettingsMode` dựa trên địa chỉ kho hiện có và cờ `onboarding`. Khi ở chế độ cài đặt (Figma `63:2315`), ẩn Stepper 3 bước, hiển thị breadcrumb `Shop settings / Pickup`, tiêu đề `Update pickup address`, form chuyển sang `isEditing={true}`, nút submit `Save pickup address`, và thẻ bối cảnh `Keep existing shipments intact`; khi lưu thành công không bị chuyển màn hình sang "Your shop is ready".
+  - Cập nhật `use-pickup-address-form.ts`: bổ sung `useEffect` và `reset()` từ `react-hook-form` để tự động điền lại dữ liệu địa chỉ khi `initial` được query tải về từ backend, giải quyết dứt điểm lỗi bị "nhập lại từ đầu".
+  - Sửa lỗi điều hướng ở `Your shop is ready` (Figma `63:2291`): nút chính đổi thành `Open seller workspace` (`/selling`) và nút phụ là `Manage pickup address` (`/selling/pickup`).
+  - Dọn dẹp `MarketplaceHeader.tsx`: loại bỏ các liên kết nội bộ người bán (`Listing packages`, `Pickup address`) khỏi dropdown tài khoản người mua, chỉ giữ `Seller workspace` làm đầu mối duy nhất.
+  - Cập nhật `SellerDashboardPage.tsx`: gỡ bỏ `Listing packages` khỏi thanh điều hướng chính, trỏ nút `+ List New Archive Piece` sang `/selling/new`.
+  - Khởi tạo trang tạm `/selling/new` với giao diện thông báo chu đáo thay vì tái sử dụng nhầm `OpenShopPage`.
+- **Phần tự làm hoặc đã chỉnh sửa:** Định hướng cấu trúc phân nhánh hiển thị theo ngữ cảnh người dùng (người dùng mới mở shop vs người bán đã có shop đang quản lý kho); kiểm chứng toàn bộ thông tin hiển thị trên Figma và đảm bảo tuân thủ thiết kế design system.
+- **Cách kiểm chứng:** Chạy `pnpm check` (pass TypeScript và ESLint 0 lỗi), `pnpm test` (5/5 suites, 9/9 unit tests pass 100%), `pnpm build` (compile và static prerender 19/19 routes thành công).
+- **Lỗi hoặc đề xuất sai của AI đã phát hiện:** Nhầm lẫn ban đầu khi xem `/selling/packages` là trang độc lập cho người bán mới đăng ký; sau khi tra cứu Figma qua Figwright đã phát hiện trang này chỉ thuộc khâu xác nhận đơn hàng (`Confirm package`), từ đó dọn dẹp các đường link gây rối rắm.
+- **Minh chứng:** Commit trên branch `feat/seller-dashboard` thuộc [PR #15](https://github.com/buihaiduongdev/rewear-fe/pull/15) (rewear-fe).
+
+### 2026-11-21 — Tinh gọn Marketplace Header và chuẩn hóa Footer 1 dòng theo Figma 48:684
+
+- **Người thực hiện:** Bùi Hải Dương.
+- **Công cụ:** Antigravity (Gemini 3.8 Flash) kết nối Figwright MCP Server.
+- **Mục đích và phạm vi:** Khắc phục phản hồi thiết kế trên trang chủ (`/`): gỡ bỏ chuyển đổi ngôn ngữ `EN / VI` khỏi `MarketplaceHeader`; loại bỏ chữ `across Vietnam` trong lời giới thiệu trên `HomePage`; chuẩn hóa Footer trang chủ sang mẫu 1 dòng tối giản thanh lịch đúng chuẩn Figma (`UX / Footer` Frame `48:684`, `48:314`), xóa bỏ khối Footer 2 tầng cồng kềnh trước đó.
+- **Prompt chính:** figma chỉ có 1 dòng mà đúng ko; bỏ khỏi header; bỏ text vietnam; sao tới tận 2 footer.
+- **Phần AI hỗ trợ:**
+  - Kiểm tra trực tiếp qua Figwright MCP trên node Figma `48:684` (*UX / Footer*) và `1:4134`: xác nhận thiết kế chuẩn của Figma toàn bộ hệ thống đều dùng Footer 1 dòng ngang (`layout: HORIZONTAL`, `height: 64px`, `justify-between`) gồm `© 2026 RE.WEAR` bên trái và `Help · Returns · Privacy` bên phải; khối Footer 2 tầng trước đây là do triển khai nhầm từ các bản nháp cũ.
+  - Tái cấu trúc [MarketplaceFooter.tsx](file:///Users/buihaiduong/Workspace/projects/rewear/rewear-fe/src/shared/components/marketplace/MarketplaceFooter.tsx) thành chuẩn 1 dòng thanh lịch đồng bộ với các trang Cart, Checkout, Wishlist.
+  - Cập nhật [MarketplaceHeader.tsx](file:///Users/buihaiduong/Workspace/projects/rewear/rewear-fe/src/shared/components/marketplace/MarketplaceHeader.tsx): gỡ bỏ thẻ `<span>EN / VI</span>`.
+  - Cập nhật [HomePage.tsx](file:///Users/buihaiduong/Workspace/projects/rewear/rewear-fe/src/features/home/components/HomePage.tsx): xóa cụm từ `across Vietnam` trong subtitle hero.
+- **Phần tự làm hoặc đã chỉnh sửa:** Định hướng chuyển đổi toàn bộ footer về chuẩn tối giản thống nhất của dự án.
+- **Cách kiểm chứng:** Chạy `pnpm check` (pass TypeScript và ESLint 0 lỗi), `pnpm test` (5/5 suites, 9/9 unit tests pass 100%), `pnpm build` (compile và static prerender 19/19 routes thành công).
+- **Minh chứng:** Commit trên branch `feat/seller-dashboard` thuộc [PR #15](https://github.com/buihaiduongdev/rewear-fe/pull/15) (rewear-fe).
+
+### 2026-11-21 — Đồng bộ icon mũi tên Start selling theo Figma Node 53:644
+
+- **Người thực hiện:** Bùi Hải Dương.
+- **Công cụ:** Antigravity (Gemini 3.8 Flash) kết nối Figwright MCP Server.
+- **Mục đích và phạm vi:** Thay thế ký tự Unicode `↗` bị vỡ/lệch font trên trình duyệt bằng vector icon `ArrowUpRight` (kích thước 16px, `strokeWidth: 2.5`) khớp chính xác với thiết kế Figma Node `53:644` (*Start selling  ↗*).
+- **Prompt chính:** https://www.figma.com/design/xjyTlIecBwx0SdTILgBkFL/Re.wear-design?node-id=53-644&t=S07OybIvWfKNzBCm-11 dùng đúng icon mũi tên.
+- **Phần AI hỗ trợ:**
+  - Kiểm tra trực tiếp qua Figwright MCP trên node `53:644` và xuất ảnh chụp kiểm chứng (`media_0.png`): xác định độ dày nét, hướng nghiêng góc 45 độ và vị trí căn hàng ngang với chữ `Start selling`.
+  - Cập nhật [HomePage.tsx](file:///Users/buihaiduong/Workspace/projects/rewear/rewear-fe/src/features/home/components/HomePage.tsx): tích hợp icon `ArrowUpRight` từ `lucide-react` kèm căn chỉnh `inline-flex items-center gap-1`.
+- **Phần tự làm hoặc đã chỉnh sửa:** Định hướng cấu trúc flex và kích thước icon đảm bảo nét vẽ tương đồng với font SemiBold của DM Sans.
+- **Cách kiểm chứng:** Chạy `pnpm check` (pass TypeScript và ESLint 0 lỗi), `pnpm test` (5/5 suites, 9/9 unit tests pass 100%), `pnpm build` (compile và static prerender 19/19 routes thành công).
+- **Minh chứng:** Commit trên branch `feat/seller-dashboard` thuộc [PR #15](https://github.com/buihaiduongdev/rewear-fe/pull/15) (rewear-fe).
+
+### 2026-11-21 — Tích hợp Modal Trợ giúp mua hàng và Đổi trả (Figma 67:419 / 48:114) vào Footer
+
+- **Người thực hiện:** Bùi Hải Dương.
+- **Công cụ:** Antigravity (Gemini 3.8 Flash) kết nối Figwright MCP Server.
+- **Mục đích và phạm vi:** Kết nối các liên kết ở Footer (`Help`, `Returns`, `Privacy`) mở trực tiếp Modal thông tin chính sách chuẩn thiết kế Figma Node `48:114` (*Buying secondhand*) và Node `71:2174` thuộc Section `03 · Shared / Buying help` (Node `67:419`); loại bỏ các liên kết chết (404), giúp người mua dễ dàng tra cứu quyền lợi đổi trả trong 72h và cam kết bảo vệ thanh toán ký quỹ (escrow).
+- **Prompt chính:** https://www.figma.com/design/xjyTlIecBwx0SdTILgBkFL/Re.wear-design?node-id=67-419&t=S07OybIvWfKNzBCm-11 footer thì cho xem các modal này nhỉ.
+- **Phần AI hỗ trợ:**
+  - Khảo sát trực tiếp cấu trúc cây node Figma qua Figwright MCP trên Node `67:419`, `48:114` và `71:2174`: trích xuất chính xác toàn bộ nội dung bản quyền, thông báo kiểm tra đồ cũ trước khi mua (*Check photos, measurements and disclosed flaws*), thời hạn báo cáo sự cố 72h (*Within 72h of delivery*), chính sách hoàn tiền sau xác minh (*Returns & refunds*).
+  - Khởi tạo [PolicyModals.tsx](file:///Users/buihaiduong/Workspace/projects/rewear/rewear-fe/src/shared/components/marketplace/PolicyModals.tsx): triển khai Modal `Buying secondhand` chuẩn Figma `48:114` và Modal `Privacy policy` theo ngôn ngữ thiết kế tối giản góc cạnh của RE.WEAR.
+  - Cập nhật [MarketplaceFooter.tsx](file:///Users/buihaiduong/Workspace/projects/rewear/rewear-fe/src/shared/components/marketplace/MarketplaceFooter.tsx): chuyển các thẻ `Link` thành các nút bấm tương tác mở Modal tương ứng.
+- **Phần tự làm hoặc đã chỉnh sửa:** Định hướng trải nghiệm tại chỗ không reload trang, tối ưu hóa hiển thị trên cả desktop và mobile.
+- **Cách kiểm chứng:** Chạy `pnpm check` (pass TypeScript và ESLint 0 lỗi), `pnpm test` (5/5 suites, 9/9 unit tests pass 100%), `pnpm build` (compile và static prerender 19/19 routes thành công).
+- **Minh chứng:** Commit trên branch `feat/seller-dashboard` thuộc [PR #15](https://github.com/buihaiduongdev/rewear-fe/pull/15) (rewear-fe).
+
+### 2026-11-21 — Triển khai bộ lọc sản phẩm (Search & Filters) và Filter Modal chuẩn Figma 53:1061 & 48:143
+
+- **Người thực hiện:** Bùi Hải Dương.
+- **Công cụ:** Antigravity (Gemini 3.8 Flash) kết nối Figwright MCP Server.
+- **Mục đích và phạm vi:** Triển khai đầy đủ thanh công cụ tìm kiếm và lọc sản phẩm (*Search and filters* - Figma Node `53:1061`) trên trang danh mục All clothing (`/products`), tích hợp Modal lọc chi tiết (*Filters modal* - Figma Node `48:143` desktop & `48:2559` mobile) bao gồm Category, Size, Condition, Price và menu sắp xếp Sort: Newest / Price low to high / Price high to low.
+- **Prompt chính:** https://www.figma.com/design/xjyTlIecBwx0SdTILgBkFL/Re.wear-design?node-id=53-1061&t=S07OybIvWfKNzBCm-11 thiếu filter.
+- **Phần AI hỗ trợ:**
+  - Khảo sát trực tiếp cấu trúc cây node Figma qua Figwright MCP trên Node `53:1052` (*Refined / All clothing*), `53:1061` (*Search and filters*), `53:1065` (*Filter controls*), `48:143` (*Filters modal*): xác định đầy đủ các trường thuộc tính lọc (Category, Size, Condition, Price), nút hành động chính *Show items*, liên kết mở modal `Filters  ↓` và menu `Sort: Newest  ↓`.
+  - Khởi tạo component [ProductFilterModal.tsx](file:///Users/buihaiduong/Workspace/projects/rewear/rewear-fe/src/features/home/components/ProductFilterModal.tsx): triển khai Modal lọc chuẩn Figma với 4 trường `RE.WEAR/Field` (Category, Size, Condition, Price) và nút bấm `Show items` màu xanh neon `bg-rewear-accent`. Nâng cấp bộ lọc Price sang dạng linh hoạt: kết hợp 2 ô nhập tùy chỉnh `Từ (₫)` – `Đến (₫)` cùng hàng nút chọn nhanh 1 chạm theo phân khúc secondhand (`Dưới 300k`, `300k - 600k`, `600k - 1tr`, `Trên 1tr`).
+  - Cập nhật hook [use-home-catalog.ts](file:///Users/buihaiduong/Workspace/projects/rewear/rewear-fe/src/features/home/hooks/use-home-catalog.ts): mở rộng hỗ trợ nhận và đồng bộ các query parameters `size`, `condition`, `minPrice`, `maxPrice`, `sortBy` khớp với API contract phân trang của backend (`filter.price=$gte:min`, `filter.price=$lte:max`).
+  - Tái cấu trúc [ProductsPage.tsx](file:///Users/buihaiduong/Workspace/projects/rewear/rewear-fe/src/features/home/components/ProductsPage.tsx): đổi tiêu đề thành `All clothing` chuẩn Figma `53:1053`, bổ sung khung Search lớn (Figma `53:1062`), tích hợp nút mở bộ lọc `Filters  ↓`, menu sắp xếp giá/mới nhất `Sort  ↓` và dải ruy-băng hiển thị các tag lọc đang kích hoạt kèm nút xóa tiện lợi.
+- **Phần tự làm hoặc đã chỉnh sửa:** Định hướng cấu trúc form tách biệt trong modal để tránh cascading renders theo chuẩn React 19; kiểm tra khớp nối chính xác với NestJS `nestjs-paginate` backend.
+- **Cách kiểm chứng:** Chạy `pnpm check` (pass TypeScript và ESLint 0 lỗi), `pnpm test` (5/5 suites, 9/9 unit tests pass 100%), `pnpm build` (compile và static prerender 19/19 routes thành công). Kiểm tra gọi trực tiếp API `filter.condition`, `filter.size`, `filter.price`, `sortBy` trên backend.
+- **Minh chứng:** Commit trên branch `feat/seller-dashboard` thuộc [PR #15](https://github.com/buihaiduongdev/rewear-fe/pull/15) (rewear-fe).
+
+### 2026-11-21 — Tích hợp shadcn pagination và tùy biến chuẩn Pagination Footer Figma 86:1606
+
+- **Người thực hiện:** Bùi Hải Dương.
+- **Công cụ:** Antigravity (Gemini 3.8 Flash) kết nối Figwright MCP Server & shadcn CLI.
+- **Mục đích và phạm vi:** Tải component phân trang shadcn (`@/shared/components/ui/pagination.tsx`) và tùy biến lại giao diện theo đúng Figma Node `86:1606` (*Pagination footer*): gồm cụm bên trái điều khiển `Items per page` (12, 24, 48) và cụm bên phải gồm các nút thẻ `‹ Previous`, các số trang (active trang nền xanh neon `#c3f832`), và `Next ›`.
+- **Prompt chính:** ok tai paginate shadcn ve roi custom lai thoi cho it code.
+- **Phần AI hỗ trợ:**
+  - Chạy `pnpm dlx shadcn@latest add pagination` tải component nền tảng chuẩn của thư viện.
+  - Tùy biến [pagination.tsx](file:///Users/buihaiduong/Workspace/projects/rewear/rewear-fe/src/shared/components/ui/pagination.tsx): bổ sung sub-component `PaginationPageSize` theo chuẩn thiết kế Figma Node `86:1607`, tùy biến các nút `PaginationLink`, `PaginationPrevious`, `PaginationNext` theo phong cách `RE.WEAR/Button/Secondary` vuông góc (cao 40px, padding 20px, trạng thái disabled `opacity-45`).
+  - Cập nhật [use-home-catalog.ts](file:///Users/buihaiduong/Workspace/projects/rewear/rewear-fe/src/features/home/hooks/use-home-catalog.ts) hỗ trợ param `limit` (12, 24, 48).
+  - Tích hợp component vào [ProductsPage.tsx](file:///Users/buihaiduong/Workspace/projects/rewear/rewear-fe/src/features/home/components/ProductsPage.tsx) thay thế phân trang viết tay cũ.
+- **Phần tự làm hoặc đã chỉnh sửa:** Định hướng giữ nguyên `button.tsx` gốc của dự án khi shadcn CLI nhắc ghi đè, thuật toán chia trang thông minh `getPageNumbers` với dấu chấm lửng `ellipsis`.
+- **Cách kiểm chứng:** Chạy `pnpm check` (pass TypeScript và ESLint 0 lỗi), `pnpm test` (5/5 suites, 9/9 unit tests pass 100%), `pnpm build` (compile và static prerender 19/19 routes thành công).
+- **Minh chứng:** Commit trên branch `feat/seller-dashboard` thuộc [PR #15](https://github.com/buihaiduongdev/rewear-fe/pull/15) (rewear-fe).
+
+### 2026-11-21 — Chuẩn hóa toàn bộ giao diện và mã nguồn sang 100% tiếng Anh (Full English UI Standardization)
+
+- **Người thực hiện:** Bùi Hải Dương.
+- **Công cụ:** Antigravity (Gemini 3.8 Flash).
+- **Mục đích và phạm vi:** Rà soát và loại bỏ toàn bộ các chuỗi văn bản tiếng Việt còn sót lại trên giao diện frontend (UI text, placeholder, aria-label, metadata, toast notification, form buttons và badges), chuẩn hóa 100% giao diện dự án sang tiếng Anh thống nhất theo đúng yêu cầu dự án RE.WEAR.
+- **Prompt chính:** full english mà sao bạn cứ code vie vào v.
+- **Phần AI hỗ trợ:**
+  - Rà soát tự động toàn bộ codebase trong thư mục `src/` bằng script quét ký tự Unicode và từ vựng tiếng Việt.
+  - Chuẩn hóa [ProductFilterModal.tsx](file:///Users/buihaiduong/Workspace/projects/rewear/rewear-fe/src/features/home/components/ProductFilterModal.tsx): chuyển các tag giá nhanh sang tiếng Anh (`Under 300k`, `300k – 600k`, `600k – 1M`, `Over 1M`), nhãn `From (₫)` và `To (₫)`.
+  - Chuẩn hóa [ProductDetailPage.tsx](file:///Users/buihaiduong/Workspace/projects/rewear/rewear-fe/src/features/product-detail/components/ProductDetailPage.tsx): chuyển toàn bộ thông báo share toast, 404 text, button labels, breadcrumbs, status labels, attributes, measurements, condition notes, shipping inspection sang tiếng Anh.
+  - Chuẩn hóa các skeleton component: [CatalogSkeleton.tsx](file:///Users/buihaiduong/Workspace/projects/rewear/rewear-fe/src/features/home/skeletons/CatalogSkeleton.tsx), [ProductDetailSkeleton.tsx](file:///Users/buihaiduong/Workspace/projects/rewear/rewear-fe/src/features/product-detail/skeletons/ProductDetailSkeleton.tsx), [CartSkeleton.tsx](file:///Users/buihaiduong/Workspace/projects/rewear/rewear-fe/src/modules/cart/skeletons/CartSkeleton.tsx), [CheckoutSkeleton.tsx](file:///Users/buihaiduong/Workspace/projects/rewear/rewear-fe/src/features/checkout/skeletons/CheckoutSkeleton.tsx) (cập nhật các aria-label và sr-only loading text).
+  - Chuẩn hóa shared components: [toast.tsx](file:///Users/buihaiduong/Workspace/projects/rewear/rewear-fe/src/shared/components/ui/toast.tsx) (`View details`, `Close notification`), [SellerVerifiedBadge.tsx](file:///Users/buihaiduong/Workspace/projects/rewear/rewear-fe/src/modules/shop/components/SellerVerifiedBadge.tsx) (`Verified`), [ShopSummaryCard.tsx](file:///Users/buihaiduong/Workspace/projects/rewear/rewear-fe/src/modules/shop/components/ShopSummaryCard.tsx) (`Seller`), [UserAddressForm.tsx](file:///Users/buihaiduong/Workspace/projects/rewear/rewear-fe/src/modules/address/components/UserAddressForm.tsx) (`Cancel`), [ProductPreview.tsx](file:///Users/buihaiduong/Workspace/projects/rewear/rewear-fe/src/features/home/components/ProductPreview.tsx) (`View full piece details`), [LoginShell.tsx](file:///Users/buihaiduong/Workspace/projects/rewear/rewear-fe/src/features/access-account/components/LoginShell.tsx), [app/products/[id]/page.tsx](file:///Users/buihaiduong/Workspace/projects/rewear/rewear-fe/src/app/products/[id]/page.tsx).
+- **Phần tự làm hoặc đã chỉnh sửa:** Định hướng giữ lại các hàm slugify / chuẩn hóa ký tự tiếng Việt trong bộ tìm kiếm địa chỉ GHN để phục vụ người dùng nhập địa chỉ Việt Nam mà không ảnh hưởng đến ngôn ngữ hiển thị.
+- **Cách kiểm chứng:** Chạy `pnpm check` (pass TypeScript và ESLint 0 lỗi), `pnpm test` (5/5 suites, 9/9 unit tests pass 100%), `pnpm build` (compile và static prerender 19/19 routes thành công). Quét lại toàn bộ codebase xác nhận không còn chuỗi tiếng Việt trên UI.
+- **Minh chứng:** Commit trên branch `feat/seller-dashboard` thuộc [PR #15](https://github.com/buihaiduongdev/rewear-fe/pull/15) (rewear-fe).
+
+### 2026-11-21 — Tinh gọn Filter Modal, loại bỏ nút Clear all filters trùng lặp theo Figma 48:143
+
+- **Người thực hiện:** Bùi Hải Dương.
+- **Công cụ:** Antigravity (Gemini 3.8 Flash).
+- **Mục đích và phạm vi:** Loại bỏ nút "Clear all filters" bên trong `ProductFilterModal` để giao diện modal gọn gàng, chuẩn xác theo thiết kế gốc Figma Node `48:143` (chỉ có duy nhất nút hành động `Show items`); hành động xóa toàn bộ bộ lọc đã có sẵn tại thanh ruy-băng active filter tags trên trang `/products`.
+- **Prompt chính:** bỏ cái này vì có clear bên ngoài page rồi nhỉ? (Feedback về nút Clear all filters trong FilterForm).
+- **Phần AI hỗ trợ:**
+  - Cập nhật [ProductFilterModal.tsx](file:///Users/buihaiduong/Workspace/projects/rewear/rewear-fe/src/features/home/components/ProductFilterModal.tsx): loại bỏ nút bấm `Clear all filters`, lược bỏ logic `hasAnyFilter` và `handleReset` dư thừa bên trong modal, giữ lại nút chính `Show items`.
+  - Cập nhật [ProductsPage.tsx](file:///Users/buihaiduong/Workspace/projects/rewear/rewear-fe/src/features/home/components/ProductsPage.tsx): đồng bộ interface gọi modal không cần truyền `onReset`.
+- **Phần tự làm hoặc đã chỉnh sửa:** Đối chiếu với Figma Node `48:143` xác nhận thiết kế gốc không có nút clear trong modal.
+- **Cách kiểm chứng:** Chạy `pnpm check` (pass TypeScript và ESLint 0 lỗi), `pnpm test` (5/5 suites, 9/9 unit tests pass 100%), `pnpm build` (compile và static prerender 19/19 routes thành công).
+- **Minh chứng:** Commit trên branch `feat/seller-dashboard` thuộc [PR #15](https://github.com/buihaiduongdev/rewear-fe/pull/15) (rewear-fe).
+
+### 2026-11-21 — Tối ưu UX thanh tìm kiếm Search và chuẩn hóa token màu bg-rewear-soft
+
+- **Người thực hiện:** Bùi Hải Dương.
+- **Công cụ:** Antigravity (Gemini 3.8 Flash).
+- **Mục đích và phạm vi:** Tối ưu hóa UX của thanh tìm kiếm Search trên trang `/products`, giải quyết triệt để vấn đề ô tìm kiếm bị chìm/hòa vào nền trắng do thiếu affordance; sửa lỗi class màu `bg-rewear-card` không tồn tại trong cấu hình Tailwind v4 sang `bg-rewear-soft` (`#f3f3f5`) kèm viền `border border-rewear-border` và tương tác `focus-within:border-rewear-text`.
+- **Prompt chính:** search bị hoà vào background có tốt ux -> người dùng chọn Phương án 1 (chuẩn Figma + viền + focus contrast).
+- **Phần AI hỗ trợ:**
+  - Bổ sung `--color-rewear-card: #f3f3f5;` vào `@theme inline` trong [globals.css](file:///Users/buihaiduong/Workspace/projects/rewear/rewear-fe/src/app/globals.css).
+  - Tinh chỉnh ô Search trong [ProductsPage.tsx](file:///Users/buihaiduong/Workspace/projects/rewear/rewear-fe/src/features/home/components/ProductsPage.tsx): gán `bg-rewear-soft border border-rewear-border focus-within:border-rewear-text transition-colors`, cập nhật màu các filter pill tags và menu sort.
+  - Chuẩn hóa các trường input trong [ProductFilterModal.tsx](file:///Users/buihaiduong/Workspace/projects/rewear/rewear-fe/src/features/home/components/ProductFilterModal.tsx) và nút trang trong [pagination.tsx](file:///Users/buihaiduong/Workspace/projects/rewear/rewear-fe/src/shared/components/ui/pagination.tsx).
+- **Phần tự làm hoặc đã chỉnh sửa:** Đánh giá affordance & accessibility theo chuẩn WCAG và Figma Node `53:1062`.
+- **Cách kiểm chứng:** Chạy `pnpm check` (pass TypeScript và ESLint 0 lỗi), `pnpm test` (5/5 suites, 9/9 unit tests pass 100%), `pnpm build` (compile và static prerender 19/19 routes thành công).
+- **Minh chứng:** Commit trên branch `feat/seller-dashboard` thuộc [PR #15](https://github.com/buihaiduongdev/rewear-fe/pull/15) (rewear-fe).
+
+### 2026-11-21 — Tinh gọn ô Search thành thanh tìm kiếm 1 dòng (48px) kèm icon kính lúp
+
+- **Người thực hiện:** Bùi Hải Dương.
+- **Công cụ:** Antigravity (Gemini 3.8 Flash).
+- **Mục đích và phạm vi:** Thu gọn ô tìm kiếm Search trên trang `/products` từ khối 80px (`h-20`) cồng kềnh với label trùng lặp thành thanh tìm kiếm 1 dòng chuẩn mực 48px (`h-12`), bổ sung icon kính lúp (`Search` từ `lucide-react`) và chuyển label sang `sr-only` cho accessibility.
+- **Prompt chính:** chắc bỏ label khỏi field nhỉ, nhìn field to quá.
+- **Phần AI hỗ trợ:** Cập nhật [ProductsPage.tsx](file:///Users/buihaiduong/Workspace/projects/rewear/rewear-fe/src/features/home/components/ProductsPage.tsx), tích hợp icon kính lúp và bố cục 1 dòng gọn gàng, cân đối hoàn hảo với các nút `Filters` và `Sort`.
+- **Phần tự làm hoặc đã chỉnh sửa:** Đảm bảo nhãn accessibility cho screen reader (`sr-only`), kiểm tra responsive trên mobile và desktop.
+- **Cách kiểm chứng:** Chạy `pnpm check` (pass TypeScript và ESLint 0 lỗi), `pnpm test` (5/5 suites, 9/9 unit tests pass 100%), `pnpm build` (compile và static prerender 19/19 routes thành công).
+- **Minh chứng:** Commit trên branch `feat/seller-dashboard` thuộc [PR #15](https://github.com/buihaiduongdev/rewear-fe/pull/15) (rewear-fe).
+
+### 2026-11-21 — Khởi tạo hook dùng chung useDebounce và áp dụng Instant Search cho ô tìm kiếm
+
+- **Người thực hiện:** Bùi Hải Dương.
+- **Công cụ:** Antigravity (Gemini 3.8 Flash).
+- **Mục đích và phạm vi:** Tạo hook dùng chung toàn cục `useDebounce` trong `src/shared/hooks/` phục vụ lọc dữ liệu thời gian thực; áp dụng cơ chế tự động tìm kiếm sau 350ms ngừng gõ kết hợp Enter tức thì cho ô Search trên trang `/products`, viết bộ unit test toàn diện cho hook.
+- **Prompt chính:** ok thêm hook debounce cho share global nhỉ.
+- **Phần AI hỗ trợ:**
+  - Khởi tạo [use-debounce.ts](file:///Users/buihaiduong/Workspace/projects/rewear/rewear-fe/src/shared/hooks/use-debounce.ts) và barrel export [index.ts](file:///Users/buihaiduong/Workspace/projects/rewear/rewear-fe/src/shared/hooks/index.ts).
+  - Viết 3 unit tests cho hook trong [use-debounce.test.ts](file:///Users/buihaiduong/Workspace/projects/rewear/rewear-fe/tests/use-debounce.test.ts) (kiểm tra trả về giá trị tức thì, debounce đúng thời gian delay và tự hủy timer cũ khi gõ nhanh liên tục).
+  - Tích hợp hook vào [ProductsPage.tsx](file:///Users/buihaiduong/Workspace/projects/rewear/rewear-fe/src/features/home/components/ProductsPage.tsx): tự động gọi `updateFilters` sau 350ms không cần ấn Enter, đồng thời giữ nguyên hỗ trợ bấm Enter hoặc nút Clear `✕` phản hồi lập tức.
+- **Phần tự làm hoặc đã chỉnh sửa:** Thiết kế cờ `isInitialMount` để tránh trigger lọc thừa khi vừa mở trang lần đầu.
+- **Cách kiểm chứng:** Chạy `pnpm check` (pass TypeScript và ESLint 0 lỗi), `pnpm test` (6/6 suites, 12/12 unit tests pass 100%), `pnpm build` (compile và static prerender 19/19 routes thành công).
+- **Minh chứng:** Commit trên branch `feat/seller-dashboard` thuộc [PR #15](https://github.com/buihaiduongdev/rewear-fe/pull/15) (rewear-fe).
+
+### 2026-11-22 — Hiển thị Shop trên ProductCard và hỗ trợ lọc nhanh theo Shop
+
+- **Người thực hiện:** Bùi Hải Dương.
+- **Công cụ:** Antigravity (Gemini 3.8 Flash).
+- **Mục đích và phạm vi:** Thể hiện rõ tính chất sàn thương mại đa người bán (multi-vendor marketplace) trên danh mục sản phẩm: bổ sung nhãn người bán (`by @shop_name`) vào phụ đề của ProductCard và cho phép bấm trực tiếp vào tên Shop để đưa ngay vào bộ lọc đang có; bổ sung chọn Shop vào Filter Modal và tính `shopId` vào bộ đếm badge của nút Filters.
+- **Prompt chính:** thôi ko cần thêm nhiều, click vào 1 shop thì cho vào filter đang có là ok, ok thực hiện card và shop filder là đủ.
+- **Phần AI hỗ trợ:**
+  - Cập nhật [ProductCard.tsx](file:///Users/buihaiduong/Workspace/projects/rewear/rewear-fe/src/features/home/components/ProductCard.tsx): hiển thị `by @{product.shop.name} · {size} · {condition}`, gắn sự kiện click có `e.stopPropagation()` gọi callback `onSelectShop` để lọc nhanh mà không kích hoạt mở ProductPreview modal.
+  - Cập nhật [ProductFilterModal.tsx](file:///Users/buihaiduong/Workspace/projects/rewear/rewear-fe/src/features/home/components/ProductFilterModal.tsx): bổ sung trường "Shop / Seller" select dropdown để chọn shop trong modal lọc.
+  - Cập nhật [ProductsPage.tsx](file:///Users/buihaiduong/Workspace/projects/rewear/rewear-fe/src/features/home/components/ProductsPage.tsx): tính `shopId` vào `activeFilterCount`, truyền `onSelectShop` và danh sách `shops` vào Filter Modal.
+  - Cập nhật [HomePage.tsx](file:///Users/buihaiduong/Workspace/projects/rewear/rewear-fe/src/features/home/components/HomePage.tsx): kết nối `onSelectShop` để chuyển hướng mượt mà sang catalog lọc theo shop.
+  - Cập nhật [ProductPreview.tsx](file:///Users/buihaiduong/Workspace/projects/rewear/rewear-fe/src/features/home/components/ProductPreview.tsx): chuyển dòng "Sold by {shop}" thành đường link lọc trực tiếp theo shop.
+  - Viết 3 unit tests trong [product-card.test.tsx](file:///Users/buihaiduong/Workspace/projects/rewear/rewear-fe/tests/product-card.test.tsx) kiểm thử hiển thị chi tiết sản phẩm, bắt sự kiện click shop name và xử lý an toàn khi sản phẩm không có shop.
+- **Phần tự làm hoặc đã chỉnh sửa:** Thiết kế nút `by @{shop.name}` với keyboard accessibility (`Enter`, `Space`) và tooltip, kết hợp mượt mà với dải ruy-băng tag `Shop: @name ✕` có sẵn.
+- **Cách kiểm chứng:** Chạy `pnpm check` (pass TypeScript và ESLint 0 lỗi), `pnpm test` (7/7 suites, 15/15 unit tests pass 100%), `pnpm build` (compile và static prerender 19/19 routes thành công).
+- **Minh chứng:** Commit trên branch `feat/seller-dashboard` thuộc [PR #15](https://github.com/buihaiduongdev/rewear-fe/pull/15) (rewear-fe).
