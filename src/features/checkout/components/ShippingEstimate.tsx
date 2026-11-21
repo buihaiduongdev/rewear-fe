@@ -161,7 +161,7 @@ export function ShippingEstimateSummary({
     },
   });
 
-  // Tự động tính phí vận chuyển GHN ngay khi vào trang checkout
+  // Automatically calculate GHN shipping fee on entering checkout
   useEffect(() => {
     if (
       checkout.status === 'HELD' &&

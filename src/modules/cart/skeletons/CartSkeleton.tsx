@@ -5,10 +5,10 @@ export function CartSkeleton() {
     <div
       role="status"
       aria-busy="true"
-      aria-label="Đang tải giỏ hàng"
+      aria-label="Loading shopping cart"
       className="mt-8 space-y-6"
     >
-      <span className="sr-only">Đang tải giỏ hàng…</span>
+      <span className="sr-only">Loading shopping cart…</span>
 
       {/* Cart Items list skeleton */}
       <div className="space-y-4">

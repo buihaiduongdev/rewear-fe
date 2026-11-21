@@ -14,10 +14,10 @@ import { PRODUCT_CONDITION_LABELS } from '@/shared/utils/product';
 export const SIZE_OPTIONS = ['XS', 'S', 'M', 'L', 'XL', 'XXL', 'Free size'];
 
 export const QUICK_PRICE_PRESETS = [
-  { label: 'Dưới 300k', min: '', max: '300000' },
+  { label: 'Under 300k', min: '', max: '300000' },
   { label: '300k – 600k', min: '300000', max: '600000' },
-  { label: '600k – 1tr', min: '600000', max: '1000000' },
-  { label: 'Trên 1tr', min: '1000000', max: '' },
+  { label: '600k – 1M', min: '600000', max: '1000000' },
+  { label: 'Over 1M', min: '1000000', max: '' },
 ];
 
 type Props = {
