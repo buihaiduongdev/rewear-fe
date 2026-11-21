@@ -308,3 +308,16 @@ Ghi một mục cho mỗi task có dùng AI. Cập nhật liên kết PR/commit 
 - **Phần tự làm hoặc đã chỉnh sửa:** Định hướng giữ lại các hàm slugify / chuẩn hóa ký tự tiếng Việt trong bộ tìm kiếm địa chỉ GHN để phục vụ người dùng nhập địa chỉ Việt Nam mà không ảnh hưởng đến ngôn ngữ hiển thị.
 - **Cách kiểm chứng:** Chạy `pnpm check` (pass TypeScript và ESLint 0 lỗi), `pnpm test` (5/5 suites, 9/9 unit tests pass 100%), `pnpm build` (compile và static prerender 19/19 routes thành công). Quét lại toàn bộ codebase xác nhận không còn chuỗi tiếng Việt trên UI.
 - **Minh chứng:** Commit trên branch `feat/seller-dashboard` thuộc [PR #15](https://github.com/buihaiduongdev/rewear-fe/pull/15) (rewear-fe).
+
+### 2026-11-21 — Tinh gọn Filter Modal, loại bỏ nút Clear all filters trùng lặp theo Figma 48:143
+
+- **Người thực hiện:** Bùi Hải Dương.
+- **Công cụ:** Antigravity (Gemini 3.8 Flash).
+- **Mục đích và phạm vi:** Loại bỏ nút "Clear all filters" bên trong `ProductFilterModal` để giao diện modal gọn gàng, chuẩn xác theo thiết kế gốc Figma Node `48:143` (chỉ có duy nhất nút hành động `Show items`); hành động xóa toàn bộ bộ lọc đã có sẵn tại thanh ruy-băng active filter tags trên trang `/products`.
+- **Prompt chính:** bỏ cái này vì có clear bên ngoài page rồi nhỉ? (Feedback về nút Clear all filters trong FilterForm).
+- **Phần AI hỗ trợ:**
+  - Cập nhật [ProductFilterModal.tsx](file:///Users/buihaiduong/Workspace/projects/rewear/rewear-fe/src/features/home/components/ProductFilterModal.tsx): loại bỏ nút bấm `Clear all filters`, lược bỏ logic `hasAnyFilter` và `handleReset` dư thừa bên trong modal, giữ lại nút chính `Show items`.
+  - Cập nhật [ProductsPage.tsx](file:///Users/buihaiduong/Workspace/projects/rewear/rewear-fe/src/features/home/components/ProductsPage.tsx): đồng bộ interface gọi modal không cần truyền `onReset`.
+- **Phần tự làm hoặc đã chỉnh sửa:** Đối chiếu với Figma Node `48:143` xác nhận thiết kế gốc không có nút clear trong modal.
+- **Cách kiểm chứng:** Chạy `pnpm check` (pass TypeScript và ESLint 0 lỗi), `pnpm test` (5/5 suites, 9/9 unit tests pass 100%), `pnpm build` (compile và static prerender 19/19 routes thành công).
+- **Minh chứng:** Commit trên branch `feat/seller-dashboard` thuộc [PR #15](https://github.com/buihaiduongdev/rewear-fe/pull/15) (rewear-fe).

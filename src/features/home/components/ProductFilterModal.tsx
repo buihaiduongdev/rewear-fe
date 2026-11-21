@@ -38,14 +38,12 @@ type Props = {
     minPrice?: string;
     maxPrice?: string;
   }) => void;
-  onReset: () => void;
 };
 
 function FilterForm({
   categories,
   currentFilters,
   onApply,
-  onReset,
   onClose,
 }: Omit<Props, 'isOpen'>) {
   const [selectedCategory, setSelectedCategory] = useState(
@@ -62,14 +60,6 @@ function FilterForm({
     currentFilters.maxPrice ?? '',
   );
 
-  const hasAnyFilter = Boolean(
-    selectedCategory ||
-      selectedSize ||
-      selectedCondition ||
-      selectedMinPrice ||
-      selectedMaxPrice,
-  );
-
   const handleApply = () => {
     onApply({
       categoryId: selectedCategory || undefined,
@@ -78,16 +68,6 @@ function FilterForm({
       minPrice: selectedMinPrice || undefined,
       maxPrice: selectedMaxPrice || undefined,
     });
-    onClose();
-  };
-
-  const handleReset = () => {
-    setSelectedCategory('');
-    setSelectedSize('');
-    setSelectedCondition('');
-    setSelectedMinPrice('');
-    setSelectedMaxPrice('');
-    onReset();
     onClose();
   };
 
@@ -275,7 +255,7 @@ function FilterForm({
         </div>
       </div>
 
-      <div className="flex flex-col gap-3 pt-2">
+      <div className="pt-2">
         <button
           type="button"
           onClick={handleApply}
@@ -283,15 +263,6 @@ function FilterForm({
         >
           Show items
         </button>
-        {hasAnyFilter && (
-          <button
-            type="button"
-            onClick={handleReset}
-            className="text-rewear-muted hover:text-rewear-text cursor-pointer text-center text-xs font-semibold underline"
-          >
-            Clear all filters
-          </button>
-        )}
       </div>
     </>
   );
@@ -303,7 +274,6 @@ export function ProductFilterModal({
   categories,
   currentFilters,
   onApply,
-  onReset,
 }: Props) {
   return (
     <Dialog
@@ -321,7 +291,6 @@ export function ProductFilterModal({
             categories={categories}
             currentFilters={currentFilters}
             onApply={onApply}
-            onReset={onReset}
             onClose={onClose}
           />
         )}

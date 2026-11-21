@@ -499,15 +499,6 @@ export function ProductsPage() {
           maxPrice: maxPrice || undefined,
         }}
         onApply={(filters) => updateFilters(filters)}
-        onReset={() =>
-          updateFilters({
-            categoryId: undefined,
-            size: undefined,
-            condition: undefined,
-            minPrice: undefined,
-            maxPrice: undefined,
-          })
-        }
       />
     </>
   );
