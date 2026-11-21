@@ -212,9 +212,6 @@ function FilterForm({
               <span className="text-rewear-text font-semibold">
                 {priceRangeText}
               </span>
-              <span className="text-rewear-muted text-[11px]">
-                0₫ – {formatVnd(MAX_SLIDER_PRICE)}+
-              </span>
             </div>
             <Slider.Root
               value={[minVal, maxVal]}
@@ -245,6 +242,9 @@ function FilterForm({
               </Slider.Control>
             </Slider.Root>
           </div>
+
+          {/* Vạch phân cách ở giữa */}
+          <div className="border-t border-rewear-border" />
 
           {/* Quick presets as rectangular boxes filling parent width */}
           <div className="grid grid-cols-2 gap-2 w-full sm:grid-cols-4">
