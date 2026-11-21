@@ -12,6 +12,7 @@ import { usePickupAddressForm } from '../hooks/use-pickup-address-form';
 type Props = {
   initial?: PickupLocationControllerSaveShop200['data']['location'] | null;
   shopId: string;
+  isEditing?: boolean;
   onBeforeSave: () => Promise<void>;
   onSaving: (saving: boolean) => void;
   onSaved: (response: PickupLocationControllerSaveShop200) => void;
@@ -20,6 +21,7 @@ type Props = {
 export function PickupAddressForm({
   initial,
   shopId,
+  isEditing = false,
   onBeforeSave,
   onSaving,
   onSaved,
@@ -153,11 +155,11 @@ export function PickupAddressForm({
         )}
       </fieldset>
 
-      {/* Right Column: Pickup point Summary Card (Figma 63:2256) (5 cols) */}
+      {/* Right Column: Pickup point / Context Summary Card (Figma 63:2256 / 63:2315) (5 cols) */}
       <aside className="space-y-4 lg:col-span-5 xl:col-span-5">
         <div className="bg-rewear-soft border-rewear-border space-y-6 border p-6">
           <h2 className="text-[24px] leading-[30px] font-semibold tracking-[-0.02em]">
-            Pickup point
+            {isEditing ? 'Keep existing shipments intact' : 'Pickup point'}
           </h2>
 
           <div className="text-rewear-muted space-y-2 text-sm leading-6">
@@ -172,22 +174,32 @@ export function PickupAddressForm({
             <p>{provinceName || 'Hanoi'}</p>
           </div>
 
+          <p className="text-rewear-muted text-xs leading-5">
+            {isEditing
+              ? 'The updated pickup address is used for future shipments after shipping setup is confirmed.'
+              : 'We’ll register this pickup point with the available shipping service. No separate carrier account needed.'}
+          </p>
+
           <div className="border-rewear-border border-t pt-4">
             <button
               type="submit"
               disabled={saving}
               className="bg-rewear-accent text-rewear-text hover:bg-rewear-accent/90 disabled:bg-rewear-border disabled:text-rewear-muted flex min-h-12 w-full items-center justify-center text-sm font-semibold transition disabled:cursor-not-allowed"
             >
-              {saving ? 'Saving pickup address…' : 'Create shop'}
+              {saving
+                ? 'Saving pickup address…'
+                : isEditing
+                  ? 'Save pickup address'
+                  : 'Create shop'}
             </button>
           </div>
 
           <div className="text-center">
             <Link
-              href="/selling/open"
+              href={isEditing ? '/selling' : '/selling/open'}
               className="text-rewear-muted hover:text-rewear-text text-xs underline"
             >
-              Back to shop details
+              {isEditing ? 'Back to shop settings' : 'Back to shop details'}
             </Link>
           </div>
         </div>

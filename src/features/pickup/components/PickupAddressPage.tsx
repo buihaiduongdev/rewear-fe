@@ -84,9 +84,15 @@ export function PickupAddressPage() {
 
   const activeAddress = savedLocation ?? selected.data?.data.location;
 
+  const isOnboardingQuery = searchParams.get('onboarding') === 'true';
+  const hasExistingLocation = Boolean(
+    selected.data?.data.location?.addressLine1,
+  );
+  const isSettingsMode = hasExistingLocation && !isOnboardingQuery && !isReady;
+
   return (
     <div className="bg-rewear-surface text-rewear-text min-h-dvh">
-      {/* Top Header (Figma 63:2256 / 63:2291) */}
+      {/* Top Header (Figma 63:2256 / 63:2291 / 63:2315) */}
       <header className="mx-auto flex min-h-20 w-full max-w-[1280px] items-center justify-between gap-6 px-4 text-sm leading-5 font-semibold md:px-8">
         <Link
           href="/"
@@ -103,13 +109,15 @@ export function PickupAddressPage() {
           />
         </Link>
         <span className="text-rewear-muted hidden sm:block">
-          {isReady ? 'Seller workspace' : 'Shop setup'}
+          {isSettingsMode || isReady ? 'Seller workspace' : 'Shop setup'}
         </span>
         <Link
-          href={isReady ? '/selling' : '/'}
+          href={isSettingsMode || isReady ? '/selling' : '/'}
           className="inline-flex min-h-11 items-center"
         >
-          {isReady ? 'Back to workspace' : 'Back to marketplace'}
+          {isSettingsMode || isReady
+            ? 'Back to workspace'
+            : 'Back to marketplace'}
         </Link>
       </header>
 
@@ -117,64 +125,66 @@ export function PickupAddressPage() {
         id="main-content"
         className="mx-auto w-full max-w-[1280px] space-y-8 px-4 py-6 md:p-12"
       >
-        {/* Stepper Timeline (Figma 63:2256 / 63:2291) */}
-        <div className="mx-auto max-w-[720px] py-2">
-          <div className="flex items-center">
-            {/* Step 1: Shop details (Completed) */}
-            <div className="flex flex-col items-center">
-              <div className="bg-rewear-text flex size-4 items-center justify-center rounded-full" />
-              <span className="text-rewear-text mt-2 text-xs font-semibold whitespace-nowrap">
-                Shop details
-              </span>
-            </div>
+        {/* Stepper Timeline (Only during initial onboarding: Figma 63:2256 / 63:2291) */}
+        {!isSettingsMode && (
+          <div className="mx-auto max-w-[720px] py-2">
+            <div className="flex items-center">
+              {/* Step 1: Shop details (Completed) */}
+              <div className="flex flex-col items-center">
+                <div className="bg-rewear-text flex size-4 items-center justify-center rounded-full" />
+                <span className="text-rewear-text mt-2 text-xs font-semibold whitespace-nowrap">
+                  Shop details
+                </span>
+              </div>
 
-            {/* Line 1 */}
-            <div className="bg-rewear-text mx-2 h-0.5 flex-1" />
+              {/* Line 1 */}
+              <div className="bg-rewear-text mx-2 h-0.5 flex-1" />
 
-            {/* Step 2: Pickup address */}
-            <div className="flex flex-col items-center">
+              {/* Step 2: Pickup address */}
+              <div className="flex flex-col items-center">
+                <div
+                  className={
+                    isReady
+                      ? 'bg-rewear-text flex size-4 items-center justify-center rounded-full'
+                      : 'border-rewear-text bg-rewear-accent flex size-4 items-center justify-center rounded-full border-2'
+                  }
+                />
+                <span className="text-rewear-text mt-2 text-xs font-semibold whitespace-nowrap">
+                  Pickup address
+                </span>
+              </div>
+
+              {/* Line 2 */}
               <div
                 className={
                   isReady
-                    ? 'bg-rewear-text flex size-4 items-center justify-center rounded-full'
-                    : 'border-rewear-text bg-rewear-accent flex size-4 items-center justify-center rounded-full border-2'
+                    ? 'bg-rewear-text mx-2 h-0.5 flex-1'
+                    : 'bg-rewear-border mx-2 h-0.5 flex-1'
                 }
               />
-              <span className="text-rewear-text mt-2 text-xs font-semibold whitespace-nowrap">
-                Pickup address
-              </span>
-            </div>
 
-            {/* Line 2 */}
-            <div
-              className={
-                isReady
-                  ? 'bg-rewear-text mx-2 h-0.5 flex-1'
-                  : 'bg-rewear-border mx-2 h-0.5 flex-1'
-              }
-            />
-
-            {/* Step 3: Shop ready */}
-            <div className="flex flex-col items-center">
-              <div
-                className={
-                  isReady
-                    ? 'border-rewear-text bg-rewear-accent flex size-4 items-center justify-center rounded-full border-2'
-                    : 'border-rewear-border bg-rewear-surface flex size-4 items-center justify-center rounded-full border'
-                }
-              />
-              <span
-                className={
-                  isReady
-                    ? 'text-rewear-text mt-2 text-xs font-semibold whitespace-nowrap'
-                    : 'text-rewear-muted mt-2 text-xs whitespace-nowrap'
-                }
-              >
-                Shop ready
-              </span>
+              {/* Step 3: Shop ready */}
+              <div className="flex flex-col items-center">
+                <div
+                  className={
+                    isReady
+                      ? 'border-rewear-text bg-rewear-accent flex size-4 items-center justify-center rounded-full border-2'
+                      : 'border-rewear-border bg-rewear-surface flex size-4 items-center justify-center rounded-full border'
+                  }
+                />
+                <span
+                  className={
+                    isReady
+                      ? 'text-rewear-text mt-2 text-xs font-semibold whitespace-nowrap'
+                      : 'text-rewear-muted mt-2 text-xs whitespace-nowrap'
+                  }
+                >
+                  Shop ready
+                </span>
+              </div>
             </div>
           </div>
-        </div>
+        )}
 
         {/* Step 3: Shop is Ready Screen (Figma 63:2291) */}
         {isReady ? (
@@ -218,16 +228,16 @@ export function PickupAddressPage() {
 
                 <div className="space-y-4 pt-2">
                   <Link
-                    href="/selling/packages"
+                    href="/selling"
                     className="bg-rewear-accent text-rewear-text hover:bg-rewear-accent/90 flex min-h-12 w-full items-center justify-center text-sm font-semibold transition"
                   >
-                    Create your first listing
+                    Open seller workspace
                   </Link>
                   <Link
-                    href="/selling"
+                    href={`/selling/pickup?shopId=${encodeURIComponent(shopId)}`}
                     className="text-rewear-muted hover:text-rewear-text block text-center text-xs font-semibold underline"
                   >
-                    Go to seller workspace
+                    Manage pickup address
                   </Link>
                 </div>
               </div>
@@ -257,11 +267,26 @@ export function PickupAddressPage() {
             </div>
           </div>
         ) : (
-          /* Step 2: Set pickup address Screen (Figma 63:2256) */
+          /* Set / Update pickup address Screen (Figma 63:2256 / 63:2315) */
           <div className="space-y-8">
-            <h1 className="text-[28px] leading-[34px] font-semibold tracking-[-0.02em] md:text-[40px] md:leading-[46px]">
-              Set your pickup address
-            </h1>
+            <div className="space-y-1">
+              {isSettingsMode && (
+                <p className="text-rewear-muted text-xs font-semibold tracking-wider uppercase">
+                  Shop settings / Pickup
+                </p>
+              )}
+              <h1 className="text-[28px] leading-[34px] font-semibold tracking-[-0.02em] md:text-[40px] md:leading-[46px]">
+                {isSettingsMode
+                  ? 'Update pickup address'
+                  : 'Set your pickup address'}
+              </h1>
+              {isSettingsMode && (
+                <p className="text-rewear-muted text-sm">
+                  Manage the dispatch warehouse and contact details for Giao
+                  Hàng Nhanh (GHN) carrier pickup.
+                </p>
+              )}
+            </div>
 
             {/* Error banner */}
             {!!error && (
@@ -306,18 +331,21 @@ export function PickupAddressPage() {
               </p>
             )}
 
-            {/* Main Form + Preview Grid (Figma 63:2256) */}
+            {/* Main Form + Preview Grid (Figma 63:2256 / 63:2315) */}
             {enabled && !!shopId && !selected.error && (
               <PickupAddressForm
-                key={`${session?.user.id}:${shopId}`}
+                key={`${session?.user.id}:${shopId}:${hasExistingLocation ? 'edit' : 'new'}`}
                 initial={selected.data?.data.location}
                 shopId={shopId}
+                isEditing={isSettingsMode}
                 onBeforeSave={() => client.cancelQueries({ queryKey: key })}
                 onSaving={setSaving}
                 onSaved={(response) => {
                   client.setQueryData(key, response);
                   setSavedLocation(response.data.location);
-                  setIsReady(true);
+                  if (!isSettingsMode) {
+                    setIsReady(true);
+                  }
                 }}
               />
             )}

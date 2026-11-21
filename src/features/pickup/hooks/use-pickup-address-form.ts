@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { useAdministrativeDivisions } from '@/modules/address';
 import type { PickupLocationControllerSaveShop200 } from '@/shared/api/models';
@@ -37,6 +37,7 @@ export function usePickupAddressForm({
     setValue,
     control,
     clearErrors,
+    reset,
     formState: { errors },
   } = useForm<PickupAddressFormValues>({
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -50,6 +51,18 @@ export function usePickupAddressForm({
     },
     mode: 'onTouched',
   });
+
+  useEffect(() => {
+    if (initial) {
+      reset({
+        contactName: initial.contactName ?? '',
+        phone: initial.phone ?? '',
+        addressLine1: initial.addressLine1 ?? '',
+        provinceCode: initial.provinceCode ?? '',
+        wardCode: initial.wardCode ?? '',
+      });
+    }
+  }, [initial, reset]);
 
   const provinceCode = useWatch({ control, name: 'provinceCode' }) ?? '';
   const wardCode = useWatch({ control, name: 'wardCode' }) ?? '';

@@ -195,12 +195,6 @@ export function SellerDashboardPage() {
                 Overview
               </Link>
               <Link
-                href="/selling/packages"
-                className="text-rewear-muted hover:text-rewear-text flex min-h-11 items-center"
-              >
-                Listing packages
-              </Link>
-              <Link
                 href={
                   shopId
                     ? `/selling/pickup?shopId=${encodeURIComponent(shopId)}`
@@ -282,7 +276,7 @@ export function SellerDashboardPage() {
               Pickup Settings
             </Link>
             <Link
-              href="/selling/packages"
+              href="/selling/new"
               className="bg-rewear-accent text-rewear-text hover:bg-rewear-accent/90 flex min-h-10 items-center gap-2 px-4 text-xs font-semibold transition"
             >
               <Plus size={14} />+ List New Archive Piece

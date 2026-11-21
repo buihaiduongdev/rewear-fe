@@ -139,7 +139,9 @@ export function OpenShopPage() {
         }
       }
 
-      router.push(`/selling/pickup?shopId=${encodeURIComponent(newShopId)}`);
+      router.push(
+        `/selling/pickup?shopId=${encodeURIComponent(newShopId)}&onboarding=true`,
+      );
     } catch {
       // Error handled by createShop.error
     }
