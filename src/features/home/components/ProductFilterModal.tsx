@@ -94,7 +94,7 @@ function FilterForm({
 
       <div className="space-y-4 pt-2">
         {/* Category Field */}
-        <div className="bg-rewear-card flex h-20 flex-col justify-between p-3 px-4">
+        <div className="bg-rewear-soft border-rewear-border flex h-20 flex-col justify-between border p-3 px-4">
           <label
             htmlFor="filter-category"
             className="text-rewear-text text-sm leading-5 font-semibold"
@@ -117,7 +117,7 @@ function FilterForm({
         </div>
 
         {/* Size Field */}
-        <div className="bg-rewear-card flex h-20 flex-col justify-between p-3 px-4">
+        <div className="bg-rewear-soft border-rewear-border flex h-20 flex-col justify-between border p-3 px-4">
           <label
             htmlFor="filter-size"
             className="text-rewear-text text-sm leading-5 font-semibold"
@@ -140,7 +140,7 @@ function FilterForm({
         </div>
 
         {/* Condition Field */}
-        <div className="bg-rewear-card flex h-20 flex-col justify-between p-3 px-4">
+        <div className="bg-rewear-soft border-rewear-border flex h-20 flex-col justify-between border p-3 px-4">
           <label
             htmlFor="filter-condition"
             className="text-rewear-text text-sm leading-5 font-semibold"
@@ -163,7 +163,7 @@ function FilterForm({
         </div>
 
         {/* Price Section: Min - Max + Quick Presets */}
-        <div className="bg-rewear-card flex flex-col gap-3 p-3 px-4">
+        <div className="bg-rewear-soft border-rewear-border flex flex-col gap-3 border p-3 px-4">
           <div className="flex items-center justify-between">
             <span className="text-rewear-text text-sm leading-5 font-semibold">
               Price (₫)

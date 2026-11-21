@@ -321,3 +321,17 @@ Ghi một mục cho mỗi task có dùng AI. Cập nhật liên kết PR/commit 
 - **Phần tự làm hoặc đã chỉnh sửa:** Đối chiếu với Figma Node `48:143` xác nhận thiết kế gốc không có nút clear trong modal.
 - **Cách kiểm chứng:** Chạy `pnpm check` (pass TypeScript và ESLint 0 lỗi), `pnpm test` (5/5 suites, 9/9 unit tests pass 100%), `pnpm build` (compile và static prerender 19/19 routes thành công).
 - **Minh chứng:** Commit trên branch `feat/seller-dashboard` thuộc [PR #15](https://github.com/buihaiduongdev/rewear-fe/pull/15) (rewear-fe).
+
+### 2026-11-21 — Tối ưu UX thanh tìm kiếm Search và chuẩn hóa token màu bg-rewear-soft
+
+- **Người thực hiện:** Bùi Hải Dương.
+- **Công cụ:** Antigravity (Gemini 3.8 Flash).
+- **Mục đích và phạm vi:** Tối ưu hóa UX của thanh tìm kiếm Search trên trang `/products`, giải quyết triệt để vấn đề ô tìm kiếm bị chìm/hòa vào nền trắng do thiếu affordance; sửa lỗi class màu `bg-rewear-card` không tồn tại trong cấu hình Tailwind v4 sang `bg-rewear-soft` (`#f3f3f5`) kèm viền `border border-rewear-border` và tương tác `focus-within:border-rewear-text`.
+- **Prompt chính:** search bị hoà vào background có tốt ux -> người dùng chọn Phương án 1 (chuẩn Figma + viền + focus contrast).
+- **Phần AI hỗ trợ:**
+  - Bổ sung `--color-rewear-card: #f3f3f5;` vào `@theme inline` trong [globals.css](file:///Users/buihaiduong/Workspace/projects/rewear/rewear-fe/src/app/globals.css).
+  - Tinh chỉnh ô Search trong [ProductsPage.tsx](file:///Users/buihaiduong/Workspace/projects/rewear/rewear-fe/src/features/home/components/ProductsPage.tsx): gán `bg-rewear-soft border border-rewear-border focus-within:border-rewear-text transition-colors`, cập nhật màu các filter pill tags và menu sort.
+  - Chuẩn hóa các trường input trong [ProductFilterModal.tsx](file:///Users/buihaiduong/Workspace/projects/rewear/rewear-fe/src/features/home/components/ProductFilterModal.tsx) và nút trang trong [pagination.tsx](file:///Users/buihaiduong/Workspace/projects/rewear/rewear-fe/src/shared/components/ui/pagination.tsx).
+- **Phần tự làm hoặc đã chỉnh sửa:** Đánh giá affordance & accessibility theo chuẩn WCAG và Figma Node `53:1062`.
+- **Cách kiểm chứng:** Chạy `pnpm check` (pass TypeScript và ESLint 0 lỗi), `pnpm test` (5/5 suites, 9/9 unit tests pass 100%), `pnpm build` (compile và static prerender 19/19 routes thành công).
+- **Minh chứng:** Commit trên branch `feat/seller-dashboard` thuộc [PR #15](https://github.com/buihaiduongdev/rewear-fe/pull/15) (rewear-fe).

@@ -99,7 +99,7 @@ function PaginationLink({
         'flex h-10 min-w-10 cursor-pointer items-center justify-center px-4 text-sm font-normal transition-colors select-none',
         isActive
           ? 'bg-rewear-accent text-rewear-text font-normal'
-          : 'bg-rewear-card text-rewear-text hover:bg-black/5',
+          : 'bg-rewear-soft text-rewear-text hover:bg-black/5',
         disabled && 'pointer-events-none cursor-default opacity-45',
         className,
       )}

@@ -202,7 +202,7 @@ export function ProductsPage() {
                 e.preventDefault();
                 updateFilters({ search: localSearch.trim() || undefined });
               }}
-              className="bg-rewear-card flex h-20 w-full shrink-0 flex-col justify-between p-3 px-4 md:w-[440px]"
+              className="bg-rewear-soft border-rewear-border focus-within:border-rewear-text flex h-20 w-full shrink-0 flex-col justify-between border p-3 px-4 transition-colors md:w-[440px]"
             >
               <label
                 htmlFor="catalog-search"
@@ -264,9 +264,9 @@ export function ProductsPage() {
                           updateFilters({ sortBy: opt.value || undefined });
                           setIsSortOpen(false);
                         }}
-                        className={`w-full cursor-pointer px-3 py-2 text-left text-sm transition-colors hover:bg-rewear-card ${
+                        className={`w-full cursor-pointer px-3 py-2 text-left text-sm transition-colors hover:bg-rewear-soft ${
                           (sortBy || '') === opt.value
-                            ? 'bg-rewear-card text-rewear-text font-semibold'
+                            ? 'bg-rewear-soft text-rewear-text font-semibold'
                             : 'text-rewear-muted'
                         }`}
                       >
@@ -286,7 +286,7 @@ export function ProductsPage() {
                 Filtered by:
               </span>
               {search && (
-                <span className="bg-rewear-card text-rewear-text inline-flex items-center gap-1.5 rounded-full px-3 py-1 font-medium">
+                <span className="bg-rewear-soft text-rewear-text inline-flex items-center gap-1.5 rounded-full px-3 py-1 font-medium">
                   Search: “{search}”
                   <button
                     type="button"
@@ -302,7 +302,7 @@ export function ProductsPage() {
                 </span>
               )}
               {activeCategory && (
-                <span className="bg-rewear-card text-rewear-text inline-flex items-center gap-1.5 rounded-full px-3 py-1 font-medium">
+                <span className="bg-rewear-soft text-rewear-text inline-flex items-center gap-1.5 rounded-full px-3 py-1 font-medium">
                   Category: {activeCategory.name}
                   <button
                     type="button"
@@ -315,7 +315,7 @@ export function ProductsPage() {
                 </span>
               )}
               {size && (
-                <span className="bg-rewear-card text-rewear-text inline-flex items-center gap-1.5 rounded-full px-3 py-1 font-medium">
+                <span className="bg-rewear-soft text-rewear-text inline-flex items-center gap-1.5 rounded-full px-3 py-1 font-medium">
                   Size: {size}
                   <button
                     type="button"
@@ -328,7 +328,7 @@ export function ProductsPage() {
                 </span>
               )}
               {condition && (
-                <span className="bg-rewear-card text-rewear-text inline-flex items-center gap-1.5 rounded-full px-3 py-1 font-medium">
+                <span className="bg-rewear-soft text-rewear-text inline-flex items-center gap-1.5 rounded-full px-3 py-1 font-medium">
                   Condition:{' '}
                   {PRODUCT_CONDITION_LABELS[
                     condition as keyof typeof PRODUCT_CONDITION_LABELS
@@ -344,7 +344,7 @@ export function ProductsPage() {
                 </span>
               )}
               {(minPrice || maxPrice) && (
-                <span className="bg-rewear-card text-rewear-text inline-flex items-center gap-1.5 rounded-full px-3 py-1 font-medium">
+                <span className="bg-rewear-soft text-rewear-text inline-flex items-center gap-1.5 rounded-full px-3 py-1 font-medium">
                   Price:{' '}
                   {minPrice && maxPrice
                     ? `${Number(minPrice).toLocaleString('vi-VN')}₫ – ${Number(maxPrice).toLocaleString('vi-VN')}₫`
@@ -364,7 +364,7 @@ export function ProductsPage() {
                 </span>
               )}
               {activeShop && (
-                <span className="bg-rewear-card text-rewear-text inline-flex items-center gap-1.5 rounded-full px-3 py-1 font-medium">
+                <span className="bg-rewear-soft text-rewear-text inline-flex items-center gap-1.5 rounded-full px-3 py-1 font-medium">
                   Shop: {activeShop.name}
                   <button
                     type="button"
