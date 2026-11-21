@@ -248,3 +248,17 @@ Ghi một mục cho mỗi task có dùng AI. Cập nhật liên kết PR/commit 
 - **Phần tự làm hoặc đã chỉnh sửa:** Định hướng cấu trúc flex và kích thước icon đảm bảo nét vẽ tương đồng với font SemiBold của DM Sans.
 - **Cách kiểm chứng:** Chạy `pnpm check` (pass TypeScript và ESLint 0 lỗi), `pnpm test` (5/5 suites, 9/9 unit tests pass 100%), `pnpm build` (compile và static prerender 19/19 routes thành công).
 - **Minh chứng:** Commit trên branch `feat/seller-dashboard` thuộc [PR #15](https://github.com/buihaiduongdev/rewear-fe/pull/15) (rewear-fe).
+
+### 2026-11-21 — Tích hợp Modal Trợ giúp mua hàng và Đổi trả (Figma 67:419 / 48:114) vào Footer
+
+- **Người thực hiện:** Bùi Hải Dương.
+- **Công cụ:** Antigravity (Gemini 3.8 Flash) kết nối Figwright MCP Server.
+- **Mục đích và phạm vi:** Kết nối các liên kết ở Footer (`Help`, `Returns`, `Privacy`) mở trực tiếp Modal thông tin chính sách chuẩn thiết kế Figma Node `48:114` (*Buying secondhand*) và Node `71:2174` thuộc Section `03 · Shared / Buying help` (Node `67:419`); loại bỏ các liên kết chết (404), giúp người mua dễ dàng tra cứu quyền lợi đổi trả trong 72h và cam kết bảo vệ thanh toán ký quỹ (escrow).
+- **Prompt chính:** https://www.figma.com/design/xjyTlIecBwx0SdTILgBkFL/Re.wear-design?node-id=67-419&t=S07OybIvWfKNzBCm-11 footer thì cho xem các modal này nhỉ.
+- **Phần AI hỗ trợ:**
+  - Khảo sát trực tiếp cấu trúc cây node Figma qua Figwright MCP trên Node `67:419`, `48:114` và `71:2174`: trích xuất chính xác toàn bộ nội dung bản quyền, thông báo kiểm tra đồ cũ trước khi mua (*Check photos, measurements and disclosed flaws*), thời hạn báo cáo sự cố 72h (*Within 72h of delivery*), chính sách hoàn tiền sau xác minh (*Returns & refunds*).
+  - Khởi tạo [PolicyModals.tsx](file:///Users/buihaiduong/Workspace/projects/rewear/rewear-fe/src/shared/components/marketplace/PolicyModals.tsx): triển khai Modal `Buying secondhand` chuẩn Figma `48:114` và Modal `Privacy policy` theo ngôn ngữ thiết kế tối giản góc cạnh của RE.WEAR.
+  - Cập nhật [MarketplaceFooter.tsx](file:///Users/buihaiduong/Workspace/projects/rewear/rewear-fe/src/shared/components/marketplace/MarketplaceFooter.tsx): chuyển các thẻ `Link` thành các nút bấm tương tác mở Modal tương ứng.
+- **Phần tự làm hoặc đã chỉnh sửa:** Định hướng trải nghiệm tại chỗ không reload trang, tối ưu hóa hiển thị trên cả desktop và mobile.
+- **Cách kiểm chứng:** Chạy `pnpm check` (pass TypeScript và ESLint 0 lỗi), `pnpm test` (5/5 suites, 9/9 unit tests pass 100%), `pnpm build` (compile và static prerender 19/19 routes thành công).
+- **Minh chứng:** Commit trên branch `feat/seller-dashboard` thuộc [PR #15](https://github.com/buihaiduongdev/rewear-fe/pull/15) (rewear-fe).
