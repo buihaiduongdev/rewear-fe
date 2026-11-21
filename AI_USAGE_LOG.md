@@ -346,3 +346,17 @@ Ghi một mục cho mỗi task có dùng AI. Cập nhật liên kết PR/commit 
 - **Phần tự làm hoặc đã chỉnh sửa:** Đảm bảo nhãn accessibility cho screen reader (`sr-only`), kiểm tra responsive trên mobile và desktop.
 - **Cách kiểm chứng:** Chạy `pnpm check` (pass TypeScript và ESLint 0 lỗi), `pnpm test` (5/5 suites, 9/9 unit tests pass 100%), `pnpm build` (compile và static prerender 19/19 routes thành công).
 - **Minh chứng:** Commit trên branch `feat/seller-dashboard` thuộc [PR #15](https://github.com/buihaiduongdev/rewear-fe/pull/15) (rewear-fe).
+
+### 2026-11-21 — Khởi tạo hook dùng chung useDebounce và áp dụng Instant Search cho ô tìm kiếm
+
+- **Người thực hiện:** Bùi Hải Dương.
+- **Công cụ:** Antigravity (Gemini 3.8 Flash).
+- **Mục đích và phạm vi:** Tạo hook dùng chung toàn cục `useDebounce` trong `src/shared/hooks/` phục vụ lọc dữ liệu thời gian thực; áp dụng cơ chế tự động tìm kiếm sau 350ms ngừng gõ kết hợp Enter tức thì cho ô Search trên trang `/products`, viết bộ unit test toàn diện cho hook.
+- **Prompt chính:** ok thêm hook debounce cho share global nhỉ.
+- **Phần AI hỗ trợ:**
+  - Khởi tạo [use-debounce.ts](file:///Users/buihaiduong/Workspace/projects/rewear/rewear-fe/src/shared/hooks/use-debounce.ts) và barrel export [index.ts](file:///Users/buihaiduong/Workspace/projects/rewear/rewear-fe/src/shared/hooks/index.ts).
+  - Viết 3 unit tests cho hook trong [use-debounce.test.ts](file:///Users/buihaiduong/Workspace/projects/rewear/rewear-fe/tests/use-debounce.test.ts) (kiểm tra trả về giá trị tức thì, debounce đúng thời gian delay và tự hủy timer cũ khi gõ nhanh liên tục).
+  - Tích hợp hook vào [ProductsPage.tsx](file:///Users/buihaiduong/Workspace/projects/rewear/rewear-fe/src/features/home/components/ProductsPage.tsx): tự động gọi `updateFilters` sau 350ms không cần ấn Enter, đồng thời giữ nguyên hỗ trợ bấm Enter hoặc nút Clear `✕` phản hồi lập tức.
+- **Phần tự làm hoặc đã chỉnh sửa:** Thiết kế cờ `isInitialMount` để tránh trigger lọc thừa khi vừa mở trang lần đầu.
+- **Cách kiểm chứng:** Chạy `pnpm check` (pass TypeScript và ESLint 0 lỗi), `pnpm test` (6/6 suites, 12/12 unit tests pass 100%), `pnpm build` (compile và static prerender 19/19 routes thành công).
+- **Minh chứng:** Commit trên branch `feat/seller-dashboard` thuộc [PR #15](https://github.com/buihaiduongdev/rewear-fe/pull/15) (rewear-fe).

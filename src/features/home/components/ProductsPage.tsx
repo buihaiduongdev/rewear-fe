@@ -3,6 +3,8 @@
 import { useEffect, useRef, useState } from 'react';
 import { Search } from 'lucide-react';
 
+import { useDebounce } from '@/shared/hooks';
+
 import { CartLink } from '@/modules/cart/components/CartLink';
 import { MarketplaceFooter } from '@/shared/components/marketplace/MarketplaceFooter';
 import { MarketplaceHeader } from '@/shared/components/marketplace/MarketplaceHeader';
@@ -85,6 +87,8 @@ export function ProductsPage() {
   const [previewHandle] = useState(() => Dialog.createHandle<Product>());
   const [prevSearch, setPrevSearch] = useState(search);
   const [localSearch, setLocalSearch] = useState(search);
+  const debouncedSearch = useDebounce(localSearch.trim(), 350);
+  const isInitialMount = useRef(true);
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
   const [isSortOpen, setIsSortOpen] = useState(false);
   const sortRef = useRef<HTMLDivElement>(null);
@@ -93,6 +97,18 @@ export function ProductsPage() {
     setPrevSearch(search);
     setLocalSearch(search);
   }
+
+  // Auto-update filter when user pauses typing
+  useEffect(() => {
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+      return;
+    }
+    const current = (search ?? '').trim();
+    if (debouncedSearch !== current) {
+      updateFilters({ search: debouncedSearch || undefined });
+    }
+  }, [debouncedSearch, search, updateFilters]);
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
