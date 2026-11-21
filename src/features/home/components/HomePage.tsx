@@ -12,6 +12,7 @@ import { MarketplaceHeader } from '@/shared/components/marketplace/MarketplaceHe
 import { Button } from '@/shared/components/ui/button';
 import type { Product } from '@/shared/utils/product';
 import { Dialog } from '@base-ui/react/dialog';
+import { ArrowUpRight } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 
 import { useHomeCatalog } from '../hooks/use-home-catalog';
@@ -105,16 +106,28 @@ export function HomePage() {
               {!isAuthenticated ? (
                 <Link
                   href="/register"
-                  className="hidden shrink-0 text-sm leading-5 font-semibold hover:underline md:block"
+                  className="hidden shrink-0 items-center gap-1 text-sm leading-5 font-semibold hover:underline md:inline-flex"
                 >
-                  Start selling <span aria-hidden="true">↗</span>
+                  Start selling
+                  <ArrowUpRight
+                    size={16}
+                    strokeWidth={2.5}
+                    aria-hidden="true"
+                    className="shrink-0"
+                  />
                 </Link>
               ) : (
                 <Link
                   href="/selling"
-                  className="hidden shrink-0 text-sm leading-5 font-semibold hover:underline md:block"
+                  className="hidden shrink-0 items-center gap-1 text-sm leading-5 font-semibold hover:underline md:inline-flex"
                 >
-                  Seller workspace <span aria-hidden="true">↗</span>
+                  Seller workspace
+                  <ArrowUpRight
+                    size={16}
+                    strokeWidth={2.5}
+                    aria-hidden="true"
+                    className="shrink-0"
+                  />
                 </Link>
               )}
             </div>

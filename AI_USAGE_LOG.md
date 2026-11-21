@@ -235,3 +235,16 @@ Ghi một mục cho mỗi task có dùng AI. Cập nhật liên kết PR/commit 
 - **Phần tự làm hoặc đã chỉnh sửa:** Định hướng chuyển đổi toàn bộ footer về chuẩn tối giản thống nhất của dự án.
 - **Cách kiểm chứng:** Chạy `pnpm check` (pass TypeScript và ESLint 0 lỗi), `pnpm test` (5/5 suites, 9/9 unit tests pass 100%), `pnpm build` (compile và static prerender 19/19 routes thành công).
 - **Minh chứng:** Commit trên branch `feat/seller-dashboard` thuộc [PR #15](https://github.com/buihaiduongdev/rewear-fe/pull/15) (rewear-fe).
+
+### 2026-11-21 — Đồng bộ icon mũi tên Start selling theo Figma Node 53:644
+
+- **Người thực hiện:** Bùi Hải Dương.
+- **Công cụ:** Antigravity (Gemini 3.8 Flash) kết nối Figwright MCP Server.
+- **Mục đích và phạm vi:** Thay thế ký tự Unicode `↗` bị vỡ/lệch font trên trình duyệt bằng vector icon `ArrowUpRight` (kích thước 16px, `strokeWidth: 2.5`) khớp chính xác với thiết kế Figma Node `53:644` (*Start selling  ↗*).
+- **Prompt chính:** https://www.figma.com/design/xjyTlIecBwx0SdTILgBkFL/Re.wear-design?node-id=53-644&t=S07OybIvWfKNzBCm-11 dùng đúng icon mũi tên.
+- **Phần AI hỗ trợ:**
+  - Kiểm tra trực tiếp qua Figwright MCP trên node `53:644` và xuất ảnh chụp kiểm chứng (`media_0.png`): xác định độ dày nét, hướng nghiêng góc 45 độ và vị trí căn hàng ngang với chữ `Start selling`.
+  - Cập nhật [HomePage.tsx](file:///Users/buihaiduong/Workspace/projects/rewear/rewear-fe/src/features/home/components/HomePage.tsx): tích hợp icon `ArrowUpRight` từ `lucide-react` kèm căn chỉnh `inline-flex items-center gap-1`.
+- **Phần tự làm hoặc đã chỉnh sửa:** Định hướng cấu trúc flex và kích thước icon đảm bảo nét vẽ tương đồng với font SemiBold của DM Sans.
+- **Cách kiểm chứng:** Chạy `pnpm check` (pass TypeScript và ESLint 0 lỗi), `pnpm test` (5/5 suites, 9/9 unit tests pass 100%), `pnpm build` (compile và static prerender 19/19 routes thành công).
+- **Minh chứng:** Commit trên branch `feat/seller-dashboard` thuộc [PR #15](https://github.com/buihaiduongdev/rewear-fe/pull/15) (rewear-fe).
