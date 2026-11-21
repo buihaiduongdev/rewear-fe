@@ -335,3 +335,14 @@ Ghi một mục cho mỗi task có dùng AI. Cập nhật liên kết PR/commit 
 - **Phần tự làm hoặc đã chỉnh sửa:** Đánh giá affordance & accessibility theo chuẩn WCAG và Figma Node `53:1062`.
 - **Cách kiểm chứng:** Chạy `pnpm check` (pass TypeScript và ESLint 0 lỗi), `pnpm test` (5/5 suites, 9/9 unit tests pass 100%), `pnpm build` (compile và static prerender 19/19 routes thành công).
 - **Minh chứng:** Commit trên branch `feat/seller-dashboard` thuộc [PR #15](https://github.com/buihaiduongdev/rewear-fe/pull/15) (rewear-fe).
+
+### 2026-11-21 — Tinh gọn ô Search thành thanh tìm kiếm 1 dòng (48px) kèm icon kính lúp
+
+- **Người thực hiện:** Bùi Hải Dương.
+- **Công cụ:** Antigravity (Gemini 3.8 Flash).
+- **Mục đích và phạm vi:** Thu gọn ô tìm kiếm Search trên trang `/products` từ khối 80px (`h-20`) cồng kềnh với label trùng lặp thành thanh tìm kiếm 1 dòng chuẩn mực 48px (`h-12`), bổ sung icon kính lúp (`Search` từ `lucide-react`) và chuyển label sang `sr-only` cho accessibility.
+- **Prompt chính:** chắc bỏ label khỏi field nhỉ, nhìn field to quá.
+- **Phần AI hỗ trợ:** Cập nhật [ProductsPage.tsx](file:///Users/buihaiduong/Workspace/projects/rewear/rewear-fe/src/features/home/components/ProductsPage.tsx), tích hợp icon kính lúp và bố cục 1 dòng gọn gàng, cân đối hoàn hảo với các nút `Filters` và `Sort`.
+- **Phần tự làm hoặc đã chỉnh sửa:** Đảm bảo nhãn accessibility cho screen reader (`sr-only`), kiểm tra responsive trên mobile và desktop.
+- **Cách kiểm chứng:** Chạy `pnpm check` (pass TypeScript và ESLint 0 lỗi), `pnpm test` (5/5 suites, 9/9 unit tests pass 100%), `pnpm build` (compile và static prerender 19/19 routes thành công).
+- **Minh chứng:** Commit trên branch `feat/seller-dashboard` thuộc [PR #15](https://github.com/buihaiduongdev/rewear-fe/pull/15) (rewear-fe).

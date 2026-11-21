@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
+import { Search } from 'lucide-react';
 
 import { CartLink } from '@/modules/cart/components/CartLink';
 import { MarketplaceFooter } from '@/shared/components/marketplace/MarketplaceFooter';
@@ -202,37 +203,36 @@ export function ProductsPage() {
                 e.preventDefault();
                 updateFilters({ search: localSearch.trim() || undefined });
               }}
-              className="bg-rewear-soft border-rewear-border focus-within:border-rewear-text flex h-20 w-full shrink-0 flex-col justify-between border p-3 px-4 transition-colors md:w-[440px]"
+              className="bg-rewear-soft border-rewear-border focus-within:border-rewear-text flex h-12 w-full shrink-0 items-center gap-3 border px-4 transition-colors md:w-[420px]"
             >
-              <label
-                htmlFor="catalog-search"
-                className="text-rewear-text text-sm leading-5 font-semibold"
-              >
-                Search
+              <label htmlFor="catalog-search" className="sr-only">
+                Search clothing, brand or seller
               </label>
-              <div className="flex items-center justify-between gap-2">
-                <input
-                  id="catalog-search"
-                  type="text"
-                  placeholder="Clothing, brand or seller"
-                  value={localSearch}
-                  onChange={(e) => setLocalSearch(e.target.value)}
-                  className="text-rewear-text placeholder:text-rewear-muted w-full bg-transparent text-base leading-6 outline-none"
-                />
-                {localSearch && (
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setLocalSearch('');
-                      updateFilters({ search: undefined });
-                    }}
-                    className="text-rewear-muted hover:text-rewear-text cursor-pointer text-xs"
-                    aria-label="Clear search"
-                  >
-                    ✕
-                  </button>
-                )}
-              </div>
+              <Search
+                aria-hidden="true"
+                className="text-rewear-muted size-4 shrink-0"
+              />
+              <input
+                id="catalog-search"
+                type="text"
+                placeholder="Clothing, brand or seller"
+                value={localSearch}
+                onChange={(e) => setLocalSearch(e.target.value)}
+                className="text-rewear-text placeholder:text-rewear-muted w-full bg-transparent text-sm leading-5 outline-none"
+              />
+              {localSearch && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setLocalSearch('');
+                    updateFilters({ search: undefined });
+                  }}
+                  className="text-rewear-muted hover:text-rewear-text cursor-pointer text-xs"
+                  aria-label="Clear search"
+                >
+                  ✕
+                </button>
+              )}
             </form>
 
             {/* Filter controls - Figma 53:1065 */}
