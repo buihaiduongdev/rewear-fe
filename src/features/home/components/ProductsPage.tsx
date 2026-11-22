@@ -156,7 +156,7 @@ export function ProductsPage() {
       />
       <main
         id="main-content"
-        className="mx-auto w-full max-w-[1536px] px-4 py-8 md:px-12 md:py-12"
+        className="mx-auto w-full max-w-[1536px] flex-1 px-4 py-8 md:px-12 md:py-12"
       >
         <section
           id="catalog-section"

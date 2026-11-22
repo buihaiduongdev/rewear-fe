@@ -66,7 +66,7 @@ export function HomePage() {
       />
       <main
         id="main-content"
-        className="mx-auto flex w-full max-w-[1536px] flex-col gap-6 px-4 py-4 md:gap-[88px] md:px-12 md:py-12"
+        className="mx-auto flex w-full max-w-[1536px] flex-1 flex-col gap-6 px-4 py-4 md:gap-[88px] md:px-12 md:py-12"
       >
         <section
           aria-labelledby="home-title"

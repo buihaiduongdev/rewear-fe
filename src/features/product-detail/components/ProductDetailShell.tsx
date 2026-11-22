@@ -12,7 +12,7 @@ export function ProductDetailShell({ children }: { children: ReactNode }) {
   const router = useRouter();
 
   return (
-    <div className="bg-rewear-surface text-rewear-text min-h-dvh pb-24 [--foreground:var(--color-rewear-text)] [--muted-foreground:var(--color-rewear-muted)] lg:pb-0">
+    <div className="bg-rewear-surface text-rewear-text flex min-h-dvh flex-col has-[[data-product-purchase-bar]]:pb-24 [--foreground:var(--color-rewear-text)] [--muted-foreground:var(--color-rewear-muted)] lg:has-[[data-product-purchase-bar]]:pb-0">
       <MarketplaceHeader
         cartAction={<CartLink />}
         search=""
@@ -20,7 +20,7 @@ export function ProductDetailShell({ children }: { children: ReactNode }) {
           router.push(`/products?search=${encodeURIComponent(value)}`)
         }
       />
-      <main id="main-content">{children}</main>
+      <main id="main-content" className="flex-1">{children}</main>
       <MarketplaceFooter showOnMobile />
     </div>
   );

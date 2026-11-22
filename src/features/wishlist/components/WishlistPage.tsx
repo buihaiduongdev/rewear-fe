@@ -47,7 +47,7 @@ export function WishlistPage() {
   };
 
   return (
-    <div className="bg-rewear-surface text-rewear-text min-h-dvh">
+    <div className="bg-rewear-surface text-rewear-text flex min-h-dvh flex-col">
       <MarketplaceHeader
         cartAction={<CartLink />}
         search=""
@@ -58,7 +58,7 @@ export function WishlistPage() {
 
       <main
         id="main-content"
-        className="mx-auto min-h-[60vh] max-w-[1280px] px-4 pt-4 pb-12 md:px-12 md:py-12"
+        className="mx-auto w-full max-w-[1280px] flex-1 px-4 pt-4 pb-12 md:px-12 md:py-12"
       >
         <div className="border-rewear-border/60 flex flex-col gap-2 border-b pb-6 md:flex-row md:items-baseline md:justify-between">
           <h1 className="text-[28px] leading-[34px] font-semibold tracking-[-0.02em] md:text-[40px] md:leading-[46px]">
@@ -218,7 +218,7 @@ export function WishlistPage() {
         )}
       </main>
 
-      <footer className="text-rewear-muted mx-auto hidden max-w-[1280px] justify-between px-12 py-6 text-sm font-semibold md:flex">
+      <footer className="text-rewear-muted mx-auto hidden w-full max-w-[1280px] justify-between px-12 py-6 text-sm font-semibold md:flex">
         <span>© 2026 RE.WEAR</span>
         <span className="text-rewear-text">Help &amp; returns</span>
       </footer>

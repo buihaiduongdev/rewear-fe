@@ -236,7 +236,7 @@ export function CheckoutPage() {
   };
 
   return (
-    <div className="bg-rewear-surface text-rewear-text min-h-dvh">
+    <div className="bg-rewear-surface text-rewear-text flex min-h-dvh flex-col">
       <MarketplaceHeader
         cartAction={<CartLink />}
         search=""
@@ -246,7 +246,7 @@ export function CheckoutPage() {
       />
       <main
         id="main-content"
-        className="mx-auto max-w-[1280px] space-y-6 px-4 py-4 md:space-y-8 md:px-12 md:py-12"
+        className="mx-auto w-full max-w-[1280px] flex-1 space-y-6 px-4 py-4 md:space-y-8 md:px-12 md:py-12"
       >
         <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
           <div className="space-y-1">
@@ -572,7 +572,7 @@ export function CheckoutPage() {
           onSelectMethod={setPaymentMethod}
         />
       </main>
-      <footer className="text-rewear-muted mx-auto hidden max-w-[1280px] justify-between px-12 py-6 text-sm font-semibold md:flex">
+      <footer className="text-rewear-muted mx-auto hidden w-full max-w-[1280px] justify-between px-12 py-6 text-sm font-semibold md:flex">
         <span>© 2026 RE.WEAR</span>
         <span className="text-rewear-text">Help &amp; returns</span>
       </footer>

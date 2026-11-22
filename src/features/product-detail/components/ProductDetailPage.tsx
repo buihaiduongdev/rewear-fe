@@ -497,7 +497,7 @@ export function ProductDetailPage({ id }: { id: string }) {
       )}
 
       {/* 5. Mobile Sticky Bottom Action Bar (Figma 48:2655) */}
-      <div className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-rewear-border p-3.5 px-4 flex items-center justify-between gap-3 shadow-2xl">
+      <div data-product-purchase-bar className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-rewear-border p-3.5 px-4 flex items-center justify-between gap-3 shadow-2xl">
         <div className="min-w-0">
           <span className="text-xs text-rewear-muted uppercase font-medium block">
             {product.size ? `Size ${product.size}` : 'Price'}

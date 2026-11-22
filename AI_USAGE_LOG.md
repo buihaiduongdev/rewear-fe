@@ -629,3 +629,15 @@ Ghi một mục cho mỗi task có dùng AI. Cập nhật liên kết PR/commit 
 - **Cách kiểm chứng:** Kiểm tra trực tiếp ảnh nguồn và `git diff --check`; không chạy test theo yêu cầu người dùng.
 - **Nguồn ảnh:** [Polina Kuzovkova, Unsplash](https://unsplash.com/photos/clothes-hanging-on-a-rack-in-a-boutique-pt3EBzQcxP0); [Adiel Gavish, Unsplash](https://unsplash.com/photos/a-bunch-of-clothes-hanging-on-a-rack-7E-bTt8i28k).
 - **Minh chứng:** PR #16; branch `buihaiduongdev/fe-cleanup-review`.
+
+### 2026-11-22 — Căn footer cho trang ít nội dung
+
+- **Người thực hiện:** Bùi Hải Dương
+- **Công cụ:** Codex (OpenAI)
+- **Mục đích và phạm vi:** Giữ footer ở đáy màn hình trên các trang marketplace và đăng nhập khi nội dung ngắn.
+- **Prompt chính:** Sửa footer bị đẩy lên cao ở các trang thiếu dữ liệu.
+- **Đầu ra AI được sử dụng:** Điều chỉnh layout co giãn ở các trang có footer; chỉ dành khoảng trống cho thanh mua khi thanh đang hiển thị.
+- **Phần tự làm hoặc đã chỉnh sửa:** Người dùng chỉ ra vấn đề footer khi thiếu dữ liệu.
+- **Cách kiểm chứng:** `git diff --check`; kiểm tra trang sản phẩm không tồn tại trên desktop và mobile, kiểm tra khoảng trống thanh mua bằng DOM trên trình duyệt. Không chạy test theo yêu cầu người dùng.
+- **Giới hạn:** Backend không phản hồi trong lúc kiểm tra nên chưa kiểm tra lại trang sản phẩm có dữ liệu thật.
+- **Minh chứng:** PR #16; branch `buihaiduongdev/fe-cleanup-review`.

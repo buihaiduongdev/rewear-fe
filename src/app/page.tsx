@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 
 export default function Home() {
   return (
-    <div className="bg-rewear-surface text-rewear-text min-h-dvh [--foreground:var(--color-rewear-text)] [--muted-foreground:var(--color-rewear-muted)]">
+    <div className="bg-rewear-surface text-rewear-text flex min-h-dvh flex-col [--foreground:var(--color-rewear-text)] [--muted-foreground:var(--color-rewear-muted)]">
       <Suspense fallback={<CatalogSkeleton />}>
         <HomePage />
       </Suspense>
