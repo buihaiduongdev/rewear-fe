@@ -7,14 +7,9 @@ import Link from 'next/link';
 
 import { Menu, X } from 'lucide-react';
 
-export type SellerNavKey =
-  | 'overview'
-  | 'products'
-  | 'orders'
-  | 'returns'
-  | 'funds'
-  | 'settings'
-  | 'messages';
+import type { SellerNavKey } from '../types';
+
+export type { SellerNavKey } from '../types';
 
 interface SellerWorkspaceLayoutProps {
   children: React.ReactNode;

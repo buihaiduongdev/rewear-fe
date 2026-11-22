@@ -641,3 +641,15 @@ Ghi một mục cho mỗi task có dùng AI. Cập nhật liên kết PR/commit 
 - **Cách kiểm chứng:** `git diff --check`; kiểm tra trang sản phẩm không tồn tại trên desktop và mobile, kiểm tra khoảng trống thanh mua bằng DOM trên trình duyệt. Không chạy test theo yêu cầu người dùng.
 - **Giới hạn:** Backend không phản hồi trong lúc kiểm tra nên chưa kiểm tra lại trang sản phẩm có dữ liệu thật.
 - **Minh chứng:** PR #16; branch `buihaiduongdev/fe-cleanup-review`.
+
+### 2026-11-22 — Tách logic và giao diện các luồng frontend
+
+- **Người thực hiện:** Bùi Hải Dương
+- **Công cụ:** Codex (OpenAI)
+- **Mục đích và phạm vi:** Giảm trách nhiệm của các component lớn trong phạm vi PR frontend.
+- **Prompt chính:** Tách logic và hook khỏi component, tổ chức lại các luồng frontend hiện có theo trách nhiệm rõ ràng.
+- **Đầu ra AI được sử dụng:** Tách logic truy vấn và thao tác trong catalog, sản phẩm, giỏ hàng, checkout, đơn hàng, seller và onboarding; tách component hiển thị, kiểu dữ liệu và hàm chuyển đổi form; thêm CI cho kiểm tra frontend.
+- **Phần tự làm hoặc đã chỉnh sửa:** Người dùng yêu cầu giữ nguyên phạm vi trong PR hiện tại và không chạy test trên máy.
+- **Cách kiểm chứng:** TypeScript incremental, ESLint và Prettier trên các file thay đổi, `git diff --check`. Không chạy test local; CI được bổ sung để chạy kiểm tra và test.
+- **Giới hạn:** Chưa kiểm thử thủ công các luồng có tương tác BE sau refactor; kết quả test và build phụ thuộc CI.
+- **Minh chứng:** PR #16; branch `buihaiduongdev/fe-cleanup-review`.

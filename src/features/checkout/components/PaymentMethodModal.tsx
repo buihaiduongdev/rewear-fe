@@ -12,7 +12,9 @@ import {
 } from '@/shared/components/ui/dialog';
 import { cn } from 'cn';
 
-export type PaymentMethodId = 'MOMO' | 'VNPAY' | 'ZALOPAY' | 'CARD';
+import type { PaymentMethodId } from '../types';
+
+export type { PaymentMethodId } from '../types';
 
 export type PaymentMethodOption = {
   id: PaymentMethodId;

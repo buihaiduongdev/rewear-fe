@@ -1,10 +1,5 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
-import { Search } from 'lucide-react';
-
-import { useDebounce } from '@/shared/hooks';
-
 import { CartLink } from '@/modules/cart/components/CartLink';
 import { MarketplaceFooter } from '@/shared/components/marketplace/MarketplaceFooter';
 import { MarketplaceHeader } from '@/shared/components/marketplace/MarketplaceHeader';
@@ -20,54 +15,18 @@ import {
   PaginationPrevious,
 } from '@/shared/components/ui/pagination';
 import { PRODUCT_CONDITION_LABELS } from '@/shared/utils/product';
+import { Search } from 'lucide-react';
 
-import { useHomeCatalog } from '../hooks/use-home-catalog';
+import { SORT_OPTIONS, useProductsPage } from '../hooks/use-products-page';
+import { getPageNumbers } from '../utils/catalog-pagination';
 import { ProductCard } from './ProductCard';
 import { ProductFilterModal } from './ProductFilterModal';
 import { SectionState } from './SectionState';
-
-const SORT_OPTIONS = [
-  { label: 'Newest', value: '' },
-  { label: 'Price: Low to high', value: 'price:ASC' },
-  { label: 'Price: High to low', value: 'price:DESC' },
-];
-
-function getPageNumbers(
-  currentPage: number,
-  totalPages: number,
-): (number | 'ellipsis')[] {
-  if (totalPages <= 5) {
-    return Array.from({ length: totalPages }, (_, i) => i + 1);
-  }
-  if (currentPage <= 3) {
-    return [1, 2, 3, 4, 'ellipsis', totalPages];
-  }
-  if (currentPage >= totalPages - 2) {
-    return [
-      1,
-      'ellipsis',
-      totalPages - 3,
-      totalPages - 2,
-      totalPages - 1,
-      totalPages,
-    ];
-  }
-  return [
-    1,
-    'ellipsis',
-    currentPage - 1,
-    currentPage,
-    currentPage + 1,
-    'ellipsis',
-    totalPages,
-  ];
-}
 
 export function ProductsPage() {
   const {
     search,
     categoryId,
-    shopId,
     size,
     condition,
     minPrice,
@@ -76,73 +35,23 @@ export function ProductsPage() {
     page,
     limit,
     categories,
-    shops,
     products,
     updateFilters,
-  } = useHomeCatalog(true);
-
-  const [prevSearch, setPrevSearch] = useState(search);
-  const [localSearch, setLocalSearch] = useState(search);
-  const debouncedSearch = useDebounce(localSearch.trim(), 350);
-  const isInitialMount = useRef(true);
-  const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
-  const [isSortOpen, setIsSortOpen] = useState(false);
-  const sortRef = useRef<HTMLDivElement>(null);
-
-  if (prevSearch !== search) {
-    setPrevSearch(search);
-    setLocalSearch(search);
-  }
-
-  // Auto-update filter when user pauses typing
-  useEffect(() => {
-    if (isInitialMount.current) {
-      isInitialMount.current = false;
-      return;
-    }
-    const current = (search ?? '').trim();
-    if (debouncedSearch !== current) {
-      updateFilters({ search: debouncedSearch || undefined });
-    }
-  }, [debouncedSearch, search, updateFilters]);
-
-  useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (sortRef.current && !sortRef.current.contains(event.target as Node)) {
-        setIsSortOpen(false);
-      }
-    }
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
-
-  const items = products.data?.data.data ?? [];
-  const meta = products.data?.data.meta;
-  const activeShop = shops.data?.data.find(({ id }) => id === shopId);
-  const activeCategory = categories.data?.data.find(
-    ({ id }) => id === categoryId,
-  );
-
-  const hasFilters = Boolean(
-    search ||
-      categoryId ||
-      shopId ||
-      size ||
-      condition ||
-      minPrice ||
-      maxPrice ||
-      sortBy,
-  );
-
-  const activeFilterCount =
-    (categoryId ? 1 : 0) +
-    (shopId ? 1 : 0) +
-    (size ? 1 : 0) +
-    (condition ? 1 : 0) +
-    (minPrice || maxPrice ? 1 : 0);
-
-  const sortLabel =
-    SORT_OPTIONS.find((opt) => opt.value === (sortBy || ''))?.label ?? 'Newest';
+    localSearch,
+    setLocalSearch,
+    isFilterModalOpen,
+    setIsFilterModalOpen,
+    isSortOpen,
+    setIsSortOpen,
+    sortRef,
+    items,
+    meta,
+    activeShop,
+    activeCategory,
+    hasFilters,
+    activeFilterCount,
+    sortLabel,
+  } = useProductsPage();
 
   return (
     <>
@@ -253,7 +162,7 @@ export function ProductsPage() {
               <button
                 type="button"
                 onClick={() => setIsFilterModalOpen(true)}
-                className="text-rewear-text hover:opacity-70 cursor-pointer transition-opacity"
+                className="text-rewear-text cursor-pointer transition-opacity hover:opacity-70"
               >
                 Filters{activeFilterCount > 0 ? ` (${activeFilterCount})` : ''}{' '}
                 ↓
@@ -263,12 +172,12 @@ export function ProductsPage() {
                 <button
                   type="button"
                   onClick={() => setIsSortOpen((prev) => !prev)}
-                  className="text-rewear-text hover:opacity-70 cursor-pointer transition-opacity"
+                  className="text-rewear-text cursor-pointer transition-opacity hover:opacity-70"
                 >
                   Sort: {sortLabel} ↓
                 </button>
                 {isSortOpen && (
-                  <div className="border-rewear-border bg-rewear-surface absolute right-0 top-full z-20 mt-2 min-w-[200px] border p-2 shadow-lg">
+                  <div className="border-rewear-border bg-rewear-surface absolute top-full right-0 z-20 mt-2 min-w-[200px] border p-2 shadow-lg">
                     {SORT_OPTIONS.map((opt) => (
                       <button
                         key={opt.value}
@@ -277,7 +186,7 @@ export function ProductsPage() {
                           updateFilters({ sortBy: opt.value || undefined });
                           setIsSortOpen(false);
                         }}
-                        className={`w-full cursor-pointer px-3 py-2 text-left text-sm transition-colors hover:bg-rewear-soft ${
+                        className={`hover:bg-rewear-soft w-full cursor-pointer px-3 py-2 text-left text-sm transition-colors ${
                           (sortBy || '') === opt.value
                             ? 'bg-rewear-soft text-rewear-text font-semibold'
                             : 'text-rewear-muted'
@@ -367,7 +276,10 @@ export function ProductsPage() {
                   <button
                     type="button"
                     onClick={() =>
-                      updateFilters({ minPrice: undefined, maxPrice: undefined })
+                      updateFilters({
+                        minPrice: undefined,
+                        maxPrice: undefined,
+                      })
                     }
                     className="text-rewear-muted hover:text-rewear-text ml-0.5 cursor-pointer"
                     aria-label="Remove price filter"

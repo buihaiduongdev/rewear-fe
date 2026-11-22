@@ -1,16 +1,11 @@
 'use client';
 
-import { useState } from 'react';
-
-import { getApiErrorMessage } from '@/shared/api/api-error';
-import {
-  orderControllerAccept,
-  orderControllerReject,
-  useOrderControllerShopList,
-} from '@/shared/api/query-generated/orders/orders';
 import { formatPrice } from '@/shared/utils/product';
 
-const PAGE_SIZE = 20;
+import {
+  SELLER_ORDERS_PAGE_SIZE,
+  useSellerPendingOrders,
+} from '../hooks/use-seller-pending-orders';
 
 export function SellerPendingOrders({
   shopId,
@@ -19,33 +14,19 @@ export function SellerPendingOrders({
   shopId: string;
   enabled: boolean;
 }) {
-  const [offset, setOffset] = useState(0);
-  const [busyId, setBusyId] = useState('');
-  const [rejectId, setRejectId] = useState('');
-  const [reason, setReason] = useState('');
-  const [error, setError] = useState('');
-  const orders = useOrderControllerShopList(
-    shopId,
-    { status: 'pending', limit: PAGE_SIZE, offset },
-    { query: { enabled: enabled && Boolean(shopId) } },
-  );
-  const items = orders.data?.data ?? [];
-
-  async function respond(id: string, action: 'accept' | 'reject') {
-    setBusyId(id);
-    setError('');
-    try {
-      if (action === 'accept') await orderControllerAccept(shopId, id, {});
-      else await orderControllerReject(shopId, id, { reason: reason.trim() });
-      setRejectId('');
-      setReason('');
-      await orders.refetch();
-    } catch (cause) {
-      setError(getApiErrorMessage(cause));
-    } finally {
-      setBusyId('');
-    }
-  }
+  const {
+    offset,
+    setOffset,
+    busyId,
+    rejectId,
+    setRejectId,
+    reason,
+    setReason,
+    error,
+    orders,
+    items,
+    respond,
+  } = useSellerPendingOrders(shopId, enabled);
 
   return (
     <section className="border-rewear-border overflow-hidden border bg-white shadow-xs">
@@ -169,27 +150,36 @@ export function SellerPendingOrders({
           </table>
         </div>
       )}
-      {(offset > 0 || items.length === PAGE_SIZE) && !orders.isError && (
-        <div className="border-rewear-border flex justify-between border-t p-5 text-sm">
-          <button
-            type="button"
-            disabled={offset === 0 || orders.isFetching}
-            onClick={() => setOffset((value) => Math.max(0, value - PAGE_SIZE))}
-            className="disabled:opacity-40"
-          >
-            Previous
-          </button>
-          <span>Page {offset / PAGE_SIZE + 1}</span>
-          <button
-            type="button"
-            disabled={items.length < PAGE_SIZE || orders.isFetching}
-            onClick={() => setOffset((value) => value + PAGE_SIZE)}
-            className="disabled:opacity-40"
-          >
-            Next
-          </button>
-        </div>
-      )}
+      {(offset > 0 || items.length === SELLER_ORDERS_PAGE_SIZE) &&
+        !orders.isError && (
+          <div className="border-rewear-border flex justify-between border-t p-5 text-sm">
+            <button
+              type="button"
+              disabled={offset === 0 || orders.isFetching}
+              onClick={() =>
+                setOffset((value) =>
+                  Math.max(0, value - SELLER_ORDERS_PAGE_SIZE),
+                )
+              }
+              className="disabled:opacity-40"
+            >
+              Previous
+            </button>
+            <span>Page {offset / SELLER_ORDERS_PAGE_SIZE + 1}</span>
+            <button
+              type="button"
+              disabled={
+                items.length < SELLER_ORDERS_PAGE_SIZE || orders.isFetching
+              }
+              onClick={() =>
+                setOffset((value) => value + SELLER_ORDERS_PAGE_SIZE)
+              }
+              className="disabled:opacity-40"
+            >
+              Next
+            </button>
+          </div>
+        )}
     </section>
   );
 }

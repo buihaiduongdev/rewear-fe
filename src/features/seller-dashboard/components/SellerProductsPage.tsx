@@ -7,24 +7,9 @@ import Link from 'next/link';
 import { ProductPhoto } from '@/shared/components/marketplace/ProductPhoto';
 import { ChevronDown, Search } from 'lucide-react';
 
-export interface SellerProductItem {
-  id: string;
-  title: string;
-  size: string;
-  condition: string;
-  price: string;
-  status:
-    | 'Active'
-    | 'Held'
-    | 'In review'
-    | 'Draft'
-    | 'Rejected'
-    | 'Suspended'
-    | 'Sold'
-    | 'Hidden';
-  isLocked?: boolean;
-  image: string | null;
-}
+import type { SellerProductItem } from '../types';
+
+export type { SellerProductItem } from '../types';
 
 interface SellerProductsPageProps {
   products: SellerProductItem[];

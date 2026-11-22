@@ -1,19 +1,19 @@
 'use client';
 
-import { useState } from 'react';
-
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
 import { CartLink } from '@/modules/cart/components/CartLink';
 import type { OrderControllerBuyerListStatus } from '@/shared/api/models';
-import { useOrderControllerBuyerList } from '@/shared/api/query-generated/orders/orders';
 import { MarketplaceHeader } from '@/shared/components/marketplace/MarketplaceHeader';
 import { MobileNavigation } from '@/shared/components/marketplace/MobileNavigation';
 import { formatPrice } from '@/shared/utils/product';
-import { useSession } from 'next-auth/react';
 
-const PAGE_SIZE = 20;
+import {
+  BUYER_ORDERS_PAGE_SIZE,
+  useBuyerOrders,
+} from '../hooks/use-buyer-orders';
+
 const statuses: Record<OrderControllerBuyerListStatus, string> = {
   waiting: 'Awaiting payment',
   pending: 'Awaiting seller confirmation',
@@ -28,22 +28,16 @@ const statuses: Record<OrderControllerBuyerListStatus, string> = {
 
 export function BuyerOrdersPage() {
   const router = useRouter();
-  const { data: session, status } = useSession();
-  const [offset, setOffset] = useState(0);
-  const [filter, setFilter] = useState<OrderControllerBuyerListStatus | 'all'>(
-    'all',
-  );
-  const enabled = status === 'authenticated' && !session?.error;
-  const params = {
-    limit: PAGE_SIZE + 1,
+  const {
     offset,
-    ...(filter === 'all' ? {} : { status: filter }),
-  };
-  const orders = useOrderControllerBuyerList(params, {
-    query: { enabled, queryKey: ['buyer-orders', session?.user.id, params] },
-  });
-  const items = orders.data?.data ?? [];
-  const visible = items.slice(0, PAGE_SIZE);
+    setOffset,
+    filter,
+    setFilter,
+    enabled,
+    orders,
+    items,
+    visible,
+  } = useBuyerOrders();
 
   return (
     <div className="bg-rewear-surface text-rewear-text min-h-dvh">
@@ -150,27 +144,32 @@ export function BuyerOrdersPage() {
             ))}
           </div>
         )}
-        {!orders.isError && (offset > 0 || items.length > PAGE_SIZE) && (
-          <div className="border-rewear-border flex justify-between border-t py-5 text-sm">
-            <button
-              type="button"
-              disabled={offset === 0 || orders.isFetching}
-              onClick={() => setOffset(Math.max(0, offset - PAGE_SIZE))}
-              className="disabled:opacity-40"
-            >
-              Previous
-            </button>
-            <span>Page {offset / PAGE_SIZE + 1}</span>
-            <button
-              type="button"
-              disabled={items.length <= PAGE_SIZE || orders.isFetching}
-              onClick={() => setOffset(offset + PAGE_SIZE)}
-              className="disabled:opacity-40"
-            >
-              Next
-            </button>
-          </div>
-        )}
+        {!orders.isError &&
+          (offset > 0 || items.length > BUYER_ORDERS_PAGE_SIZE) && (
+            <div className="border-rewear-border flex justify-between border-t py-5 text-sm">
+              <button
+                type="button"
+                disabled={offset === 0 || orders.isFetching}
+                onClick={() =>
+                  setOffset(Math.max(0, offset - BUYER_ORDERS_PAGE_SIZE))
+                }
+                className="disabled:opacity-40"
+              >
+                Previous
+              </button>
+              <span>Page {offset / BUYER_ORDERS_PAGE_SIZE + 1}</span>
+              <button
+                type="button"
+                disabled={
+                  items.length <= BUYER_ORDERS_PAGE_SIZE || orders.isFetching
+                }
+                onClick={() => setOffset(offset + BUYER_ORDERS_PAGE_SIZE)}
+                className="disabled:opacity-40"
+              >
+                Next
+              </button>
+            </div>
+          )}
       </main>
       <MobileNavigation
         cartAction={
