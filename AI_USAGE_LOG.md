@@ -516,3 +516,14 @@ Ghi một mục cho mỗi task có dùng AI. Cập nhật liên kết PR/commit 
 - **Phần tự làm hoặc đã chỉnh sửa:** Người dùng góp ý trực tiếp trên giao diện.
 - **Cách kiểm chứng:** `pnpm check`, `pnpm test` (14 suites, 40 tests), `git diff --check`; kiểm tra liên kết tên shop trên trình duyệt.
 - **Minh chứng:** PR #16; branch `buihaiduongdev/fe-cleanup-review`.
+
+### 2026-11-22 — Loại bỏ ảnh sản phẩm trùng lặp
+
+- **Người thực hiện:** Bùi Hải Dương
+- **Công cụ:** Codex (OpenAI)
+- **Mục đích và phạm vi:** Tinh gọn gallery và phần số đo trên trang sản phẩm.
+- **Prompt chính:** Bỏ dòng hướng dẫn ảnh thừa và phần ảnh lặp lại bên dưới gallery.
+- **Đầu ra AI được sử dụng:** Bỏ ảnh và dòng chữ trùng lặp, điều chỉnh bố cục số đo và skeleton tương ứng.
+- **Phần tự làm hoặc đã chỉnh sửa:** Người dùng góp ý trực tiếp trên giao diện.
+- **Cách kiểm chứng:** `pnpm check`, `pnpm test` (14 suites, 40 tests), `git diff --check`; kiểm tra trang sản phẩm trên trình duyệt.
+- **Minh chứng:** PR #16; branch `buihaiduongdev/fe-cleanup-review`.

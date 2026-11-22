@@ -195,11 +195,6 @@ export function ProductDetailPage({ id }: { id: string }) {
     .join('')
     .toUpperCase();
 
-  // Closer look photos (take up to 2 distinct photos from seller photos)
-  const closerLookPhotos = displayPhotos.length >= 3
-    ? displayPhotos.slice(1, 3)
-    : displayPhotos.slice(0, 2);
-
   return (
     <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10 pb-8 lg:pb-16 font-sans space-y-16">
       {/* 1. Breadcrumbs (Figma 53:755) */}
@@ -269,9 +264,6 @@ export function ProductDetailPage({ id }: { id: string }) {
                   );
                 })}
               </div>
-              <p className="text-sm font-semibold text-rewear-muted">
-                {displayPhotos.length} seller photos · Select a photo to inspect
-              </p>
             </div>
           )}
         </div>
@@ -403,41 +395,9 @@ export function ProductDetailPage({ id }: { id: string }) {
         </div>
       </div>
 
-      {/* 3. Condition and Fit / Information Section (Figma 53:801) */}
-      <div className="bg-rewear-soft p-8 sm:p-10 flex flex-col lg:flex-row gap-10">
-        {/* Left: Look closer (532px on desktop, Figma 53:802) */}
-        <div className="w-full lg:w-[532px] space-y-6">
-          <h2 className="text-[28px] leading-[34px] font-semibold tracking-[-0.02em] text-rewear-text">
-            A closer look.
-          </h2>
-
-          <div className="grid grid-cols-2 gap-4">
-            {closerLookPhotos.map((photo, i) => (
-              <div
-                key={`closer-look-${photo.id || 'photo'}-${i}`}
-                onClick={() => {
-                  const idx = displayPhotos.findIndex((p) => p.id === photo.id);
-                  if (idx >= 0) setSelectedMediaIndex(idx);
-                }}
-                className="bg-white relative aspect-[4/3] w-full overflow-hidden border border-rewear-border cursor-pointer group"
-                title="Click to view full photo"
-              >
-                <ProductPhoto
-                  url={photo.url}
-                  title={`Detail photo ${i + 1}`}
-                  sizes="(min-width: 1024px) 25vw, 50vw"
-                />
-                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors" />
-              </div>
-            ))}
-          </div>
-          <p className="text-sm font-semibold text-rewear-muted">
-            Seller photos
-          </p>
-        </div>
-
-        {/* Right: Measurements (532px on desktop, Figma 53:808) */}
-        <div className="w-full lg:w-[532px] space-y-6">
+      {/* Measurements */}
+      <div className="bg-rewear-soft p-8 sm:p-10">
+        <div className="mx-auto w-full max-w-2xl space-y-6">
           <h2 className="text-[28px] leading-[34px] font-semibold tracking-[-0.02em] text-rewear-text">
             Find your fit.
           </h2>

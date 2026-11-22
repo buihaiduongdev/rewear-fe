@@ -89,18 +89,9 @@ export function ProductDetailSkeleton() {
         </div>
       </div>
 
-      {/* Condition & Fit Skeleton */}
-      <div className="bg-rewear-soft p-8 sm:p-10 flex flex-col lg:flex-row gap-10">
-        <div className="w-full lg:w-[532px] space-y-6">
-          <div className="h-8 w-44 motion-safe:animate-pulse bg-white/60" />
-          <div className="grid grid-cols-2 gap-4">
-            <div className="aspect-[258/194] w-full motion-safe:animate-pulse border border-rewear-border bg-white" />
-            <div className="aspect-[258/194] w-full motion-safe:animate-pulse border border-rewear-border bg-white" />
-          </div>
-          <div className="h-4 w-60 motion-safe:animate-pulse bg-white/60" />
-        </div>
-
-        <div className="w-full lg:w-[532px] space-y-6">
+      {/* Measurements skeleton */}
+      <div className="bg-rewear-soft p-8 sm:p-10">
+        <div className="mx-auto w-full max-w-2xl space-y-6">
           <div className="h-8 w-44 motion-safe:animate-pulse bg-white/60" />
           <div className="space-y-3">
             {[1, 2, 3].map((i) => (
