@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { useAdministrativeDivisions } from '@/modules/address';
 import type { PickupLocationControllerSaveShop200 } from '@/shared/api/models';
@@ -15,7 +15,7 @@ export type PickupAddressFormValues = zod.infer<
 >;
 
 export type UsePickupAddressFormProps = {
-  initial: PickupLocationControllerSaveShop200['data']['location'];
+  initial?: PickupLocationControllerSaveShop200['data']['location'] | null;
   shopId: string;
   onBeforeSave: () => Promise<void>;
   onSaving: (saving: boolean) => void;
@@ -36,6 +36,8 @@ export function usePickupAddressForm({
     handleSubmit,
     setValue,
     control,
+    clearErrors,
+    reset,
     formState: { errors },
   } = useForm<PickupAddressFormValues>({
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -50,8 +52,23 @@ export function usePickupAddressForm({
     mode: 'onTouched',
   });
 
+  useEffect(() => {
+    if (initial) {
+      reset({
+        contactName: initial.contactName ?? '',
+        phone: initial.phone ?? '',
+        addressLine1: initial.addressLine1 ?? '',
+        provinceCode: initial.provinceCode ?? '',
+        wardCode: initial.wardCode ?? '',
+      });
+    }
+  }, [initial, reset]);
+
   const provinceCode = useWatch({ control, name: 'provinceCode' }) ?? '';
   const wardCode = useWatch({ control, name: 'wardCode' }) ?? '';
+  const contactName = useWatch({ control, name: 'contactName' }) ?? '';
+  const phone = useWatch({ control, name: 'phone' }) ?? '';
+  const addressLine1 = useWatch({ control, name: 'addressLine1' }) ?? '';
 
   const {
     provinces,
@@ -59,16 +76,24 @@ export function usePickupAddressForm({
     error: divisionError,
     refetch: refetchDivisions,
   } = useAdministrativeDivisions({
-    initialProvinceCode: provinceCode,
-    initialWardCode: wardCode,
+    provinceCode,
+    wardCode,
     onProvinceChange: () => setMessage(''),
     onWardChange: () => setMessage(''),
   });
+
+  const provinceName =
+    provinces.data?.data.find((p) => p.code === provinceCode)?.name ?? '';
+  const wardName =
+    wards.data?.data.find((w) => w.code === wardCode)?.name ?? '';
 
   const config = {
     mutation: {
       onMutate: onBeforeSave,
       meta: { skipErrorToast: true, skipSuccessToast: true },
+    },
+    request: {
+      headers: shopId ? { 'x-shop-id': shopId } : undefined,
     },
   };
   const shopSave = usePickupLocationControllerSaveShop(config);
@@ -77,7 +102,8 @@ export function usePickupAddressForm({
 
   const handleProvinceChange = (code: string) => {
     setValue('provinceCode', code, { shouldValidate: true });
-    setValue('wardCode', '', { shouldValidate: true });
+    setValue('wardCode', '', { shouldValidate: false });
+    clearErrors('wardCode');
     setMessage('');
   };
 
@@ -112,6 +138,11 @@ export function usePickupAddressForm({
     setMessage,
     provinceCode,
     wardCode,
+    contactName,
+    phone,
+    addressLine1,
+    provinceName,
+    wardName,
     handleProvinceChange,
     handleWardChange,
     provinces,

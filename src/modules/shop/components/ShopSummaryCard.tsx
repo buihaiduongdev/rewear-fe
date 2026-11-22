@@ -11,7 +11,7 @@ export type ShopSummaryCardProps = {
 
 export function ShopSummaryCard({
   name,
-  subtitle = 'Người bán',
+  subtitle = 'Seller',
   verified = true,
   className = '',
 }: ShopSummaryCardProps) {

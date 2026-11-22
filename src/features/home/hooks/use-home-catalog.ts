@@ -2,6 +2,7 @@
 
 import { useRouter, useSearchParams } from 'next/navigation';
 
+import { ProductControllerFindAllSortByItem } from '@/shared/api/models';
 import { useCategoryControllerFindAll } from '@/shared/api/query-generated/categories/categories';
 import { useProductControllerFindAll } from '@/shared/api/query-generated/products/products';
 import { useShopControllerFindAll } from '@/shared/api/query-generated/shops/shops';
@@ -13,21 +14,46 @@ export function useHomeCatalog(catalog = false) {
   const search = searchParams.get('search') ?? '';
   const categoryId = searchParams.get('categoryId') ?? '';
   const shopId = searchParams.get('shopId') ?? '';
+  const size = searchParams.get('size') ?? '';
+  const condition = searchParams.get('condition') ?? '';
+  const minPrice = searchParams.get('minPrice') ?? '';
+  const maxPrice = searchParams.get('maxPrice') ?? '';
+  const sortBy = searchParams.get('sortBy') ?? '';
   const pageValue = Number(searchParams.get('page') ?? 1);
   const page = Number.isSafeInteger(pageValue) && pageValue > 0 ? pageValue : 1;
+  const limitValue = Number(searchParams.get('limit') ?? (catalog ? 12 : 4));
+  const limit =
+    Number.isSafeInteger(limitValue) && limitValue > 0
+      ? limitValue
+      : catalog
+        ? 12
+        : 4;
   const categories = useCategoryControllerFindAll({
     query: { meta: { skipErrorToast: true } },
   });
   const shops = useShopControllerFindAll({
     query: { meta: { skipErrorToast: true } },
   });
+  const validSortBy =
+    sortBy && sortBy in ProductControllerFindAllSortByItem
+      ? [sortBy as ProductControllerFindAllSortByItem]
+      : undefined;
+
+  const priceFilters: string[] = [];
+  if (minPrice) priceFilters.push(`$gte:${minPrice}`);
+  if (maxPrice) priceFilters.push(`$lte:${maxPrice}`);
+
   const products = useProductControllerFindAll(
     {
       page,
-      limit: catalog ? 12 : 4,
+      limit,
       ...(search ? { search } : {}),
       ...(categoryId ? { 'filter.categoryId': [categoryId] } : {}),
       ...(shopId ? { 'filter.shopId': [shopId] } : {}),
+      ...(size ? { 'filter.size': [`$ilike:${size}`] } : {}),
+      ...(condition ? { 'filter.condition': [condition] } : {}),
+      ...(priceFilters.length > 0 ? { 'filter.price': priceFilters } : {}),
+      ...(validSortBy ? { sortBy: validSortBy } : {}),
     },
     {
       query: {
@@ -55,7 +81,13 @@ export function useHomeCatalog(catalog = false) {
     search,
     categoryId,
     shopId,
+    size,
+    condition,
+    minPrice,
+    maxPrice,
+    sortBy,
     page,
+    limit,
     categories,
     shops,
     products,

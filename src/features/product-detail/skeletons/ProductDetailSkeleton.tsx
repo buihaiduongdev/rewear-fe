@@ -5,10 +5,10 @@ export function ProductDetailSkeleton() {
     <div
       role="status"
       aria-busy="true"
-      aria-label="Đang tải thông tin sản phẩm"
+      aria-label="Loading product details"
       className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8"
     >
-      <span className="sr-only">Đang tải thông tin sản phẩm…</span>
+      <span className="sr-only">Loading product details…</span>
 
       {/* Breadcrumb skeleton */}
       <div className="mb-6 flex items-center justify-between">

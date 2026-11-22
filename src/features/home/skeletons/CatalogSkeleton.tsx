@@ -5,10 +5,10 @@ export function CatalogSkeleton() {
     <div
       role="status"
       aria-busy="true"
-      aria-label="Đang tải danh sách đồ thời trang"
+      aria-label="Loading clothing catalog"
       className="mx-auto max-w-[1280px] space-y-8 px-4 py-6 md:px-12 md:py-12"
     >
-      <span className="sr-only">Đang tải danh sách quần áo…</span>
+      <span className="sr-only">Loading clothing items…</span>
 
       {/* Header skeleton */}
       <div className="space-y-3">

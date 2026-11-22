@@ -61,7 +61,7 @@ export function ProductDetailPage({ id }: { id: string }) {
         setCopied(true);
         addToast({
           type: 'success',
-          title: 'Đã sao chép liên kết sản phẩm',
+          title: 'Product link copied to clipboard',
           durationMs: TOAST_DURATION_MS.DEFAULT,
         });
         setTimeout(() => setCopied(false), 2000);
@@ -69,7 +69,7 @@ export function ProductDetailPage({ id }: { id: string }) {
     } catch {
       addToast({
         type: 'error',
-        title: 'Không thể sao chép liên kết',
+        title: 'Could not copy link',
         durationMs: TOAST_DURATION_MS.DEFAULT,
       });
     }
@@ -86,10 +86,10 @@ export function ProductDetailPage({ id }: { id: string }) {
           <AlertTriangle size={32} />
         </div>
         <h1 className="text-rewear-text text-2xl font-bold tracking-tight">
-          Không tìm thấy sản phẩm
+          Piece not found
         </h1>
         <p className="text-rewear-muted mt-2 text-sm">
-          Sản phẩm có thể đã bị gỡ hoặc đường dẫn không chính xác.
+          This piece may have been removed or the link is incorrect.
         </p>
         <div className="mt-6 flex justify-center gap-4">
           <Button
@@ -97,7 +97,7 @@ export function ProductDetailPage({ id }: { id: string }) {
             render={<Link href="/products" />}
             nativeButton={false}
           >
-            Quay lại danh mục
+            Back to clothing
           </Button>
         </div>
       </div>
@@ -120,7 +120,7 @@ export function ProductDetailPage({ id }: { id: string }) {
             className="hover:text-rewear-text flex items-center gap-1 transition-colors"
           >
             <ArrowLeft size={16} />
-            <span>Danh mục</span>
+            <span>Clothing</span>
           </Link>
           <ChevronRight size={14} className="text-rewear-muted/50" />
           {product.category && (
@@ -132,21 +132,21 @@ export function ProductDetailPage({ id }: { id: string }) {
             </>
           )}
           <span className="text-rewear-text line-clamp-1 max-w-[200px] font-medium sm:max-w-xs">
-            {product.title ?? 'Chi tiết món đồ'}
+            {product.title ?? 'Piece details'}
           </span>
         </div>
 
         <button
           onClick={handleShare}
           className="hover:bg-rewear-soft text-rewear-text flex items-center gap-1.5 rounded px-2.5 py-1 text-xs font-medium transition-colors"
-          title="Chia sẻ sản phẩm"
+          title="Share piece"
         >
           {copied ? (
             <Check size={14} className="text-green-600" />
           ) : (
             <Share2 size={14} />
           )}
-          <span>{copied ? 'Đã sao chép' : 'Chia sẻ'}</span>
+          <span>{copied ? 'Copied' : 'Share'}</span>
         </button>
       </nav>
 
@@ -164,9 +164,9 @@ export function ProductDetailPage({ id }: { id: string }) {
             {product.status && product.status !== 'ACTIVE' && (
               <div className="absolute top-3 left-3 rounded bg-black/75 px-2.5 py-1 text-xs font-semibold tracking-wider text-white uppercase backdrop-blur-sm">
                 {product.status === 'SOLD'
-                  ? 'Đã bán'
+                  ? 'Sold'
                   : product.status === 'HELD'
-                    ? 'Đang giữ hàng'
+                    ? 'Reserved'
                     : product.status}
               </div>
             )}
@@ -189,7 +189,7 @@ export function ProductDetailPage({ id }: { id: string }) {
                   >
                     <ProductPhoto
                       url={photo.url}
-                      title={`Ảnh nhỏ ${index + 1}`}
+                      title={`Photo ${index + 1}`}
                       sizes="80px"
                     />
                   </button>
@@ -224,7 +224,7 @@ export function ProductDetailPage({ id }: { id: string }) {
               </span>
               {product.size && (
                 <span className="text-rewear-muted text-sm">
-                  Kích cỡ:{' '}
+                  Size:{' '}
                   <strong className="text-rewear-text">{product.size}</strong>
                 </span>
               )}
@@ -234,15 +234,15 @@ export function ProductDetailPage({ id }: { id: string }) {
           {/* Key Attributes Pills */}
           <div className="grid grid-cols-2 gap-3 text-sm">
             <div className="border-rewear-border rounded-lg border p-3">
-              <span className="text-rewear-muted text-xs">Màu sắc</span>
+              <span className="text-rewear-muted text-xs">Color</span>
               <p className="text-rewear-text font-medium">
-                {product.color || 'Chưa cập nhật'}
+                {product.color || 'Not specified'}
               </p>
             </div>
             <div className="border-rewear-border rounded-lg border p-3">
-              <span className="text-rewear-muted text-xs">Tình trạng</span>
+              <span className="text-rewear-muted text-xs">Condition</span>
               <p className="text-rewear-text font-medium">
-                {formatCondition(product.condition) || 'Chưa phân loại'}
+                {formatCondition(product.condition) || 'Uncategorized'}
               </p>
             </div>
           </div>
@@ -266,18 +266,18 @@ export function ProductDetailPage({ id }: { id: string }) {
 
           {/* Seller / Shop Information Card */}
           <ShopSummaryCard
-            name={product.shop?.name || 'Người bán RE.WEAR'}
+            name={product.shop?.name || 'RE.WEAR Seller'}
             verified
           />
 
           {/* Description Section */}
           <div className="space-y-3">
             <h3 className="text-rewear-muted text-sm font-semibold tracking-wider uppercase">
-              Mô tả chi tiết
+              Description
             </h3>
             <div className="text-rewear-text text-sm leading-relaxed whitespace-pre-line">
               {product.description ||
-                'Người bán chưa cung cấp thêm mô tả chi tiết cho sản phẩm này.'}
+                'The seller has not provided additional descriptions for this piece.'}
             </div>
           </div>
 
@@ -286,12 +286,12 @@ export function ProductDetailPage({ id }: { id: string }) {
             <div className="border-rewear-border space-y-3 rounded-lg border p-4">
               <div className="text-rewear-text flex items-center gap-2 text-sm font-semibold">
                 <Ruler size={16} />
-                <span>Số đo chi tiết (cm)</span>
+                <span>Measurements (cm)</span>
               </div>
               <div className="grid grid-cols-2 gap-2 text-xs sm:grid-cols-3">
                 {measurements?.chest && (
                   <div>
-                    Vòng ngực:{' '}
+                    Chest:{' '}
                     <strong className="text-rewear-text">
                       {measurements.chest} cm
                     </strong>
@@ -299,7 +299,7 @@ export function ProductDetailPage({ id }: { id: string }) {
                 )}
                 {measurements?.waist && (
                   <div>
-                    Vòng eo:{' '}
+                    Waist:{' '}
                     <strong className="text-rewear-text">
                       {measurements.waist} cm
                     </strong>
@@ -307,7 +307,7 @@ export function ProductDetailPage({ id }: { id: string }) {
                 )}
                 {measurements?.hip && (
                   <div>
-                    Vòng mông:{' '}
+                    Hips:{' '}
                     <strong className="text-rewear-text">
                       {measurements.hip} cm
                     </strong>
@@ -315,7 +315,7 @@ export function ProductDetailPage({ id }: { id: string }) {
                 )}
                 {measurements?.length && (
                   <div>
-                    Chiều dài:{' '}
+                    Length:{' '}
                     <strong className="text-rewear-text">
                       {measurements.length} cm
                     </strong>
@@ -323,7 +323,7 @@ export function ProductDetailPage({ id }: { id: string }) {
                 )}
                 {measurements?.shoulder && (
                   <div>
-                    Rộng vai:{' '}
+                    Shoulder:{' '}
                     <strong className="text-rewear-text">
                       {measurements.shoulder} cm
                     </strong>
@@ -331,7 +331,7 @@ export function ProductDetailPage({ id }: { id: string }) {
                 )}
                 {measurements?.sleeve && (
                   <div>
-                    Dài tay:{' '}
+                    Sleeve:{' '}
                     <strong className="text-rewear-text">
                       {measurements.sleeve} cm
                     </strong>
@@ -339,7 +339,7 @@ export function ProductDetailPage({ id }: { id: string }) {
                 )}
                 {measurements?.inseam && (
                   <div>
-                    Đáy quần (inseam):{' '}
+                    Inseam:{' '}
                     <strong className="text-rewear-text">
                       {measurements.inseam} cm
                     </strong>
@@ -354,16 +354,16 @@ export function ProductDetailPage({ id }: { id: string }) {
             <div className="space-y-2 rounded-lg border border-amber-200 bg-amber-50/50 p-4 text-amber-900 dark:border-amber-900/40 dark:bg-amber-950/20 dark:text-amber-200">
               <div className="flex items-center gap-2 text-xs font-semibold tracking-wider uppercase">
                 <AlertTriangle size={15} />
-                <span>Lưu ý tình trạng & Lỗi nhỏ</span>
+                <span>Condition notes & flaws</span>
               </div>
               {product.repairs && (
                 <p className="text-xs">
-                  <strong>Đã sửa chữa:</strong> {product.repairs}
+                  <strong>Repairs:</strong> {product.repairs}
                 </p>
               )}
               {defects.length > 0 && (
                 <div className="space-y-1 text-xs">
-                  <strong>Lỗi được ghi nhận:</strong>
+                  <strong>Disclosed flaws:</strong>
                   <ul className="list-disc space-y-0.5 pl-4">
                     {defects.map((d, i) => (
                       <li key={i}>{d.description}</li>
@@ -379,12 +379,12 @@ export function ProductDetailPage({ id }: { id: string }) {
             <div className="text-rewear-muted border-rewear-border flex items-center gap-3 border-t pt-4 text-xs">
               <Truck size={16} />
               <span>
-                Đóng gói: {shippingPkg.weightGrams}g ({shippingPkg.lengthCm}x
+                Package: {shippingPkg.weightGrams}g ({shippingPkg.lengthCm}x
                 {shippingPkg.widthCm}x{shippingPkg.heightCm} cm)
               </span>
               <span className="ml-auto flex items-center gap-1">
                 <PackageCheck size={14} />
-                Kiểm hàng trước khi nhận
+                Inspection upon delivery
               </span>
             </div>
           )}

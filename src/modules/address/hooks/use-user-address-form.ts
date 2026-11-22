@@ -27,6 +27,7 @@ export function useUserAddressForm({
     handleSubmit,
     setValue,
     control,
+    clearErrors,
     formState: { errors },
   } = useForm<UserAddressFormValues>({
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -52,8 +53,8 @@ export function useUserAddressForm({
     error: divisionError,
     refetch: refetchDivisions,
   } = useAdministrativeDivisions({
-    initialProvinceCode: provinceCode,
-    initialWardCode: wardCode,
+    provinceCode,
+    wardCode,
   });
 
   const create = useUserAddressControllerCreate({
@@ -62,7 +63,8 @@ export function useUserAddressForm({
 
   const handleProvinceChange = (code: string) => {
     setValue('provinceCode', code, { shouldValidate: true });
-    setValue('wardCode', '', { shouldValidate: true });
+    setValue('wardCode', '', { shouldValidate: false });
+    clearErrors('wardCode');
   };
 
   const handleWardChange = (code: string) => {

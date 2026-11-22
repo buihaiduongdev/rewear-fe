@@ -2,7 +2,7 @@ import { Badge } from '@/shared/components/ui/badge';
 import { ShieldCheck } from 'lucide-react';
 
 export function SellerVerifiedBadge({
-  label = 'Đã xác thực',
+  label = 'Verified',
 }: {
   label?: string;
 }) {
