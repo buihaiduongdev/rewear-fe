@@ -617,3 +617,15 @@ Ghi một mục cho mỗi task có dùng AI. Cập nhật liên kết PR/commit 
 - **Phần tự làm hoặc đã chỉnh sửa:** Người dùng góp ý trực tiếp trên giao diện.
 - **Cách kiểm chứng:** `git diff --check`; không chạy test theo yêu cầu người dùng, để CI kiểm tra.
 - **Minh chứng:** PR #16; branch `buihaiduongdev/fe-cleanup-review`.
+
+### 2026-11-22 — Làm mới ảnh trang chủ
+
+- **Người thực hiện:** Bùi Hải Dương
+- **Công cụ:** Codex (OpenAI)
+- **Mục đích và phạm vi:** Thay ảnh trang chủ bằng ảnh quần áo không có người.
+- **Prompt chính:** Chọn lại ảnh chỉ có quần áo và phụ kiện, đồng thời làm mới ảnh trang chủ.
+- **Đầu ra AI được sử dụng:** Hai ảnh quần áo trên giá và nội dung thay thế tương ứng.
+- **Phần tự làm hoặc đã chỉnh sửa:** Người dùng yêu cầu không dùng ảnh có người.
+- **Cách kiểm chứng:** Kiểm tra trực tiếp ảnh nguồn và `git diff --check`; không chạy test theo yêu cầu người dùng.
+- **Nguồn ảnh:** [Polina Kuzovkova, Unsplash](https://unsplash.com/photos/clothes-hanging-on-a-rack-in-a-boutique-pt3EBzQcxP0); [Adiel Gavish, Unsplash](https://unsplash.com/photos/a-bunch-of-clothes-hanging-on-a-rack-7E-bTt8i28k).
+- **Minh chứng:** PR #16; branch `buihaiduongdev/fe-cleanup-review`.

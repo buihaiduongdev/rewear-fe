@@ -128,8 +128,8 @@ export function HomePage() {
           </div>
           <div className="relative aspect-[358/448] w-full md:aspect-[528/660] md:min-w-0 md:flex-[528]">
             <Image
-              src="/images/home/editorial.png"
-              alt="Pre-owned wool outerwear, styled for its next chapter"
+              src="/images/home/editorial.jpg"
+              alt="A rail of light-coloured clothing in a boutique"
               fill
               preload
               sizes="(min-width: 1536px) 656px, (min-width: 768px) 44vw, 100vw"
@@ -275,8 +275,8 @@ export function HomePage() {
           </h2>
           <div className="relative h-[180px] w-full md:aspect-[592/400] md:h-auto md:w-1/2">
             <Image
-              src="/images/home/selling.png"
-              alt="Clothing rails inside an independent secondhand shop"
+              src="/images/home/selling.jpg"
+              alt="A rail of pre-loved knitwear and dresses"
               fill
               sizes="(min-width: 1536px) 720px, (min-width: 768px) 50vw, 90vw"
               className="object-cover"
