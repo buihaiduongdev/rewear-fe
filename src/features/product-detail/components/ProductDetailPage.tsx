@@ -270,11 +270,6 @@ export function ProductDetailPage({ id }: { id: string }) {
         <div className={`flex flex-col gap-6 md:col-span-6 ${displayPhotos.length > 1 ? 'md:pb-[136px]' : ''}`}>
           {/* Brand, Title & Price (Figma 53:771) */}
           <div className="space-y-4">
-            {product.brand && (
-              <span className="text-base text-rewear-text block">
-                {product.brand}
-              </span>
-            )}
             <h1 className="text-3xl sm:text-4xl font-semibold tracking-[-0.02em] text-rewear-text leading-tight">
               {product.title ?? 'Untitled piece'}
             </h1>
@@ -303,6 +298,24 @@ export function ProductDetailPage({ id }: { id: string }) {
                 {formatCondition(product.condition)}
               </p>
             </div>
+            {product.category?.name && (
+              <div className="space-y-1.5">
+                <span className="block text-sm font-semibold text-rewear-muted">Category</span>
+                <p className="text-base font-medium text-rewear-text">{product.category.name}</p>
+              </div>
+            )}
+            {product.brand && (
+              <div className="space-y-1.5">
+                <span className="block text-sm font-semibold text-rewear-muted">Brand</span>
+                <p className="text-base font-medium text-rewear-text">{product.brand}</p>
+              </div>
+            )}
+            {product.color && (
+              <div className="space-y-1.5">
+                <span className="block text-sm font-semibold text-rewear-muted">Color</span>
+                <p className="text-base font-medium text-rewear-text">{product.color}</p>
+              </div>
+            )}
           </div>
 
           {/* Purchase Actions (Figma 53:785) */}
@@ -362,17 +375,6 @@ export function ProductDetailPage({ id }: { id: string }) {
           <p className="whitespace-pre-line text-base leading-relaxed text-rewear-text">
             {product.description || 'No detailed description provided by the seller.'}
           </p>
-          <dl className="space-y-3 pt-2 text-sm">
-            {product.category?.name && (
-              <div className="flex justify-between gap-4"><dt className="text-rewear-muted">Category</dt><dd className="text-right font-semibold text-rewear-text">{product.category.name}</dd></div>
-            )}
-            {product.brand && (
-              <div className="flex justify-between gap-4"><dt className="text-rewear-muted">Brand</dt><dd className="text-right font-semibold text-rewear-text">{product.brand}</dd></div>
-            )}
-            {product.color && (
-              <div className="flex justify-between gap-4"><dt className="text-rewear-muted">Color</dt><dd className="text-right font-semibold text-rewear-text">{product.color}</dd></div>
-            )}
-          </dl>
         </section>
         <section className="min-w-0 space-y-6">
           <h2 className="text-[28px] leading-[34px] font-semibold tracking-[-0.02em] text-rewear-text">

@@ -36,7 +36,6 @@ export function ProductDetailSkeleton() {
         <div className="flex flex-col gap-6 md:col-span-6 md:pb-[136px]">
           {/* Title & Price Header */}
           <div className="space-y-4">
-            <div className="h-4 w-24 motion-safe:animate-pulse bg-rewear-soft" />
             <div className="h-10 w-4/5 motion-safe:animate-pulse bg-rewear-soft" />
             <div className="h-10 w-36 motion-safe:animate-pulse bg-rewear-soft" />
           </div>
@@ -51,6 +50,12 @@ export function ProductDetailSkeleton() {
               <div className="h-4 w-16 motion-safe:animate-pulse bg-rewear-soft" />
               <div className="h-5 w-24 motion-safe:animate-pulse bg-rewear-soft" />
             </div>
+            {[1, 2, 3].map((item) => (
+              <div key={item} className="space-y-1.5">
+                <div className="h-4 w-16 motion-safe:animate-pulse bg-rewear-soft" />
+                <div className="h-5 w-24 motion-safe:animate-pulse bg-rewear-soft" />
+              </div>
+            ))}
           </div>
 
           {/* Action Buttons */}

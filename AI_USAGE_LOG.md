@@ -606,3 +606,14 @@ Ghi một mục cho mỗi task có dùng AI. Cập nhật liên kết PR/commit 
 - **Phần tự làm hoặc đã chỉnh sửa:** Người dùng góp ý về popup xem nhanh.
 - **Cách kiểm chứng:** `pnpm check`, `pnpm test` (15 suites, 41 tests), `git diff --check`; kiểm tra điều hướng từ danh sách trên trình duyệt.
 - **Minh chứng:** PR #16; branch `buihaiduongdev/fe-cleanup-review`.
+
+### 2026-11-22 — Đưa thuộc tính lên đầu trang sản phẩm
+
+- **Người thực hiện:** Bùi Hải Dương
+- **Công cụ:** Codex (OpenAI)
+- **Mục đích và phạm vi:** Chuyển thông tin danh mục, thương hiệu và màu vào khu vực thông tin chính.
+- **Prompt chính:** Đưa các thuộc tính sản phẩm lên phía trên, cạnh size và tình trạng.
+- **Đầu ra AI được sử dụng:** Sắp xếp thuộc tính vào cùng lưới và điều chỉnh skeleton; bỏ dòng thương hiệu trùng phía trên tên sản phẩm.
+- **Phần tự làm hoặc đã chỉnh sửa:** Người dùng góp ý trực tiếp trên giao diện.
+- **Cách kiểm chứng:** `git diff --check`; không chạy test theo yêu cầu người dùng, để CI kiểm tra.
+- **Minh chứng:** PR #16; branch `buihaiduongdev/fe-cleanup-review`.
