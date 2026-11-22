@@ -110,7 +110,7 @@ export function MarketplaceHeader({
             Messages
           </button>
           {cartAction}
-          {session ? (
+          {session?.user && !session?.error ? (
             <details className="relative">
               <summary className="flex min-h-11 cursor-pointer list-none items-center">
                 Account
@@ -126,16 +126,10 @@ export function MarketplaceHeader({
                   Wishlist
                 </Link>
                 <Link
-                  href="/selling/packages"
+                  href="/selling"
                   className="flex min-h-11 items-center underline underline-offset-4"
                 >
-                  Listing packages
-                </Link>
-                <Link
-                  href="/selling/pickup"
-                  className="flex min-h-11 items-center underline underline-offset-4"
-                >
-                  Pickup address
+                  Seller workspace
                 </Link>
                 <button
                   type="button"
@@ -154,9 +148,6 @@ export function MarketplaceHeader({
               Account
             </Link>
           )}
-          <span>
-            <span lang="en">EN</span> / <span lang="vi">VI</span>
-          </span>
         </nav>
         <button
           type="button"

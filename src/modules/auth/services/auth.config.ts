@@ -11,7 +11,7 @@ import Google from 'next-auth/providers/google';
 
 import { buildAuthToken, getRefreshToken } from './auth.session';
 
-export const { handlers, signIn, signOut, auth } = NextAuth({
+export const { handlers, signIn, signOut, auth, unstable_update } = NextAuth({
   providers: [
     Google,
     Credentials({
@@ -47,7 +47,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     }),
   ],
   callbacks: {
-    async jwt({ token, user, account }) {
+    async jwt({ token, user, account, trigger }) {
       if (account?.provider === 'credentials') {
         return { ...token, ...user };
       }
@@ -75,7 +75,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         }
       }
 
-      if (Date.now() < token.expiresAt) {
+      if (trigger !== 'update' && Date.now() < token.expiresAt - 60_000) {
         return token;
       }
 

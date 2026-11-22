@@ -43,6 +43,7 @@ export function UserAddressForm({
         <BaseInputField
           id="delivery-recipient"
           label="Recipient"
+          placeholder="e.g. Tran Minh Quan"
           appearance="filled"
           autoComplete="name"
           maxLength={100}
@@ -54,6 +55,7 @@ export function UserAddressForm({
         <BaseInputField
           id="delivery-phone"
           label="Phone"
+          placeholder="e.g. 0918 345 889"
           appearance="filled"
           type="tel"
           autoComplete="tel"
@@ -75,12 +77,13 @@ export function UserAddressForm({
             wardCode: errors.wardCode?.message,
           }}
           provinceLabel="Province / City"
-          wardLabel="Ward"
+          wardLabel="Ward / Commune"
         />
 
         <BaseInputField
           id="delivery-street"
           label="Street address"
+          placeholder="e.g. 45 Xa Dan"
           appearance="filled"
           autoComplete="street-address"
           maxLength={255}
@@ -127,7 +130,7 @@ export function UserAddressForm({
             onClick={onCancel}
             className="min-h-11"
           >
-            Hủy
+            Cancel
           </Button>
         )}
         <Button

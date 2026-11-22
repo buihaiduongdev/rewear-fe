@@ -91,7 +91,6 @@ export function LoginShell({ children }: { children: ReactNode }) {
           <p>© 2026 RE.WEAR</p>
           <div className="flex items-center gap-4 whitespace-nowrap">
             <span lang="en">English</span>
-            <span lang="vi">Tiếng Việt</span>
           </div>
         </div>
       </footer>

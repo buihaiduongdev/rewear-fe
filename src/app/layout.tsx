@@ -19,7 +19,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: 'RE.WEAR',
-  description: 'Pre-owned clothing from independent sellers across Vietnam.',
+  description: 'Pre-owned clothing from independent sellers.',
 };
 
 export default function RootLayout({

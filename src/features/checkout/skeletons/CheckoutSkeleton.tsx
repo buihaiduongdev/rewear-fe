@@ -5,10 +5,10 @@ export function CheckoutSkeleton() {
     <div
       role="status"
       aria-busy="true"
-      aria-label="Đang tải trang thanh toán"
+      aria-label="Loading checkout page"
       className="bg-rewear-surface text-rewear-text min-h-dvh"
     >
-      <span className="sr-only">Đang tải trang thanh toán…</span>
+      <span className="sr-only">Loading checkout page…</span>
 
       {/* Mock Header skeleton */}
       <header className="border-rewear-border border-b">
