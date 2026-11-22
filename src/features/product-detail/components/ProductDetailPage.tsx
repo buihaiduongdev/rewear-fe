@@ -376,21 +376,19 @@ export function ProductDetailPage({ id }: { id: string }) {
                   <img src={shopLogo} alt="" className="size-full object-cover" />
                 ) : shopInitials}
               </div>
-              <div className="min-w-0">
-                <p className="text-sm text-rewear-muted">Sold by</p>
-                <h3 className="break-words text-xl font-semibold leading-snug text-rewear-text">
-                  {product.shop?.name || 'Seller'}
-                </h3>
-              </div>
+              <h3 className="min-w-0 break-words text-xl font-semibold leading-snug text-rewear-text">
+                {product.shopId ? (
+                  <Link
+                    href={`/products?shopId=${encodeURIComponent(product.shopId)}`}
+                    className="underline decoration-rewear-muted underline-offset-4 hover:decoration-rewear-text"
+                  >
+                    {product.shop?.name || 'Seller'}
+                  </Link>
+                ) : (
+                  product.shop?.name || 'Seller'
+                )}
+              </h3>
             </div>
-            {product.shopId && (
-              <Link
-                href={`/products?shopId=${encodeURIComponent(product.shopId)}`}
-                className="mt-5 inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-rewear-text underline underline-offset-4 hover:no-underline"
-              >
-                Explore shop <span aria-hidden="true">→</span>
-              </Link>
-            )}
           </section>
 
           {/* About This Piece (Figma 53:798) */}
