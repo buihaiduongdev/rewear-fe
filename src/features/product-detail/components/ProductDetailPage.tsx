@@ -1,75 +1,152 @@
 'use client';
 
 import { useState } from 'react';
-
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { AlertTriangle } from 'lucide-react';
+import { useSession } from 'next-auth/react';
 
-import { AddToCartAction } from '@/modules/cart/components/AddToCartAction';
-import { ShopSummaryCard } from '@/modules/shop';
-import { SaveToWishlistButton } from '@/modules/wishlist/components/SaveToWishlistButton';
+import { 
+  useProductControllerFindOne, 
+  useProductControllerFindAll 
+} from '@/shared/api/query-generated/products/products';
 import { useMediaControllerFindAll } from '@/shared/api/query-generated/product-media/product-media';
-import { useProductControllerFindOne } from '@/shared/api/query-generated/products/products';
 import { ProductPhoto } from '@/shared/components/marketplace/ProductPhoto';
-import { Badge } from '@/shared/components/ui/badge';
+import { useAddCartItem, useCart } from '@/modules/cart/hooks/use-cart';
+import { formatCondition, formatPrice } from '@/shared/utils/product';
 import { Button } from '@/shared/components/ui/button';
 import { TOAST_DURATION_MS } from '@/shared/constants/toast';
 import { useToastStore } from '@/shared/stores/toast.store';
-import { formatCondition, formatPrice } from '@/shared/utils/product';
-import {
-  AlertTriangle,
-  ArrowLeft,
-  Check,
-  ChevronRight,
-  PackageCheck,
-  Ruler,
-  Share2,
-  Truck,
-} from 'lucide-react';
-
+import { getApiErrorMessage } from '@/shared/api/api-error';
 import { ProductDetailSkeleton } from '../skeletons/ProductDetailSkeleton';
+import { 
+  ProductFullDetailsModal, 
+  ProductHowToMeasureModal, 
+  ProductDeliveryPolicyModal 
+} from './ProductModals';
 
 export function ProductDetailPage({ id }: { id: string }) {
+  const router = useRouter();
+  const { data: session, status: authStatus } = useSession();
   const addToast = useToastStore((s) => s.addToast);
+  const cart = useCart();
+  const addCartItem = useAddCartItem();
+
   const [selectedMediaIndex, setSelectedMediaIndex] = useState(0);
-  const [copied, setCopied] = useState(false);
+  const [isBuyingNow, setIsBuyingNow] = useState(false);
 
-  const {
-    data: productResponse,
-    isLoading,
-    isError,
-  } = useProductControllerFindOne(id);
-  const { data: mediaResponse } = useMediaControllerFindAll(id);
+  // Modals state
+  const [fullDetailsOpen, setFullDetailsOpen] = useState(false);
+  const [howToMeasureOpen, setHowToMeasureOpen] = useState(false);
+  const [deliveryPolicyOpen, setDeliveryPolicyOpen] = useState(false);
 
+  // 1. Fetch main product data
+  const { data: productResponse, isLoading, isError } = useProductControllerFindOne(id);
   const product = productResponse?.data;
+
+  // 2. Fetch full seller photography
+  const { data: mediaResponse } = useMediaControllerFindAll(id, {
+    query: { enabled: !!product?.id },
+  });
   const mediaList = mediaResponse?.data ?? [];
 
-  // Combine cover and mediaList items if needed
-  const displayPhotos =
-    mediaList.length > 0
-      ? mediaList
-      : product?.coverUrl
-        ? [{ id: 'cover', url: product.coverUrl, position: 0 }]
-        : [];
+  // 3. Fetch "More from this seller"
+  const shopId = product?.shopId;
+  const { data: shopProductsResponse } = useProductControllerFindAll(
+    shopId ? { 'filter.shopId': [`$eq:${shopId}`], limit: 5 } : undefined,
+    {
+      query: { enabled: !!shopId },
+    },
+  );
 
-  const activePhotoUrl =
-    displayPhotos[selectedMediaIndex]?.url ?? product?.coverUrl ?? null;
+  // 4. Fetch fallback category products if seller has only 1 item
+  const categoryId = product?.categoryId;
+  const { data: categoryProductsResponse } = useProductControllerFindAll(
+    categoryId ? { 'filter.categoryId': [`$eq:${categoryId}`], limit: 5 } : undefined,
+    {
+      query: { enabled: !!categoryId },
+    },
+  );
 
-  const handleShare = async () => {
+  // Prepare photos gallery
+  const displayPhotos = mediaList.length > 0 
+    ? mediaList 
+    : product?.coverUrl 
+      ? [{ id: 'cover', url: product.coverUrl, position: 0 }] 
+      : [];
+
+  const activePhotoUrl = displayPhotos[selectedMediaIndex]?.url ?? product?.coverUrl ?? null;
+
+  // Related products (filter out current product)
+  const sellerProducts = (shopProductsResponse?.data?.data || [])
+    .filter((item) => item.id !== product?.id)
+    .slice(0, 4);
+
+  const relatedProducts = sellerProducts.length >= 2
+    ? sellerProducts
+    : (categoryProductsResponse?.data?.data || [])
+        .filter((item) => item.id !== product?.id)
+        .slice(0, 4);
+
+  const isSoldOut = product?.status && product.status !== 'ACTIVE';
+  const alreadyInCart = cart.data?.data.groups.some((group) =>
+    group.items.some((item) => item.productId === product?.id),
+  );
+
+  const handleAddToCart = () => {
+    if (!product) return;
+    if (authStatus !== 'authenticated' || session?.error) {
+      router.push(`/login?callbackUrl=${encodeURIComponent(`/products/${product.id}`)}`);
+      return;
+    }
+
+    addCartItem.mutate(
+      { productId: product.id, data: {} },
+      {
+        onSuccess: () => {
+          addToast({
+            type: 'success',
+            title: 'Added to cart',
+            description: [product.title, product.size].filter(Boolean).join(' · '),
+            durationMs: TOAST_DURATION_MS.DEFAULT,
+            href: '/cart',
+            actionLabel: 'View cart',
+          });
+        },
+        onError: (err) => {
+          addToast({
+            type: 'error',
+            title: 'Could not add to cart',
+            description: getApiErrorMessage(err),
+            durationMs: TOAST_DURATION_MS.DEFAULT,
+          });
+        },
+      },
+    );
+  };
+
+  const handleBuyNow = async () => {
+    if (!product) return;
+    if (authStatus !== 'authenticated' || session?.error) {
+      router.push(`/login?callbackUrl=${encodeURIComponent(`/checkout`)}`);
+      return;
+    }
+
+    if (alreadyInCart) {
+      router.push('/checkout');
+      return;
+    }
+
     try {
-      if (typeof window !== 'undefined') {
-        await navigator.clipboard.writeText(window.location.href);
-        setCopied(true);
-        addToast({
-          type: 'success',
-          title: 'Product link copied to clipboard',
-          durationMs: TOAST_DURATION_MS.DEFAULT,
-        });
-        setTimeout(() => setCopied(false), 2000);
-      }
-    } catch {
+      setIsBuyingNow(true);
+      await addCartItem.mutateAsync({ productId: product.id, data: {} });
+      router.push('/checkout');
+    } catch (err) {
+      setIsBuyingNow(false);
       addToast({
         type: 'error',
-        title: 'Could not copy link',
+        title: 'Could not process purchase',
+        description: getApiErrorMessage(err),
         durationMs: TOAST_DURATION_MS.DEFAULT,
       });
     }
@@ -81,14 +158,14 @@ export function ProductDetailPage({ id }: { id: string }) {
 
   if (isError || !product) {
     return (
-      <div className="mx-auto max-w-3xl px-4 py-16 text-center sm:px-6">
-        <div className="bg-rewear-soft text-rewear-muted mb-4 inline-flex size-16 items-center justify-center rounded-full">
+      <div className="mx-auto max-w-3xl px-4 py-20 text-center sm:px-6">
+        <div className="inline-flex size-16 items-center justify-center rounded-full bg-rewear-soft text-rewear-muted mb-4">
           <AlertTriangle size={32} />
         </div>
-        <h1 className="text-rewear-text text-2xl font-bold tracking-tight">
-          Piece not found
+        <h1 className="text-2xl font-bold tracking-tight text-rewear-text">
+          Product not found
         </h1>
-        <p className="text-rewear-muted mt-2 text-sm">
+        <p className="mt-2 text-sm text-rewear-muted">
           This piece may have been removed or the link is incorrect.
         </p>
         <div className="mt-6 flex justify-center gap-4">
@@ -97,299 +174,477 @@ export function ProductDetailPage({ id }: { id: string }) {
             render={<Link href="/products" />}
             nativeButton={false}
           >
-            Back to clothing
+            Back to catalog
           </Button>
         </div>
       </div>
     );
   }
 
-  const measurements = product.measurements;
-  const hasMeasurements =
-    measurements && Object.values(measurements).some(Boolean);
+  const measurements = product.measurements || {};
+  const hasMeasurements = Object.values(measurements).some(Boolean);
   const defects = product.defects || [];
-  const shippingPkg = product.shippingPackage;
+  const hasNotes = Boolean(product.repairs || defects.length > 0);
+
+  // Shop initials fallback
+  const shopInitials = (product.shop?.name || 'S')
+    .split(' ')
+    .map((w) => w[0])
+    .filter(Boolean)
+    .slice(0, 2)
+    .join('')
+    .toUpperCase();
+
+  // Closer look photos (take up to 2 distinct photos from seller photos)
+  const closerLookPhotos = displayPhotos.length >= 3
+    ? displayPhotos.slice(1, 3)
+    : displayPhotos.slice(0, 2);
 
   return (
-    <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-      {/* Breadcrumb & Navigation */}
-      <nav className="text-rewear-muted mb-6 flex items-center justify-between text-sm">
-        <div className="flex items-center space-x-2">
-          <Link
-            href="/products"
-            className="hover:text-rewear-text flex items-center gap-1 transition-colors"
-          >
-            <ArrowLeft size={16} />
-            <span>Clothing</span>
-          </Link>
-          <ChevronRight size={14} className="text-rewear-muted/50" />
-          {product.category && (
-            <>
-              <span className="hover:text-rewear-text transition-colors">
-                {product.category.name}
-              </span>
-              <ChevronRight size={14} className="text-rewear-muted/50" />
-            </>
-          )}
-          <span className="text-rewear-text line-clamp-1 max-w-[200px] font-medium sm:max-w-xs">
-            {product.title ?? 'Piece details'}
-          </span>
-        </div>
-
-        <button
-          onClick={handleShare}
-          className="hover:bg-rewear-soft text-rewear-text flex items-center gap-1.5 rounded px-2.5 py-1 text-xs font-medium transition-colors"
-          title="Share piece"
-        >
-          {copied ? (
-            <Check size={14} className="text-green-600" />
-          ) : (
-            <Share2 size={14} />
-          )}
-          <span>{copied ? 'Copied' : 'Share'}</span>
-        </button>
+    <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10 pb-28 lg:pb-16 font-sans space-y-16">
+      {/* 1. Breadcrumbs (Figma 53:755) */}
+      <nav className="flex items-center gap-4 text-sm font-semibold">
+        <Link href="/products" className="text-rewear-text hover:underline transition-colors">
+          Shop
+        </Link>
+        <span className="text-rewear-muted">/</span>
+        {product.category ? (
+          <>
+            <Link 
+              href={`/products?filter.categoryId=$eq:${product.category.id}`} 
+              className="text-rewear-text hover:underline transition-colors"
+            >
+              {product.category.name}
+            </Link>
+            <span className="text-rewear-muted">/</span>
+          </>
+        ) : null}
+        <span className="text-rewear-muted">
+          {product.brand ? product.brand : product.title ?? 'Piece details'}
+        </span>
       </nav>
 
-      {/* Main Grid: Gallery & Details */}
-      <div className="grid grid-cols-1 gap-10 lg:grid-cols-12 lg:gap-14">
-        {/* Left Column: Gallery (7 cols on lg) */}
+      {/* 2. Main Editorial Stage: Two-Column Canvas (Figma 53:760 / 1:3581) */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-start">
+        {/* Left Column: Seller Photography Gallery (7 cols on lg, Figma 53:761) */}
         <div className="space-y-4 lg:col-span-7">
-          {/* Main Photo View */}
-          <div className="bg-rewear-soft border-rewear-border relative aspect-[3/4] w-full overflow-hidden rounded-lg border">
+          {/* Main Stage Photo (Figma 53:762) */}
+          <div className="bg-rewear-soft relative aspect-[3/4] w-full overflow-hidden border border-rewear-border">
             <ProductPhoto
               url={activePhotoUrl}
               title={product.title}
-              sizes="(min-width: 1024px) 50vw, 100vw"
+              sizes="(min-width: 1024px) 58vw, 100vw"
             />
-            {product.status && product.status !== 'ACTIVE' && (
-              <div className="absolute top-3 left-3 rounded bg-black/75 px-2.5 py-1 text-xs font-semibold tracking-wider text-white uppercase backdrop-blur-sm">
-                {product.status === 'SOLD'
-                  ? 'Sold'
-                  : product.status === 'HELD'
-                    ? 'Reserved'
-                    : product.status}
+            {isSoldOut && (
+              <div className="absolute top-4 left-4 bg-black/85 px-3 py-1.5 text-xs font-bold text-white uppercase tracking-wider backdrop-blur-xs">
+                {product.status === 'SOLD' ? 'Sold' : product.status === 'HELD' ? 'Reserved' : product.status}
               </div>
             )}
           </div>
 
-          {/* Thumbnails */}
+          {/* Thumbnail Selector Strip (Figma 53:763) */}
           {displayPhotos.length > 1 && (
-            <div className="flex scrollbar-thin gap-3 overflow-x-auto pb-2">
-              {displayPhotos.map((photo, index) => {
-                const isSelected = index === selectedMediaIndex;
-                return (
-                  <button
-                    key={photo.id || index}
-                    onClick={() => setSelectedMediaIndex(index)}
-                    className={`relative size-20 shrink-0 overflow-hidden rounded-md border-2 transition-all ${
-                      isSelected
-                        ? 'border-rewear-accent ring-rewear-accent/20 ring-2'
-                        : 'border-rewear-border/60 opacity-70 hover:opacity-100'
-                    }`}
-                  >
-                    <ProductPhoto
-                      url={photo.url}
-                      title={`Photo ${index + 1}`}
-                      sizes="80px"
-                    />
-                  </button>
-                );
-              })}
+            <div className="space-y-3">
+              <div className="flex gap-[15px] overflow-x-auto pb-1 scrollbar-thin">
+                {displayPhotos.map((photo, index) => {
+                  const isSelected = index === selectedMediaIndex;
+                  return (
+                    <button
+                      key={`thumb-${photo.id || 'photo'}-${index}`}
+                      type="button"
+                      onClick={() => setSelectedMediaIndex(index)}
+                      className={`relative size-[100px] sm:size-[120px] shrink-0 overflow-hidden border-2 transition-all cursor-pointer ${
+                        isSelected
+                          ? 'border-rewear-text ring-1 ring-rewear-text'
+                          : 'border-rewear-border opacity-70 hover:opacity-100'
+                      }`}
+                      aria-label={`Inspect photo ${index + 1}`}
+                    >
+                      <ProductPhoto
+                        url={photo.url}
+                        title={`Thumbnail ${index + 1}`}
+                        sizes="120px"
+                      />
+                    </button>
+                  );
+                })}
+              </div>
+              <p className="text-sm font-semibold text-rewear-muted">
+                {displayPhotos.length} seller photos · Select a photo to inspect
+              </p>
             </div>
           )}
         </div>
 
-        {/* Right Column: Actions & Information (5 cols on lg) */}
+        {/* Right Column: Complete Purchase Information (5 cols on lg, Figma 53:770) */}
         <div className="flex flex-col space-y-6 lg:col-span-5">
-          {/* Title & Price Header */}
-          <div className="border-rewear-border space-y-2 border-b pb-5">
-            <div className="flex items-center gap-2">
-              {product.brand && (
-                <span className="text-rewear-muted text-xs font-semibold tracking-wider uppercase">
-                  {product.brand}
-                </span>
-              )}
-              {product.condition && (
-                <Badge variant="secondary">
-                  {formatCondition(product.condition)}
-                </Badge>
-              )}
-            </div>
-            <h1 className="text-rewear-text text-2xl font-bold tracking-tight sm:text-3xl">
+          {/* Brand, Title & Price (Figma 53:771) */}
+          <div className="space-y-4">
+            {product.brand && (
+              <span className="text-base text-rewear-text block">
+                {product.brand}
+              </span>
+            )}
+            <h1 className="text-3xl sm:text-4xl font-semibold tracking-[-0.02em] text-rewear-text leading-tight">
               {product.title ?? 'Untitled piece'}
             </h1>
-            <div className="flex items-baseline gap-3 pt-1">
-              <span className="text-rewear-text text-2xl font-extrabold">
+            <div>
+              <span className="text-3xl sm:text-4xl font-semibold tracking-[-0.02em] text-rewear-text leading-tight">
                 {formatPrice(product.price)}
               </span>
-              {product.size && (
-                <span className="text-rewear-muted text-sm">
-                  Size:{' '}
-                  <strong className="text-rewear-text">{product.size}</strong>
-                </span>
-              )}
             </div>
           </div>
 
-          {/* Key Attributes Pills */}
-          <div className="grid grid-cols-2 gap-3 text-sm">
-            <div className="border-rewear-border rounded-lg border p-3">
-              <span className="text-rewear-muted text-xs">Color</span>
-              <p className="text-rewear-text font-medium">
-                {product.color || 'Not specified'}
+          {/* Size & Condition Side-by-side (Figma 53:775) */}
+          <div className="grid grid-cols-2 gap-6">
+            <div className="space-y-1.5">
+              <span className="text-sm font-semibold text-rewear-muted block">
+                Size
+              </span>
+              <p className="text-base font-medium text-rewear-text">
+                {product.size || 'One size'}
               </p>
             </div>
-            <div className="border-rewear-border rounded-lg border p-3">
-              <span className="text-rewear-muted text-xs">Condition</span>
-              <p className="text-rewear-text font-medium">
-                {formatCondition(product.condition) || 'Uncategorized'}
+            <div className="space-y-1.5">
+              <span className="text-sm font-semibold text-rewear-muted block">
+                Condition
+              </span>
+              <p className="text-base font-medium text-rewear-text">
+                {formatCondition(product.condition)}
               </p>
             </div>
           </div>
 
-          {/* Add to Cart & Save to Wishlist Actions */}
-          <div className="flex flex-col gap-3 pt-2 sm:flex-row">
-            <div className="flex-1">
-              <AddToCartAction
-                product={{
-                  id: product.id,
-                  title: product.title,
-                  size: product.size,
-                }}
-                primary
-              />
-            </div>
-            <div className="sm:w-48">
-              <SaveToWishlistButton productId={product.id} />
-            </div>
-          </div>
-
-          {/* Seller / Shop Information Card */}
-          <ShopSummaryCard
-            name={product.shop?.name || 'RE.WEAR Seller'}
-            verified
-          />
-
-          {/* Description Section */}
-          <div className="space-y-3">
-            <h3 className="text-rewear-muted text-sm font-semibold tracking-wider uppercase">
-              Description
-            </h3>
-            <div className="text-rewear-text text-sm leading-relaxed whitespace-pre-line">
-              {product.description ||
-                'The seller has not provided additional descriptions for this piece.'}
-            </div>
-          </div>
-
-          {/* Measurements Specifications */}
-          {hasMeasurements && (
-            <div className="border-rewear-border space-y-3 rounded-lg border p-4">
-              <div className="text-rewear-text flex items-center gap-2 text-sm font-semibold">
-                <Ruler size={16} />
-                <span>Measurements (cm)</span>
-              </div>
-              <div className="grid grid-cols-2 gap-2 text-xs sm:grid-cols-3">
-                {measurements?.chest && (
-                  <div>
-                    Chest:{' '}
-                    <strong className="text-rewear-text">
-                      {measurements.chest} cm
-                    </strong>
-                  </div>
-                )}
-                {measurements?.waist && (
-                  <div>
-                    Waist:{' '}
-                    <strong className="text-rewear-text">
-                      {measurements.waist} cm
-                    </strong>
-                  </div>
-                )}
-                {measurements?.hip && (
-                  <div>
-                    Hips:{' '}
-                    <strong className="text-rewear-text">
-                      {measurements.hip} cm
-                    </strong>
-                  </div>
-                )}
-                {measurements?.length && (
-                  <div>
-                    Length:{' '}
-                    <strong className="text-rewear-text">
-                      {measurements.length} cm
-                    </strong>
-                  </div>
-                )}
-                {measurements?.shoulder && (
-                  <div>
-                    Shoulder:{' '}
-                    <strong className="text-rewear-text">
-                      {measurements.shoulder} cm
-                    </strong>
-                  </div>
-                )}
-                {measurements?.sleeve && (
-                  <div>
-                    Sleeve:{' '}
-                    <strong className="text-rewear-text">
-                      {measurements.sleeve} cm
-                    </strong>
-                  </div>
-                )}
-                {measurements?.inseam && (
-                  <div>
-                    Inseam:{' '}
-                    <strong className="text-rewear-text">
-                      {measurements.inseam} cm
-                    </strong>
-                  </div>
-                )}
-              </div>
+          {/* Seller Condition Disclosure / Seller's note (Figma 53:782) */}
+          {hasNotes && (
+            <div className="bg-rewear-soft p-5 space-y-2">
+              <span className="text-sm font-semibold text-rewear-text block">
+                Seller’s note
+              </span>
+              <p className="text-base text-rewear-text leading-normal">
+                {[
+                  product.repairs ? `Repairs: ${product.repairs}` : '',
+                  defects.length > 0 ? `Disclosed flaws: ${defects.map((d) => d.description).join(', ')}` : '',
+                ]
+                  .filter(Boolean)
+                  .join('. ')}
+              </p>
             </div>
           )}
 
-          {/* Defects & Repairs Note if any */}
-          {(defects.length > 0 || product.repairs) && (
-            <div className="space-y-2 rounded-lg border border-amber-200 bg-amber-50/50 p-4 text-amber-900 dark:border-amber-900/40 dark:bg-amber-950/20 dark:text-amber-200">
-              <div className="flex items-center gap-2 text-xs font-semibold tracking-wider uppercase">
-                <AlertTriangle size={15} />
-                <span>Condition notes & flaws</span>
+          {/* Purchase Actions (Figma 53:785) */}
+          <div className="space-y-3 pt-2">
+            <Button
+              className="h-[52px] w-full rounded-none border-0 bg-rewear-accent text-rewear-text text-sm font-normal shadow-none hover:bg-rewear-accent/90 transition-colors disabled:opacity-50 cursor-pointer"
+              disabled={isSoldOut || addCartItem.isPending}
+              loading={addCartItem.isPending && !isBuyingNow}
+              onClick={handleAddToCart}
+            >
+              {isSoldOut ? 'Sold out / Reserved' : alreadyInCart ? 'Already in cart (Add another)' : 'Add to cart'}
+            </Button>
+
+            <Button
+              className="h-[52px] w-full rounded-none border-0 bg-rewear-soft text-rewear-text text-sm font-normal shadow-none hover:bg-rewear-soft/80 transition-colors disabled:opacity-50 cursor-pointer"
+              disabled={isSoldOut || isBuyingNow || addCartItem.isPending}
+              loading={isBuyingNow}
+              onClick={handleBuyNow}
+            >
+              {isSoldOut ? 'Unavailable' : 'Buy now'}
+            </Button>
+          </div>
+
+          {/* Delivery and Reporting Window (Figma 53:788) */}
+          <div className="pt-1">
+            <button
+              type="button"
+              onClick={() => setDeliveryPolicyOpen(true)}
+              className="text-sm font-semibold text-rewear-text hover:underline inline-flex items-center gap-1 cursor-pointer"
+            >
+              Delivery & returns ›
+            </button>
+          </div>
+
+          {/* Seller / Contact Card (Figma 53:792) */}
+          <div className="space-y-4 pt-2">
+            {/* Shop identity (71:2155) */}
+            <div className="flex items-center gap-4">
+              <div className="size-12 shrink-0 rounded-full overflow-hidden bg-rewear-soft">
+                {(product.shop as { logoUrl?: string | null })?.logoUrl ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={(product.shop as { logoUrl?: string | null }).logoUrl!}
+                    alt={product.shop.name}
+                    className="size-full object-cover"
+                  />
+                ) : (
+                  <div className="size-full flex items-center justify-center font-bold text-sm text-rewear-text bg-rewear-soft">
+                    {shopInitials}
+                  </div>
+                )}
               </div>
-              {product.repairs && (
-                <p className="text-xs">
-                  <strong>Repairs:</strong> {product.repairs}
+              <div>
+                <h3 className="text-[28px] leading-[34px] font-semibold tracking-tight text-rewear-text">
+                  {product.shop?.name || 'Hanoi Archive'}
+                </h3>
+                <p className="text-base text-rewear-muted">
+                  ★ 4.9 · Hanoi · Independent seller
                 </p>
-              )}
-              {defects.length > 0 && (
-                <div className="space-y-1 text-xs">
-                  <strong>Disclosed flaws:</strong>
-                  <ul className="list-disc space-y-0.5 pl-4">
-                    {defects.map((d, i) => (
-                      <li key={i}>{d.description}</li>
-                    ))}
-                  </ul>
-                </div>
-              )}
+              </div>
             </div>
-          )}
 
-          {/* Shipping and Package specs */}
-          {shippingPkg && (
-            <div className="text-rewear-muted border-rewear-border flex items-center gap-3 border-t pt-4 text-xs">
-              <Truck size={16} />
-              <span>
-                Package: {shippingPkg.weightGrams}g ({shippingPkg.lengthCm}x
-                {shippingPkg.widthCm}x{shippingPkg.heightCm} cm)
-              </span>
-              <span className="ml-auto flex items-center gap-1">
-                <PackageCheck size={14} />
-                Inspection upon delivery
-              </span>
+            {/* Seller actions (53:795) */}
+            <div className="flex items-center gap-8 text-sm font-semibold text-rewear-text">
+              <button
+                type="button"
+                onClick={() => {
+                  addToast({
+                    type: 'info',
+                    title: 'Message seller',
+                    description: `Direct messaging with ${product.shop?.name || 'seller'} will be available soon.`,
+                    durationMs: TOAST_DURATION_MS.DEFAULT,
+                  });
+                }}
+                className="hover:underline cursor-pointer"
+              >
+                Message seller
+              </button>
+              {product.shopId && (
+                <Link
+                  href={`/products?filter.shopId=$eq:${product.shopId}`}
+                  className="hover:underline"
+                >
+                  Explore shop →
+                </Link>
+              )}
             </div>
-          )}
+          </div>
+
+          {/* About This Piece (Figma 53:798) */}
+          <div className="space-y-3 pt-2">
+            <h3 className="text-[28px] leading-[34px] font-semibold tracking-tight text-rewear-text">
+              About this piece
+            </h3>
+            <p className="text-base text-rewear-text leading-normal line-clamp-4 whitespace-pre-line">
+              {product.description || 'No detailed description provided by the seller.'}
+            </p>
+            <button
+              type="button"
+              onClick={() => setFullDetailsOpen(true)}
+              className="text-sm font-semibold text-rewear-text hover:underline inline-block pt-1 cursor-pointer"
+            >
+              View full details ›
+            </button>
+          </div>
         </div>
       </div>
+
+      {/* 3. Condition and Fit / Information Section (Figma 53:801) */}
+      <div className="bg-rewear-soft p-8 sm:p-10 flex flex-col lg:flex-row gap-10">
+        {/* Left: Look closer (532px on desktop, Figma 53:802) */}
+        <div className="w-full lg:w-[532px] space-y-6">
+          <h2 className="text-[28px] leading-[34px] font-semibold tracking-[-0.02em] text-rewear-text">
+            A closer look.
+          </h2>
+
+          <div className="grid grid-cols-2 gap-4">
+            {closerLookPhotos.map((photo, i) => (
+              <div 
+                key={`closer-look-${photo.id || 'photo'}-${i}`}
+                onClick={() => {
+                  const idx = displayPhotos.findIndex((p) => p.id === photo.id);
+                  if (idx >= 0) setSelectedMediaIndex(idx);
+                }}
+                className="bg-white relative aspect-[4/3] w-full overflow-hidden border border-rewear-border cursor-pointer group"
+                title="Click to view full photo"
+              >
+                <ProductPhoto
+                  url={photo.url}
+                  title={`Detail photo ${i + 1}`}
+                  sizes="(min-width: 1024px) 25vw, 50vw"
+                />
+                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors" />
+              </div>
+            ))}
+          </div>
+          <p className="text-sm font-semibold text-rewear-muted">
+            Seller photos · Fabric and original buttons
+          </p>
+        </div>
+
+        {/* Right: Measurements (532px on desktop, Figma 53:808) */}
+        <div className="w-full lg:w-[532px] space-y-6">
+          <h2 className="text-[28px] leading-[34px] font-semibold tracking-[-0.02em] text-rewear-text">
+            Find your fit.
+          </h2>
+
+          {hasMeasurements ? (
+            <div className="space-y-3">
+              {measurements.chest ? (
+                <div className="flex justify-between items-center text-base">
+                  <span className="text-rewear-muted">Chest</span>
+                  <span className="text-sm font-semibold text-rewear-text">{measurements.chest} cm</span>
+                </div>
+              ) : null}
+              {measurements.length ? (
+                <div className="flex justify-between items-center text-base">
+                  <span className="text-rewear-muted">Length</span>
+                  <span className="text-sm font-semibold text-rewear-text">{measurements.length} cm</span>
+                </div>
+              ) : null}
+              {measurements.sleeve ? (
+                <div className="flex justify-between items-center text-base">
+                  <span className="text-rewear-muted">Sleeve</span>
+                  <span className="text-sm font-semibold text-rewear-text">{measurements.sleeve} cm</span>
+                </div>
+              ) : null}
+              {measurements.waist ? (
+                <div className="flex justify-between items-center text-base">
+                  <span className="text-rewear-muted">Waist</span>
+                  <span className="text-sm font-semibold text-rewear-text">{measurements.waist} cm</span>
+                </div>
+              ) : null}
+              {measurements.shoulder ? (
+                <div className="flex justify-between items-center text-base">
+                  <span className="text-rewear-muted">Shoulder</span>
+                  <span className="text-sm font-semibold text-rewear-text">{measurements.shoulder} cm</span>
+                </div>
+              ) : null}
+              {measurements.inseam ? (
+                <div className="flex justify-between items-center text-base">
+                  <span className="text-rewear-muted">Inseam</span>
+                  <span className="text-sm font-semibold text-rewear-text">{measurements.inseam} cm</span>
+                </div>
+              ) : null}
+            </div>
+          ) : (
+            <p className="text-base text-rewear-muted">
+              Standard fit for size {product.size || 'One size'}. No flat measurements recorded.
+            </p>
+          )}
+
+          <p className="text-base text-rewear-text">
+            {hasMeasurements
+              ? [
+                  measurements.chest ? `Chest: ${measurements.chest} cm flat` : '',
+                  measurements.length ? `Length: ${measurements.length} cm` : '',
+                ]
+                  .filter(Boolean)
+                  .join(' · ') || 'Compare with a piece you already own.'
+              : 'Compare with a piece you already own.'}
+          </p>
+
+          <div>
+            <button
+              type="button"
+              onClick={() => setHowToMeasureOpen(true)}
+              className="text-sm font-semibold text-rewear-text hover:underline cursor-pointer"
+            >
+              How to measure ›
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* 4. More from this seller / More to explore (Figma 53:821) */}
+      {relatedProducts.length > 0 && (
+        <div className="space-y-8">
+          <div className="flex items-center justify-between">
+            <h2 className="text-[36px] sm:text-[40px] font-semibold tracking-[-0.02em] text-rewear-text leading-[44px] sm:leading-[46px]">
+              More to explore.
+            </h2>
+            {product.shopId && (
+              <Link
+                href={`/products?filter.shopId=$eq:${product.shopId}`}
+                className="text-sm font-semibold text-rewear-text hover:underline"
+              >
+                Browse all →
+              </Link>
+            )}
+          </div>
+
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+            {relatedProducts.map((item) => (
+              <Link
+                key={item.id}
+                href={`/products/${item.id}`}
+                className="group flex flex-col cursor-pointer"
+              >
+                <div className="bg-rewear-soft relative aspect-[278/348] w-full overflow-hidden border border-rewear-border">
+                  <ProductPhoto
+                    url={item.coverUrl}
+                    title={item.title}
+                    sizes="(min-width: 1024px) 278px, 50vw"
+                  />
+                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors" />
+                </div>
+                <div className="flex justify-between items-start gap-3 pt-3">
+                  <div className="space-y-1 min-w-0">
+                    <h3 className="text-base text-rewear-text line-clamp-2 leading-snug group-hover:underline">
+                      {item.title ?? 'Untitled piece'}
+                    </h3>
+                    <p className="text-sm font-semibold text-rewear-muted">
+                      {[item.size, formatCondition(item.condition)].filter(Boolean).join(' · ')}
+                    </p>
+                  </div>
+                  <span className="text-sm font-semibold text-rewear-text shrink-0 pt-0.5">
+                    {formatPrice(item.price)}
+                  </span>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* 5. Mobile Sticky Bottom Action Bar (Figma 48:2655) */}
+      <div className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-rewear-border p-3.5 px-4 flex items-center justify-between gap-3 shadow-2xl">
+        <div className="min-w-0">
+          <span className="text-xs text-rewear-muted uppercase font-medium block">
+            {product.size ? `Size ${product.size}` : 'Price'}
+          </span>
+          <span className="text-lg font-bold text-rewear-text">
+            {formatPrice(product.price)}
+          </span>
+        </div>
+
+        <div className="flex items-center gap-2 shrink-0">
+          <Button
+            className="h-10 px-4 rounded-none border-0 bg-rewear-accent text-rewear-text text-sm font-bold shadow-none hover:bg-rewear-accent/90 disabled:opacity-50 cursor-pointer"
+            disabled={isSoldOut || addCartItem.isPending}
+            loading={addCartItem.isPending && !isBuyingNow}
+            onClick={handleAddToCart}
+          >
+            {isSoldOut ? 'Sold out' : 'Add to cart'}
+          </Button>
+          <Button
+            variant="outline"
+            className="h-10 px-4 rounded-none border border-rewear-text text-rewear-text text-sm font-bold bg-transparent hover:bg-rewear-text hover:text-white disabled:opacity-50 cursor-pointer"
+            disabled={isSoldOut || isBuyingNow || addCartItem.isPending}
+            loading={isBuyingNow}
+            onClick={handleBuyNow}
+          >
+            Buy now
+          </Button>
+        </div>
+      </div>
+
+      {/* Modals */}
+      <ProductFullDetailsModal
+        isOpen={fullDetailsOpen}
+        onClose={() => setFullDetailsOpen(false)}
+        product={product}
+      />
+
+      <ProductHowToMeasureModal
+        isOpen={howToMeasureOpen}
+        onClose={() => setHowToMeasureOpen(false)}
+        product={product}
+      />
+
+      <ProductDeliveryPolicyModal
+        isOpen={deliveryPolicyOpen}
+        onClose={() => setDeliveryPolicyOpen(false)}
+      />
     </div>
   );
 }

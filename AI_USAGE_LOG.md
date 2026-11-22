@@ -394,3 +394,26 @@ Ghi một mục cho mỗi task có dùng AI. Cập nhật liên kết PR/commit 
 - **Phần tự làm hoặc đã chỉnh sửa:** Kiểm tra responsive cho thiết bị di động với menu trượt, bọc `React.Suspense` cho các trang dùng `useSearchParams()`, trích xuất tài nguyên hình ảnh mẫu chính xác từ Figma vào `public/images/seller/`.
 - **Cách kiểm chứng:** Chạy `pnpm check` (pass TypeScript và ESLint 0 lỗi), `pnpm test` (8/8 suites, 24/24 unit tests pass 100%), `pnpm build` (compile và static prerender 19/19 routes thành công).
 - **Minh chứng:** Commit trên branch `feat/seller-dashboard` thuộc [PR #15](https://github.com/buihaiduongdev/rewear-fe/pull/15) (rewear-fe).
+
+### 2026-11-22 — Chuẩn hóa trang Chi tiết sản phẩm (/products/[id]) theo thiết kế Figma 53:754 và kết nối dữ liệu thật
+
+- **Người thực hiện:** Bùi Hải Dương.
+- **Công cụ:** Antigravity (Gemini 3.8 Flash).
+- **Mục đích và phạm vi:** Tái cấu trúc toàn diện trang chi tiết sản phẩm (`/products/[id]`) bám sát chuẩn thiết kế Figma (Frame `1:3556`, `53:754`, `48:2527`), loại bỏ hoàn toàn các phần hiển thị sơ sài hoặc mockup tạm bợ, đảm bảo 100% dữ liệu thực từ Backend (ảnh thực tế từ người bán, thuộc tính, tình trạng, số đo, thông tin shop, sản phẩm liên quan từ cùng shop và chính sách kiểm hàng 72 giờ).
+- **Prompt chính:** Sửa lại trang product detail giống Figma (Frame `53:754`, `1:3556`), dùng data thật 100% từ API, không dùng mockup hay phương án tạm thời.
+- **Phần AI hỗ trợ:**
+  - Thiết kế và phát triển `ProductModals.tsx` gồm: `ProductFullDetailsModal` (Figma Frame `71:2159`), `ProductHowToMeasureModal` (Figma Frame `71:2190`) hiển thị hướng dẫn đo tương ứng theo đúng số đo thực của trang phục, và `ProductDeliveryPolicyModal` minh bạch quy trình vận chuyển GHN & bảo vệ người mua 72h.
+  - Tái cấu trúc `ProductDetailPage.tsx` theo bố cục 2 cột bất đối xứng của Figma:
+    - Cột trái: Gallery ảnh người bán với ảnh lớn chính, thumbnail strip chọn ảnh động (`5 seller photos · Select a photo to inspect`), nhãn trạng thái HELD/SOLD.
+    - Cột phải: Thương hiệu, Tiêu đề, Giá bán nổi bật; 2 khối hộp Size & Condition song song; khối Seller's note khi có khuyết điểm/sửa chữa; cụm nút hành động "Thêm vào giỏ hàng" và "Mua ngay" (chuyển tiếp thẳng Checkout); thông tin Shop xác thực kèm link "Ghé shop"; mô tả trích lược kèm nút xem đầy đủ.
+    - Khối "Góc nhìn cận cảnh" (A closer look - `53:802`) với 2 ảnh phóng to chi tiết chất liệu/phụ kiện.
+    - Khối "Kiểm tra độ vừa vặn" (Find your fit - `53:808`) với thẻ số đo trực quan và hướng dẫn đối chiếu.
+    - Khối "Các món khác từ người bán / Gợi ý tương tự" (`53:821`) truy vấn trực tiếp qua API `useProductControllerFindAll`.
+    - Thanh hành động cố định dưới chân trang trên thiết bị di động (Mobile Sticky Action Bar - `48:2655`).
+  - Đồng bộ `ProductDetailSkeleton.tsx` khớp hoàn toàn cấu trúc mới để triệt tiêu hiện tượng layout shift (CLS).
+  - Viết bộ kiểm thử unit tests `tests/product-detail.test.tsx` kiểm tra render và tương tác các modal.
+- **Phần tự làm hoặc đã chỉnh sửa:** Đối chiếu trực tiếp cấu trúc từng node Figma qua Figwright MCP (`1:3556`, `53:754`, `71:2159`, `71:2190`), loại bỏ dữ liệu cứng, xử lý fallback hợp lý khi shop chưa có nhiều sản phẩm.
+- **Cách kiểm chứng:** `pnpm check` (oxlint, prettier, tsc) pass 100%, `pnpm test` (4 test suites, 8 tests) pass 100%, `next build` biên dịch thành công 14/14 static & dynamic routes.
+- **Lỗi hoặc đề xuất sai của AI đã phát hiện:** Phát hiện tham số `filter.shopId` và `filter.categoryId` trong Orval API client yêu cầu kiểu `string[]` thay vì chuỗi đơn lẻ, đã sửa đúng cú pháp `['$eq:...']`.
+- **Minh chứng:** Worktree `/Users/buihaiduong/orca/workspaces/rewear-fe/product-detail-figma`, nhánh `feat/product-detail`.
+
