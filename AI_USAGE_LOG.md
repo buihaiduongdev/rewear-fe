@@ -482,3 +482,14 @@ Ghi một mục cho mỗi task có dùng AI. Cập nhật liên kết PR/commit 
 - **Cách kiểm chứng:** `pnpm check`, `pnpm test` (14 suites, 41 tests), `git diff --check`; kiểm tra hiển thị dữ liệu shop trên trình duyệt.
 - **Giới hạn:** API hiện tại không trả logo của shop được kiểm tra; tính năng nhắn tin từ trang sản phẩm chưa được kết nối.
 - **Minh chứng:** PR #16; branch `buihaiduongdev/fe-cleanup-review`.
+
+### 2026-11-22 — Điều chỉnh card shop và nút mua hàng
+
+- **Người thực hiện:** Bùi Hải Dương
+- **Công cụ:** Codex (OpenAI)
+- **Mục đích và phạm vi:** Tinh gọn card shop và sắp xếp lại các thao tác trên trang chi tiết sản phẩm.
+- **Prompt chính:** Bỏ mô tả shop, đặt nút chính trên một hàng và hai nút còn lại cùng hàng.
+- **Đầu ra AI được sử dụng:** Bỏ mô tả và truy vấn shop không còn cần thiết; sắp xếp hai hàng nút mua hàng và wishlist.
+- **Phần tự làm hoặc đã chỉnh sửa:** Người dùng cung cấp góp ý trực tiếp trên giao diện.
+- **Cách kiểm chứng:** `pnpm check`, `pnpm test` (14 suites, 41 tests), `git diff --check`; kiểm tra vị trí hai nút ở màn hình mobile trên trình duyệt.
+- **Minh chứng:** PR #16; branch `buihaiduongdev/fe-cleanup-review`.

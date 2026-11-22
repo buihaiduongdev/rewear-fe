@@ -11,7 +11,6 @@ import {
   useProductControllerFindAll
 } from '@/shared/api/query-generated/products/products';
 import { useMediaControllerFindAll } from '@/shared/api/query-generated/product-media/product-media';
-import { useShopControllerFindOne } from '@/shared/api/query-generated/shops/shops';
 import { ProductPhoto } from '@/shared/components/marketplace/ProductPhoto';
 import { useAddCartItem, useCart } from '@/modules/cart/hooks/use-cart';
 import { SaveToWishlistButton } from '@/modules/wishlist/components/SaveToWishlistButton';
@@ -54,12 +53,7 @@ export function ProductDetailPage({ id }: { id: string }) {
 
   // 3. Fetch "More from this seller"
   const shopId = product?.shopId;
-  const { data: shopResponse } = useShopControllerFindOne(shopId ?? '', {
-    query: { enabled: !!shopId },
-  });
-  const shop = shopResponse?.data;
-  const shopLogo = (shop as { logoUrl?: string | null } | undefined)?.logoUrl
-    ?? (product?.shop as { logoUrl?: string | null } | undefined)?.logoUrl;
+  const shopLogo = (product?.shop as { logoUrl?: string | null } | undefined)?.logoUrl;
   const { data: shopProductsResponse } = useProductControllerFindAll(
     shopId ? { 'filter.shopId': [`$eq:${shopId}`], limit: 5 } : undefined,
     {
@@ -351,15 +345,17 @@ export function ProductDetailPage({ id }: { id: string }) {
               {isSoldOut ? 'Sold out / Reserved' : alreadyInCart ? 'Already in cart (Add another)' : 'Add to cart'}
             </Button>
 
-            <Button
-              className="h-[52px] w-full rounded-none border-0 bg-rewear-soft text-rewear-text text-sm font-normal shadow-none hover:bg-rewear-soft/80 transition-colors disabled:opacity-50 cursor-pointer"
-              disabled={isSoldOut || isBuyingNow || addCartItem.isPending}
-              loading={isBuyingNow}
-              onClick={handleBuyNow}
-            >
-              {isSoldOut ? 'Unavailable' : 'Buy now'}
-            </Button>
-            <SaveToWishlistButton productId={product.id} />
+            <div className="grid grid-cols-2 gap-3">
+              <Button
+                className="h-[52px] w-full rounded-none border-0 bg-rewear-soft text-rewear-text text-sm font-normal shadow-none hover:bg-rewear-soft/80 transition-colors disabled:opacity-50 cursor-pointer"
+                disabled={isSoldOut || isBuyingNow || addCartItem.isPending}
+                loading={isBuyingNow}
+                onClick={handleBuyNow}
+              >
+                {isSoldOut ? 'Unavailable' : 'Buy now'}
+              </Button>
+              <SaveToWishlistButton productId={product.id} />
+            </div>
           </div>
 
           {/* Delivery and Reporting Window (Figma 53:788) */}
@@ -385,15 +381,10 @@ export function ProductDetailPage({ id }: { id: string }) {
               <div className="min-w-0">
                 <p className="text-sm text-rewear-muted">Sold by</p>
                 <h3 className="break-words text-xl font-semibold leading-snug text-rewear-text">
-                  {shop?.name || product.shop?.name || 'Seller'}
+                  {product.shop?.name || 'Seller'}
                 </h3>
               </div>
             </div>
-            {shop?.description && (
-              <p className="mt-4 text-sm leading-relaxed text-rewear-text">
-                {shop.description}
-              </p>
-            )}
             {product.shopId && (
               <Link
                 href={`/products?shopId=${encodeURIComponent(product.shopId)}`}
