@@ -1,9 +1,11 @@
 'use client';
 
 import * as React from 'react';
-import Link from 'next/link';
+
 import Image from 'next/image';
-import { Bell, Menu, X } from 'lucide-react';
+import Link from 'next/link';
+
+import { Menu, X } from 'lucide-react';
 
 export type SellerNavKey =
   | 'overview'
@@ -36,7 +38,7 @@ export function SellerWorkspaceLayout({
   children,
   activeNav = 'products',
   onSelectNav,
-  shopName = 'Hanoi Archive',
+  shopName = 'My shop',
   shopLogo,
 }: SellerWorkspaceLayoutProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
@@ -60,7 +62,7 @@ export function SellerWorkspaceLayout({
           <button
             type="button"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="border-rewear-border p-1.5 border"
+            className="border-rewear-border border p-1.5"
             aria-label="Toggle navigation"
           >
             {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
@@ -90,6 +92,16 @@ export function SellerWorkspaceLayout({
           <nav className="space-y-3" aria-label="Seller workspace">
             {NAV_ITEMS.map((item) => {
               const isActive = activeNav === item.key;
+              if (!onSelectNav)
+                return (
+                  <Link
+                    key={item.key}
+                    href={`/selling?tab=${item.key}`}
+                    className="hover:bg-rewear-soft flex h-11 w-full items-center px-3 text-sm font-semibold"
+                  >
+                    {item.label}
+                  </Link>
+                );
               return (
                 <button
                   key={item.key}
@@ -123,20 +135,10 @@ export function SellerWorkspaceLayout({
       </aside>
 
       {/* Main Column */}
-      <div className="flex flex-1 flex-col min-w-0">
+      <div className="flex min-w-0 flex-1 flex-col">
         {/* Header: Figma 1:453 */}
-        <header className="border-rewear-border flex h-16 sm:h-20 items-center justify-end border-b px-6 lg:px-8">
+        <header className="border-rewear-border flex h-16 items-center justify-end border-b px-6 sm:h-20 lg:px-8">
           <div className="flex items-center gap-4">
-            {/* Notification Bell */}
-            <button
-              type="button"
-              className="text-rewear-text hover:text-rewear-muted relative p-2 transition"
-              aria-label="Notifications"
-            >
-              <Bell size={18} />
-              <span className="bg-rewear-accent absolute top-2 right-2 size-2 rounded-full ring-2 ring-white" />
-            </button>
-
             {/* Shop Profile */}
             <div className="flex items-center gap-2.5">
               <span className="text-rewear-text text-sm font-semibold">
@@ -150,28 +152,10 @@ export function SellerWorkspaceLayout({
                   className="border-rewear-border size-8 rounded-full border object-cover"
                 />
               ) : (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img
-                  src="/images/seller/avatar.jpg"
-                  alt={shopName}
-                  className="border-rewear-border size-8 rounded-full border object-cover"
-                  onError={(e) => {
-                    // Fallback to text initials if avatar fails
-                    const target = e.currentTarget;
-                    target.style.display = 'none';
-                    if (target.nextElementSibling) {
-                      (target.nextElementSibling as HTMLElement).style.display =
-                        'flex';
-                    }
-                  }}
-                />
+                <div className="bg-rewear-text text-rewear-accent flex size-8 items-center justify-center rounded-full text-xs font-bold">
+                  {shopName.slice(0, 2).toUpperCase()}
+                </div>
               )}
-              <div
-                style={{ display: 'none' }}
-                className="bg-rewear-text text-rewear-accent flex size-8 items-center justify-center rounded-full text-xs font-bold"
-              >
-                {shopName.slice(0, 2).toUpperCase()}
-              </div>
             </div>
           </div>
         </header>

@@ -6,10 +6,10 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 
+import { useShopMemberships } from '@/modules/shop/hooks/use-shop-memberships';
 import { getApiErrorMessage } from '@/shared/api/api-error';
 import type { PickupLocationControllerSaveShop200 } from '@/shared/api/models';
 import { usePickupLocationControllerFindShop } from '@/shared/api/query-generated/pickup-locations/pickup-locations';
-import { useShopControllerFindMine } from '@/shared/api/query-generated/shops/shops';
 import { useQueryClient } from '@tanstack/react-query';
 import { useSession } from 'next-auth/react';
 
@@ -27,9 +27,7 @@ export function PickupAddressPage() {
   >(null);
   const enabled = status === 'authenticated' && !session?.error;
 
-  const memberships = useShopControllerFindMine({
-    query: { enabled, queryKey: ['pickup-shop-memberships', session?.user.id] },
-  });
+  const memberships = useShopMemberships(enabled, session?.user.id);
 
   const activeMembership = useMemo(() => {
     const owned = memberships.data?.data.filter(
@@ -63,7 +61,7 @@ export function PickupAddressPage() {
   const error = selected.error || memberships.error;
 
   const shopInitials = useMemo(() => {
-    const name = currentShop?.name || 'Hanoi Archive';
+    const name = currentShop?.name || 'My shop';
     const words = name.trim().split(/\s+/);
     if (words.length >= 2) {
       return (words[0][0] + words[1][0]).toUpperCase();
@@ -202,7 +200,7 @@ export function PickupAddressPage() {
                   </div>
                   <div className="min-w-0 space-y-1">
                     <p className="text-rewear-text truncate text-xl font-semibold">
-                      {currentShop?.name || 'Hanoi Archive'}
+                      {currentShop?.name || 'My shop'}
                     </p>
                     <span className="text-rewear-muted block truncate font-mono text-xs">
                       rewear.vn/shops/{shopSlug}

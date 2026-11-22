@@ -63,21 +63,18 @@ describe('ProductCard', () => {
 
   it('handles products without shop info gracefully', () => {
     const handle = Dialog.createHandle<Product>();
-    const noShopProduct = { ...mockProduct, shop: undefined as unknown as Product['shop'] };
+    const noShopProduct = {
+      ...mockProduct,
+      shop: undefined as unknown as Product['shop'],
+    };
     render(<ProductCard product={noShopProduct} handle={handle} />);
 
     expect(screen.queryByText(/@/)).not.toBeInTheDocument();
     expect(screen.getAllByText(/L · Very good/)).toHaveLength(2);
   });
 
-  it('renders shop logo if found in localStorage or fallback initial', () => {
+  it('uses shop initials when the server has no logo', () => {
     const handle = Dialog.createHandle<Product>();
-    localStorage.setItem('rewear_shop_logo_shop-123', 'data:image/png;base64,mock');
-    const { unmount } = render(<ProductCard product={mockProduct} handle={handle} />);
-    expect(screen.getAllByAltText('hanoivintage')).toHaveLength(2);
-    unmount();
-    localStorage.clear();
-
     render(<ProductCard product={mockProduct} handle={handle} />);
     expect(screen.getAllByText('H')).toHaveLength(2);
   });
@@ -86,7 +83,10 @@ describe('ProductCard', () => {
     const handle = Dialog.createHandle<Product>();
     const productWithLogo = {
       ...mockProduct,
-      shop: { ...mockProduct.shop, logoUrl: 'https://cdn.example.com/logo.jpg' },
+      shop: {
+        ...mockProduct.shop,
+        logoUrl: 'https://cdn.example.com/logo.jpg',
+      },
     };
     render(
       <ProductCard
