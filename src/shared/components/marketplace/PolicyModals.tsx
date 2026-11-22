@@ -72,7 +72,7 @@ export function PolicyModals({ openType, onClose }: Props) {
               </span>
               <p className="text-rewear-muted">
                 Your dispatch and delivery address is securely passed to
-                certified logistics partners (GHN) strictly for order
+                logistics partners strictly for order
                 fulfillment.
               </p>
               <p className="text-rewear-muted">

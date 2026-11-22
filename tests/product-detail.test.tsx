@@ -1,8 +1,7 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 import {
-  ProductHowToMeasureModal,
-  ProductDeliveryPolicyModal
+  ProductHowToMeasureModal
 } from '@/features/product-detail/components/ProductModals';
 import type { ProductControllerFindOne200Data } from '@/shared/api/models';
 
@@ -48,24 +47,13 @@ describe('ProductModals', () => {
     render(<ProductHowToMeasureModal isOpen={true} onClose={handleClose} product={mockProduct} />);
 
     expect(screen.getByText('How to measure')).toBeDefined();
-    expect(screen.getByText(/This piece: 52 cm flat \/ 104 cm around/)).toBeDefined();
-    expect(screen.getByText(/This piece: 112 cm/)).toBeDefined();
-    expect(screen.getByText(/This piece: 64 cm/)).toBeDefined();
+    expect(screen.getByText('Chest')).toBeDefined();
+    expect(screen.getByText('Length')).toBeDefined();
+    expect(screen.getByText('Sleeve')).toBeDefined();
+    expect(screen.queryByText('Waist')).toBeNull();
 
     fireEvent.click(screen.getByRole('button', { name: 'Got it' }));
     expect(handleClose).toHaveBeenCalledOnce();
   });
 
-  it('renders ProductDeliveryPolicyModal with 72-hour return protection details in English', () => {
-    const handleClose = vi.fn();
-    render(<ProductDeliveryPolicyModal isOpen={true} onClose={handleClose} />);
-
-    expect(screen.getByText('Delivery & 72-hour return policy')).toBeDefined();
-    expect(screen.getByText(/Shipping via Giao Hàng Nhanh \(GHN\)/)).toBeDefined();
-    expect(screen.getByText(/72-hour buyer inspection window/)).toBeDefined();
-    expect(screen.getByText(/Escrow buyer payment protection/)).toBeDefined();
-
-    fireEvent.click(screen.getAllByRole('button', { name: 'Close' })[0]);
-    expect(handleClose).toHaveBeenCalledOnce();
-  });
 });

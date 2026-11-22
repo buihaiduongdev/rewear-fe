@@ -21,8 +21,7 @@ import { useToastStore } from '@/shared/stores/toast.store';
 import { getApiErrorMessage } from '@/shared/api/api-error';
 import { ProductDetailSkeleton } from '../skeletons/ProductDetailSkeleton';
 import {
-  ProductHowToMeasureModal,
-  ProductDeliveryPolicyModal
+  ProductHowToMeasureModal
 } from './ProductModals';
 
 export function ProductDetailPage({ id }: { id: string }) {
@@ -37,7 +36,6 @@ export function ProductDetailPage({ id }: { id: string }) {
 
   // Modals state
   const [howToMeasureOpen, setHowToMeasureOpen] = useState(false);
-  const [deliveryPolicyOpen, setDeliveryPolicyOpen] = useState(false);
 
   // 1. Fetch main product data
   const { data: productResponse, isLoading, isError } = useProductControllerFindOne(id);
@@ -348,17 +346,6 @@ export function ProductDetailPage({ id }: { id: string }) {
             </div>
           </div>
 
-          {/* Delivery and Reporting Window (Figma 53:788) */}
-          <div className="pt-1">
-            <button
-              type="button"
-              onClick={() => setDeliveryPolicyOpen(true)}
-              className="text-sm font-semibold text-rewear-text hover:underline inline-flex items-center gap-1 cursor-pointer"
-            >
-              Delivery & returns ›
-            </button>
-          </div>
-
           {/* Seller */}
           <section aria-label="Seller" className="bg-rewear-soft p-5 sm:p-6">
             <div className="flex items-center gap-4">
@@ -453,7 +440,7 @@ export function ProductDetailPage({ id }: { id: string }) {
             </p>
           )}
 
-          <div>
+          {hasMeasurements && <div>
             <button
               type="button"
               onClick={() => setHowToMeasureOpen(true)}
@@ -461,7 +448,7 @@ export function ProductDetailPage({ id }: { id: string }) {
             >
               How to measure ›
             </button>
-          </div>
+          </div>}
         </div>
       </div>
 
@@ -555,10 +542,6 @@ export function ProductDetailPage({ id }: { id: string }) {
         product={product}
       />
 
-      <ProductDeliveryPolicyModal
-        isOpen={deliveryPolicyOpen}
-        onClose={() => setDeliveryPolicyOpen(false)}
-      />
     </div>
   );
 }

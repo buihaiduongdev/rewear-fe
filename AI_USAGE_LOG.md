@@ -527,3 +527,15 @@ Ghi một mục cho mỗi task có dùng AI. Cập nhật liên kết PR/commit 
 - **Phần tự làm hoặc đã chỉnh sửa:** Người dùng góp ý trực tiếp trên giao diện.
 - **Cách kiểm chứng:** `pnpm check`, `pnpm test` (14 suites, 40 tests), `git diff --check`; kiểm tra trang sản phẩm trên trình duyệt.
 - **Minh chứng:** PR #16; branch `buihaiduongdev/fe-cleanup-review`.
+
+### 2026-11-22 — Điều chỉnh hướng dẫn đo và chính sách hiển thị
+
+- **Người thực hiện:** Bùi Hải Dương
+- **Công cụ:** Codex (OpenAI)
+- **Mục đích và phạm vi:** Làm rõ hướng dẫn số đo và bỏ nội dung chính sách trùng trên trang sản phẩm.
+- **Prompt chính:** Kiểm tra hướng dẫn đo theo sản phẩm, tránh cố định tên hãng vận chuyển và bỏ nút chính sách trùng footer.
+- **Đầu ra AI được sử dụng:** Hiển thị hướng dẫn theo trường số đo có dữ liệu, bỏ phép quy đổi không được xác nhận; bỏ modal chính sách riêng và tên hãng cố định trong footer.
+- **Phần tự làm hoặc đã chỉnh sửa:** Người dùng góp ý trực tiếp trên giao diện.
+- **Cách kiểm chứng:** `pnpm check`, `pnpm test` (14 suites, 39 tests), `git diff --check`; kiểm tra hướng dẫn đo trên trình duyệt với dữ liệu seed.
+- **Giới hạn:** Hướng dẫn là nội dung chung theo từng loại số đo; chưa có quy ước đo theo danh mục hay đơn vị cung cấp bởi API.
+- **Minh chứng:** PR #16; branch `buihaiduongdev/fe-cleanup-review`.
