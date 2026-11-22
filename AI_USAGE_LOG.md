@@ -583,3 +583,15 @@ Ghi một mục cho mỗi task có dùng AI. Cập nhật liên kết PR/commit 
 - **Phần tự làm hoặc đã chỉnh sửa:** Người dùng góp ý trực tiếp trên giao diện.
 - **Cách kiểm chứng:** `pnpm check`, `pnpm test` (14 suites, 39 tests), `git diff --check`; kiểm tra trang sản phẩm trên trình duyệt.
 - **Minh chứng:** PR #16; branch `buihaiduongdev/fe-cleanup-review`.
+
+### 2026-11-22 — Hiển thị chi tiết tình trạng sản phẩm
+
+- **Người thực hiện:** Bùi Hải Dương
+- **Công cụ:** Codex (OpenAI)
+- **Mục đích và phạm vi:** Trình bày rõ các thuộc tính và tình trạng thực tế của sản phẩm secondhand.
+- **Prompt chính:** Hiển thị riêng và đầy đủ các thông tin sản phẩm hiện có để trang chi tiết dễ xem hơn.
+- **Đầu ra AI được sử dụng:** Hiển thị màu, danh mục, thương hiệu; tách sửa chữa và từng khuyết điểm, kèm ảnh tương ứng khi có; bổ sung kiểm thử.
+- **Phần tự làm hoặc đã chỉnh sửa:** Người dùng lựa chọn hướng hiển thị chi tiết hơn cho sản phẩm secondhand.
+- **Cách kiểm chứng:** `pnpm check`, `pnpm test` (15 suites, 41 tests), `git diff --check`; kiểm tra dữ liệu sản phẩm seed trên trình duyệt và kiểm thử trường hợp khuyết điểm có ảnh.
+- **Giới hạn:** Sản phẩm seed được xem không có sửa chữa hay khuyết điểm; kiểm thử các trường hợp này dùng dữ liệu test.
+- **Minh chứng:** PR #16; branch `buihaiduongdev/fe-cleanup-review`.

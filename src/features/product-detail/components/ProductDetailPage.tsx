@@ -20,6 +20,7 @@ import { TOAST_DURATION_MS } from '@/shared/constants/toast';
 import { useToastStore } from '@/shared/stores/toast.store';
 import { getApiErrorMessage } from '@/shared/api/api-error';
 import { ProductDetailSkeleton } from '../skeletons/ProductDetailSkeleton';
+import { ProductConditionDetails } from './ProductConditionDetails';
 import {
   ProductHowToMeasureModal
 } from './ProductModals';
@@ -182,7 +183,6 @@ export function ProductDetailPage({ id }: { id: string }) {
   const measurements = product.measurements || {};
   const hasMeasurements = Object.values(measurements).some(Boolean);
   const defects = product.defects || [];
-  const hasNotes = Boolean(product.repairs || defects.length > 0);
 
   // Shop initials fallback
   const shopInitials = (product.shop?.name || 'S')
@@ -305,23 +305,6 @@ export function ProductDetailPage({ id }: { id: string }) {
             </div>
           </div>
 
-          {/* Seller Condition Disclosure / Seller's note (Figma 53:782) */}
-          {hasNotes && (
-            <div className="bg-rewear-soft p-5 space-y-2">
-              <span className="text-sm font-semibold text-rewear-text block">
-                Seller’s note
-              </span>
-              <p className="text-base text-rewear-text leading-normal">
-                {[
-                  product.repairs ? `Repairs: ${product.repairs}` : '',
-                  defects.length > 0 ? `Disclosed flaws: ${defects.map((d) => d.description).join(', ')}` : '',
-                ]
-                  .filter(Boolean)
-                  .join('. ')}
-              </p>
-            </div>
-          )}
-
           {/* Purchase Actions (Figma 53:785) */}
           <div className="space-y-3 pt-2 md:mt-auto">
             <Button
@@ -379,6 +362,17 @@ export function ProductDetailPage({ id }: { id: string }) {
           <p className="whitespace-pre-line text-base leading-relaxed text-rewear-text">
             {product.description || 'No detailed description provided by the seller.'}
           </p>
+          <dl className="space-y-3 pt-2 text-sm">
+            {product.category?.name && (
+              <div className="flex justify-between gap-4"><dt className="text-rewear-muted">Category</dt><dd className="text-right font-semibold text-rewear-text">{product.category.name}</dd></div>
+            )}
+            {product.brand && (
+              <div className="flex justify-between gap-4"><dt className="text-rewear-muted">Brand</dt><dd className="text-right font-semibold text-rewear-text">{product.brand}</dd></div>
+            )}
+            {product.color && (
+              <div className="flex justify-between gap-4"><dt className="text-rewear-muted">Color</dt><dd className="text-right font-semibold text-rewear-text">{product.color}</dd></div>
+            )}
+          </dl>
         </section>
         <section className="min-w-0 space-y-6">
           <h2 className="text-[28px] leading-[34px] font-semibold tracking-[-0.02em] text-rewear-text">
@@ -446,6 +440,7 @@ export function ProductDetailPage({ id }: { id: string }) {
             </button>
           </div>}
         </section>
+        <ProductConditionDetails repairs={product.repairs} defects={defects} media={mediaList} />
       </div>
 
       {/* 4. More from this seller / More to explore (Figma 53:821) */}
