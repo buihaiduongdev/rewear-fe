@@ -219,14 +219,14 @@ export function ProductDetailPage({ id }: { id: string }) {
 
       {/* 2. Main Editorial Stage: Two-Column Canvas (Figma 53:760 / 1:3581) */}
       <div className="grid grid-cols-1 md:grid-cols-12 gap-10 md:gap-8 lg:gap-14 items-start">
-        {/* Left Column: Seller Photography Gallery (7 cols on lg, Figma 53:761) */}
-        <div className="space-y-4 md:col-span-6 lg:col-span-7">
+        {/* Left Column: Seller Photography Gallery */}
+        <div className="space-y-4 md:col-span-6">
           {/* Main Stage Photo (Figma 53:762) */}
-          <div className="bg-rewear-soft relative aspect-[3/4] w-full overflow-hidden border border-rewear-border">
+          <div className="bg-rewear-soft relative aspect-[4/5] w-full overflow-hidden border border-rewear-border">
             <ProductPhoto
               url={activePhotoUrl}
               title={product.title}
-              sizes="(min-width: 1024px) 58vw, (min-width: 768px) 50vw, 100vw"
+              sizes="(min-width: 768px) 50vw, 100vw"
             />
             {isSoldOut && (
               <div className="absolute top-4 left-4 bg-black/85 px-3 py-1.5 text-xs font-bold text-white uppercase tracking-wider backdrop-blur-xs">
@@ -266,8 +266,8 @@ export function ProductDetailPage({ id }: { id: string }) {
           )}
         </div>
 
-        {/* Right Column: Complete Purchase Information (5 cols on lg, Figma 53:770) */}
-        <div className="flex flex-col space-y-6 md:col-span-6 lg:col-span-5">
+        {/* Right Column: Complete Purchase Information */}
+        <div className="flex flex-col space-y-6 md:col-span-6">
           {/* Brand, Title & Price (Figma 53:771) */}
           <div className="space-y-4">
             {product.brand && (

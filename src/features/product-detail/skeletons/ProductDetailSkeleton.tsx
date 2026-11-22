@@ -19,9 +19,9 @@ export function ProductDetailSkeleton() {
 
       {/* Main Grid: Gallery & Details (12-column responsive layout) */}
       <div className="grid grid-cols-1 md:grid-cols-12 gap-10 md:gap-8 lg:gap-14 items-start">
-        {/* Left Column: Gallery (7 cols on lg) */}
-        <div className="space-y-4 md:col-span-6 lg:col-span-7">
-          <div className="aspect-[3/4] w-full motion-safe:animate-pulse border border-rewear-border bg-rewear-soft" />
+        {/* Left Column: Gallery */}
+        <div className="space-y-4 md:col-span-6">
+          <div className="aspect-[4/5] w-full motion-safe:animate-pulse border border-rewear-border bg-rewear-soft" />
           <div className="flex gap-[15px] overflow-hidden">
             {[1, 2, 3, 4, 5].map((i) => (
               <div
@@ -32,8 +32,8 @@ export function ProductDetailSkeleton() {
           </div>
         </div>
 
-        {/* Right Column: Actions & Details (5 cols on lg) */}
-        <div className="flex flex-col space-y-6 md:col-span-6 lg:col-span-5">
+        {/* Right Column: Actions & Details */}
+        <div className="flex flex-col space-y-6 md:col-span-6">
           {/* Title & Price Header */}
           <div className="space-y-4">
             <div className="h-4 w-24 motion-safe:animate-pulse bg-rewear-soft" />

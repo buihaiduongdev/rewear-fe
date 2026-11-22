@@ -550,3 +550,14 @@ Ghi một mục cho mỗi task có dùng AI. Cập nhật liên kết PR/commit 
 - **Phần tự làm hoặc đã chỉnh sửa:** Người dùng góp ý trực tiếp trên giao diện.
 - **Cách kiểm chứng:** `pnpm check`, `pnpm test` (14 suites, 39 tests), `git diff --check`; kiểm tra trang sản phẩm và bố cục mobile trên trình duyệt.
 - **Minh chứng:** PR #16; branch `buihaiduongdev/fe-cleanup-review`.
+
+### 2026-11-22 — Cân chỉnh bố cục đầu trang sản phẩm
+
+- **Người thực hiện:** Bùi Hải Dương
+- **Công cụ:** Codex (OpenAI)
+- **Mục đích và phạm vi:** Cân đối phần ảnh và thông tin mua hàng sau khi chuyển mô tả xuống dưới.
+- **Prompt chính:** Giảm khoảng trống ở phần đầu trang chi tiết sản phẩm.
+- **Đầu ra AI được sử dụng:** Điều chỉnh tỷ lệ hai cột, tỷ lệ khung ảnh và skeleton tương ứng.
+- **Phần tự làm hoặc đã chỉnh sửa:** Người dùng góp ý trực tiếp trên giao diện.
+- **Cách kiểm chứng:** `pnpm check`, `pnpm test` (14 suites, 39 tests), `git diff --check`; kiểm tra trang sản phẩm trên trình duyệt.
+- **Minh chứng:** PR #16; branch `buihaiduongdev/fe-cleanup-review`.
