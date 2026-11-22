@@ -394,3 +394,22 @@ Ghi một mục cho mỗi task có dùng AI. Cập nhật liên kết PR/commit 
 - **Phần tự làm hoặc đã chỉnh sửa:** Kiểm tra responsive cho thiết bị di động với menu trượt, bọc `React.Suspense` cho các trang dùng `useSearchParams()`, trích xuất tài nguyên hình ảnh mẫu chính xác từ Figma vào `public/images/seller/`.
 - **Cách kiểm chứng:** Chạy `pnpm check` (pass TypeScript và ESLint 0 lỗi), `pnpm test` (8/8 suites, 24/24 unit tests pass 100%), `pnpm build` (compile và static prerender 19/19 routes thành công).
 - **Minh chứng:** Commit trên branch `feat/seller-dashboard` thuộc [PR #15](https://github.com/buihaiduongdev/rewear-fe/pull/15) (rewear-fe).
+
+### 2026-11-22 — Thay thế dữ liệu mock trong seller dashboard bằng API thật
+
+- **Người thực hiện:** Bùi Hải Dương
+- **Công cụ:** Antigravity (Claude Opus 4.6)
+- **Mục đích và phạm vi:** Loại bỏ toàn bộ dữ liệu giả lập (mock orders, hardcoded KPI, sản phẩm mẫu, localStorage logo) trong luồng seller dashboard và thay bằng dữ liệu thật từ API backend, đồng thời bổ sung các trạng thái tải, rỗng, lỗi cho giao diện.
+- **Prompt chính:** Rà soát và thay thế các danh sách mock (orders, products, chỉ số KPI) trong seller dashboard bằng dữ liệu thật từ API backend. Nối luồng tạo/sửa/gửi duyệt sản phẩm qua API, bỏ localStorage logo và chuyển sang đọc logoUrl từ server, thêm trạng thái tải và lỗi cho từng phần.
+- **Đầu ra AI được sử dụng:**
+  - Tạo component SellerPendingOrders gọi API lấy đơn chờ xác nhận, hỗ trợ chấp nhận/từ chối đơn và phân trang.
+  - Cập nhật SellerProductsPage đọc sản phẩm theo shop từ API, bỏ fallback bốn sản phẩm mẫu.
+  - Cập nhật SellerListingEditorPage nối luồng tạo/sửa/gửi duyệt và upload ảnh sản phẩm qua API.
+  - Cập nhật SellerDashboardPage bỏ bốn thẻ KPI giả, dùng số lượng sản phẩm thật.
+  - Cập nhật OpenShopPage chuyển logo từ localStorage sang nhập URL công khai.
+  - Trích hook useShopMemberships để giảm logic trùng lặp giữa các trang seller.
+  - Viết 6 test mới cho pending orders và listing editor.
+- **Phần tự làm hoặc đã chỉnh sửa:** Quyết định giữ placeholder Hanoi Archive chỉ ở gợi ý nhập liệu, loại bỏ ở mọi fallback hiển thị. Kiểm tra luồng FE–BE thực tế với dữ liệu seed.
+- **Cách kiểm chứng:** Chạy `pnpm check` (pass TypeScript và ESLint 0 lỗi), `pnpm test` (10/10 suites, 30/30 unit tests pass 100%).
+- **Lỗi hoặc đề xuất sai của AI đã phát hiện:** Không phát hiện.
+- **Minh chứng:** Branch `buihaiduongdev/fe-cleanup-review`, commit `46e6b9d`.
