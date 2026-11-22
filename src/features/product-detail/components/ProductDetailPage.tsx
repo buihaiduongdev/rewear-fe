@@ -21,7 +21,6 @@ import { useToastStore } from '@/shared/stores/toast.store';
 import { getApiErrorMessage } from '@/shared/api/api-error';
 import { ProductDetailSkeleton } from '../skeletons/ProductDetailSkeleton';
 import {
-  ProductFullDetailsModal,
   ProductHowToMeasureModal,
   ProductDeliveryPolicyModal
 } from './ProductModals';
@@ -37,7 +36,6 @@ export function ProductDetailPage({ id }: { id: string }) {
   const [isBuyingNow, setIsBuyingNow] = useState(false);
 
   // Modals state
-  const [fullDetailsOpen, setFullDetailsOpen] = useState(false);
   const [howToMeasureOpen, setHowToMeasureOpen] = useState(false);
   const [deliveryPolicyOpen, setDeliveryPolicyOpen] = useState(false);
 
@@ -400,16 +398,9 @@ export function ProductDetailPage({ id }: { id: string }) {
             <h3 className="text-[28px] leading-[34px] font-semibold tracking-tight text-rewear-text">
               About this piece
             </h3>
-            <p className="text-base text-rewear-text leading-normal line-clamp-4 whitespace-pre-line">
+            <p className="text-base text-rewear-text leading-normal whitespace-pre-line">
               {product.description || 'No detailed description provided by the seller.'}
             </p>
-            <button
-              type="button"
-              onClick={() => setFullDetailsOpen(true)}
-              className="text-sm font-semibold text-rewear-text hover:underline inline-block pt-1 cursor-pointer"
-            >
-              View full details ›
-            </button>
           </div>
         </div>
       </div>
@@ -443,7 +434,7 @@ export function ProductDetailPage({ id }: { id: string }) {
             ))}
           </div>
           <p className="text-sm font-semibold text-rewear-muted">
-            Seller photos · Fabric and original buttons
+            Seller photos
           </p>
         </div>
 
@@ -479,6 +470,12 @@ export function ProductDetailPage({ id }: { id: string }) {
                   <span className="text-sm font-semibold text-rewear-text">{measurements.waist} cm</span>
                 </div>
               ) : null}
+              {measurements.hip ? (
+                <div className="flex justify-between items-center text-base">
+                  <span className="text-rewear-muted">Hip</span>
+                  <span className="text-sm font-semibold text-rewear-text">{measurements.hip} cm</span>
+                </div>
+              ) : null}
               {measurements.shoulder ? (
                 <div className="flex justify-between items-center text-base">
                   <span className="text-rewear-muted">Shoulder</span>
@@ -494,20 +491,9 @@ export function ProductDetailPage({ id }: { id: string }) {
             </div>
           ) : (
             <p className="text-base text-rewear-muted">
-              Standard fit for size {product.size || 'One size'}. No flat measurements recorded.
+              No measurements provided by the seller.
             </p>
           )}
-
-          <p className="text-base text-rewear-text">
-            {hasMeasurements
-              ? [
-                  measurements.chest ? `Chest: ${measurements.chest} cm flat` : '',
-                  measurements.length ? `Length: ${measurements.length} cm` : '',
-                ]
-                  .filter(Boolean)
-                  .join(' · ') || 'Compare with a piece you already own.'
-              : 'Compare with a piece you already own.'}
-          </p>
 
           <div>
             <button
@@ -605,12 +591,6 @@ export function ProductDetailPage({ id }: { id: string }) {
       </div>
 
       {/* Modals */}
-      <ProductFullDetailsModal
-        isOpen={fullDetailsOpen}
-        onClose={() => setFullDetailsOpen(false)}
-        product={product}
-      />
-
       <ProductHowToMeasureModal
         isOpen={howToMeasureOpen}
         onClose={() => setHowToMeasureOpen(false)}

@@ -1,7 +1,6 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 import {
-  ProductFullDetailsModal,
   ProductHowToMeasureModal,
   ProductDeliveryPolicyModal
 } from '@/features/product-detail/components/ProductModals';
@@ -44,27 +43,6 @@ const mockProduct: ProductControllerFindOne200Data = {
 };
 
 describe('ProductModals', () => {
-  it('renders ProductFullDetailsModal with full details in English when open', () => {
-    const handleClose = vi.fn();
-    const { rerender } = render(
-      <ProductFullDetailsModal isOpen={false} onClose={handleClose} product={mockProduct} />,
-    );
-    expect(screen.queryByText('Description')).toBeNull();
-
-    rerender(<ProductFullDetailsModal isOpen={true} onClose={handleClose} product={mockProduct} />);
-    expect(screen.getByText('Description')).toBeDefined();
-    expect(screen.getByText('Lemaire')).toBeDefined();
-    expect(screen.getByText('Relaxed double-breasted wool coat')).toBeDefined();
-    expect(screen.getByText(/Charcoal heather, 100% virgin wool/)).toBeDefined();
-    expect(screen.getByText(/104 cm/)).toBeDefined();
-    expect(screen.getByText(/112 cm/)).toBeDefined();
-    expect(screen.getByText(/Faint scuff on inner bottom hem lining/)).toBeDefined();
-    expect(screen.getByText(/850g/)).toBeDefined();
-
-    fireEvent.click(screen.getByLabelText('Close'));
-    expect(handleClose).toHaveBeenCalledOnce();
-  });
-
   it('renders ProductHowToMeasureModal with custom measurements guide in English', () => {
     const handleClose = vi.fn();
     render(<ProductHowToMeasureModal isOpen={true} onClose={handleClose} product={mockProduct} />);

@@ -493,3 +493,15 @@ Ghi một mục cho mỗi task có dùng AI. Cập nhật liên kết PR/commit 
 - **Phần tự làm hoặc đã chỉnh sửa:** Người dùng cung cấp góp ý trực tiếp trên giao diện.
 - **Cách kiểm chứng:** `pnpm check`, `pnpm test` (14 suites, 41 tests), `git diff --check`; kiểm tra vị trí hai nút ở màn hình mobile trên trình duyệt.
 - **Minh chứng:** PR #16; branch `buihaiduongdev/fe-cleanup-review`.
+
+### 2026-11-22 — Tinh gọn thông tin chi tiết sản phẩm
+
+- **Người thực hiện:** Bùi Hải Dương
+- **Công cụ:** Codex (OpenAI)
+- **Mục đích và phạm vi:** Giảm nội dung trùng lặp giữa trang sản phẩm và hộp thoại chi tiết.
+- **Prompt chính:** Sắp xếp lại phần thông tin sản phẩm theo phương án phù hợp, tránh hiển thị trùng lặp.
+- **Đầu ra AI được sử dụng:** Hiển thị đầy đủ mô tả và số đo trên trang, bỏ hộp thoại trùng lặp và thông tin ảnh không có dữ liệu xác nhận.
+- **Phần tự làm hoặc đã chỉnh sửa:** Người dùng lựa chọn để AI đề xuất cách trình bày.
+- **Cách kiểm chứng:** `pnpm check`, `pnpm test` (14 suites, 40 tests), `git diff --check`; kiểm tra nội dung trang sản phẩm từ dữ liệu BE trên trình duyệt.
+- **Giới hạn:** Thông số kiện hàng không còn hiển thị trên trang sản phẩm.
+- **Minh chứng:** PR #16; branch `buihaiduongdev/fe-cleanup-review`.
