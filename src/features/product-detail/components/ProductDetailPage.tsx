@@ -11,6 +11,7 @@ import {
   useProductControllerFindAll
 } from '@/shared/api/query-generated/products/products';
 import { useMediaControllerFindAll } from '@/shared/api/query-generated/product-media/product-media';
+import { useShopControllerFindOne } from '@/shared/api/query-generated/shops/shops';
 import { ProductPhoto } from '@/shared/components/marketplace/ProductPhoto';
 import { useAddCartItem, useCart } from '@/modules/cart/hooks/use-cart';
 import { SaveToWishlistButton } from '@/modules/wishlist/components/SaveToWishlistButton';
@@ -53,6 +54,12 @@ export function ProductDetailPage({ id }: { id: string }) {
 
   // 3. Fetch "More from this seller"
   const shopId = product?.shopId;
+  const { data: shopResponse } = useShopControllerFindOne(shopId ?? '', {
+    query: { enabled: !!shopId },
+  });
+  const shop = shopResponse?.data;
+  const shopLogo = (shop as { logoUrl?: string | null } | undefined)?.logoUrl
+    ?? (product?.shop as { logoUrl?: string | null } | undefined)?.logoUrl;
   const { data: shopProductsResponse } = useProductControllerFindAll(
     shopId ? { 'filter.shopId': [`$eq:${shopId}`], limit: 5 } : undefined,
     {
@@ -366,60 +373,36 @@ export function ProductDetailPage({ id }: { id: string }) {
             </button>
           </div>
 
-          {/* Seller / Contact Card (Figma 53:792) */}
-          <div className="bg-rewear-soft space-y-5 p-5 sm:p-6">
-            {/* Shop identity (71:2155) */}
+          {/* Seller */}
+          <section aria-label="Seller" className="bg-rewear-soft p-5 sm:p-6">
             <div className="flex items-center gap-4">
-              <div className="size-12 shrink-0 rounded-full overflow-hidden bg-rewear-soft">
-                {(product.shop as { logoUrl?: string | null })?.logoUrl ? (
+              <div className="flex size-14 shrink-0 items-center justify-center overflow-hidden rounded-full bg-white text-base font-semibold text-rewear-text">
+                {shopLogo ? (
                   // eslint-disable-next-line @next/next/no-img-element
-                  <img
-                    src={(product.shop as { logoUrl?: string | null }).logoUrl!}
-                    alt={product.shop.name}
-                    className="size-full object-cover"
-                  />
-                ) : (
-                  <div className="size-full flex items-center justify-center font-bold text-sm text-rewear-text bg-rewear-soft">
-                    {shopInitials}
-                  </div>
-                )}
+                  <img src={shopLogo} alt="" className="size-full object-cover" />
+                ) : shopInitials}
               </div>
-              <div>
-                <h3 className="text-[28px] leading-[34px] font-semibold tracking-tight text-rewear-text">
-                  {product.shop?.name || 'Seller'}
+              <div className="min-w-0">
+                <p className="text-sm text-rewear-muted">Sold by</p>
+                <h3 className="break-words text-xl font-semibold leading-snug text-rewear-text">
+                  {shop?.name || product.shop?.name || 'Seller'}
                 </h3>
-                <p className="text-base text-rewear-muted">
-                  Independent seller
-                </p>
               </div>
             </div>
-
-            {/* Seller actions (53:795) */}
-            <div className="flex flex-wrap items-center gap-x-8 gap-y-3 text-sm font-semibold text-rewear-text">
-              <button
-                type="button"
-                onClick={() => {
-                  addToast({
-                    type: 'info',
-                    title: 'Message seller',
-                    description: `Direct messaging with ${product.shop?.name || 'seller'} will be available soon.`,
-                    durationMs: TOAST_DURATION_MS.DEFAULT,
-                  });
-                }}
-                className="hover:underline cursor-pointer"
+            {shop?.description && (
+              <p className="mt-4 text-sm leading-relaxed text-rewear-text">
+                {shop.description}
+              </p>
+            )}
+            {product.shopId && (
+              <Link
+                href={`/products?shopId=${encodeURIComponent(product.shopId)}`}
+                className="mt-5 inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-rewear-text underline underline-offset-4 hover:no-underline"
               >
-                Message seller
-              </button>
-              {product.shopId && (
-                <Link
-                  href={`/products?shopId=${encodeURIComponent(product.shopId)}`}
-                  className="hover:underline"
-                >
-                  Explore shop →
-                </Link>
-              )}
-            </div>
-          </div>
+                Explore shop <span aria-hidden="true">→</span>
+              </Link>
+            )}
+          </section>
 
           {/* About This Piece (Figma 53:798) */}
           <div className="space-y-4 pt-4">
