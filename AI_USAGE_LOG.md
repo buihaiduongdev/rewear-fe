@@ -412,4 +412,4 @@ Ghi một mục cho mỗi task có dùng AI. Cập nhật liên kết PR/commit 
 - **Phần tự làm hoặc đã chỉnh sửa:** Quyết định giữ placeholder Hanoi Archive chỉ ở gợi ý nhập liệu, loại bỏ ở mọi fallback hiển thị. Kiểm tra luồng FE–BE thực tế với dữ liệu seed.
 - **Cách kiểm chứng:** Chạy `pnpm check` (pass TypeScript và ESLint 0 lỗi), `pnpm test` (10/10 suites, 30/30 unit tests pass 100%).
 - **Lỗi hoặc đề xuất sai của AI đã phát hiện:** Không phát hiện.
-- **Minh chứng:** Branch `buihaiduongdev/fe-cleanup-review`, commit `46e6b9d`.
+- **Minh chứng:** PR [#16](https://github.com/buihaiduongdev/rewear-fe/pull/16), branch `buihaiduongdev/fe-cleanup-review`, commit `46e6b9d`.
