@@ -572,3 +572,14 @@ Ghi một mục cho mỗi task có dùng AI. Cập nhật liên kết PR/commit 
 - **Phần tự làm hoặc đã chỉnh sửa:** Người dùng góp ý trực tiếp trên giao diện.
 - **Cách kiểm chứng:** `pnpm check`, `pnpm test` (14 suites, 39 tests), `git diff --check`; kiểm tra thứ tự nội dung trên trình duyệt.
 - **Minh chứng:** PR #16; branch `buihaiduongdev/fe-cleanup-review`.
+
+### 2026-11-22 — Căn chỉnh khu vực mua và chi tiết sản phẩm
+
+- **Người thực hiện:** Bùi Hải Dương
+- **Công cụ:** Codex (OpenAI)
+- **Mục đích và phạm vi:** Làm rõ bố cục shop, mô tả, số đo và căn lại cụm mua hàng.
+- **Prompt chính:** Sắp xếp lại phần thông tin sản phẩm cho bớt rối và căn cụm nút mua xuống dưới.
+- **Đầu ra AI được sử dụng:** Tách shop thành hàng riêng, đặt mô tả và số đo thành hai cột; căn cụm mua hàng theo chiều cao ảnh trên màn hình lớn và đồng bộ skeleton.
+- **Phần tự làm hoặc đã chỉnh sửa:** Người dùng góp ý trực tiếp trên giao diện.
+- **Cách kiểm chứng:** `pnpm check`, `pnpm test` (14 suites, 39 tests), `git diff --check`; kiểm tra trang sản phẩm trên trình duyệt.
+- **Minh chứng:** PR #16; branch `buihaiduongdev/fe-cleanup-review`.

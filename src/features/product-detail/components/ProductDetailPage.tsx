@@ -218,7 +218,7 @@ export function ProductDetailPage({ id }: { id: string }) {
       </nav>
 
       {/* 2. Main Editorial Stage: Two-Column Canvas (Figma 53:760 / 1:3581) */}
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-10 md:gap-8 lg:gap-14 items-start">
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-10 md:gap-8 lg:gap-14">
         {/* Left Column: Seller Photography Gallery */}
         <div className="space-y-4 md:col-span-6">
           {/* Main Stage Photo (Figma 53:762) */}
@@ -267,7 +267,7 @@ export function ProductDetailPage({ id }: { id: string }) {
         </div>
 
         {/* Right Column: Complete Purchase Information */}
-        <div className="flex flex-col space-y-6 md:col-span-6">
+        <div className={`flex flex-col gap-6 md:col-span-6 ${displayPhotos.length > 1 ? 'md:pb-[136px]' : ''}`}>
           {/* Brand, Title & Price (Figma 53:771) */}
           <div className="space-y-4">
             {product.brand && (
@@ -323,7 +323,7 @@ export function ProductDetailPage({ id }: { id: string }) {
           )}
 
           {/* Purchase Actions (Figma 53:785) */}
-          <div className="space-y-3 pt-2">
+          <div className="space-y-3 pt-2 md:mt-auto">
             <Button
               className="h-[52px] w-full rounded-none border-0 bg-rewear-accent text-rewear-text text-sm font-normal shadow-none hover:bg-rewear-accent/90 transition-colors disabled:opacity-50 cursor-pointer"
               disabled={isSoldOut || addCartItem.isPending}
@@ -350,39 +350,36 @@ export function ProductDetailPage({ id }: { id: string }) {
 
       {/* Product description and measurements */}
       <div className="grid gap-10 bg-rewear-soft p-6 sm:p-10 md:grid-cols-2 md:gap-16">
-        <div className="space-y-8">
-          <section aria-label="Seller" className="pb-2">
-            <div className="flex items-center gap-4">
-              <div className="flex size-11 shrink-0 items-center justify-center overflow-hidden rounded-full bg-white text-base font-semibold text-rewear-text">
-                {shopLogo ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img src={shopLogo} alt="" className="size-full object-cover" />
-                ) : shopInitials}
-              </div>
-              <h3 className="min-w-0 break-words text-xl font-semibold leading-snug text-rewear-text">
-                {product.shopId ? (
-                  <Link
-                    href={`/products?shopId=${encodeURIComponent(product.shopId)}`}
-                    className="underline decoration-rewear-muted underline-offset-4 hover:decoration-rewear-text"
-                  >
-                    {product.shop?.name || 'Seller'} <span aria-hidden="true">→</span>
-                  </Link>
-                ) : (
-                  product.shop?.name || 'Seller'
-                )}
-              </h3>
+        <section aria-label="Seller" className="md:col-span-2">
+          <div className="flex items-center gap-4">
+            <div className="flex size-11 shrink-0 items-center justify-center overflow-hidden rounded-full bg-white text-base font-semibold text-rewear-text">
+              {shopLogo ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={shopLogo} alt="" className="size-full object-cover" />
+              ) : shopInitials}
             </div>
-          </section>
-
-          <section className="space-y-5">
-            <h2 className="text-[28px] leading-[34px] font-semibold tracking-tight text-rewear-text">
-              About this piece
-            </h2>
-            <p className="whitespace-pre-line text-base leading-relaxed text-rewear-text">
-              {product.description || 'No detailed description provided by the seller.'}
-            </p>
-          </section>
-        </div>
+            <h3 className="min-w-0 break-words text-xl font-semibold leading-snug text-rewear-text">
+              {product.shopId ? (
+                <Link
+                  href={`/products?shopId=${encodeURIComponent(product.shopId)}`}
+                  className="underline decoration-rewear-muted underline-offset-4 hover:decoration-rewear-text"
+                >
+                  {product.shop?.name || 'Seller'} <span aria-hidden="true">→</span>
+                </Link>
+              ) : (
+                product.shop?.name || 'Seller'
+              )}
+            </h3>
+          </div>
+        </section>
+        <section className="space-y-5">
+          <h2 className="text-[28px] leading-[34px] font-semibold tracking-tight text-rewear-text">
+            About this piece
+          </h2>
+          <p className="whitespace-pre-line text-base leading-relaxed text-rewear-text">
+            {product.description || 'No detailed description provided by the seller.'}
+          </p>
+        </section>
         <section className="min-w-0 space-y-6">
           <h2 className="text-[28px] leading-[34px] font-semibold tracking-[-0.02em] text-rewear-text">
             Find your fit.
