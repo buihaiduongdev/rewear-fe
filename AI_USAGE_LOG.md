@@ -413,3 +413,15 @@ Ghi một mục cho mỗi task có dùng AI. Cập nhật liên kết PR/commit 
 - **Cách kiểm chứng:** Chạy `pnpm check` (pass TypeScript và ESLint 0 lỗi), `pnpm test` (10/10 suites, 30/30 unit tests pass 100%).
 - **Lỗi hoặc đề xuất sai của AI đã phát hiện:** Không phát hiện.
 - **Minh chứng:** PR [#16](https://github.com/buihaiduongdev/rewear-fe/pull/16), branch `buihaiduongdev/fe-cleanup-review`, commit `46e6b9d`.
+
+### 2026-11-22 — Bổ sung đơn mua và sửa tính toán giỏ hàng
+
+- **Người thực hiện:** Bùi Hải Dương
+- **Công cụ:** Codex (OpenAI)
+- **Mục đích và phạm vi:** Bổ sung danh sách đơn hàng của người mua và sửa các trường hợp giỏ hàng hiển thị hoặc xử lý không đúng.
+- **Prompt chính:** Tiếp tục hoàn thiện frontend và gộp các thay đổi vào cùng worktree và PR dọn code FE.
+- **Đầu ra AI được sử dụng:** Trang đơn hàng sử dụng API buyer, lọc trạng thái, phân trang, trạng thái tải/rỗng/lỗi; liên kết điều hướng; sửa tổng tiền giỏ hàng và thứ tự chuyển sản phẩm sang wishlist; bổ sung kiểm thử.
+- **Phần tự làm hoặc đã chỉnh sửa:** Người dùng yêu cầu gộp các thay đổi frontend vào cùng worktree và PR hiện có.
+- **Cách kiểm chứng:** `pnpm check`, `pnpm test` (12 suites, 36 tests), `pnpm build` đạt. Kiểm tra trình duyệt với buyer seed: danh sách ba đơn và lọc trạng thái gọi API thành công; phiên kiểm thử dùng CORS nới riêng.
+- **Giới hạn:** Chưa có trang chi tiết đơn hoặc luồng thanh toán hoàn chỉnh; kiểm thử trình duyệt không xác nhận cấu hình CORS triển khai.
+- **Minh chứng:** PR #16, branch `buihaiduongdev/fe-cleanup-review`.

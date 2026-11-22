@@ -64,15 +64,8 @@ export function CartPage() {
   });
 
   const allCartItems = data?.groups.flatMap((g) => g.items) ?? [];
-  const displayCount =
-    (data?.summary.availableItemCount ?? 0) > 0
-      ? data!.summary.availableItemCount
-      : allCartItems.length;
-
-  const displayTotal =
-    (data?.summary.totalPrice ?? 0) > 0
-      ? data!.summary.totalPrice
-      : allCartItems.reduce((sum, item) => sum + (item.product?.price ?? 0), 0);
+  const displayCount = data?.summary.availableItemCount ?? 0;
+  const displayTotal = data?.summary.totalPrice ?? 0;
 
   const handleContinueToCheckout = (customAddressId?: string) => {
     setCreateError(null);
@@ -133,8 +126,10 @@ export function CartPage() {
       router.push('/login?callbackUrl=/cart');
       return;
     }
-    addToWishlist.mutate({ productId, data: {} });
-    remove.mutate({ productId });
+    addToWishlist.mutate(
+      { productId, data: {} },
+      { onSuccess: () => remove.mutate({ productId }) },
+    );
   };
 
   return (
@@ -293,6 +288,11 @@ export function CartPage() {
                     </div>
                   </section>
                 ))}
+                {addToWishlist.isError && (
+                  <p role="alert" className="text-xs text-red-600">
+                    {getApiErrorMessage(addToWishlist.error)}
+                  </p>
+                )}
                 {remove.isError && (
                   <p role="alert" className="text-xs text-red-600">
                     {getApiErrorMessage(remove.error)}
@@ -331,18 +331,16 @@ export function CartPage() {
                     Resume checkout
                   </Link>
                 ) : (
-                  <Link
-                    href="/checkout"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      handleContinueToCheckout();
-                    }}
-                    className={`bg-rewear-accent text-rewear-text flex h-[52px] w-full items-center justify-center text-sm font-semibold md:h-12 ${create.isPending || displayCount === 0 ? 'pointer-events-none opacity-50' : 'cursor-pointer'}`}
+                  <button
+                    type="button"
+                    disabled={create.isPending || displayCount === 0}
+                    onClick={() => handleContinueToCheckout()}
+                    className="bg-rewear-accent text-rewear-text flex h-[52px] w-full items-center justify-center text-sm font-semibold disabled:cursor-not-allowed disabled:opacity-50 md:h-12"
                   >
                     {create.isPending
                       ? 'Reserving items…'
                       : 'Continue to checkout'}
-                  </Link>
+                  </button>
                 )}
                 <Link
                   href="/"

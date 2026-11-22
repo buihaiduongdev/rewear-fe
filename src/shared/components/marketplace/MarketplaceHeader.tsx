@@ -126,6 +126,12 @@ export function MarketplaceHeader({
                   Wishlist
                 </Link>
                 <Link
+                  href="/orders"
+                  className="flex min-h-11 items-center underline underline-offset-4"
+                >
+                  Orders
+                </Link>
+                <Link
                   href="/selling"
                   className="flex min-h-11 items-center underline underline-offset-4"
                 >
@@ -149,14 +155,12 @@ export function MarketplaceHeader({
             </Link>
           )}
         </nav>
-        <button
-          type="button"
-          disabled
-          title="Orders are coming soon"
-          className="min-h-11 w-[90px] text-left md:hidden"
+        <Link
+          href="/orders"
+          className="flex min-h-11 w-[90px] items-center text-left md:hidden"
         >
           Orders
-        </button>
+        </Link>
       </header>
       <div
         id="mobile-search"
