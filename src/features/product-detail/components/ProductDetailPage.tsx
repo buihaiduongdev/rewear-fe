@@ -347,9 +347,9 @@ export function ProductDetailPage({ id }: { id: string }) {
           </div>
 
           {/* Seller */}
-          <section aria-label="Seller" className="bg-rewear-soft p-5 sm:p-6">
+          <section aria-label="Seller" className="bg-rewear-soft px-4 py-3">
             <div className="flex items-center gap-4">
-              <div className="flex size-14 shrink-0 items-center justify-center overflow-hidden rounded-full bg-white text-base font-semibold text-rewear-text">
+              <div className="flex size-11 shrink-0 items-center justify-center overflow-hidden rounded-full bg-white text-base font-semibold text-rewear-text">
                 {shopLogo ? (
                   // eslint-disable-next-line @next/next/no-img-element
                   <img src={shopLogo} alt="" className="size-full object-cover" />
@@ -361,7 +361,7 @@ export function ProductDetailPage({ id }: { id: string }) {
                     href={`/products?shopId=${encodeURIComponent(product.shopId)}`}
                     className="underline decoration-rewear-muted underline-offset-4 hover:decoration-rewear-text"
                   >
-                    {product.shop?.name || 'Seller'}
+                    {product.shop?.name || 'Seller'} <span aria-hidden="true">→</span>
                   </Link>
                 ) : (
                   product.shop?.name || 'Seller'
@@ -370,21 +370,20 @@ export function ProductDetailPage({ id }: { id: string }) {
             </div>
           </section>
 
-          {/* About This Piece (Figma 53:798) */}
-          <div className="space-y-4 pt-4">
-            <h3 className="text-[28px] leading-[34px] font-semibold tracking-tight text-rewear-text">
-              About this piece
-            </h3>
-            <p className="text-base text-rewear-text leading-normal whitespace-pre-line">
-              {product.description || 'No detailed description provided by the seller.'}
-            </p>
-          </div>
         </div>
       </div>
 
-      {/* Measurements */}
-      <div className="bg-rewear-soft p-8 sm:p-10">
-        <div className="mx-auto w-full max-w-2xl space-y-6">
+      {/* Product description and measurements */}
+      <div className="grid gap-10 bg-rewear-soft p-6 sm:p-10 md:grid-cols-2 md:gap-16">
+        <section className="space-y-5">
+          <h2 className="text-[28px] leading-[34px] font-semibold tracking-tight text-rewear-text">
+            About this piece
+          </h2>
+          <p className="whitespace-pre-line text-base leading-relaxed text-rewear-text">
+            {product.description || 'No detailed description provided by the seller.'}
+          </p>
+        </section>
+        <section className="min-w-0 space-y-6">
           <h2 className="text-[28px] leading-[34px] font-semibold tracking-[-0.02em] text-rewear-text">
             Find your fit.
           </h2>
@@ -449,7 +448,7 @@ export function ProductDetailPage({ id }: { id: string }) {
               How to measure ›
             </button>
           </div>}
-        </div>
+        </section>
       </div>
 
       {/* 4. More from this seller / More to explore (Figma 53:821) */}

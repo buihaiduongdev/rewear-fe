@@ -64,34 +64,22 @@ export function ProductDetailSkeleton() {
             <div className="h-4 w-36 motion-safe:animate-pulse bg-rewear-soft" />
           </div>
 
-          {/* Seller Card */}
-          <div className="space-y-4 pt-2">
-            <div className="flex items-center gap-4">
-              <div className="size-12 rounded-full motion-safe:animate-pulse bg-rewear-soft shrink-0" />
-              <div className="space-y-1.5">
-                <div className="h-7 w-44 motion-safe:animate-pulse bg-rewear-soft" />
-                <div className="h-4 w-32 motion-safe:animate-pulse bg-rewear-soft" />
-              </div>
-            </div>
-            <div className="flex items-center gap-8 pt-1">
-              <div className="h-4 w-24 motion-safe:animate-pulse bg-rewear-soft" />
-              <div className="h-4 w-28 motion-safe:animate-pulse bg-rewear-soft" />
-            </div>
-          </div>
-
-          {/* About this piece */}
-          <div className="space-y-3 pt-2">
-            <div className="h-7 w-40 motion-safe:animate-pulse bg-rewear-soft" />
-            <div className="h-4 w-full motion-safe:animate-pulse bg-rewear-soft" />
-            <div className="h-4 w-4/5 motion-safe:animate-pulse bg-rewear-soft" />
-            <div className="h-4 w-28 motion-safe:animate-pulse bg-rewear-soft pt-1" />
+          {/* Seller */}
+          <div className="flex items-center gap-4 bg-rewear-soft px-4 py-3">
+            <div className="size-11 shrink-0 rounded-full motion-safe:animate-pulse bg-white" />
+            <div className="h-7 w-44 motion-safe:animate-pulse bg-white" />
           </div>
         </div>
       </div>
 
-      {/* Measurements skeleton */}
-      <div className="bg-rewear-soft p-8 sm:p-10">
-        <div className="mx-auto w-full max-w-2xl space-y-6">
+      {/* Product description and measurements skeleton */}
+      <div className="grid gap-10 bg-rewear-soft p-6 sm:p-10 md:grid-cols-2 md:gap-16">
+        <div className="space-y-5">
+          <div className="h-8 w-44 motion-safe:animate-pulse bg-white/60" />
+          <div className="h-4 w-full motion-safe:animate-pulse bg-white/60" />
+          <div className="h-4 w-4/5 motion-safe:animate-pulse bg-white/60" />
+        </div>
+        <div className="min-w-0 space-y-6">
           <div className="h-8 w-44 motion-safe:animate-pulse bg-white/60" />
           <div className="space-y-3">
             {[1, 2, 3].map((i) => (

@@ -539,3 +539,14 @@ Ghi một mục cho mỗi task có dùng AI. Cập nhật liên kết PR/commit 
 - **Cách kiểm chứng:** `pnpm check`, `pnpm test` (14 suites, 39 tests), `git diff --check`; kiểm tra hướng dẫn đo trên trình duyệt với dữ liệu seed.
 - **Giới hạn:** Hướng dẫn là nội dung chung theo từng loại số đo; chưa có quy ước đo theo danh mục hay đơn vị cung cấp bởi API.
 - **Minh chứng:** PR #16; branch `buihaiduongdev/fe-cleanup-review`.
+
+### 2026-11-22 — Sắp xếp thông tin sản phẩm và shop
+
+- **Người thực hiện:** Bùi Hải Dương
+- **Công cụ:** Codex (OpenAI)
+- **Mục đích và phạm vi:** Điều chỉnh bố cục mô tả sản phẩm, số đo và thông tin shop.
+- **Prompt chính:** Đưa mô tả sản phẩm xuống cùng khối số đo và thu gọn phần shop.
+- **Đầu ra AI được sử dụng:** Bố trí mô tả và số đo trong cùng khối; thu gọn hàng shop và cập nhật skeleton tương ứng.
+- **Phần tự làm hoặc đã chỉnh sửa:** Người dùng góp ý trực tiếp trên giao diện.
+- **Cách kiểm chứng:** `pnpm check`, `pnpm test` (14 suites, 39 tests), `git diff --check`; kiểm tra trang sản phẩm và bố cục mobile trên trình duyệt.
+- **Minh chứng:** PR #16; branch `buihaiduongdev/fe-cleanup-review`.
