@@ -345,9 +345,13 @@ export function ProductDetailPage({ id }: { id: string }) {
               <SaveToWishlistButton productId={product.id} />
             </div>
           </div>
+        </div>
+      </div>
 
-          {/* Seller */}
-          <section aria-label="Seller" className="bg-rewear-soft px-4 py-3">
+      {/* Product description and measurements */}
+      <div className="grid gap-10 bg-rewear-soft p-6 sm:p-10 md:grid-cols-2 md:gap-16">
+        <div className="space-y-8">
+          <section aria-label="Seller" className="pb-2">
             <div className="flex items-center gap-4">
               <div className="flex size-11 shrink-0 items-center justify-center overflow-hidden rounded-full bg-white text-base font-semibold text-rewear-text">
                 {shopLogo ? (
@@ -370,19 +374,15 @@ export function ProductDetailPage({ id }: { id: string }) {
             </div>
           </section>
 
+          <section className="space-y-5">
+            <h2 className="text-[28px] leading-[34px] font-semibold tracking-tight text-rewear-text">
+              About this piece
+            </h2>
+            <p className="whitespace-pre-line text-base leading-relaxed text-rewear-text">
+              {product.description || 'No detailed description provided by the seller.'}
+            </p>
+          </section>
         </div>
-      </div>
-
-      {/* Product description and measurements */}
-      <div className="grid gap-10 bg-rewear-soft p-6 sm:p-10 md:grid-cols-2 md:gap-16">
-        <section className="space-y-5">
-          <h2 className="text-[28px] leading-[34px] font-semibold tracking-tight text-rewear-text">
-            About this piece
-          </h2>
-          <p className="whitespace-pre-line text-base leading-relaxed text-rewear-text">
-            {product.description || 'No detailed description provided by the seller.'}
-          </p>
-        </section>
         <section className="min-w-0 space-y-6">
           <h2 className="text-[28px] leading-[34px] font-semibold tracking-[-0.02em] text-rewear-text">
             Find your fit.

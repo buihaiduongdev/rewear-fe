@@ -59,22 +59,16 @@ export function ProductDetailSkeleton() {
             <div className="h-[52px] w-full motion-safe:animate-pulse bg-rewear-soft/60" />
           </div>
 
-          {/* Delivery link */}
-          <div className="pt-1">
-            <div className="h-4 w-36 motion-safe:animate-pulse bg-rewear-soft" />
-          </div>
-
-          {/* Seller */}
-          <div className="flex items-center gap-4 bg-rewear-soft px-4 py-3">
-            <div className="size-11 shrink-0 rounded-full motion-safe:animate-pulse bg-white" />
-            <div className="h-7 w-44 motion-safe:animate-pulse bg-white" />
-          </div>
         </div>
       </div>
 
       {/* Product description and measurements skeleton */}
       <div className="grid gap-10 bg-rewear-soft p-6 sm:p-10 md:grid-cols-2 md:gap-16">
         <div className="space-y-5">
+          <div className="flex items-center gap-4 pb-5">
+            <div className="size-11 shrink-0 rounded-full motion-safe:animate-pulse bg-white" />
+            <div className="h-7 w-44 motion-safe:animate-pulse bg-white/60" />
+          </div>
           <div className="h-8 w-44 motion-safe:animate-pulse bg-white/60" />
           <div className="h-4 w-full motion-safe:animate-pulse bg-white/60" />
           <div className="h-4 w-4/5 motion-safe:animate-pulse bg-white/60" />
