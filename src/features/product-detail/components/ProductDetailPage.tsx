@@ -13,6 +13,7 @@ import {
 import { useMediaControllerFindAll } from '@/shared/api/query-generated/product-media/product-media';
 import { ProductPhoto } from '@/shared/components/marketplace/ProductPhoto';
 import { useAddCartItem, useCart } from '@/modules/cart/hooks/use-cart';
+import { SaveToWishlistButton } from '@/modules/wishlist/components/SaveToWishlistButton';
 import { formatCondition, formatPrice } from '@/shared/utils/product';
 import { Button } from '@/shared/components/ui/button';
 import { TOAST_DURATION_MS } from '@/shared/constants/toast';
@@ -201,7 +202,7 @@ export function ProductDetailPage({ id }: { id: string }) {
     : displayPhotos.slice(0, 2);
 
   return (
-    <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10 pb-28 lg:pb-16 font-sans space-y-16">
+    <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10 pb-8 lg:pb-16 font-sans space-y-16">
       {/* 1. Breadcrumbs (Figma 53:755) */}
       <nav className="flex items-center gap-4 text-sm font-semibold">
         <Link href="/products" className="text-rewear-text hover:underline transition-colors">
@@ -211,7 +212,7 @@ export function ProductDetailPage({ id }: { id: string }) {
         {product.category ? (
           <>
             <Link
-              href={`/products?filter.categoryId=$eq:${product.category.id}`}
+              href={`/products?categoryId=${encodeURIComponent(product.category.id)}`}
               className="text-rewear-text hover:underline transition-colors"
             >
               {product.category.name}
@@ -225,15 +226,15 @@ export function ProductDetailPage({ id }: { id: string }) {
       </nav>
 
       {/* 2. Main Editorial Stage: Two-Column Canvas (Figma 53:760 / 1:3581) */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-start">
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-10 md:gap-8 lg:gap-14 items-start">
         {/* Left Column: Seller Photography Gallery (7 cols on lg, Figma 53:761) */}
-        <div className="space-y-4 lg:col-span-7">
+        <div className="space-y-4 md:col-span-6 lg:col-span-7">
           {/* Main Stage Photo (Figma 53:762) */}
           <div className="bg-rewear-soft relative aspect-[3/4] w-full overflow-hidden border border-rewear-border">
             <ProductPhoto
               url={activePhotoUrl}
               title={product.title}
-              sizes="(min-width: 1024px) 58vw, 100vw"
+              sizes="(min-width: 1024px) 58vw, (min-width: 768px) 50vw, 100vw"
             />
             {isSoldOut && (
               <div className="absolute top-4 left-4 bg-black/85 px-3 py-1.5 text-xs font-bold text-white uppercase tracking-wider backdrop-blur-xs">
@@ -277,7 +278,7 @@ export function ProductDetailPage({ id }: { id: string }) {
         </div>
 
         {/* Right Column: Complete Purchase Information (5 cols on lg, Figma 53:770) */}
-        <div className="flex flex-col space-y-6 lg:col-span-5">
+        <div className="flex flex-col space-y-6 md:col-span-6 lg:col-span-5">
           {/* Brand, Title & Price (Figma 53:771) */}
           <div className="space-y-4">
             {product.brand && (
@@ -351,6 +352,7 @@ export function ProductDetailPage({ id }: { id: string }) {
             >
               {isSoldOut ? 'Unavailable' : 'Buy now'}
             </Button>
+            <SaveToWishlistButton productId={product.id} />
           </div>
 
           {/* Delivery and Reporting Window (Figma 53:788) */}
@@ -365,7 +367,7 @@ export function ProductDetailPage({ id }: { id: string }) {
           </div>
 
           {/* Seller / Contact Card (Figma 53:792) */}
-          <div className="space-y-4 pt-2">
+          <div className="bg-rewear-soft space-y-5 p-5 sm:p-6">
             {/* Shop identity (71:2155) */}
             <div className="flex items-center gap-4">
               <div className="size-12 shrink-0 rounded-full overflow-hidden bg-rewear-soft">
@@ -384,16 +386,16 @@ export function ProductDetailPage({ id }: { id: string }) {
               </div>
               <div>
                 <h3 className="text-[28px] leading-[34px] font-semibold tracking-tight text-rewear-text">
-                  {product.shop?.name || 'Hanoi Archive'}
+                  {product.shop?.name || 'Seller'}
                 </h3>
                 <p className="text-base text-rewear-muted">
-                  ★ 4.9 · Hanoi · Independent seller
+                  Independent seller
                 </p>
               </div>
             </div>
 
             {/* Seller actions (53:795) */}
-            <div className="flex items-center gap-8 text-sm font-semibold text-rewear-text">
+            <div className="flex flex-wrap items-center gap-x-8 gap-y-3 text-sm font-semibold text-rewear-text">
               <button
                 type="button"
                 onClick={() => {
@@ -410,7 +412,7 @@ export function ProductDetailPage({ id }: { id: string }) {
               </button>
               {product.shopId && (
                 <Link
-                  href={`/products?filter.shopId=$eq:${product.shopId}`}
+                  href={`/products?shopId=${encodeURIComponent(product.shopId)}`}
                   className="hover:underline"
                 >
                   Explore shop →
@@ -420,7 +422,7 @@ export function ProductDetailPage({ id }: { id: string }) {
           </div>
 
           {/* About This Piece (Figma 53:798) */}
-          <div className="space-y-3 pt-2">
+          <div className="space-y-4 pt-4">
             <h3 className="text-[28px] leading-[34px] font-semibold tracking-tight text-rewear-text">
               About this piece
             </h3>
@@ -548,13 +550,13 @@ export function ProductDetailPage({ id }: { id: string }) {
       {/* 4. More from this seller / More to explore (Figma 53:821) */}
       {relatedProducts.length > 0 && (
         <div className="space-y-8">
-          <div className="flex items-center justify-between">
+          <div className="flex flex-wrap items-center justify-between gap-4">
             <h2 className="text-[36px] sm:text-[40px] font-semibold tracking-[-0.02em] text-rewear-text leading-[44px] sm:leading-[46px]">
               More to explore.
             </h2>
             {product.shopId && (
               <Link
-                href={`/products?filter.shopId=$eq:${product.shopId}`}
+                href={`/products?shopId=${encodeURIComponent(product.shopId)}`}
                 className="text-sm font-semibold text-rewear-text hover:underline"
               >
                 Browse all →

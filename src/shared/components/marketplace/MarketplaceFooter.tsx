@@ -7,12 +7,18 @@ import {
   type PolicyModalType,
 } from '@/shared/components/marketplace/PolicyModals';
 
-export function MarketplaceFooter() {
+export function MarketplaceFooter({
+  showOnMobile = false,
+}: {
+  showOnMobile?: boolean;
+}) {
   const [modalType, setModalType] = useState<PolicyModalType>(null);
 
   return (
     <>
-      <footer className="text-rewear-muted mx-auto hidden w-full max-w-[1536px] items-center justify-between px-4 py-8 text-sm font-semibold md:flex md:px-12">
+      <footer
+        className={`text-rewear-muted mx-auto w-full max-w-[1536px] items-center justify-between gap-4 px-4 py-8 text-sm font-semibold md:flex md:px-12 ${showOnMobile ? 'flex flex-wrap' : 'hidden'}`}
+      >
         <p>© 2026 RE.WEAR</p>
         <div className="flex items-center gap-6">
           <button
@@ -45,10 +51,7 @@ export function MarketplaceFooter() {
         </div>
       </footer>
 
-      <PolicyModals
-        openType={modalType}
-        onClose={() => setModalType(null)}
-      />
+      <PolicyModals openType={modalType} onClose={() => setModalType(null)} />
     </>
   );
 }

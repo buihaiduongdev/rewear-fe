@@ -458,3 +458,15 @@ Ghi một mục cho mỗi task có dùng AI. Cập nhật liên kết PR/commit 
 - **Cách kiểm chứng:** `pnpm check`, `pnpm test` (13 suites, 39 tests) và `pnpm build` đạt.
 - **Giới hạn:** Giao diện được gộp còn hiển thị thông tin đánh giá và địa điểm mẫu; nút lưu wishlist trước đó không có trong phiên bản mới, cần xử lý tiếp. Chưa kiểm tra lại Figma hoặc các luồng mua hàng qua trình duyệt sau khi gộp.
 - **Minh chứng:** PR #16; branch `buihaiduongdev/fe-cleanup-review`; commit nguồn `2da8d69`.
+
+### 2026-11-22 — Hoàn thiện giao diện chi tiết sản phẩm
+
+- **Người thực hiện:** Bùi Hải Dương
+- **Công cụ:** Codex (OpenAI)
+- **Mục đích và phạm vi:** Khôi phục header, footer và cải thiện bố cục trang chi tiết sản phẩm trên desktop, tablet và mobile.
+- **Prompt chính:** Phần thông tin shop quá chật, thiếu header và footer; tiếp tục polish trang sản phẩm trong PR frontend chung.
+- **Đầu ra AI được sử dụng:** Dùng lại layout marketplace, nới khoảng cách thông tin shop, bỏ đánh giá và địa điểm mẫu, khôi phục nút wishlist, sửa liên kết lọc shop và danh mục, điều chỉnh layout và skeleton theo kích thước màn hình; bổ sung kiểm thử.
+- **Phần tự làm hoặc đã chỉnh sửa:** Người dùng chỉ ra vấn đề giao diện và yêu cầu gộp vào worktree, PR hiện có.
+- **Cách kiểm chứng:** `pnpm check` và `pnpm test` (14 suites, 41 tests) đạt; kiểm tra trang sản phẩm, trạng thái không tìm thấy và liên kết lọc shop trên trình duyệt với dữ liệu BE, ở desktop, tablet và mobile.
+- **Giới hạn:** Chưa kiểm tra lại luồng mua và thanh toán; chưa chạy lại build sau thay đổi giao diện này.
+- **Minh chứng:** PR #16; branch `buihaiduongdev/fe-cleanup-review`.
