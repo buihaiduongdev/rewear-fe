@@ -1,7 +1,5 @@
 'use client';
 
-import { useState } from 'react';
-
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -10,14 +8,11 @@ import { ShopCard } from '@/modules/shop';
 import { MarketplaceFooter } from '@/shared/components/marketplace/MarketplaceFooter';
 import { MarketplaceHeader } from '@/shared/components/marketplace/MarketplaceHeader';
 import { Button } from '@/shared/components/ui/button';
-import type { Product } from '@/shared/utils/product';
-import { Dialog } from '@base-ui/react/dialog';
 import { ArrowUpRight } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 
 import { useHomeCatalog } from '../hooks/use-home-catalog';
 import { ProductCard } from './ProductCard';
-import { ProductPreview } from './ProductPreview';
 import { SectionState } from './SectionState';
 
 const primaryButtonClass =
@@ -56,7 +51,6 @@ export function HomePage() {
   } = useHomeCatalog();
   const { data: session, status: sessionStatus } = useSession();
   const isAuthenticated = sessionStatus === 'authenticated' && !session?.error;
-  const [previewHandle] = useState(() => Dialog.createHandle<Product>());
   const items = products.data?.data.data ?? [];
   const shopItems = shops.data?.data.slice(0, 2) ?? [];
   const hasFilters = Boolean(search || categoryId || shopId);
@@ -213,7 +207,6 @@ export function HomePage() {
                   <ProductCard
                     key={product.id}
                     product={product}
-                    handle={previewHandle}
                     onSelectShop={(selectedShopId) =>
                       updateFilters({ shopId: selectedShopId })
                     }
@@ -324,7 +317,6 @@ export function HomePage() {
         </Link>
         <CartLink className="bg-rewear-soft flex min-h-11 items-center px-3" />
       </nav>
-      <ProductPreview handle={previewHandle} />
     </>
   );
 }

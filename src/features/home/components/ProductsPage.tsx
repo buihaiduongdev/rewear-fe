@@ -20,13 +20,10 @@ import {
   PaginationPrevious,
 } from '@/shared/components/ui/pagination';
 import { PRODUCT_CONDITION_LABELS } from '@/shared/utils/product';
-import type { Product } from '@/shared/utils/product';
-import { Dialog } from '@base-ui/react/dialog';
 
 import { useHomeCatalog } from '../hooks/use-home-catalog';
 import { ProductCard } from './ProductCard';
 import { ProductFilterModal } from './ProductFilterModal';
-import { ProductPreview } from './ProductPreview';
 import { SectionState } from './SectionState';
 
 const SORT_OPTIONS = [
@@ -84,7 +81,6 @@ export function ProductsPage() {
     updateFilters,
   } = useHomeCatalog(true);
 
-  const [previewHandle] = useState(() => Dialog.createHandle<Product>());
   const [prevSearch, setPrevSearch] = useState(search);
   const [localSearch, setLocalSearch] = useState(search);
   const debouncedSearch = useDebounce(localSearch.trim(), 350);
@@ -444,7 +440,6 @@ export function ProductsPage() {
                   <ProductCard
                     key={product.id}
                     product={product}
-                    handle={previewHandle}
                     onSelectShop={(selectedShopId) =>
                       updateFilters({ shopId: selectedShopId })
                     }
@@ -504,7 +499,6 @@ export function ProductsPage() {
 
       <MarketplaceFooter />
       <MobileNavigation cartAction={<CartLink />} />
-      <ProductPreview handle={previewHandle} />
 
       {/* Filter Modal - Figma 48:143 / 48:2559 */}
       <ProductFilterModal

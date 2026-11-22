@@ -1,6 +1,5 @@
 import { ProductCard } from '@/features/home/components/ProductCard';
 import type { Product } from '@/shared/utils/product';
-import { Dialog } from '@base-ui/react/dialog';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
@@ -36,21 +35,22 @@ const mockProduct: Product = {
 
 describe('ProductCard', () => {
   it('renders product details and shop name', () => {
-    const handle = Dialog.createHandle<Product>();
-    render(<ProductCard product={mockProduct} handle={handle} />);
+    render(<ProductCard product={mockProduct} onSelectShop={vi.fn()} />);
 
+    expect(
+      screen.getByRole('link', { name: 'View Vintage Leather Jacket' }),
+    ).toHaveAttribute('href', '/products/prod-1');
     expect(screen.getByText('Vintage Leather Jacket')).toBeInTheDocument();
     expect(screen.getAllByText(/@hanoivintage/)).toHaveLength(2); // desktop & mobile
     expect(screen.getAllByText(/L · Very good/)).toHaveLength(2);
   });
 
   it('calls onSelectShop when clicking shop name and stops propagation', () => {
-    const handle = Dialog.createHandle<Product>();
     const onSelectShop = vi.fn();
     render(
       <ProductCard
         product={mockProduct}
-        handle={handle}
+
         onSelectShop={onSelectShop}
       />,
     );
@@ -62,25 +62,22 @@ describe('ProductCard', () => {
   });
 
   it('handles products without shop info gracefully', () => {
-    const handle = Dialog.createHandle<Product>();
     const noShopProduct = {
       ...mockProduct,
       shop: undefined as unknown as Product['shop'],
     };
-    render(<ProductCard product={noShopProduct} handle={handle} />);
+    render(<ProductCard product={noShopProduct} />);
 
     expect(screen.queryByText(/@/)).not.toBeInTheDocument();
     expect(screen.getAllByText(/L · Very good/)).toHaveLength(2);
   });
 
   it('uses shop initials when the server has no logo', () => {
-    const handle = Dialog.createHandle<Product>();
-    render(<ProductCard product={mockProduct} handle={handle} />);
+    render(<ProductCard product={mockProduct} onSelectShop={vi.fn()} />);
     expect(screen.getAllByText('H')).toHaveLength(2);
   });
 
   it('renders shop logo if provided directly by server in product.shop.logoUrl', () => {
-    const handle = Dialog.createHandle<Product>();
     const productWithLogo = {
       ...mockProduct,
       shop: {
@@ -91,7 +88,7 @@ describe('ProductCard', () => {
     render(
       <ProductCard
         product={productWithLogo as unknown as Product}
-        handle={handle}
+        onSelectShop={vi.fn()}
       />,
     );
     expect(screen.getAllByAltText('hanoivintage')).toHaveLength(2);

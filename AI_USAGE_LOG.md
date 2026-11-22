@@ -595,3 +595,14 @@ Ghi một mục cho mỗi task có dùng AI. Cập nhật liên kết PR/commit 
 - **Cách kiểm chứng:** `pnpm check`, `pnpm test` (15 suites, 41 tests), `git diff --check`; kiểm tra dữ liệu sản phẩm seed trên trình duyệt và kiểm thử trường hợp khuyết điểm có ảnh.
 - **Giới hạn:** Sản phẩm seed được xem không có sửa chữa hay khuyết điểm; kiểm thử các trường hợp này dùng dữ liệu test.
 - **Minh chứng:** PR #16; branch `buihaiduongdev/fe-cleanup-review`.
+
+### 2026-11-22 — Mở trực tiếp trang chi tiết sản phẩm
+
+- **Người thực hiện:** Bùi Hải Dương
+- **Công cụ:** Codex (OpenAI)
+- **Mục đích và phạm vi:** Bỏ bước xem nhanh trùng nội dung khi chọn sản phẩm trên trang chủ và danh sách.
+- **Prompt chính:** Tinh gọn thao tác xem sản phẩm vì popup xem nhanh trùng với trang chi tiết.
+- **Đầu ra AI được sử dụng:** Chuyển ảnh và tên sản phẩm thành liên kết tới trang chi tiết, giữ nút lọc shop riêng; loại bỏ popup không còn sử dụng và cập nhật kiểm thử.
+- **Phần tự làm hoặc đã chỉnh sửa:** Người dùng góp ý về popup xem nhanh.
+- **Cách kiểm chứng:** `pnpm check`, `pnpm test` (15 suites, 41 tests), `git diff --check`; kiểm tra điều hướng từ danh sách trên trình duyệt.
+- **Minh chứng:** PR #16; branch `buihaiduongdev/fe-cleanup-review`.
