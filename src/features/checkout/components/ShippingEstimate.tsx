@@ -10,27 +10,15 @@ import type {
 import { useCheckoutControllerQuote } from '@/shared/api/query-generated/checkout/checkout';
 import { formatPrice } from '@/shared/utils/product';
 
+import type { PaymentMethodId } from '../types';
+import { getShippingEstimateState } from '../utils/shipping-estimate-state';
 import { DeliveryMethodModal } from './DeliveryMethodModal';
-import type { PaymentMethodId } from './PaymentMethodModal';
 
 type Checkout = CheckoutControllerFind200['data'];
 
-export function useShippingEstimateState(
-  quote: CheckoutControllerQuote200Data | undefined,
-  status: Checkout['status'],
-) {
-  const invalid = !!quote && status !== 'HELD';
-  const fresh =
-    !!quote && !invalid && ['READY', 'PARTIAL'].includes(quote.status);
-  return {
-    fresh,
-    complete: fresh && quote?.status === 'READY',
-    pending: false,
-    invalid,
-  };
-}
+export { getShippingEstimateState as useShippingEstimateState } from '../utils/shipping-estimate-state';
 
-type State = ReturnType<typeof useShippingEstimateState>;
+type State = ReturnType<typeof getShippingEstimateState>;
 
 const reasons: Record<string, string> = {
   PACKAGE_REQUIRED: 'Seller needs to declare packaging for every item.',

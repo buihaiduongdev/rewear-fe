@@ -394,3 +394,262 @@ Ghi một mục cho mỗi task có dùng AI. Cập nhật liên kết PR/commit 
 - **Phần tự làm hoặc đã chỉnh sửa:** Kiểm tra responsive cho thiết bị di động với menu trượt, bọc `React.Suspense` cho các trang dùng `useSearchParams()`, trích xuất tài nguyên hình ảnh mẫu chính xác từ Figma vào `public/images/seller/`.
 - **Cách kiểm chứng:** Chạy `pnpm check` (pass TypeScript và ESLint 0 lỗi), `pnpm test` (8/8 suites, 24/24 unit tests pass 100%), `pnpm build` (compile và static prerender 19/19 routes thành công).
 - **Minh chứng:** Commit trên branch `feat/seller-dashboard` thuộc [PR #15](https://github.com/buihaiduongdev/rewear-fe/pull/15) (rewear-fe).
+
+### 2026-11-22 — Thay thế dữ liệu mock trong seller dashboard bằng API thật
+
+- **Người thực hiện:** Bùi Hải Dương
+- **Công cụ:** Antigravity (Claude Opus 4.6)
+- **Mục đích và phạm vi:** Loại bỏ toàn bộ dữ liệu giả lập (mock orders, hardcoded KPI, sản phẩm mẫu, localStorage logo) trong luồng seller dashboard và thay bằng dữ liệu thật từ API backend, đồng thời bổ sung các trạng thái tải, rỗng, lỗi cho giao diện.
+- **Prompt chính:** Rà soát và thay thế các danh sách mock (orders, products, chỉ số KPI) trong seller dashboard bằng dữ liệu thật từ API backend. Nối luồng tạo/sửa/gửi duyệt sản phẩm qua API, bỏ localStorage logo và chuyển sang đọc logoUrl từ server, thêm trạng thái tải và lỗi cho từng phần.
+- **Đầu ra AI được sử dụng:**
+  - Tạo component SellerPendingOrders gọi API lấy đơn chờ xác nhận, hỗ trợ chấp nhận/từ chối đơn và phân trang.
+  - Cập nhật SellerProductsPage đọc sản phẩm theo shop từ API, bỏ fallback bốn sản phẩm mẫu.
+  - Cập nhật SellerListingEditorPage nối luồng tạo/sửa/gửi duyệt và upload ảnh sản phẩm qua API.
+  - Cập nhật SellerDashboardPage bỏ bốn thẻ KPI giả, dùng số lượng sản phẩm thật.
+  - Cập nhật OpenShopPage chuyển logo từ localStorage sang nhập URL công khai.
+  - Trích hook useShopMemberships để giảm logic trùng lặp giữa các trang seller.
+  - Viết 6 test mới cho pending orders và listing editor.
+- **Phần tự làm hoặc đã chỉnh sửa:** Quyết định giữ placeholder Hanoi Archive chỉ ở gợi ý nhập liệu, loại bỏ ở mọi fallback hiển thị. Kiểm tra luồng FE–BE thực tế với dữ liệu seed.
+- **Cách kiểm chứng:** Chạy `pnpm check` (pass TypeScript và ESLint 0 lỗi), `pnpm test` (10/10 suites, 30/30 unit tests pass 100%).
+- **Lỗi hoặc đề xuất sai của AI đã phát hiện:** Không phát hiện.
+- **Minh chứng:** PR [#16](https://github.com/buihaiduongdev/rewear-fe/pull/16), branch `buihaiduongdev/fe-cleanup-review`, commit `46e6b9d`.
+
+### 2026-11-22 — Bổ sung đơn mua và sửa tính toán giỏ hàng
+
+- **Người thực hiện:** Bùi Hải Dương
+- **Công cụ:** Codex (OpenAI)
+- **Mục đích và phạm vi:** Bổ sung danh sách đơn hàng của người mua và sửa các trường hợp giỏ hàng hiển thị hoặc xử lý không đúng.
+- **Prompt chính:** Tiếp tục hoàn thiện frontend và gộp các thay đổi vào cùng worktree và PR dọn code FE.
+- **Đầu ra AI được sử dụng:** Trang đơn hàng sử dụng API buyer, lọc trạng thái, phân trang, trạng thái tải/rỗng/lỗi; liên kết điều hướng; sửa tổng tiền giỏ hàng và thứ tự chuyển sản phẩm sang wishlist; bổ sung kiểm thử.
+- **Phần tự làm hoặc đã chỉnh sửa:** Người dùng yêu cầu gộp các thay đổi frontend vào cùng worktree và PR hiện có.
+- **Cách kiểm chứng:** `pnpm check`, `pnpm test` (12 suites, 36 tests), `pnpm build` đạt. Kiểm tra trình duyệt với buyer seed: danh sách ba đơn và lọc trạng thái gọi API thành công; phiên kiểm thử dùng CORS nới riêng.
+- **Giới hạn:** Chưa có trang chi tiết đơn hoặc luồng thanh toán hoàn chỉnh; kiểm thử trình duyệt không xác nhận cấu hình CORS triển khai.
+- **Minh chứng:** PR #16, branch `buihaiduongdev/fe-cleanup-review`.
+### 2026-11-22 — Chuẩn hóa trang Chi tiết sản phẩm (/products/[id]) theo thiết kế Figma 53:754 và kết nối dữ liệu thật
+
+- **Người thực hiện:** Bùi Hải Dương.
+- **Công cụ:** Antigravity (Gemini 3.8 Flash).
+- **Mục đích và phạm vi:** Tái cấu trúc toàn diện trang chi tiết sản phẩm (`/products/[id]`) bám sát chuẩn thiết kế Figma (Frame `1:3556`, `53:754`, `48:2527`), loại bỏ hoàn toàn các phần hiển thị sơ sài hoặc mockup tạm bợ, đảm bảo 100% dữ liệu thực từ Backend (ảnh thực tế từ người bán, thuộc tính, tình trạng, số đo, thông tin shop, sản phẩm liên quan từ cùng shop và chính sách kiểm hàng 72 giờ).
+- **Prompt chính:** Sửa lại trang product detail giống Figma (Frame `53:754`, `1:3556`), dùng data thật 100% từ API, không dùng mockup hay phương án tạm thời.
+- **Phần AI hỗ trợ:**
+  - Thiết kế và phát triển `ProductModals.tsx` gồm: `ProductFullDetailsModal` (Figma Frame `71:2159`), `ProductHowToMeasureModal` (Figma Frame `71:2190`) hiển thị hướng dẫn đo tương ứng theo đúng số đo thực của trang phục, và `ProductDeliveryPolicyModal` minh bạch quy trình vận chuyển GHN & bảo vệ người mua 72h.
+  - Tái cấu trúc `ProductDetailPage.tsx` theo bố cục 2 cột bất đối xứng của Figma:
+    - Cột trái: Gallery ảnh người bán với ảnh lớn chính, thumbnail strip chọn ảnh động (`5 seller photos · Select a photo to inspect`), nhãn trạng thái HELD/SOLD.
+    - Cột phải: Thương hiệu, Tiêu đề, Giá bán nổi bật; 2 khối hộp Size & Condition song song; khối Seller's note khi có khuyết điểm/sửa chữa; cụm nút hành động "Thêm vào giỏ hàng" và "Mua ngay" (chuyển tiếp thẳng Checkout); thông tin Shop xác thực kèm link "Ghé shop"; mô tả trích lược kèm nút xem đầy đủ.
+    - Khối "Góc nhìn cận cảnh" (A closer look - `53:802`) với 2 ảnh phóng to chi tiết chất liệu/phụ kiện.
+    - Khối "Kiểm tra độ vừa vặn" (Find your fit - `53:808`) với thẻ số đo trực quan và hướng dẫn đối chiếu.
+    - Khối "Các món khác từ người bán / Gợi ý tương tự" (`53:821`) truy vấn trực tiếp qua API `useProductControllerFindAll`.
+    - Thanh hành động cố định dưới chân trang trên thiết bị di động (Mobile Sticky Action Bar - `48:2655`).
+  - Đồng bộ `ProductDetailSkeleton.tsx` khớp hoàn toàn cấu trúc mới để triệt tiêu hiện tượng layout shift (CLS).
+  - Viết bộ kiểm thử unit tests `tests/product-detail.test.tsx` kiểm tra render và tương tác các modal.
+- **Phần tự làm hoặc đã chỉnh sửa:** Đối chiếu trực tiếp cấu trúc từng node Figma qua Figwright MCP (`1:3556`, `53:754`, `71:2159`, `71:2190`), loại bỏ dữ liệu cứng, xử lý fallback hợp lý khi shop chưa có nhiều sản phẩm.
+- **Cách kiểm chứng:** `pnpm check` (oxlint, prettier, tsc) pass 100%, `pnpm test` (4 test suites, 8 tests) pass 100%, `next build` biên dịch thành công 14/14 static & dynamic routes.
+- **Lỗi hoặc đề xuất sai của AI đã phát hiện:** Phát hiện tham số `filter.shopId` và `filter.categoryId` trong Orval API client yêu cầu kiểu `string[]` thay vì chuỗi đơn lẻ, đã sửa đúng cú pháp `['$eq:...']`.
+- **Minh chứng:** Worktree `/Users/buihaiduong/orca/workspaces/rewear-fe/product-detail-figma`, nhánh `feat/product-detail`.
+
+### 2026-11-22 — Gộp giao diện chi tiết sản phẩm vào PR frontend
+
+- **Người thực hiện:** Bùi Hải Dương
+- **Công cụ:** Codex (OpenAI)
+- **Mục đích và phạm vi:** Gộp branch giao diện chi tiết sản phẩm đã đồng bộ main vào PR frontend hiện có, giữ layout và nhật ký của cả hai branch.
+- **Prompt chính:** Gộp thay đổi trang chi tiết sản phẩm vào worktree cleanup và PR frontend chung.
+- **Đầu ra AI được sử dụng:** Gộp giao diện, skeleton, modal và test từ branch product detail; giải quyết xung đột nhật ký và loại bỏ khoảng trắng thừa.
+- **Phần tự làm hoặc đã chỉnh sửa:** Người dùng chọn gộp product detail vào worktree cleanup.
+- **Cách kiểm chứng:** `pnpm check`, `pnpm test` (13 suites, 39 tests) và `pnpm build` đạt.
+- **Giới hạn:** Giao diện được gộp còn hiển thị thông tin đánh giá và địa điểm mẫu; nút lưu wishlist trước đó không có trong phiên bản mới, cần xử lý tiếp. Chưa kiểm tra lại Figma hoặc các luồng mua hàng qua trình duyệt sau khi gộp.
+- **Minh chứng:** PR #16; branch `buihaiduongdev/fe-cleanup-review`; commit nguồn `2da8d69`.
+
+### 2026-11-22 — Hoàn thiện giao diện chi tiết sản phẩm
+
+- **Người thực hiện:** Bùi Hải Dương
+- **Công cụ:** Codex (OpenAI)
+- **Mục đích và phạm vi:** Khôi phục header, footer và cải thiện bố cục trang chi tiết sản phẩm trên desktop, tablet và mobile.
+- **Prompt chính:** Phần thông tin shop quá chật, thiếu header và footer; tiếp tục polish trang sản phẩm trong PR frontend chung.
+- **Đầu ra AI được sử dụng:** Dùng lại layout marketplace, nới khoảng cách thông tin shop, bỏ đánh giá và địa điểm mẫu, khôi phục nút wishlist, sửa liên kết lọc shop và danh mục, điều chỉnh layout và skeleton theo kích thước màn hình; bổ sung kiểm thử.
+- **Phần tự làm hoặc đã chỉnh sửa:** Người dùng chỉ ra vấn đề giao diện và yêu cầu gộp vào worktree, PR hiện có.
+- **Cách kiểm chứng:** `pnpm check` và `pnpm test` (14 suites, 41 tests) đạt; kiểm tra trang sản phẩm, trạng thái không tìm thấy và liên kết lọc shop trên trình duyệt với dữ liệu BE, ở desktop, tablet và mobile.
+- **Giới hạn:** Chưa kiểm tra lại luồng mua và thanh toán; chưa chạy lại build sau thay đổi giao diện này.
+- **Minh chứng:** PR #16; branch `buihaiduongdev/fe-cleanup-review`.
+
+### 2026-11-22 — Hoàn thiện thông tin shop trên trang sản phẩm
+
+- **Người thực hiện:** Bùi Hải Dương
+- **Công cụ:** Codex (OpenAI)
+- **Mục đích và phạm vi:** Cải thiện card shop trên trang chi tiết sản phẩm và hiển thị thông tin shop từ API.
+- **Prompt chính:** Chỉnh card shop để giao diện bớt sơ sài và phản ánh dữ liệu thực tế.
+- **Đầu ra AI được sử dụng:** Lấy mô tả từ API shop, chỉnh phân cấp thông tin và ảnh đại diện dự phòng, bỏ nút nhắn tin chưa hoạt động.
+- **Phần tự làm hoặc đã chỉnh sửa:** Người dùng góp ý trực tiếp về giao diện card shop.
+- **Cách kiểm chứng:** `pnpm check`, `pnpm test` (14 suites, 41 tests), `git diff --check`; kiểm tra hiển thị dữ liệu shop trên trình duyệt.
+- **Giới hạn:** API hiện tại không trả logo của shop được kiểm tra; tính năng nhắn tin từ trang sản phẩm chưa được kết nối.
+- **Minh chứng:** PR #16; branch `buihaiduongdev/fe-cleanup-review`.
+
+### 2026-11-22 — Điều chỉnh card shop và nút mua hàng
+
+- **Người thực hiện:** Bùi Hải Dương
+- **Công cụ:** Codex (OpenAI)
+- **Mục đích và phạm vi:** Tinh gọn card shop và sắp xếp lại các thao tác trên trang chi tiết sản phẩm.
+- **Prompt chính:** Bỏ mô tả shop, đặt nút chính trên một hàng và hai nút còn lại cùng hàng.
+- **Đầu ra AI được sử dụng:** Bỏ mô tả và truy vấn shop không còn cần thiết; sắp xếp hai hàng nút mua hàng và wishlist.
+- **Phần tự làm hoặc đã chỉnh sửa:** Người dùng cung cấp góp ý trực tiếp trên giao diện.
+- **Cách kiểm chứng:** `pnpm check`, `pnpm test` (14 suites, 41 tests), `git diff --check`; kiểm tra vị trí hai nút ở màn hình mobile trên trình duyệt.
+- **Minh chứng:** PR #16; branch `buihaiduongdev/fe-cleanup-review`.
+
+### 2026-11-22 — Tinh gọn thông tin chi tiết sản phẩm
+
+- **Người thực hiện:** Bùi Hải Dương
+- **Công cụ:** Codex (OpenAI)
+- **Mục đích và phạm vi:** Giảm nội dung trùng lặp giữa trang sản phẩm và hộp thoại chi tiết.
+- **Prompt chính:** Sắp xếp lại phần thông tin sản phẩm theo phương án phù hợp, tránh hiển thị trùng lặp.
+- **Đầu ra AI được sử dụng:** Hiển thị đầy đủ mô tả và số đo trên trang, bỏ hộp thoại trùng lặp và thông tin ảnh không có dữ liệu xác nhận.
+- **Phần tự làm hoặc đã chỉnh sửa:** Người dùng lựa chọn để AI đề xuất cách trình bày.
+- **Cách kiểm chứng:** `pnpm check`, `pnpm test` (14 suites, 40 tests), `git diff --check`; kiểm tra nội dung trang sản phẩm từ dữ liệu BE trên trình duyệt.
+- **Giới hạn:** Thông số kiện hàng không còn hiển thị trên trang sản phẩm.
+- **Minh chứng:** PR #16; branch `buihaiduongdev/fe-cleanup-review`.
+
+### 2026-11-22 — Tinh gọn liên kết shop
+
+- **Người thực hiện:** Bùi Hải Dương
+- **Công cụ:** Codex (OpenAI)
+- **Mục đích và phạm vi:** Tinh gọn thông tin shop trên trang sản phẩm.
+- **Prompt chính:** Bỏ dòng Sold by và liên kết Explore shop; cho phép mở shop bằng tên shop.
+- **Đầu ra AI được sử dụng:** Chuyển liên kết lọc sản phẩm theo shop sang tên shop.
+- **Phần tự làm hoặc đã chỉnh sửa:** Người dùng góp ý trực tiếp trên giao diện.
+- **Cách kiểm chứng:** `pnpm check`, `pnpm test` (14 suites, 40 tests), `git diff --check`; kiểm tra liên kết tên shop trên trình duyệt.
+- **Minh chứng:** PR #16; branch `buihaiduongdev/fe-cleanup-review`.
+
+### 2026-11-22 — Loại bỏ ảnh sản phẩm trùng lặp
+
+- **Người thực hiện:** Bùi Hải Dương
+- **Công cụ:** Codex (OpenAI)
+- **Mục đích và phạm vi:** Tinh gọn gallery và phần số đo trên trang sản phẩm.
+- **Prompt chính:** Bỏ dòng hướng dẫn ảnh thừa và phần ảnh lặp lại bên dưới gallery.
+- **Đầu ra AI được sử dụng:** Bỏ ảnh và dòng chữ trùng lặp, điều chỉnh bố cục số đo và skeleton tương ứng.
+- **Phần tự làm hoặc đã chỉnh sửa:** Người dùng góp ý trực tiếp trên giao diện.
+- **Cách kiểm chứng:** `pnpm check`, `pnpm test` (14 suites, 40 tests), `git diff --check`; kiểm tra trang sản phẩm trên trình duyệt.
+- **Minh chứng:** PR #16; branch `buihaiduongdev/fe-cleanup-review`.
+
+### 2026-11-22 — Điều chỉnh hướng dẫn đo và chính sách hiển thị
+
+- **Người thực hiện:** Bùi Hải Dương
+- **Công cụ:** Codex (OpenAI)
+- **Mục đích và phạm vi:** Làm rõ hướng dẫn số đo và bỏ nội dung chính sách trùng trên trang sản phẩm.
+- **Prompt chính:** Kiểm tra hướng dẫn đo theo sản phẩm, tránh cố định tên hãng vận chuyển và bỏ nút chính sách trùng footer.
+- **Đầu ra AI được sử dụng:** Hiển thị hướng dẫn theo trường số đo có dữ liệu, bỏ phép quy đổi không được xác nhận; bỏ modal chính sách riêng và tên hãng cố định trong footer.
+- **Phần tự làm hoặc đã chỉnh sửa:** Người dùng góp ý trực tiếp trên giao diện.
+- **Cách kiểm chứng:** `pnpm check`, `pnpm test` (14 suites, 39 tests), `git diff --check`; kiểm tra hướng dẫn đo trên trình duyệt với dữ liệu seed.
+- **Giới hạn:** Hướng dẫn là nội dung chung theo từng loại số đo; chưa có quy ước đo theo danh mục hay đơn vị cung cấp bởi API.
+- **Minh chứng:** PR #16; branch `buihaiduongdev/fe-cleanup-review`.
+
+### 2026-11-22 — Sắp xếp thông tin sản phẩm và shop
+
+- **Người thực hiện:** Bùi Hải Dương
+- **Công cụ:** Codex (OpenAI)
+- **Mục đích và phạm vi:** Điều chỉnh bố cục mô tả sản phẩm, số đo và thông tin shop.
+- **Prompt chính:** Đưa mô tả sản phẩm xuống cùng khối số đo và thu gọn phần shop.
+- **Đầu ra AI được sử dụng:** Bố trí mô tả và số đo trong cùng khối; thu gọn hàng shop và cập nhật skeleton tương ứng.
+- **Phần tự làm hoặc đã chỉnh sửa:** Người dùng góp ý trực tiếp trên giao diện.
+- **Cách kiểm chứng:** `pnpm check`, `pnpm test` (14 suites, 39 tests), `git diff --check`; kiểm tra trang sản phẩm và bố cục mobile trên trình duyệt.
+- **Minh chứng:** PR #16; branch `buihaiduongdev/fe-cleanup-review`.
+
+### 2026-11-22 — Cân chỉnh bố cục đầu trang sản phẩm
+
+- **Người thực hiện:** Bùi Hải Dương
+- **Công cụ:** Codex (OpenAI)
+- **Mục đích và phạm vi:** Cân đối phần ảnh và thông tin mua hàng sau khi chuyển mô tả xuống dưới.
+- **Prompt chính:** Giảm khoảng trống ở phần đầu trang chi tiết sản phẩm.
+- **Đầu ra AI được sử dụng:** Điều chỉnh tỷ lệ hai cột, tỷ lệ khung ảnh và skeleton tương ứng.
+- **Phần tự làm hoặc đã chỉnh sửa:** Người dùng góp ý trực tiếp trên giao diện.
+- **Cách kiểm chứng:** `pnpm check`, `pnpm test` (14 suites, 39 tests), `git diff --check`; kiểm tra trang sản phẩm trên trình duyệt.
+- **Minh chứng:** PR #16; branch `buihaiduongdev/fe-cleanup-review`.
+
+### 2026-11-22 — Đặt shop cạnh thông tin sản phẩm
+
+- **Người thực hiện:** Bùi Hải Dương
+- **Công cụ:** Codex (OpenAI)
+- **Mục đích và phạm vi:** Đưa thông tin shop về cùng khu vực mô tả sản phẩm.
+- **Prompt chính:** Chuyển thông tin shop xuống phía trên phần About this piece.
+- **Đầu ra AI được sử dụng:** Di chuyển liên kết shop và điều chỉnh skeleton tương ứng.
+- **Phần tự làm hoặc đã chỉnh sửa:** Người dùng góp ý trực tiếp trên giao diện.
+- **Cách kiểm chứng:** `pnpm check`, `pnpm test` (14 suites, 39 tests), `git diff --check`; kiểm tra thứ tự nội dung trên trình duyệt.
+- **Minh chứng:** PR #16; branch `buihaiduongdev/fe-cleanup-review`.
+
+### 2026-11-22 — Căn chỉnh khu vực mua và chi tiết sản phẩm
+
+- **Người thực hiện:** Bùi Hải Dương
+- **Công cụ:** Codex (OpenAI)
+- **Mục đích và phạm vi:** Làm rõ bố cục shop, mô tả, số đo và căn lại cụm mua hàng.
+- **Prompt chính:** Sắp xếp lại phần thông tin sản phẩm cho bớt rối và căn cụm nút mua xuống dưới.
+- **Đầu ra AI được sử dụng:** Tách shop thành hàng riêng, đặt mô tả và số đo thành hai cột; căn cụm mua hàng theo chiều cao ảnh trên màn hình lớn và đồng bộ skeleton.
+- **Phần tự làm hoặc đã chỉnh sửa:** Người dùng góp ý trực tiếp trên giao diện.
+- **Cách kiểm chứng:** `pnpm check`, `pnpm test` (14 suites, 39 tests), `git diff --check`; kiểm tra trang sản phẩm trên trình duyệt.
+- **Minh chứng:** PR #16; branch `buihaiduongdev/fe-cleanup-review`.
+
+### 2026-11-22 — Hiển thị chi tiết tình trạng sản phẩm
+
+- **Người thực hiện:** Bùi Hải Dương
+- **Công cụ:** Codex (OpenAI)
+- **Mục đích và phạm vi:** Trình bày rõ các thuộc tính và tình trạng thực tế của sản phẩm secondhand.
+- **Prompt chính:** Hiển thị riêng và đầy đủ các thông tin sản phẩm hiện có để trang chi tiết dễ xem hơn.
+- **Đầu ra AI được sử dụng:** Hiển thị màu, danh mục, thương hiệu; tách sửa chữa và từng khuyết điểm, kèm ảnh tương ứng khi có; bổ sung kiểm thử.
+- **Phần tự làm hoặc đã chỉnh sửa:** Người dùng lựa chọn hướng hiển thị chi tiết hơn cho sản phẩm secondhand.
+- **Cách kiểm chứng:** `pnpm check`, `pnpm test` (15 suites, 41 tests), `git diff --check`; kiểm tra dữ liệu sản phẩm seed trên trình duyệt và kiểm thử trường hợp khuyết điểm có ảnh.
+- **Giới hạn:** Sản phẩm seed được xem không có sửa chữa hay khuyết điểm; kiểm thử các trường hợp này dùng dữ liệu test.
+- **Minh chứng:** PR #16; branch `buihaiduongdev/fe-cleanup-review`.
+
+### 2026-11-22 — Mở trực tiếp trang chi tiết sản phẩm
+
+- **Người thực hiện:** Bùi Hải Dương
+- **Công cụ:** Codex (OpenAI)
+- **Mục đích và phạm vi:** Bỏ bước xem nhanh trùng nội dung khi chọn sản phẩm trên trang chủ và danh sách.
+- **Prompt chính:** Tinh gọn thao tác xem sản phẩm vì popup xem nhanh trùng với trang chi tiết.
+- **Đầu ra AI được sử dụng:** Chuyển ảnh và tên sản phẩm thành liên kết tới trang chi tiết, giữ nút lọc shop riêng; loại bỏ popup không còn sử dụng và cập nhật kiểm thử.
+- **Phần tự làm hoặc đã chỉnh sửa:** Người dùng góp ý về popup xem nhanh.
+- **Cách kiểm chứng:** `pnpm check`, `pnpm test` (15 suites, 41 tests), `git diff --check`; kiểm tra điều hướng từ danh sách trên trình duyệt.
+- **Minh chứng:** PR #16; branch `buihaiduongdev/fe-cleanup-review`.
+
+### 2026-11-22 — Đưa thuộc tính lên đầu trang sản phẩm
+
+- **Người thực hiện:** Bùi Hải Dương
+- **Công cụ:** Codex (OpenAI)
+- **Mục đích và phạm vi:** Chuyển thông tin danh mục, thương hiệu và màu vào khu vực thông tin chính.
+- **Prompt chính:** Đưa các thuộc tính sản phẩm lên phía trên, cạnh size và tình trạng.
+- **Đầu ra AI được sử dụng:** Sắp xếp thuộc tính vào cùng lưới và điều chỉnh skeleton; bỏ dòng thương hiệu trùng phía trên tên sản phẩm.
+- **Phần tự làm hoặc đã chỉnh sửa:** Người dùng góp ý trực tiếp trên giao diện.
+- **Cách kiểm chứng:** `git diff --check`; không chạy test theo yêu cầu người dùng, để CI kiểm tra.
+- **Minh chứng:** PR #16; branch `buihaiduongdev/fe-cleanup-review`.
+
+### 2026-11-22 — Làm mới ảnh trang chủ
+
+- **Người thực hiện:** Bùi Hải Dương
+- **Công cụ:** Codex (OpenAI)
+- **Mục đích và phạm vi:** Thay ảnh trang chủ bằng ảnh quần áo không có người.
+- **Prompt chính:** Chọn lại ảnh chỉ có quần áo và phụ kiện, đồng thời làm mới ảnh trang chủ.
+- **Đầu ra AI được sử dụng:** Hai ảnh quần áo trên giá và nội dung thay thế tương ứng.
+- **Phần tự làm hoặc đã chỉnh sửa:** Người dùng yêu cầu không dùng ảnh có người.
+- **Cách kiểm chứng:** Kiểm tra trực tiếp ảnh nguồn và `git diff --check`; không chạy test theo yêu cầu người dùng.
+- **Nguồn ảnh:** [Polina Kuzovkova, Unsplash](https://unsplash.com/photos/clothes-hanging-on-a-rack-in-a-boutique-pt3EBzQcxP0); [Adiel Gavish, Unsplash](https://unsplash.com/photos/a-bunch-of-clothes-hanging-on-a-rack-7E-bTt8i28k).
+- **Minh chứng:** PR #16; branch `buihaiduongdev/fe-cleanup-review`.
+
+### 2026-11-22 — Căn footer cho trang ít nội dung
+
+- **Người thực hiện:** Bùi Hải Dương
+- **Công cụ:** Codex (OpenAI)
+- **Mục đích và phạm vi:** Giữ footer ở đáy màn hình trên các trang marketplace và đăng nhập khi nội dung ngắn.
+- **Prompt chính:** Sửa footer bị đẩy lên cao ở các trang thiếu dữ liệu.
+- **Đầu ra AI được sử dụng:** Điều chỉnh layout co giãn ở các trang có footer; chỉ dành khoảng trống cho thanh mua khi thanh đang hiển thị.
+- **Phần tự làm hoặc đã chỉnh sửa:** Người dùng chỉ ra vấn đề footer khi thiếu dữ liệu.
+- **Cách kiểm chứng:** `git diff --check`; kiểm tra trang sản phẩm không tồn tại trên desktop và mobile, kiểm tra khoảng trống thanh mua bằng DOM trên trình duyệt. Không chạy test theo yêu cầu người dùng.
+- **Giới hạn:** Backend không phản hồi trong lúc kiểm tra nên chưa kiểm tra lại trang sản phẩm có dữ liệu thật.
+- **Minh chứng:** PR #16; branch `buihaiduongdev/fe-cleanup-review`.
+
+### 2026-11-22 — Tách logic và giao diện các luồng frontend
+
+- **Người thực hiện:** Bùi Hải Dương
+- **Công cụ:** Codex (OpenAI)
+- **Mục đích và phạm vi:** Giảm trách nhiệm của các component lớn trong phạm vi PR frontend.
+- **Prompt chính:** Tách logic và hook khỏi component, tổ chức lại các luồng frontend hiện có theo trách nhiệm rõ ràng.
+- **Đầu ra AI được sử dụng:** Tách logic truy vấn và thao tác trong catalog, sản phẩm, giỏ hàng, checkout, đơn hàng, seller và onboarding; tách component hiển thị, kiểu dữ liệu và hàm chuyển đổi form; thêm CI cho kiểm tra frontend.
+- **Phần tự làm hoặc đã chỉnh sửa:** Người dùng yêu cầu giữ nguyên phạm vi trong PR hiện tại và không chạy test trên máy.
+- **Cách kiểm chứng:** TypeScript incremental, ESLint và Prettier trên các file thay đổi, `git diff --check`. Không chạy test local; CI được bổ sung để chạy kiểm tra và test.
+- **Giới hạn:** Chưa kiểm thử thủ công các luồng có tương tác BE sau refactor; kết quả test và build phụ thuộc CI.
+- **Minh chứng:** PR #16; branch `buihaiduongdev/fe-cleanup-review`.

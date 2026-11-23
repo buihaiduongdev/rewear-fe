@@ -1,151 +1,31 @@
 'use client';
 
-import { useId, useMemo, useRef, useState } from 'react';
-
 import Image from 'next/image';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 
 import { getApiErrorMessage } from '@/shared/api/api-error';
-import {
-  useShopControllerCreate,
-  useShopControllerFindMine,
-} from '@/shared/api/query-generated/shops/shops';
-import { useQueryClient } from '@tanstack/react-query';
-import { Camera, Check, Copy, Store } from 'lucide-react';
-import { useSession } from 'next-auth/react';
+import { Check, Copy, Store } from 'lucide-react';
 
-function slugify(text: string): string {
-  return text
-    .toString()
-    .toLowerCase()
-    .trim()
-    .replace(/[đĐ]/g, 'd')
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .replace(/[^a-z0-9 -]/g, '')
-    .replace(/\s+/g, '-')
-    .replace(/-+/g, '-');
-}
+import { useOpenShop } from '../hooks/use-open-shop';
 
 export function OpenShopPage() {
-  const router = useRouter();
-  const queryClient = useQueryClient();
-  const { data: session, status } = useSession();
-  const shopNameInputId = useId();
-  const shopAboutInputId = useId();
-  const fileInputRef = useRef<HTMLInputElement>(null);
-
-  const [name, setName] = useState('');
-  const [description, setDescription] = useState('');
-  const [copied, setCopied] = useState(false);
-  const [logoPreview, setLogoPreview] = useState<string | null>(null);
-  const [logoError, setLogoError] = useState<string | null>(null);
-
-  const isAuthenticated = status === 'authenticated' && !session?.error;
-
-  const memberships = useShopControllerFindMine({
-    query: {
-      enabled: isAuthenticated,
-      queryKey: ['pickup-shop-memberships', session?.user.id],
-    },
-  });
-
-  const existingShop = useMemo(() => {
-    return memberships.data?.data.find(
-      (m) => m.memberRole === 'OWNER' && m.status === 'ACTIVE',
-    );
-  }, [memberships.data?.data]);
-
-  const createShop = useShopControllerCreate();
-
-  const slug = useMemo(() => {
-    const raw = name.trim() || 'your-shop';
-    return slugify(raw);
-  }, [name]);
-
-  const initials = useMemo(() => {
-    const trimmed = name.trim();
-    if (!trimmed) return 'HA';
-    const words = trimmed.split(/\s+/).filter(Boolean);
-    if (words.length >= 2) {
-      return (words[0][0] + words[1][0]).toUpperCase();
-    }
-    return trimmed.slice(0, 2).toUpperCase();
-  }, [name]);
-
-  const handleCopyUrl = async () => {
-    try {
-      await navigator.clipboard.writeText(`rewear.vn/shops/${slug}`);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    } catch {
-      // ignore clipboard error
-    }
-  };
-
-  const handleLogoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    if (!file.type.startsWith('image/')) {
-      setLogoError('Please choose a valid image file (PNG, JPG, or WebP).');
-      return;
-    }
-
-    if (file.size > 5 * 1024 * 1024) {
-      setLogoError('Image size must be less than 5MB.');
-      return;
-    }
-
-    setLogoError(null);
-    const reader = new FileReader();
-    reader.onload = () => {
-      setLogoPreview(reader.result as string);
-    };
-    reader.readAsDataURL(file);
-  };
-
-  const handleRemoveLogo = () => {
-    setLogoPreview(null);
-    setLogoError(null);
-    if (fileInputRef.current) {
-      fileInputRef.current.value = '';
-    }
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!name.trim()) return;
-
-    try {
-      const result = await createShop.mutateAsync({
-        data: {
-          name: name.trim(),
-          description: description.trim() || null,
-        },
-      });
-
-      await queryClient.invalidateQueries({
-        queryKey: ['pickup-shop-memberships'],
-      });
-
-      const newShopId = result.data.id;
-      if (logoPreview && typeof window !== 'undefined') {
-        try {
-          localStorage.setItem(`rewear_shop_logo_${newShopId}`, logoPreview);
-        } catch {
-          // ignore storage error
-        }
-      }
-
-      router.push(
-        `/selling/pickup?shopId=${encodeURIComponent(newShopId)}&onboarding=true`,
-      );
-    } catch {
-      // Error handled by createShop.error
-    }
-  };
+  const {
+    shopNameInputId,
+    shopAboutInputId,
+    name,
+    setName,
+    description,
+    setDescription,
+    copied,
+    logoPreview,
+    setLogoPreview,
+    existingShop,
+    createShop,
+    slug,
+    initials,
+    handleCopyUrl,
+    handleSubmit,
+  } = useOpenShop();
 
   // If user already owns a shop, show Figma 66:311 existing shop notice
   if (existingShop) {
@@ -339,70 +219,24 @@ export function OpenShopPage() {
               />
             </div>
 
-            {/* Upload Shop Logo (Figma 63:2248) */}
             <div className="space-y-2 py-2">
-              <span className="text-rewear-text block text-sm font-semibold">
-                Upload shop logo
-              </span>
-              <div className="flex items-center gap-4">
-                <input
-                  ref={fileInputRef}
-                  type="file"
-                  accept="image/png,image/jpeg,image/webp,image/gif"
-                  className="hidden"
-                  onChange={handleLogoChange}
-                />
-
-                {/* Logo Avatar or Initials */}
-                <button
-                  type="button"
-                  onClick={() => fileInputRef.current?.click()}
-                  className="group border-rewear-border bg-rewear-text text-rewear-accent relative flex size-14 shrink-0 items-center justify-center overflow-hidden rounded-full border transition hover:opacity-90 focus:outline-none"
-                  title="Click to choose shop logo"
-                >
-                  {logoPreview ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img
-                      src={logoPreview}
-                      alt="Shop logo preview"
-                      className="size-full object-cover"
-                    />
-                  ) : (
-                    <span className="text-base font-bold">{initials}</span>
-                  )}
-                  <div className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 transition group-hover:opacity-100">
-                    <Camera size={18} className="text-white" />
-                  </div>
-                </button>
-
-                <div className="space-y-1">
-                  <div className="flex items-center gap-3">
-                    <button
-                      type="button"
-                      onClick={() => fileInputRef.current?.click()}
-                      className="text-rewear-text text-sm font-semibold hover:underline"
-                    >
-                      {logoPreview ? 'Replace logo' : 'Choose image'}
-                    </button>
-                    {logoPreview && (
-                      <button
-                        type="button"
-                        onClick={handleRemoveLogo}
-                        className="text-rewear-muted text-xs underline hover:text-red-600"
-                      >
-                        Remove
-                      </button>
-                    )}
-                  </div>
-                  <p className="text-rewear-muted text-xs">
-                    PNG, JPG or WebP up to 5MB. Initials will be used by default
-                    if omitted.
-                  </p>
-                </div>
-              </div>
-              {logoError && (
-                <p className="text-destructive text-xs">{logoError}</p>
-              )}
+              <label
+                htmlFor="shop-logo-url"
+                className="text-rewear-text block text-sm font-semibold"
+              >
+                Shop logo URL (optional)
+              </label>
+              <input
+                id="shop-logo-url"
+                type="url"
+                value={logoPreview}
+                onChange={(event) => setLogoPreview(event.target.value)}
+                placeholder="https://example.com/logo.jpg"
+                className="bg-rewear-soft w-full px-4 py-3 text-sm"
+              />
+              <p className="text-rewear-muted text-xs">
+                Use a publicly accessible image URL.
+              </p>
             </div>
 
             {/* Error Display */}
@@ -439,7 +273,7 @@ export function OpenShopPage() {
                 </div>
                 <div className="min-w-0 space-y-1">
                   <p className="text-rewear-text truncate text-lg font-semibold">
-                    {name.trim() || 'Hanoi Archive'}
+                    {name.trim() || 'Your shop'}
                   </p>
                   <div className="flex items-center gap-2">
                     <span className="text-rewear-muted truncate font-mono text-xs">

@@ -1,76 +1,37 @@
 'use client';
 
 import * as React from 'react';
+
 import Link from 'next/link';
-import Image from 'next/image';
+
+import { ProductPhoto } from '@/shared/components/marketplace/ProductPhoto';
 import { ChevronDown, Search } from 'lucide-react';
 
-export interface SellerProductItem {
-  id: string;
-  title: string;
-  size: string;
-  condition: string;
-  price: string;
-  status: 'Active' | 'Held' | 'In review' | 'Draft';
-  isLocked?: boolean;
-  image: string;
-}
+import type { SellerProductItem } from '../types';
 
-const DEFAULT_SELLER_PRODUCTS: SellerProductItem[] = [
-  {
-    id: 'prod-lemaire-coat',
-    title: 'Lemaire wool coat',
-    size: 'M',
-    condition: 'Very good',
-    price: '580.000₫',
-    status: 'Active',
-    isLocked: false,
-    image: '/images/seller/coat.png',
-  },
-  {
-    id: 'prod-tailored-jacket',
-    title: 'Tailored wool jacket',
-    size: 'S',
-    condition: 'Like new',
-    price: '490.000₫',
-    status: 'Held',
-    isLocked: true,
-    image: '/images/seller/jacket.png',
-  },
-  {
-    id: 'prod-pleated-trousers',
-    title: 'Pleated wool trousers',
-    size: 'M',
-    condition: 'Very good',
-    price: '320.000₫',
-    status: 'In review',
-    isLocked: false,
-    image: '/images/seller/trousers.png',
-  },
-  {
-    id: 'prod-cashmere-sweater',
-    title: 'Cashmere sweater',
-    size: 'M',
-    condition: 'Good',
-    price: '720.000₫',
-    status: 'Draft',
-    isLocked: false,
-    image: '/images/seller/sweater.png',
-  },
-];
+export type { SellerProductItem } from '../types';
 
 interface SellerProductsPageProps {
-  products?: SellerProductItem[];
+  products: SellerProductItem[];
+  totalItems?: number;
+  page?: number;
+  hasNext?: boolean;
+  onPageChange?: (page: number) => void;
   onCreateListing?: () => void;
 }
 
 export function SellerProductsPage({
-  products = DEFAULT_SELLER_PRODUCTS,
+  products,
+  totalItems,
+  page = 1,
+  hasNext = false,
+  onPageChange,
   onCreateListing,
 }: SellerProductsPageProps) {
   const [searchTerm, setSearchTerm] = React.useState('');
-  const [statusFilter, setStatusFilter] = React.useState<'All' | 'Active' | 'Held' | 'In review' | 'Draft'>('All');
-  const [pageSize, setPageSize] = React.useState(12);
+  const [statusFilter, setStatusFilter] = React.useState<
+    'All' | SellerProductItem['status']
+  >('All');
 
   const filteredProducts = React.useMemo(() => {
     return products.filter((item) => {
@@ -91,7 +52,7 @@ export function SellerProductsPage({
   return (
     <div className="space-y-8">
       {/* Title: Figma 53:1153 */}
-      <h1 className="text-[32px] sm:text-[40px] font-semibold leading-[46px] tracking-[-0.02em]">
+      <h1 className="text-[32px] leading-[46px] font-semibold tracking-[-0.02em] sm:text-[40px]">
         Products
       </h1>
 
@@ -106,7 +67,7 @@ export function SellerProductsPage({
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               placeholder="Search products by title or code"
-              className="bg-transparent text-rewear-text placeholder:text-rewear-muted w-full text-sm outline-none"
+              className="text-rewear-text placeholder:text-rewear-muted w-full bg-transparent text-sm outline-none"
             />
           </div>
 
@@ -117,16 +78,20 @@ export function SellerProductsPage({
               value={statusFilter}
               onChange={(e) =>
                 setStatusFilter(
-                  e.target.value as 'All' | 'Active' | 'Held' | 'In review' | 'Draft',
+                  e.target.value as 'All' | SellerProductItem['status'],
                 )
               }
-              className="bg-rewear-soft text-rewear-text appearance-none h-11 px-4 pr-10 text-sm font-semibold outline-none cursor-pointer"
+              className="bg-rewear-soft text-rewear-text h-11 cursor-pointer appearance-none px-4 pr-10 text-sm font-semibold outline-none"
             >
               <option value="All">All statuses</option>
               <option value="Active">Active</option>
               <option value="Held">Held</option>
               <option value="In review">In review</option>
               <option value="Draft">Draft</option>
+              <option value="Rejected">Rejected</option>
+              <option value="Suspended">Suspended</option>
+              <option value="Sold">Sold</option>
+              <option value="Hidden">Hidden</option>
             </select>
             <ChevronDown
               size={14}
@@ -140,14 +105,14 @@ export function SellerProductsPage({
           <button
             type="button"
             onClick={onCreateListing}
-            className="bg-rewear-accent text-rewear-text hover:bg-rewear-accent/90 flex h-[52px] min-w-[200px] sm:min-w-[240px] items-center justify-center px-6 text-sm font-semibold transition"
+            className="bg-rewear-accent text-rewear-text hover:bg-rewear-accent/90 flex h-[52px] min-w-[200px] items-center justify-center px-6 text-sm font-semibold transition sm:min-w-[240px]"
           >
             Create listing
           </button>
         ) : (
           <Link
             href="/selling/new"
-            className="bg-rewear-accent text-rewear-text hover:bg-rewear-accent/90 flex h-[52px] min-w-[200px] sm:min-w-[240px] items-center justify-center px-6 text-sm font-semibold transition"
+            className="bg-rewear-accent text-rewear-text hover:bg-rewear-accent/90 flex h-[52px] min-w-[200px] items-center justify-center px-6 text-sm font-semibold transition sm:min-w-[240px]"
           >
             Create listing
           </Link>
@@ -160,6 +125,10 @@ export function SellerProductsPage({
         {reservedCount !== 1 ? 's' : ''}
       </p>
 
+      <p className="text-rewear-muted text-sm">
+        Search and status filters apply to this page.
+        {totalItems !== undefined ? ` ${totalItems} total listings.` : ''}
+      </p>
       {/* Product Table: Figma 53:1162 */}
       <div className="border-rewear-border overflow-hidden border">
         <div className="overflow-x-auto">
@@ -167,28 +136,27 @@ export function SellerProductsPage({
             {/* Table Header: Figma 53:1163 */}
             <thead className="border-rewear-border text-rewear-muted border-b bg-transparent text-sm font-semibold">
               <tr>
-                <th className="py-3 px-4 font-semibold">Product</th>
-                <th className="py-3 px-4 font-semibold w-36">Price</th>
-                <th className="py-3 px-4 font-semibold w-44">Status</th>
-                <th className="py-3 px-4 text-right font-semibold w-28">Action</th>
+                <th className="px-4 py-3 font-semibold">Product</th>
+                <th className="w-36 px-4 py-3 font-semibold">Price</th>
+                <th className="w-44 px-4 py-3 font-semibold">Status</th>
+                <th className="w-28 px-4 py-3 text-right font-semibold">
+                  Action
+                </th>
               </tr>
             </thead>
 
             {/* Table Rows: Figma 53:1172 */}
             <tbody className="divide-rewear-border divide-y">
               {filteredProducts.map((item) => (
-                <tr key={item.id} className="hover:bg-rewear-soft/30 transition">
+                <tr
+                  key={item.id}
+                  className="hover:bg-rewear-soft/30 transition"
+                >
                   {/* Product info: thumbnail + title + size/condition */}
-                  <td className="py-3 px-4">
+                  <td className="px-4 py-3">
                     <div className="flex items-center gap-4">
                       <div className="bg-rewear-soft relative h-20 w-16 shrink-0 overflow-hidden">
-                        <Image
-                          src={item.image}
-                          alt={item.title}
-                          fill
-                          className="object-cover"
-                          unoptimized
-                        />
+                        <ProductPhoto url={item.image} title={item.title} />
                       </div>
                       <div className="space-y-1">
                         <p className="text-rewear-text text-base font-semibold">
@@ -202,15 +170,15 @@ export function SellerProductsPage({
                   </td>
 
                   {/* Price */}
-                  <td className="py-3 px-4 text-base font-semibold">
+                  <td className="px-4 py-3 text-base font-semibold">
                     {item.price}
                   </td>
 
                   {/* Status */}
-                  <td className="py-3 px-4 text-base">
+                  <td className="px-4 py-3 text-base">
                     {item.status === 'Held' ? (
                       <div className="space-y-0.5">
-                        <p className="font-semibold text-rewear-text">Held</p>
+                        <p className="text-rewear-text font-semibold">Held</p>
                         <p className="text-rewear-muted text-xs">
                           Editing locked
                         </p>
@@ -221,7 +189,7 @@ export function SellerProductsPage({
                   </td>
 
                   {/* Action */}
-                  <td className="py-3 px-4 text-right">
+                  <td className="px-4 py-3 text-right">
                     {item.isLocked ? (
                       <span className="text-rewear-muted cursor-not-allowed text-sm font-semibold">
                         Locked
@@ -229,7 +197,7 @@ export function SellerProductsPage({
                     ) : (
                       <Link
                         href={`/selling/new?id=${encodeURIComponent(item.id)}`}
-                        className="text-rewear-text hover:underline text-sm font-semibold"
+                        className="text-rewear-text text-sm font-semibold hover:underline"
                       >
                         Edit
                       </Link>
@@ -240,62 +208,40 @@ export function SellerProductsPage({
 
               {filteredProducts.length === 0 && (
                 <tr>
-                  <td colSpan={4} className="py-12 text-center text-rewear-muted">
-                    No products found matching &ldquo;{searchTerm}&rdquo;
+                  <td
+                    colSpan={4}
+                    className="text-rewear-muted py-12 text-center"
+                  >
+                    {products.length === 0
+                      ? 'No products yet.'
+                      : 'No products match the current filters.'}
                   </td>
                 </tr>
               )}
             </tbody>
           </table>
         </div>
-
-        {/* Pagination Footer: Figma 86:1647 */}
-        <div className="border-rewear-border flex flex-col gap-4 border-t p-4 sm:flex-row sm:items-center sm:justify-between">
-          {/* Items per page control */}
-          <div className="flex items-center gap-2 text-sm text-rewear-muted">
-            <span>Items per page</span>
-            <div className="relative">
-              <select
-                value={pageSize}
-                onChange={(e) => setPageSize(Number(e.target.value))}
-                aria-label="Items per page"
-                className="border-rewear-border text-rewear-text appearance-none border px-3 py-1.5 pr-8 text-sm outline-none cursor-pointer"
-              >
-                <option value={12}>12</option>
-                <option value={24}>24</option>
-                <option value={48}>48</option>
-              </select>
-              <ChevronDown
-                size={14}
-                className="text-rewear-muted pointer-events-none absolute top-1/2 right-2 -translate-y-1/2"
-              />
-            </div>
-          </div>
-
-          {/* Page controls */}
-          <div className="flex items-center gap-2">
+        {onPageChange && (
+          <div className="flex items-center justify-between border-t p-4 text-sm">
             <button
               type="button"
-              disabled
-              className="bg-rewear-soft text-rewear-text/40 h-10 px-4 text-sm font-normal disabled:cursor-not-allowed"
+              disabled={page <= 1}
+              onClick={() => onPageChange(page - 1)}
+              className="disabled:opacity-40"
             >
-              ‹ Previous
+              Previous
             </button>
+            <span>Page {page}</span>
             <button
               type="button"
-              className="bg-rewear-accent text-rewear-text h-10 w-11 text-sm font-semibold"
+              disabled={!hasNext}
+              onClick={() => onPageChange(page + 1)}
+              className="disabled:opacity-40"
             >
-              1
-            </button>
-            <button
-              type="button"
-              disabled
-              className="bg-rewear-soft text-rewear-text/40 h-10 px-4 text-sm font-normal disabled:cursor-not-allowed"
-            >
-              Next ›
+              Next
             </button>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );

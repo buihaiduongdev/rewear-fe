@@ -1,90 +1,95 @@
-import { Skeleton } from '@/shared/components/ui/skeleton';
-
 export function ProductDetailSkeleton() {
   return (
     <div
       role="status"
       aria-busy="true"
       aria-label="Loading product details"
-      className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8"
+      className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10 pb-8 lg:pb-16 font-sans space-y-16"
     >
       <span className="sr-only">Loading product details…</span>
 
       {/* Breadcrumb skeleton */}
-      <div className="mb-6 flex items-center justify-between">
-        <div className="flex items-center space-x-2">
-          <Skeleton className="h-4 w-16" />
-          <Skeleton className="h-4 w-4" />
-          <Skeleton className="h-4 w-20" />
-          <Skeleton className="h-4 w-4" />
-          <Skeleton className="h-4 w-32" />
-        </div>
-        <Skeleton className="h-7 w-20" />
+      <div className="flex items-center gap-4 text-sm font-semibold">
+        <div className="h-4 w-12 motion-safe:animate-pulse bg-rewear-soft" />
+        <span className="text-rewear-muted">/</span>
+        <div className="h-4 w-20 motion-safe:animate-pulse bg-rewear-soft" />
+        <span className="text-rewear-muted">/</span>
+        <div className="h-4 w-32 motion-safe:animate-pulse bg-rewear-soft" />
       </div>
 
-      {/* Main Grid: Gallery & Details */}
-      <div className="grid grid-cols-1 gap-10 lg:grid-cols-12 lg:gap-14">
-        {/* Left Column: Gallery (7 cols on lg) */}
-        <div className="space-y-4 lg:col-span-7">
-          <Skeleton className="border-rewear-border aspect-[3/4] w-full rounded-lg border" />
-          <div className="flex gap-3">
-            {[1, 2, 3, 4].map((i) => (
-              <Skeleton
+      {/* Main Grid: Gallery & Details (12-column responsive layout) */}
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-10 md:gap-8 lg:gap-14">
+        {/* Left Column: Gallery */}
+        <div className="space-y-4 md:col-span-6">
+          <div className="aspect-[4/5] w-full motion-safe:animate-pulse border border-rewear-border bg-rewear-soft" />
+          <div className="flex gap-[15px] overflow-hidden">
+            {[1, 2, 3, 4, 5].map((i) => (
+              <div
                 key={i}
-                className="border-rewear-border size-20 shrink-0 border"
+                className="size-[100px] sm:size-[120px] shrink-0 motion-safe:animate-pulse border border-rewear-border bg-rewear-soft"
               />
             ))}
           </div>
         </div>
 
-        {/* Right Column: Actions & Details (5 cols on lg) */}
-        <div className="flex flex-col space-y-6 lg:col-span-5">
+        {/* Right Column: Actions & Details */}
+        <div className="flex flex-col gap-6 md:col-span-6 md:pb-[136px]">
           {/* Title & Price Header */}
-          <div className="border-rewear-border space-y-3 border-b pb-5">
-            <div className="flex items-center gap-2">
-              <Skeleton className="h-4 w-16" />
-              <Skeleton className="h-5 w-20 rounded-full" />
-            </div>
-            <Skeleton className="h-8 w-4/5 sm:h-9" />
-            <div className="flex items-baseline gap-4 pt-1">
-              <Skeleton className="h-8 w-32" />
-              <Skeleton className="h-4 w-20" />
-            </div>
+          <div className="space-y-4">
+            <div className="h-10 w-4/5 motion-safe:animate-pulse bg-rewear-soft" />
+            <div className="h-10 w-36 motion-safe:animate-pulse bg-rewear-soft" />
           </div>
 
-          {/* Quick specs pill */}
-          <div className="border-rewear-border grid grid-cols-2 gap-4 rounded-lg border p-4">
-            <div className="space-y-1">
-              <Skeleton className="h-3 w-16" />
-              <Skeleton className="h-5 w-24" />
+          {/* Size and Condition */}
+          <div className="grid grid-cols-2 gap-6">
+            <div className="space-y-1.5">
+              <div className="h-4 w-12 motion-safe:animate-pulse bg-rewear-soft" />
+              <div className="h-5 w-20 motion-safe:animate-pulse bg-rewear-soft" />
             </div>
-            <div className="space-y-1">
-              <Skeleton className="h-3 w-16" />
-              <Skeleton className="h-5 w-28" />
+            <div className="space-y-1.5">
+              <div className="h-4 w-16 motion-safe:animate-pulse bg-rewear-soft" />
+              <div className="h-5 w-24 motion-safe:animate-pulse bg-rewear-soft" />
             </div>
-          </div>
-
-          {/* CTA Action button */}
-          <div className="pt-2">
-            <Skeleton className="h-12 w-full rounded-md" />
-          </div>
-
-          {/* Seller preview card */}
-          <div className="border-rewear-border rounded-lg border p-4">
-            <div className="flex items-center space-x-3">
-              <Skeleton className="size-11 rounded-full" />
-              <div className="space-y-2">
-                <Skeleton className="h-3 w-20" />
-                <Skeleton className="h-4 w-36" />
+            {[1, 2, 3].map((item) => (
+              <div key={item} className="space-y-1.5">
+                <div className="h-4 w-16 motion-safe:animate-pulse bg-rewear-soft" />
+                <div className="h-5 w-24 motion-safe:animate-pulse bg-rewear-soft" />
               </div>
-            </div>
+            ))}
           </div>
 
-          {/* Description & specs placeholders */}
-          <div className="space-y-3">
-            <Skeleton className="h-4 w-28" />
-            <Skeleton className="h-16 w-full" />
+          {/* Action Buttons */}
+          <div className="space-y-3 pt-2 md:mt-auto">
+            <div className="h-[52px] w-full motion-safe:animate-pulse bg-rewear-soft" />
+            <div className="h-[52px] w-full motion-safe:animate-pulse bg-rewear-soft/60" />
           </div>
+
+        </div>
+      </div>
+
+      {/* Product description and measurements skeleton */}
+      <div className="grid gap-10 bg-rewear-soft p-6 sm:p-10 md:grid-cols-2 md:gap-16">
+        <div className="flex items-center gap-4 md:col-span-2">
+          <div className="size-11 shrink-0 rounded-full motion-safe:animate-pulse bg-white" />
+          <div className="h-7 w-44 motion-safe:animate-pulse bg-white/60" />
+        </div>
+        <div className="space-y-5">
+          <div className="h-8 w-44 motion-safe:animate-pulse bg-white/60" />
+          <div className="h-4 w-full motion-safe:animate-pulse bg-white/60" />
+          <div className="h-4 w-4/5 motion-safe:animate-pulse bg-white/60" />
+        </div>
+        <div className="min-w-0 space-y-6">
+          <div className="h-8 w-44 motion-safe:animate-pulse bg-white/60" />
+          <div className="space-y-3">
+            {[1, 2, 3].map((i) => (
+              <div key={i} className="flex justify-between py-1">
+                <div className="h-4 w-20 motion-safe:animate-pulse bg-white/60" />
+                <div className="h-4 w-16 motion-safe:animate-pulse bg-white/60" />
+              </div>
+            ))}
+          </div>
+          <div className="h-4 w-48 motion-safe:animate-pulse bg-white/60" />
+          <div className="h-4 w-32 motion-safe:animate-pulse bg-white/60" />
         </div>
       </div>
     </div>

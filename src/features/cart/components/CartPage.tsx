@@ -1,28 +1,18 @@
 'use client';
 
-import { useState, useSyncExternalStore } from 'react';
-
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
 import { DeliveryAddressModal } from '@/modules/address';
 import { CartLink } from '@/modules/cart/components/CartLink';
-import {
-  cartQueryKey,
-  useCart,
-  useRemoveCartItem,
-} from '@/modules/cart/hooks/use-cart';
 import { CartSkeleton } from '@/modules/cart/skeletons/CartSkeleton';
-import { useAddToWishlist } from '@/modules/wishlist/hooks/use-wishlist';
 import { getApiErrorMessage } from '@/shared/api/api-error';
-import { useCheckoutControllerCreate } from '@/shared/api/query-generated/checkout/checkout';
-import { useUserAddressControllerFindAll } from '@/shared/api/query-generated/user-addresses/user-addresses';
 import { MarketplaceHeader } from '@/shared/components/marketplace/MarketplaceHeader';
 import { MobileNavigation } from '@/shared/components/marketplace/MobileNavigation';
 import { ProductPhoto } from '@/shared/components/marketplace/ProductPhoto';
 import { formatCondition, formatPrice } from '@/shared/utils/product';
-import { useQueryClient } from '@tanstack/react-query';
-import { useSession } from 'next-auth/react';
+
+import { useCartPage } from '../hooks/use-cart-page';
 
 const availabilityLabels: Record<string, string> = {
   HELD: 'Temporarily reserved',
@@ -33,112 +23,25 @@ const availabilityLabels: Record<string, string> = {
 
 export function CartPage() {
   const router = useRouter();
-  const cart = useCart();
-  const remove = useRemoveCartItem();
-  const addToWishlist = useAddToWishlist();
-  const data = cart.data?.data;
-  const activeCheckoutId = useSyncExternalStore(
-    (onStoreChange) => {
-      window.addEventListener('storage', onStoreChange);
-      return () => window.removeEventListener('storage', onStoreChange);
-    },
-    () => sessionStorage.getItem('activeCheckoutId'),
-    () => null,
-  );
-
-  const { data: session, status } = useSession();
-  const enabled = status === 'authenticated' && !session?.error;
-  const client = useQueryClient();
-  const [addressModalOpen, setAddressModalOpen] = useState(false);
-  const [createError, setCreateError] = useState<string | null>(null);
-
-  const addresses = useUserAddressControllerFindAll({
-    query: {
-      enabled: enabled,
-      queryKey: ['/api/user-addresses', session?.user.id],
-    },
-  });
-
-  const create = useCheckoutControllerCreate({
-    mutation: { meta: { skipSuccessToast: true, skipErrorToast: true } },
-  });
-
-  const allCartItems = data?.groups.flatMap((g) => g.items) ?? [];
-  const displayCount =
-    (data?.summary.availableItemCount ?? 0) > 0
-      ? data!.summary.availableItemCount
-      : allCartItems.length;
-
-  const displayTotal =
-    (data?.summary.totalPrice ?? 0) > 0
-      ? data!.summary.totalPrice
-      : allCartItems.reduce((sum, item) => sum + (item.product?.price ?? 0), 0);
-
-  const handleContinueToCheckout = (customAddressId?: string) => {
-    setCreateError(null);
-    if (!enabled) {
-      router.push('/login?callbackUrl=/cart');
-      return;
-    }
-
-    const available = allCartItems.filter(
-      (i) => i.availability === 'AVAILABLE' && i.product,
-    );
-    if (!available.length) return;
-
-    const chosenAddressId =
-      customAddressId ||
-      addresses.data?.data.find((a) => a.isDefault)?.id ||
-      addresses.data?.data[0]?.id;
-
-    if (!chosenAddressId) {
-      setAddressModalOpen(true);
-      return;
-    }
-
-    const productIds = available.map((i) => i.productId).sort();
-    const key = `rewear.checkout.request:${session?.user.id}:${chosenAddressId}:${productIds.join(',')}`;
-    let requestId =
-      typeof window !== 'undefined' ? sessionStorage.getItem(key) : null;
-    if (!requestId) {
-      requestId = crypto.randomUUID();
-      if (typeof window !== 'undefined') {
-        sessionStorage.setItem(key, requestId);
-      }
-    }
-
-    create.mutate(
-      { data: { requestId, addressId: chosenAddressId, productIds } },
-      {
-        onSuccess: (response: { data: { id: string } }) => {
-          if (typeof window !== 'undefined') {
-            sessionStorage.setItem('activeCheckoutId', response.data.id);
-            sessionStorage.removeItem(key);
-            window.dispatchEvent(new Event('storage'));
-          }
-          void client.invalidateQueries({
-            queryKey: cartQueryKey(session?.user.id),
-          });
-          router.push(`/checkout?id=${response.data.id}`);
-        },
-        onError: (err: unknown) => {
-          setCreateError(getApiErrorMessage(err));
-        },
-      },
-    );
-  };
-
-  const handleSaveForLater = (productId: string) => {
-    if (!enabled) {
-      router.push('/login?callbackUrl=/cart');
-      return;
-    }
-    addToWishlist.mutate({ productId, data: {} });
-    remove.mutate({ productId });
-  };
+  const {
+    cart,
+    remove,
+    addToWishlist,
+    data,
+    activeCheckoutId,
+    addressModalOpen,
+    setAddressModalOpen,
+    createError,
+    addresses,
+    create,
+    displayCount,
+    displayTotal,
+    handleContinueToCheckout,
+    handleSaveForLater,
+  } = useCartPage();
 
   return (
-    <div className="bg-rewear-surface text-rewear-text min-h-dvh">
+    <div className="bg-rewear-surface text-rewear-text flex min-h-dvh flex-col">
       <MarketplaceHeader
         cartAction={<CartLink active />}
         search=""
@@ -148,7 +51,7 @@ export function CartPage() {
       />
       <main
         id="main-content"
-        className="mx-auto min-h-[60vh] max-w-[1280px] px-4 pt-4 pb-4 md:px-12 md:py-12"
+        className="mx-auto w-full max-w-[1280px] flex-1 px-4 pt-4 pb-4 md:px-12 md:py-12"
       >
         <h1 className="text-[28px] leading-[34px] font-semibold tracking-[-0.02em] md:text-[40px] md:leading-[46px]">
           Your cart
@@ -293,6 +196,11 @@ export function CartPage() {
                     </div>
                   </section>
                 ))}
+                {addToWishlist.isError && (
+                  <p role="alert" className="text-xs text-red-600">
+                    {getApiErrorMessage(addToWishlist.error)}
+                  </p>
+                )}
                 {remove.isError && (
                   <p role="alert" className="text-xs text-red-600">
                     {getApiErrorMessage(remove.error)}
@@ -331,18 +239,16 @@ export function CartPage() {
                     Resume checkout
                   </Link>
                 ) : (
-                  <Link
-                    href="/checkout"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      handleContinueToCheckout();
-                    }}
-                    className={`bg-rewear-accent text-rewear-text flex h-[52px] w-full items-center justify-center text-sm font-semibold md:h-12 ${create.isPending || displayCount === 0 ? 'pointer-events-none opacity-50' : 'cursor-pointer'}`}
+                  <button
+                    type="button"
+                    disabled={create.isPending || displayCount === 0}
+                    onClick={() => handleContinueToCheckout()}
+                    className="bg-rewear-accent text-rewear-text flex h-[52px] w-full items-center justify-center text-sm font-semibold disabled:cursor-not-allowed disabled:opacity-50 md:h-12"
                   >
                     {create.isPending
                       ? 'Reserving items…'
                       : 'Continue to checkout'}
-                  </Link>
+                  </button>
                 )}
                 <Link
                   href="/"
@@ -355,7 +261,7 @@ export function CartPage() {
           </>
         )}
       </main>
-      <footer className="text-rewear-muted mx-auto hidden max-w-[1280px] justify-between px-12 py-6 text-sm font-semibold md:flex">
+      <footer className="text-rewear-muted mx-auto hidden w-full max-w-[1280px] justify-between px-12 py-6 text-sm font-semibold md:flex">
         <span>© 2026 RE.WEAR</span>
         <span className="text-rewear-text">Help &amp; returns</span>
       </footer>

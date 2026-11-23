@@ -1,7 +1,5 @@
 'use client';
 
-import { useState } from 'react';
-
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -10,14 +8,11 @@ import { ShopCard } from '@/modules/shop';
 import { MarketplaceFooter } from '@/shared/components/marketplace/MarketplaceFooter';
 import { MarketplaceHeader } from '@/shared/components/marketplace/MarketplaceHeader';
 import { Button } from '@/shared/components/ui/button';
-import type { Product } from '@/shared/utils/product';
-import { Dialog } from '@base-ui/react/dialog';
 import { ArrowUpRight } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 
 import { useHomeCatalog } from '../hooks/use-home-catalog';
 import { ProductCard } from './ProductCard';
-import { ProductPreview } from './ProductPreview';
 import { SectionState } from './SectionState';
 
 const primaryButtonClass =
@@ -56,7 +51,6 @@ export function HomePage() {
   } = useHomeCatalog();
   const { data: session, status: sessionStatus } = useSession();
   const isAuthenticated = sessionStatus === 'authenticated' && !session?.error;
-  const [previewHandle] = useState(() => Dialog.createHandle<Product>());
   const items = products.data?.data.data ?? [];
   const shopItems = shops.data?.data.slice(0, 2) ?? [];
   const hasFilters = Boolean(search || categoryId || shopId);
@@ -72,7 +66,7 @@ export function HomePage() {
       />
       <main
         id="main-content"
-        className="mx-auto flex w-full max-w-[1536px] flex-col gap-6 px-4 py-4 md:gap-[88px] md:px-12 md:py-12"
+        className="mx-auto flex w-full max-w-[1536px] flex-1 flex-col gap-6 px-4 py-4 md:gap-[88px] md:px-12 md:py-12"
       >
         <section
           aria-labelledby="home-title"
@@ -134,8 +128,8 @@ export function HomePage() {
           </div>
           <div className="relative aspect-[358/448] w-full md:aspect-[528/660] md:min-w-0 md:flex-[528]">
             <Image
-              src="/images/home/editorial.png"
-              alt="Pre-owned wool outerwear, styled for its next chapter"
+              src="/images/home/editorial.jpg"
+              alt="A rail of light-coloured clothing in a boutique"
               fill
               preload
               sizes="(min-width: 1536px) 656px, (min-width: 768px) 44vw, 100vw"
@@ -213,7 +207,6 @@ export function HomePage() {
                   <ProductCard
                     key={product.id}
                     product={product}
-                    handle={previewHandle}
                     onSelectShop={(selectedShopId) =>
                       updateFilters({ shopId: selectedShopId })
                     }
@@ -282,8 +275,8 @@ export function HomePage() {
           </h2>
           <div className="relative h-[180px] w-full md:aspect-[592/400] md:h-auto md:w-1/2">
             <Image
-              src="/images/home/selling.png"
-              alt="Clothing rails inside an independent secondhand shop"
+              src="/images/home/selling.jpg"
+              alt="A rail of pre-loved knitwear and dresses"
               fill
               sizes="(min-width: 1536px) 720px, (min-width: 768px) 50vw, 90vw"
               className="object-cover"
@@ -324,7 +317,6 @@ export function HomePage() {
         </Link>
         <CartLink className="bg-rewear-soft flex min-h-11 items-center px-3" />
       </nav>
-      <ProductPreview handle={previewHandle} />
     </>
   );
 }

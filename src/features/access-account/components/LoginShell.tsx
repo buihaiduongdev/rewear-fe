@@ -11,7 +11,7 @@ const dmSans = DM_Sans({ subsets: ['latin', 'latin-ext'], display: 'swap' });
 export function LoginShell({ children }: { children: ReactNode }) {
   return (
     <div
-      className={`${dmSans.className} min-h-dvh bg-white text-[#1a1c1d] [--foreground:#1a1c1d] [--muted-foreground:#5f5e5e] [&_a]:underline-offset-4 [&_a:focus-visible]:rounded-sm [&_a:focus-visible]:outline-2 [&_a:focus-visible]:outline-offset-[5px] [&_a:focus-visible]:outline-[#1a1c1d] [&_a:hover]:underline`}
+      className={`${dmSans.className} flex min-h-dvh flex-col bg-white text-[#1a1c1d] [--foreground:#1a1c1d] [--muted-foreground:#5f5e5e] [&_a]:underline-offset-4 [&_a:focus-visible]:rounded-sm [&_a:focus-visible]:outline-2 [&_a:focus-visible]:outline-offset-[5px] [&_a:focus-visible]:outline-[#1a1c1d] [&_a:hover]:underline`}
     >
       <header className="flex h-20 items-center gap-10 px-12 text-sm leading-5 font-semibold max-[1150px]:gap-6 max-[1150px]:px-8 max-[767px]:h-[72px] max-[767px]:justify-between max-[767px]:px-6">
         <Link
@@ -47,7 +47,7 @@ export function LoginShell({ children }: { children: ReactNode }) {
           <span lang="vi">VI</span>
         </div>
       </header>
-      <main className="mx-auto flex max-w-[1536px] items-center gap-16 p-12 max-[1150px]:gap-10 max-[1150px]:p-8 max-[767px]:min-h-[620px] max-[767px]:px-6 max-[767px]:pt-10 max-[767px]:pb-16">
+      <main className="mx-auto flex w-full max-w-[1536px] flex-1 items-center gap-16 p-12 max-[1150px]:gap-10 max-[1150px]:p-8 max-[767px]:min-h-[620px] max-[767px]:px-6 max-[767px]:pt-10 max-[767px]:pb-16">
         <div className="relative h-[760px] min-w-0 flex-1 max-[1150px]:h-[680px] max-[767px]:hidden">
           <Image
             src="/images/login-editorial.png"

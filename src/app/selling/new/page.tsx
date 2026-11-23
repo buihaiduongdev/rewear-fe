@@ -1,36 +1,17 @@
 'use client';
 
 import * as React from 'react';
-import { useSession } from 'next-auth/react';
-import { useShopControllerFindMine } from '@/shared/api/query-generated/shops/shops';
-import { SellerWorkspaceLayout } from '@/features/seller-dashboard/components/SellerWorkspaceLayout';
+
 import { SellerListingEditorPage } from '@/features/seller-dashboard/components/SellerListingEditorPage';
-
-function getShopLogo(shopId: string): string | null {
-  if (typeof window === 'undefined' || !shopId) return null;
-  try {
-    return localStorage.getItem(`rewear_shop_logo_${shopId}`);
-  } catch {
-    return null;
-  }
-}
-
-function subscribeToStorage(callback: () => void) {
-  if (typeof window === 'undefined') return () => {};
-  window.addEventListener('storage', callback);
-  return () => window.removeEventListener('storage', callback);
-}
+import { SellerWorkspaceLayout } from '@/features/seller-dashboard/components/SellerWorkspaceLayout';
+import { useShopMemberships } from '@/modules/shop/hooks/use-shop-memberships';
+import { useSession } from 'next-auth/react';
 
 export default function NewListingPage() {
   const { data: session, status } = useSession();
   const enabled = status === 'authenticated' && !session?.error;
 
-  const memberships = useShopControllerFindMine({
-    query: {
-      enabled,
-      queryKey: ['pickup-shop-memberships', session?.user.id],
-    },
-  });
+  const memberships = useShopMemberships(enabled, session?.user.id);
 
   const activeShop = React.useMemo(() => {
     return memberships.data?.data.find(
@@ -38,14 +19,22 @@ export default function NewListingPage() {
     );
   }, [memberships.data?.data]);
 
-  const shopName = activeShop?.shop.name || 'Hanoi Archive';
+  if (enabled && memberships.isPending)
+    return <p role="status">Loading shop…</p>;
+  if (enabled && memberships.isError)
+    return (
+      <div role="alert">
+        Could not load your shop.{' '}
+        <button onClick={() => void memberships.refetch()}>Retry</button>
+      </div>
+    );
+
+  const shopName = activeShop?.shop.name || 'Seller workspace';
   const shopId = activeShop?.shopId || '';
 
-  const shopLogo = React.useSyncExternalStore(
-    subscribeToStorage,
-    () => getShopLogo(shopId),
-    () => null,
-  );
+  const shopLogo =
+    (activeShop?.shop as { logoUrl?: string | null } | undefined)?.logoUrl ??
+    null;
 
   return (
     <SellerWorkspaceLayout
@@ -62,7 +51,7 @@ export default function NewListingPage() {
           </div>
         }
       >
-        <SellerListingEditorPage />
+        <SellerListingEditorPage shopId={shopId} />
       </React.Suspense>
     </SellerWorkspaceLayout>
   );

@@ -3,6 +3,7 @@ import { Suspense } from 'react';
 import type { Metadata } from 'next';
 
 import { ProductDetailPage } from '@/features/product-detail/components/ProductDetailPage';
+import { ProductDetailShell } from '@/features/product-detail/components/ProductDetailShell';
 import { ProductDetailSkeleton } from '@/features/product-detail/skeletons/ProductDetailSkeleton';
 
 interface Props {
@@ -24,10 +25,10 @@ async function ProductDetailContent({ params }: Props) {
 
 export default function ProductDetailRoute({ params }: Props) {
   return (
-    <div className="bg-rewear-surface text-rewear-text min-h-dvh [--foreground:var(--color-rewear-text)] [--muted-foreground:var(--color-rewear-muted)]">
+    <ProductDetailShell>
       <Suspense fallback={<ProductDetailSkeleton />}>
         <ProductDetailContent params={params} />
       </Suspense>
-    </div>
+    </ProductDetailShell>
   );
 }
