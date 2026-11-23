@@ -664,4 +664,4 @@ Ghi một mục cho mỗi task có dùng AI. Cập nhật liên kết PR/commit 
 - **Phần tự làm hoặc đã chỉnh sửa:** Định hướng cấu trúc component, quy tắc thao tác theo trạng thái đơn hàng, kiểm tra responsive và nghiệm thu kiểm thử.
 - **Cách kiểm chứng:** Chạy `pnpm check` (tsc + eslint) pass 0 lỗi, `pnpm test` (15/15 suites, 41/41 tests) pass 100%, `pnpm build` thành công toàn bộ routes qua Turbopack.
 - **Lỗi hoặc đề xuất sai của AI đã phát hiện:** Không phát hiện.
-- **Minh chứng:** Branch `buihaiduongdev/buyer-orders-2`.
+- **Minh chứng:** PR #17; branch `buihaiduongdev/buyer-orders-2`.
