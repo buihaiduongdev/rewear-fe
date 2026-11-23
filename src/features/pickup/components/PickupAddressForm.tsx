@@ -150,21 +150,23 @@ export function PickupAddressForm({
           {...register('addressLine1')}
         />
 
-        <div className="bg-rewear-soft space-y-4 p-4">
-          <div className="flex items-center justify-between gap-4">
-            <h2 className="font-semibold">Pickup shipping providers</h2>
+        {isEditing && (
+          <div className="bg-rewear-soft space-y-4 p-4">
+            <div className="flex items-center justify-between gap-4">
+              <h2 className="font-semibold">Pickup shipping providers</h2>
+            </div>
+            <GhnPickupProvider
+              ghn={ghn}
+              status={syncStatus}
+              shopId={connection?.ghnShopId}
+              connectionError={connectionError}
+              onDisconnect={disconnectGhn}
+              onConnect={connectGhn}
+              addressNeedsSave={addressNeedsSave}
+              connecting={saving}
+            />
           </div>
-          <GhnPickupProvider
-            ghn={ghn}
-            status={syncStatus}
-            shopId={connection?.ghnShopId}
-            connectionError={connectionError}
-            onDisconnect={disconnectGhn}
-            onConnect={connectGhn}
-            addressNeedsSave={addressNeedsSave}
-            connecting={saving}
-          />
-        </div>
+        )}
 
         {message && (
           <p role="status" className="text-sm font-medium text-emerald-600">
