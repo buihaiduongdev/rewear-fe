@@ -4,27 +4,16 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
 import { CartLink } from '@/modules/cart/components/CartLink';
-import type { OrderControllerBuyerListStatus } from '@/shared/api/models';
+import { MarketplaceFooter } from '@/shared/components/marketplace/MarketplaceFooter';
 import { MarketplaceHeader } from '@/shared/components/marketplace/MarketplaceHeader';
 import { MobileNavigation } from '@/shared/components/marketplace/MobileNavigation';
-import { formatPrice } from '@/shared/utils/product';
 
 import {
   BUYER_ORDERS_PAGE_SIZE,
   useBuyerOrders,
 } from '../hooks/use-buyer-orders';
-
-const statuses: Record<OrderControllerBuyerListStatus, string> = {
-  waiting: 'Awaiting payment',
-  pending: 'Awaiting seller confirmation',
-  preparing: 'Preparing',
-  shipping: 'Shipping',
-  delivered: 'Delivered',
-  completed: 'Completed',
-  dispute: 'In dispute',
-  returns: 'Return in progress',
-  cancelled: 'Cancelled',
-};
+import { ORDER_STATUS_LABELS } from '../utils/order-display';
+import { BuyerOrderCard } from './BuyerOrderCard';
 
 export function BuyerOrdersPage() {
   const router = useRouter();
@@ -34,13 +23,14 @@ export function BuyerOrdersPage() {
     filter,
     setFilter,
     enabled,
+    authLoading,
     orders,
     items,
     visible,
   } = useBuyerOrders();
 
   return (
-    <div className="bg-rewear-surface text-rewear-text min-h-dvh">
+    <div className="bg-rewear-surface text-rewear-text flex min-h-dvh flex-col">
       <MarketplaceHeader
         cartAction={<CartLink />}
         search=""
@@ -50,13 +40,13 @@ export function BuyerOrdersPage() {
       />
       <main
         id="main-content"
-        className="mx-auto min-h-[60vh] max-w-[1280px] px-4 pt-4 pb-12 md:px-12 md:py-12"
+        className="mx-auto w-full max-w-[1280px] flex-1 px-4 pt-4 pb-12 md:px-12 md:py-12"
       >
         <div className="border-rewear-border flex flex-wrap items-center justify-between gap-4 border-b pb-6">
           <h1 className="text-[28px] font-semibold md:text-[40px]">
             Your orders
           </h1>
-          <label className="text-sm font-semibold">
+          <label className="text-sm font-semibold md:hidden">
             Status{' '}
             <select
               aria-label="Filter orders by status"
@@ -68,7 +58,7 @@ export function BuyerOrdersPage() {
               className="bg-rewear-soft ml-2 min-h-11 px-3"
             >
               <option value="all">All orders</option>
-              {Object.entries(statuses).map(([value, label]) => (
+              {Object.entries(ORDER_STATUS_LABELS).map(([value, label]) => (
                 <option key={value} value={value}>
                   {label}
                 </option>
@@ -76,7 +66,51 @@ export function BuyerOrdersPage() {
             </select>
           </label>
         </div>
-        {!enabled || orders.isPending ? (
+        <nav
+          aria-label="Order status"
+          className="mt-6 hidden gap-2 overflow-x-auto pb-1 md:flex"
+        >
+          {(
+            [
+              ['all', 'All'],
+              ['waiting', 'Awaiting payment'],
+              ['pending', 'Awaiting confirmation'],
+              ['preparing', 'Preparing'],
+              ['shipping', 'Shipping'],
+              ['delivered', 'Delivered'],
+              ['completed', 'Completed'],
+              ['dispute', 'In dispute'],
+              ['returns', 'Returns'],
+              ['cancelled', 'Cancelled'],
+            ] as const
+          ).map(([value, label]) => (
+            <button
+              key={value}
+              type="button"
+              aria-pressed={filter === value}
+              onClick={() => {
+                setFilter(value);
+                setOffset(0);
+              }}
+              className={`min-h-11 shrink-0 px-5 text-sm font-semibold ${filter === value ? 'bg-rewear-text text-white' : 'bg-rewear-soft text-rewear-text hover:opacity-80'}`}
+            >
+              {label}
+            </button>
+          ))}
+        </nav>
+        {authLoading ? (
+          <p role="status" className="text-rewear-muted py-10">
+            Loading orders…
+          </p>
+        ) : !enabled ? (
+          <p role="alert" className="py-10">
+            Your session has expired.{' '}
+            <Link href="/login" className="underline">
+              Sign in again
+            </Link>{' '}
+            to view your orders.
+          </p>
+        ) : orders.isPending ? (
           <p role="status" className="text-rewear-muted py-10">
             Loading orders…
           </p>
@@ -105,42 +139,9 @@ export function BuyerOrdersPage() {
             )}
           </div>
         ) : (
-          <div className="divide-rewear-border divide-y">
+          <div className="space-y-6 pt-6">
             {visible.map((order) => (
-              <article key={order.id} className="space-y-4 py-6">
-                <div className="flex flex-wrap items-start justify-between gap-4">
-                  <div>
-                    <p className="font-semibold">{order.shopName}</p>
-                    <p className="text-rewear-muted mt-1 font-mono text-xs break-all">
-                      Order {order.id}
-                    </p>
-                  </div>
-                  <span className="bg-rewear-soft px-3 py-2 text-xs font-semibold">
-                    {statuses[order.status] ?? order.status}
-                  </span>
-                </div>
-                <ul className="space-y-2">
-                  {order.items.map((item, index) => (
-                    <li
-                      key={index}
-                      className="flex justify-between gap-4 text-sm"
-                    >
-                      <span>
-                        {typeof item.title === 'string' && item.title
-                          ? item.title
-                          : 'Item'}
-                      </span>
-                      {typeof item.price === 'number' && (
-                        <span>{formatPrice(item.price)}</span>
-                      )}
-                    </li>
-                  ))}
-                </ul>
-                <p className="border-rewear-border flex justify-between border-t pt-3 text-sm">
-                  <span>Total</span>
-                  <strong>{formatPrice(order.total)}</strong>
-                </p>
-              </article>
+              <BuyerOrderCard key={order.id} order={order} />
             ))}
           </div>
         )}
@@ -171,6 +172,7 @@ export function BuyerOrdersPage() {
             </div>
           )}
       </main>
+      <MarketplaceFooter />
       <MobileNavigation
         cartAction={
           <CartLink className="bg-rewear-soft flex min-h-11 items-center justify-center px-2 text-center" />

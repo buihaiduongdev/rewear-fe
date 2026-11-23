@@ -1962,6 +1962,8 @@ export type OrderControllerBuyerList200DataItem = {
   /** @nullable */
   walletRefund?: OrderControllerBuyerList200DataItemWalletRefund;
   events?: OrderControllerBuyerList200DataItemEventsItem[];
+  /** @pattern ^RW-[0-9A-F]{10}$ */
+  orderCode: string;
 };
 
 export type OrderControllerBuyerList200 = {
@@ -2205,6 +2207,8 @@ export type OrderControllerBuyerDetail200Data = {
   /** @nullable */
   walletRefund?: OrderControllerBuyerDetail200DataWalletRefund;
   events?: OrderControllerBuyerDetail200DataEventsItem[];
+  /** @pattern ^RW-[0-9A-F]{10}$ */
+  orderCode: string;
 };
 
 export type OrderControllerBuyerDetail200 = {
@@ -2477,6 +2481,8 @@ export type OrderControllerShopList200DataItem = {
   /** @nullable */
   walletRefund?: OrderControllerShopList200DataItemWalletRefund;
   events?: OrderControllerShopList200DataItemEventsItem[];
+  /** @pattern ^RW-[0-9A-F]{10}$ */
+  orderCode: string;
 };
 
 export type OrderControllerShopList200 = {
@@ -2720,6 +2726,8 @@ export type OrderControllerShopDetail200Data = {
   /** @nullable */
   walletRefund?: OrderControllerShopDetail200DataWalletRefund;
   events?: OrderControllerShopDetail200DataEventsItem[];
+  /** @pattern ^RW-[0-9A-F]{10}$ */
+  orderCode: string;
 };
 
 export type OrderControllerShopDetail200 = {
@@ -2961,6 +2969,8 @@ export type OrderControllerAccept200Data = {
   /** @nullable */
   walletRefund?: OrderControllerAccept200DataWalletRefund;
   events?: OrderControllerAccept200DataEventsItem[];
+  /** @pattern ^RW-[0-9A-F]{10}$ */
+  orderCode: string;
 };
 
 export type OrderControllerAccept200 = {
@@ -3208,6 +3218,8 @@ export type OrderControllerReject200Data = {
   /** @nullable */
   walletRefund?: OrderControllerReject200DataWalletRefund;
   events?: OrderControllerReject200DataEventsItem[];
+  /** @pattern ^RW-[0-9A-F]{10}$ */
+  orderCode: string;
 };
 
 export type OrderControllerReject200 = {
@@ -3456,6 +3468,8 @@ export type OrderSettlementControllerConfirmReceipt200Data = {
   /** @nullable */
   walletRefund?: OrderSettlementControllerConfirmReceipt200DataWalletRefund;
   events?: OrderSettlementControllerConfirmReceipt200DataEventsItem[];
+  /** @pattern ^RW-[0-9A-F]{10}$ */
+  orderCode: string;
 };
 
 export type OrderSettlementControllerConfirmReceipt200 = {
@@ -3724,6 +3738,8 @@ export type OrderSettlementControllerVerifyDelivery200Data = {
   /** @nullable */
   walletRefund?: OrderSettlementControllerVerifyDelivery200DataWalletRefund;
   events?: OrderSettlementControllerVerifyDelivery200DataEventsItem[];
+  /** @pattern ^RW-[0-9A-F]{10}$ */
+  orderCode: string;
 };
 
 export type OrderSettlementControllerVerifyDelivery200 = {
@@ -5823,6 +5839,8 @@ export type CodControllerPlace200DataItem = {
   /** @nullable */
   walletRefund?: CodControllerPlace200DataItemWalletRefund;
   events?: CodControllerPlace200DataItemEventsItem[];
+  /** @pattern ^RW-[0-9A-F]{10}$ */
+  orderCode: string;
 };
 
 export type CodControllerPlace200 = {
@@ -6073,6 +6091,8 @@ export type CodControllerCancel200Data = {
   /** @nullable */
   walletRefund?: CodControllerCancel200DataWalletRefund;
   events?: CodControllerCancel200DataEventsItem[];
+  /** @pattern ^RW-[0-9A-F]{10}$ */
+  orderCode: string;
 };
 
 export type CodControllerCancel200 = {
@@ -11902,6 +11922,8 @@ export type ShipmentControllerInspect200DataOrder = {
   /** @nullable */
   walletRefund?: ShipmentControllerInspect200DataOrderWalletRefund;
   events?: ShipmentControllerInspect200DataOrderEventsItem[];
+  /** @pattern ^RW-[0-9A-F]{10}$ */
+  orderCode: string;
 };
 
 export type ShipmentControllerInspect200DataInspectionCondition =
@@ -12873,6 +12895,8 @@ export type ShipmentControllerIncidents200DataOrdersItem = {
   /** @nullable */
   walletRefund?: ShipmentControllerIncidents200DataOrdersItemWalletRefund;
   events?: ShipmentControllerIncidents200DataOrdersItemEventsItem[];
+  /** @pattern ^RW-[0-9A-F]{10}$ */
+  orderCode: string;
 };
 
 export type ShipmentControllerIncidents200Data = {
@@ -13142,6 +13166,8 @@ export type ShipmentControllerRequest200Data = {
   /** @nullable */
   walletRefund?: ShipmentControllerRequest200DataWalletRefund;
   events?: ShipmentControllerRequest200DataEventsItem[];
+  /** @pattern ^RW-[0-9A-F]{10}$ */
+  orderCode: string;
 };
 
 export type ShipmentControllerRequest200 = {
@@ -13399,6 +13425,8 @@ export type ShipmentControllerRespond200Data = {
   /** @nullable */
   walletRefund?: ShipmentControllerRespond200DataWalletRefund;
   events?: ShipmentControllerRespond200DataEventsItem[];
+  /** @pattern ^RW-[0-9A-F]{10}$ */
+  orderCode: string;
 };
 
 export type ShipmentControllerRespond200 = {
@@ -13648,6 +13676,8 @@ export type ShipmentControllerReview200Data = {
   /** @nullable */
   walletRefund?: ShipmentControllerReview200DataWalletRefund;
   events?: ShipmentControllerReview200DataEventsItem[];
+  /** @pattern ^RW-[0-9A-F]{10}$ */
+  orderCode: string;
 };
 
 export type ShipmentControllerReview200 = {
@@ -13903,6 +13933,8 @@ export type ShipmentControllerDecide200Data = {
   /** @nullable */
   walletRefund?: ShipmentControllerDecide200DataWalletRefund;
   events?: ShipmentControllerDecide200DataEventsItem[];
+  /** @pattern ^RW-[0-9A-F]{10}$ */
+  orderCode: string;
 };
 
 export type ShipmentControllerDecide200 = {

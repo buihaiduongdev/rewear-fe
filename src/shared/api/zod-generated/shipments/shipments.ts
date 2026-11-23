@@ -135,6 +135,8 @@ export const shipmentControllerInspectResponseDataOrderEventsItemCreatedAtRegExp
   new RegExp(
     '^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$',
   );
+export const shipmentControllerInspectResponseDataOrderOrderCodeRegExp =
+  new RegExp('^RW-[0-9A-F]{10}$');
 export const shipmentControllerInspectResponseDataInspectionReasonMax = 1000;
 
 export const shipmentControllerInspectResponseDataInspectionEvidenceMax = 2000;
@@ -364,6 +366,9 @@ export const ShipmentControllerInspectResponse = zod.object({
           }),
         )
         .optional(),
+      orderCode: zod
+        .string()
+        .regex(shipmentControllerInspectResponseDataOrderOrderCodeRegExp),
     }),
     inspection: zod
       .object({
@@ -1334,6 +1339,8 @@ export const shipmentControllerIncidentsResponseDataOrdersItemEventsItemCreatedA
   new RegExp(
     '^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$',
   );
+export const shipmentControllerIncidentsResponseDataOrdersItemOrderCodeRegExp =
+  new RegExp('^RW-[0-9A-F]{10}$');
 
 export const ShipmentControllerIncidentsResponse = zod.object({
   statusCode: zod.literal(200),
@@ -1705,6 +1712,11 @@ export const ShipmentControllerIncidentsResponse = zod.object({
             }),
           )
           .optional(),
+        orderCode: zod
+          .string()
+          .regex(
+            shipmentControllerIncidentsResponseDataOrdersItemOrderCodeRegExp,
+          ),
       }),
     ),
   }),
@@ -1842,6 +1854,9 @@ export const shipmentControllerRequestResponseDataEventsItemCreatedAtRegExp =
   new RegExp(
     '^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$',
   );
+export const shipmentControllerRequestResponseDataOrderCodeRegExp = new RegExp(
+  '^RW-[0-9A-F]{10}$',
+);
 
 export const ShipmentControllerRequestResponse = zod.object({
   statusCode: zod.literal(200),
@@ -2022,6 +2037,9 @@ export const ShipmentControllerRequestResponse = zod.object({
         }),
       )
       .optional(),
+    orderCode: zod
+      .string()
+      .regex(shipmentControllerRequestResponseDataOrderCodeRegExp),
   }),
 });
 
@@ -2147,6 +2165,9 @@ export const shipmentControllerRespondResponseDataEventsItemCreatedAtRegExp =
   new RegExp(
     '^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$',
   );
+export const shipmentControllerRespondResponseDataOrderCodeRegExp = new RegExp(
+  '^RW-[0-9A-F]{10}$',
+);
 
 export const ShipmentControllerRespondResponse = zod.object({
   statusCode: zod.literal(200),
@@ -2327,6 +2348,9 @@ export const ShipmentControllerRespondResponse = zod.object({
         }),
       )
       .optional(),
+    orderCode: zod
+      .string()
+      .regex(shipmentControllerRespondResponseDataOrderCodeRegExp),
   }),
 });
 
@@ -2439,6 +2463,9 @@ export const shipmentControllerReviewResponseDataEventsItemCreatedAtRegExp =
   new RegExp(
     '^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$',
   );
+export const shipmentControllerReviewResponseDataOrderCodeRegExp = new RegExp(
+  '^RW-[0-9A-F]{10}$',
+);
 
 export const ShipmentControllerReviewResponse = zod.object({
   statusCode: zod.literal(200),
@@ -2619,6 +2646,9 @@ export const ShipmentControllerReviewResponse = zod.object({
         }),
       )
       .optional(),
+    orderCode: zod
+      .string()
+      .regex(shipmentControllerReviewResponseDataOrderCodeRegExp),
   }),
 });
 
@@ -2735,6 +2765,9 @@ export const shipmentControllerDecideResponseDataEventsItemCreatedAtRegExp =
   new RegExp(
     '^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$',
   );
+export const shipmentControllerDecideResponseDataOrderCodeRegExp = new RegExp(
+  '^RW-[0-9A-F]{10}$',
+);
 
 export const ShipmentControllerDecideResponse = zod.object({
   statusCode: zod.literal(200),
@@ -2915,5 +2948,8 @@ export const ShipmentControllerDecideResponse = zod.object({
         }),
       )
       .optional(),
+    orderCode: zod
+      .string()
+      .regex(shipmentControllerDecideResponseDataOrderCodeRegExp),
   }),
 });
