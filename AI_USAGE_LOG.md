@@ -653,3 +653,15 @@ Ghi một mục cho mỗi task có dùng AI. Cập nhật liên kết PR/commit 
 - **Cách kiểm chứng:** TypeScript incremental, ESLint và Prettier trên các file thay đổi, `git diff --check`. Không chạy test local; CI được bổ sung để chạy kiểm tra và test.
 - **Giới hạn:** Chưa kiểm thử thủ công các luồng có tương tác BE sau refactor; kết quả test và build phụ thuộc CI.
 - **Minh chứng:** PR #16; branch `buihaiduongdev/fe-cleanup-review`.
+
+### 2026-11-24 — Chi tiết đơn hàng và các thao tác người mua
+
+- **Người thực hiện:** Bùi Hải Dương
+- **Công cụ:** Antigravity (Gemini 3.8 Flash)
+- **Mục đích và phạm vi:** Triển khai trang chi tiết đơn hàng người mua `/orders/[id]`, kết nối dữ liệu đơn hàng, hiển thị tiến trình giao nhận và các dialog thao tác (hủy đơn, xác nhận đã nhận hàng, khiếu nại); bổ sung skeleton chống layout shift cho trang và tích hợp vào Suspense fallback.
+- **Prompt chính:** Triển khai trang chi tiết đơn hàng cho người mua (/orders/[id]), hiển thị timeline tiến trình đơn, địa chỉ giao hàng, thông tin sản phẩm và tóm tắt thanh toán; tích hợp các dialog thao tác (hủy đơn, xác nhận đã nhận hàng, khiếu nại đơn hàng); bổ sung OrderDetailSkeleton chống layout shift và cập nhật API client tương ứng.
+- **Đầu ra AI được sử dụng:** Trang `src/app/orders/[id]/page.tsx`, `BuyerOrderDetailPage`, `OrderTimeline`, `ConfirmReceiptDialog`, `OrderActionDialogs`, `OrderDetailSkeleton`, các hook `useBuyerOrderDetail`, `useOrderActions`, `useDisputeWindow`, và cập nhật mô hình dữ liệu API sinh từ OpenAPI.
+- **Phần tự làm hoặc đã chỉnh sửa:** Định hướng cấu trúc component, quy tắc thao tác theo trạng thái đơn hàng, kiểm tra responsive và nghiệm thu kiểm thử.
+- **Cách kiểm chứng:** Chạy `pnpm check` (tsc + eslint) pass 0 lỗi, `pnpm test` (15/15 suites, 41/41 tests) pass 100%, `pnpm build` thành công toàn bộ routes qua Turbopack.
+- **Lỗi hoặc đề xuất sai của AI đã phát hiện:** Không phát hiện.
+- **Minh chứng:** Branch `buihaiduongdev/buyer-orders-2`.

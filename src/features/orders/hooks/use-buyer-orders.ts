@@ -32,6 +32,7 @@ export function useBuyerOrders() {
     filter,
     setFilter,
     enabled,
+    authLoading: status === 'loading',
     orders,
     items,
     visible,

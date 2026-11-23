@@ -24,6 +24,7 @@ vi.mock('@/modules/cart/components/CartLink', () => ({ CartLink: () => null }));
 
 const order = {
   id: 'order-123',
+  orderCode: 'RW-0123456789',
   shopName: 'Second Story',
   status: 'pending',
   total: 230000,
