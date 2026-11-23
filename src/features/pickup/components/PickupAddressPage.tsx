@@ -25,6 +25,7 @@ export function PickupAddressPage() {
     activeAddress,
     hasExistingLocation,
     isSettingsMode,
+    openSettings,
     handleSaved,
     handleBeforeSave,
   } = usePickupAddressPage();
@@ -174,6 +175,7 @@ export function PickupAddressPage() {
                   </Link>
                   <Link
                     href={`/selling/pickup?shopId=${encodeURIComponent(shopId)}`}
+                    onClick={openSettings}
                     className="text-rewear-muted hover:text-rewear-text block text-center text-xs font-semibold underline"
                   >
                     Manage pickup address
@@ -196,10 +198,16 @@ export function PickupAddressPage() {
                       <span className="text-rewear-accent font-bold">✓</span>
                       <span>Pickup point registered</span>
                     </li>
-                    <li className="flex items-center gap-3">
-                      <span className="text-rewear-accent font-bold">✓</span>
-                      <span>GHN · Standard delivery</span>
-                    </li>
+                    {(
+                      activeAddress as typeof activeAddress & {
+                        ghnSyncStatus?: string;
+                      }
+                    )?.ghnSyncStatus === 'CONNECTED' && (
+                      <li className="flex items-center gap-3">
+                        <span className="text-rewear-accent font-bold">✓</span>
+                        <span>GHN connected</span>
+                      </li>
+                    )}
                   </ul>
                 </div>
               </aside>
@@ -219,12 +227,6 @@ export function PickupAddressPage() {
                   ? 'Update pickup address'
                   : 'Set your pickup address'}
               </h1>
-              {isSettingsMode && (
-                <p className="text-rewear-muted text-sm">
-                  Manage the dispatch warehouse and contact details for Giao
-                  Hàng Nhanh (GHN) carrier pickup.
-                </p>
-              )}
             </div>
 
             {/* Error banner */}

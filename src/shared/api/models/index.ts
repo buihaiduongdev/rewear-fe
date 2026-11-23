@@ -16633,3 +16633,100 @@ export type AuthControllerResetPassword200 = {
   message: string;
   data: AuthControllerResetPassword200Data;
 };
+
+export type ShopLogoControllerTicketBody = {
+  /**
+   * @minLength 1
+   * @maxLength 100
+   */
+  mimeType: string;
+  /**
+   * @minimum 1
+   * @maximum 5242880
+   */
+  sizeBytes: number;
+};
+
+export type ShopLogoControllerTicket201StatusCode =
+  (typeof ShopLogoControllerTicket201StatusCode)[keyof typeof ShopLogoControllerTicket201StatusCode];
+
+export const ShopLogoControllerTicket201StatusCode = {
+  NUMBER_201: 201,
+} as const;
+
+export type ShopLogoControllerTicket201DataMethod =
+  (typeof ShopLogoControllerTicket201DataMethod)[keyof typeof ShopLogoControllerTicket201DataMethod];
+
+export const ShopLogoControllerTicket201DataMethod = {
+  PUT: 'PUT',
+} as const;
+
+export type ShopLogoControllerTicket201DataHeaders = { [key: string]: string };
+
+export type ShopLogoControllerTicket201Data = {
+  storageKey: string;
+  uploadUrl: string;
+  publicUrl: string;
+  method: ShopLogoControllerTicket201DataMethod;
+  headers: ShopLogoControllerTicket201DataHeaders;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  expiresAt: string;
+};
+
+export type ShopLogoControllerTicket201 = {
+  statusCode: ShopLogoControllerTicket201StatusCode;
+  message: string;
+  data: ShopLogoControllerTicket201Data;
+};
+
+export type ShopLogoControllerConfirmBody = {
+  /**
+   * @minLength 1
+   * @maxLength 100
+   */
+  mimeType: string;
+  /**
+   * @minimum 1
+   * @maximum 5242880
+   */
+  sizeBytes: number;
+  /**
+   * @minLength 1
+   * @maxLength 512
+   */
+  storageKey: string;
+};
+
+export type ShopLogoControllerConfirm200StatusCode =
+  (typeof ShopLogoControllerConfirm200StatusCode)[keyof typeof ShopLogoControllerConfirm200StatusCode];
+
+export const ShopLogoControllerConfirm200StatusCode = {
+  NUMBER_200: 200,
+} as const;
+
+export type ShopLogoControllerConfirm200DataStatus =
+  (typeof ShopLogoControllerConfirm200DataStatus)[keyof typeof ShopLogoControllerConfirm200DataStatus];
+
+export const ShopLogoControllerConfirm200DataStatus = {
+  ACTIVE: 'ACTIVE',
+  INACTIVE: 'INACTIVE',
+} as const;
+
+export type ShopLogoControllerConfirm200Data = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  name: string;
+  /** @nullable */
+  description: string | null;
+  status: ShopLogoControllerConfirm200DataStatus;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  createdAt: string;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  updatedAt: string;
+};
+
+export type ShopLogoControllerConfirm200 = {
+  statusCode: ShopLogoControllerConfirm200StatusCode;
+  message: string;
+  data: ShopLogoControllerConfirm200Data;
+};

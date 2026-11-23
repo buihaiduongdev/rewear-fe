@@ -27,11 +27,14 @@ export function UserAddressForm({
     createError,
     divisionError,
     refetchDivisions,
-    provinceCode,
+    provinceId,
+    districtId,
     wardCode,
     handleProvinceChange,
+    handleDistrictChange,
     handleWardChange,
     provinces,
+    districts,
     wards,
   } = useUserAddressForm({
     onSuccess,
@@ -66,17 +69,22 @@ export function UserAddressForm({
         />
 
         <AdministrativeDivisionFields
-          provinceCode={provinceCode}
+          provinceId={provinceId}
+          districtId={districtId}
           wardCode={wardCode}
           onProvinceChange={handleProvinceChange}
+          onDistrictChange={handleDistrictChange}
           onWardChange={handleWardChange}
           provinces={provinces}
+          districts={districts}
           wards={wards}
           errors={{
-            provinceCode: errors.provinceCode?.message,
+            provinceId: errors.provinceId?.message,
+            districtId: errors.districtId?.message,
             wardCode: errors.wardCode?.message,
           }}
           provinceLabel="Province / City"
+          districtLabel="District"
           wardLabel="Ward / Commune"
         />
 
@@ -140,7 +148,8 @@ export function UserAddressForm({
             isPending ||
             provinces.isPending ||
             !!provinces.error ||
-            !!(provinceCode && wards.error)
+            !!(provinceId && districts.isPending) ||
+            !!(districtId && wards.isPending)
           }
           className="bg-rewear-accent text-rewear-text hover:bg-rewear-accent/90 min-h-11 w-full sm:w-auto"
         >

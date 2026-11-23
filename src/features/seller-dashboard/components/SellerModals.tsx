@@ -31,11 +31,19 @@ export function ListingChecklistModal({ open, onOpenChange }: ModalProps) {
           </h2>
 
           <div className="space-y-4 text-base leading-6">
-            <p className="text-rewear-text">Add front, back and label photos.</p>
+            <p className="text-rewear-text">
+              Add front, back and label photos.
+            </p>
             <p className="text-rewear-text">Show every defect in a close-up.</p>
-            <p className="text-rewear-text">Include size, measurements and repairs.</p>
-            <p className="text-rewear-text">Submit for content review before publishing.</p>
-            <p className="text-rewear-muted">Held items cannot be edited or hidden.</p>
+            <p className="text-rewear-text">
+              Include size, measurements and repairs.
+            </p>
+            <p className="text-rewear-text">
+              Submit for content review before publishing.
+            </p>
+            <p className="text-rewear-muted">
+              Held items cannot be edited or hidden.
+            </p>
           </div>
         </div>
       </DialogContent>

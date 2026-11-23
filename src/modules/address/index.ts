@@ -13,3 +13,5 @@ export type {
   UseUserAddressFormOptions,
   UserAddressFormValues,
 } from './hooks/use-user-address-form';
+
+export { AddressDivisionSelect } from './components/AddressDivisionSelect';

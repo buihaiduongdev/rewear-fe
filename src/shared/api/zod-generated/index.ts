@@ -17,6 +17,7 @@ export * from './products/products';
 export * from './shipments/shipments';
 export * from './shipping/shipping';
 export * from './shop-finance/shop-finance';
+export * from './shop-logo/shop-logo';
 export * from './shop-roles/shop-roles';
 export * from './shops/shops';
 export * from './user-addresses/user-addresses';

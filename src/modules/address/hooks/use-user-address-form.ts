@@ -2,16 +2,21 @@
 
 import type { UserAddressControllerCreate201Data } from '@/shared/api/models';
 import { useUserAddressControllerCreate } from '@/shared/api/query-generated/user-addresses/user-addresses';
-import { UserAddressControllerCreateBody } from '@/shared/api/zod-generated/user-addresses/user-addresses';
-import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm, useWatch } from 'react-hook-form';
-import type * as zod from 'zod';
 
 import { useAdministrativeDivisions } from './use-administrative-divisions';
 
-export type UserAddressFormValues = zod.infer<
-  typeof UserAddressControllerCreateBody
->;
+export type UserAddressFormValues = {
+  recipientName: string;
+  phone: string;
+  addressLine1: string;
+  addressLine2?: string | null;
+  provinceId: number | '';
+  districtId: number | '';
+  wardCode: string;
+  countryCode?: 'VN';
+  isDefault?: boolean;
+};
 
 export type UseUserAddressFormOptions = {
   initialValues?: Partial<UserAddressFormValues>;
@@ -30,13 +35,12 @@ export function useUserAddressForm({
     clearErrors,
     formState: { errors },
   } = useForm<UserAddressFormValues>({
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    resolver: zodResolver(UserAddressControllerCreateBody as any),
     defaultValues: {
       recipientName: initialValues?.recipientName ?? '',
       phone: initialValues?.phone ?? '',
       addressLine1: initialValues?.addressLine1 ?? '',
-      provinceCode: initialValues?.provinceCode ?? '',
+      provinceId: initialValues?.provinceId ?? '',
+      districtId: initialValues?.districtId ?? '',
       wardCode: initialValues?.wardCode ?? '',
       countryCode: 'VN',
       isDefault: initialValues?.isDefault ?? false,
@@ -44,16 +48,19 @@ export function useUserAddressForm({
     mode: 'onTouched',
   });
 
-  const provinceCode = useWatch({ control, name: 'provinceCode' }) ?? '';
+  const provinceId = useWatch({ control, name: 'provinceId' }) ?? '';
+  const districtId = useWatch({ control, name: 'districtId' }) ?? '';
   const wardCode = useWatch({ control, name: 'wardCode' }) ?? '';
 
   const {
     provinces,
+    districts,
     wards,
     error: divisionError,
     refetch: refetchDivisions,
   } = useAdministrativeDivisions({
-    provinceCode,
+    provinceId: typeof provinceId === 'number' ? provinceId : undefined,
+    districtId: typeof districtId === 'number' ? districtId : undefined,
     wardCode,
   });
 
@@ -61,8 +68,17 @@ export function useUserAddressForm({
     mutation: { meta: { skipSuccessToast: true, skipErrorToast: true } },
   });
 
-  const handleProvinceChange = (code: string) => {
-    setValue('provinceCode', code, { shouldValidate: true });
+  const handleProvinceChange = (id: string) => {
+    const num = Number(id) || '';
+    setValue('provinceId', num, { shouldValidate: true });
+    setValue('districtId', '', { shouldValidate: false });
+    setValue('wardCode', '', { shouldValidate: false });
+    clearErrors(['districtId', 'wardCode']);
+  };
+
+  const handleDistrictChange = (id: string) => {
+    const num = Number(id) || '';
+    setValue('districtId', num, { shouldValidate: true });
     setValue('wardCode', '', { shouldValidate: false });
     clearErrors('wardCode');
   };
@@ -73,7 +89,8 @@ export function useUserAddressForm({
 
   const onSubmit = handleSubmit((data) => {
     create.mutate(
-      { data },
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      { data: data as any },
       {
         onSuccess: (response) => {
           onSuccess?.(response.data);
@@ -91,11 +108,14 @@ export function useUserAddressForm({
     createError: create.error,
     divisionError,
     refetchDivisions,
-    provinceCode,
+    provinceId,
+    districtId,
     wardCode,
     handleProvinceChange,
+    handleDistrictChange,
     handleWardChange,
     provinces,
+    districts,
     wards,
   };
 }

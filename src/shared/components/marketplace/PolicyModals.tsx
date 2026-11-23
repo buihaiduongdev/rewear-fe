@@ -72,8 +72,7 @@ export function PolicyModals({ openType, onClose }: Props) {
               </span>
               <p className="text-rewear-muted">
                 Your dispatch and delivery address is securely passed to
-                logistics partners strictly for order
-                fulfillment.
+                logistics partners strictly for order fulfillment.
               </p>
               <p className="text-rewear-muted">
                 Personal contact details and account credentials stay protected
@@ -98,7 +97,9 @@ export function PolicyModals({ openType, onClose }: Props) {
             <div className="bg-rewear-soft space-y-2 p-4">
               <div className="flex items-center justify-between text-sm font-semibold">
                 <span>Report an issue</span>
-                <span className="text-rewear-muted">Within 72h of delivery</span>
+                <span className="text-rewear-muted">
+                  Within 72h of delivery
+                </span>
               </div>
               <p className="text-rewear-muted text-sm leading-5">
                 Confirming receipt does not shorten this window.

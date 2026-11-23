@@ -2,36 +2,49 @@
 
 import { useState } from 'react';
 
-import {
-  useAdministrativeDivisionControllerFindAllProvinces,
-  useAdministrativeDivisionControllerFindWardsByProvinceCode,
-} from '@/shared/api/query-generated/administrative-divisions/administrative-divisions';
+import { orvalRequest } from '@/shared/api/orval-request';
+import { useQuery } from '@tanstack/react-query';
+
+export type DivisionProvince = { id: number; name: string };
+export type DivisionDistrict = { id: number; name: string; provinceId: number };
+export type DivisionWard = { code: string; name: string; districtId: number };
 
 export type UseAdministrativeDivisionsOptions = {
-  provinceCode?: string;
+  provinceId?: number | '';
+  districtId?: number | '';
   wardCode?: string;
-  initialProvinceCode?: string;
+  initialProvinceId?: number | '';
+  initialDistrictId?: number | '';
   initialWardCode?: string;
-  onProvinceChange?: (provinceCode: string) => void;
+  onProvinceChange?: (provinceId: number | '') => void;
+  onDistrictChange?: (districtId: number | '') => void;
   onWardChange?: (wardCode: string) => void;
 };
 
 export function useAdministrativeDivisions(
   options: UseAdministrativeDivisionsOptions = {},
 ) {
-  const [internalProvinceCode, setInternalProvinceCode] = useState(
-    options.provinceCode ?? options.initialProvinceCode ?? '',
+  const [internalProvinceId, setInternalProvinceId] = useState<number | ''>(
+    options.provinceId ?? options.initialProvinceId ?? '',
   );
-  const [internalWardCode, setInternalWardCode] = useState(
+  const [internalDistrictId, setInternalDistrictId] = useState<number | ''>(
+    options.districtId ?? options.initialDistrictId ?? '',
+  );
+  const [internalWardCode, setInternalWardCode] = useState<string>(
     options.wardCode ?? options.initialWardCode ?? '',
   );
 
-  // Controlled provinceCode takes priority, or initialProvinceCode if provided/updated
-  const provinceCode =
-    options.provinceCode ??
-    (options.initialProvinceCode !== undefined
-      ? options.initialProvinceCode
-      : internalProvinceCode);
+  const provinceId =
+    options.provinceId ??
+    (options.initialProvinceId !== undefined
+      ? options.initialProvinceId
+      : internalProvinceId);
+
+  const districtId =
+    options.districtId ??
+    (options.initialDistrictId !== undefined
+      ? options.initialDistrictId
+      : internalDistrictId);
 
   const wardCode =
     options.wardCode ??
@@ -39,27 +52,58 @@ export function useAdministrativeDivisions(
       ? options.initialWardCode
       : internalWardCode);
 
-  const provinces = useAdministrativeDivisionControllerFindAllProvinces({
-    query: {
-      staleTime: Infinity,
-      gcTime: 1000 * 60 * 60 * 24,
-    },
+  const provinces = useQuery({
+    queryKey: ['/api/administrative-divisions/provinces'],
+    queryFn: ({ signal }) =>
+      orvalRequest<{ data: DivisionProvince[] }>({
+        url: '/api/administrative-divisions/provinces',
+        method: 'GET',
+        signal,
+      }),
+    staleTime: Infinity,
+    gcTime: 1000 * 60 * 60 * 24,
   });
-  const wards = useAdministrativeDivisionControllerFindWardsByProvinceCode(
-    provinceCode,
-    {
-      query: {
-        enabled: !!provinceCode,
-        staleTime: Infinity,
-        gcTime: 1000 * 60 * 60 * 24,
-      },
-    },
-  );
 
-  const setProvinceCode = (code: string) => {
-    setInternalProvinceCode(code);
+  const districts = useQuery({
+    queryKey: ['/api/administrative-divisions/districts', provinceId],
+    queryFn: ({ signal }) =>
+      orvalRequest<{ data: DivisionDistrict[] }>({
+        url: `/api/administrative-divisions/provinces/${provinceId}/districts`,
+        method: 'GET',
+        signal,
+      }),
+    enabled: !!provinceId,
+    staleTime: Infinity,
+    gcTime: 1000 * 60 * 60 * 24,
+  });
+
+  const wards = useQuery({
+    queryKey: ['/api/administrative-divisions/wards', districtId],
+    queryFn: ({ signal }) =>
+      orvalRequest<{ data: DivisionWard[] }>({
+        url: `/api/administrative-divisions/districts/${districtId}/wards`,
+        method: 'GET',
+        signal,
+      }),
+    enabled: !!districtId,
+    staleTime: Infinity,
+    gcTime: 1000 * 60 * 60 * 24,
+  });
+
+  const setProvinceId = (id: number | '') => {
+    setInternalProvinceId(id);
+    setInternalDistrictId('');
     setInternalWardCode('');
-    options.onProvinceChange?.(code);
+    options.onProvinceChange?.(id);
+    options.onDistrictChange?.('');
+    options.onWardChange?.('');
+  };
+
+  const setDistrictId = (id: number | '') => {
+    setInternalDistrictId(id);
+    setInternalWardCode('');
+    options.onDistrictChange?.(id);
+    options.onWardChange?.('');
   };
 
   const setWardCode = (code: string) => {
@@ -69,18 +113,28 @@ export function useAdministrativeDivisions(
 
   const refetch = () => {
     if (provinces.isError) void provinces.refetch();
-    if (provinceCode && wards.isError) void wards.refetch();
+    if (provinceId && districts.isError) void districts.refetch();
+    if (districtId && wards.isError) void wards.refetch();
   };
 
   return {
-    provinceCode,
-    setProvinceCode,
+    provinceId,
+    setProvinceId,
+    districtId,
+    setDistrictId,
     wardCode,
     setWardCode,
     provinces,
+    districts,
     wards,
-    isLoading: provinces.isPending || (!!provinceCode && wards.isPending),
-    error: provinces.error || (provinceCode ? wards.error : null),
+    isLoading:
+      provinces.isPending ||
+      (!!provinceId && districts.isPending) ||
+      (!!districtId && wards.isPending),
+    error:
+      provinces.error ||
+      (provinceId ? districts.error : null) ||
+      (districtId ? wards.error : null),
     refetch,
   };
 }

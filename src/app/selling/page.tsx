@@ -1,4 +1,5 @@
 import * as React from 'react';
+
 import { SellerDashboardPage } from '@/features/seller-dashboard/components/SellerDashboardPage';
 
 export default function Page() {

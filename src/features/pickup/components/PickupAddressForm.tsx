@@ -8,6 +8,7 @@ import type { PickupLocationControllerSaveShop200 } from '@/shared/api/models';
 import { BaseInputField } from '@/shared/components/ui/input/BaseInputField';
 
 import { usePickupAddressForm } from '../hooks/use-pickup-address-form';
+import { GhnPickupProvider } from './GhnPickupProvider';
 
 type Props = {
   initial?: PickupLocationControllerSaveShop200['data']['location'] | null;
@@ -27,6 +28,12 @@ export function PickupAddressForm({
   onSaved,
 }: Props) {
   const {
+    ghn,
+    disconnectGhn,
+    connectGhn,
+    addressNeedsSave,
+    ghnStatus,
+    connectionError,
     register,
     errors,
     onSubmit,
@@ -34,16 +41,20 @@ export function PickupAddressForm({
     apiError,
     message,
     setMessage,
-    provinceCode,
+    provinceId,
+    districtId,
     wardCode,
     contactName,
     phone,
     addressLine1,
     provinceName,
+    districtName,
     wardName,
     handleProvinceChange,
+    handleDistrictChange,
     handleWardChange,
     provinces,
+    districts,
     wards,
     refetchDivisions,
   } = usePickupAddressForm({
@@ -54,6 +65,11 @@ export function PickupAddressForm({
     onSaved,
   });
 
+  const connection = initial as
+    | (typeof initial & { ghnSyncStatus?: string; ghnShopId?: number | null })
+    | null;
+  const syncStatus = ghnStatus ?? connection?.ghnSyncStatus;
+
   return (
     <form
       noValidate
@@ -63,7 +79,7 @@ export function PickupAddressForm({
         if (message) setMessage('');
       }}
     >
-      {/* Left Column: Form Fields (Figma 63:2256) (7 cols) */}
+      {/* Left Column: Form Fields (7 cols) */}
       <fieldset
         disabled={saving}
         className="min-w-0 space-y-6 lg:col-span-7 xl:col-span-7"
@@ -71,11 +87,11 @@ export function PickupAddressForm({
         <BaseInputField
           id="pickup-contact"
           label="Contact name"
-          placeholder="e.g. Tran Minh Quan"
+          placeholder="Enter contact name"
           appearance="filled"
           autoComplete="name"
           maxLength={100}
-          error={errors.contactName?.message}
+          error={errors.contactName ? 'Enter a valid contact name.' : undefined}
           required
           {...register('contactName')}
         />
@@ -83,52 +99,71 @@ export function PickupAddressForm({
         <BaseInputField
           id="pickup-phone"
           label="Pickup phone"
-          placeholder="e.g. 0918 345 889"
+          placeholder="Enter phone number"
           appearance="filled"
           autoComplete="tel"
           type="tel"
           maxLength={16}
-          error={errors.phone?.message}
+          error={
+            errors.phone
+              ? 'Enter a valid phone number (8–15 digits).'
+              : undefined
+          }
           required
           {...register('phone')}
         />
 
         <AdministrativeDivisionFields
-          provinceCode={provinceCode}
+          provinceId={provinceId}
+          districtId={districtId}
           wardCode={wardCode}
           onProvinceChange={handleProvinceChange}
+          onDistrictChange={handleDistrictChange}
           onWardChange={handleWardChange}
           provinces={provinces}
+          districts={districts}
           wards={wards}
           errors={{
-            provinceCode: errors.provinceCode?.message,
-            wardCode: errors.wardCode?.message,
+            provinceId: errors.provinceId
+              ? 'Select a province/city'
+              : undefined,
+            districtId: errors.districtId ? 'Select a district' : undefined,
+            wardCode: errors.wardCode ? 'Select a ward/commune' : undefined,
           }}
           rounded
           provinceLabel="Province / City"
+          districtLabel="District"
           wardLabel="Ward / Commune"
         />
 
         <BaseInputField
           id="pickup-street"
           label="Street address"
-          placeholder="e.g. 45 Xa Dan"
+          placeholder="Enter street address"
           appearance="filled"
           autoComplete="street-address"
           maxLength={255}
-          error={errors.addressLine1?.message}
+          error={
+            errors.addressLine1 ? 'Enter a valid street address.' : undefined
+          }
           required
           {...register('addressLine1')}
         />
 
-        {/* Shipping carrier notice (Figma 63:2256) */}
-        <div className="bg-rewear-soft space-y-1.5 p-4">
-          <span className="text-rewear-muted block text-xs font-semibold tracking-wider uppercase">
-            Shipping carrier ›
-          </span>
-          <p className="text-rewear-text text-sm font-medium">
-            GHN · Standard delivery
-          </p>
+        <div className="bg-rewear-soft space-y-4 p-4">
+          <div className="flex items-center justify-between gap-4">
+            <h2 className="font-semibold">Pickup shipping providers</h2>
+          </div>
+          <GhnPickupProvider
+            ghn={ghn}
+            status={syncStatus}
+            shopId={connection?.ghnShopId}
+            connectionError={connectionError}
+            onDisconnect={disconnectGhn}
+            onConnect={connectGhn}
+            addressNeedsSave={addressNeedsSave}
+            connecting={saving}
+          />
         </div>
 
         {message && (
@@ -155,35 +190,39 @@ export function PickupAddressForm({
         )}
       </fieldset>
 
-      {/* Right Column: Pickup point / Context Summary Card (Figma 63:2256 / 63:2315) (5 cols) */}
+      {/* Right Column: Context Summary Card (5 cols) */}
       <aside className="space-y-4 lg:col-span-5 xl:col-span-5">
         <div className="bg-rewear-soft border-rewear-border space-y-6 border p-6">
           <h2 className="text-[24px] leading-[30px] font-semibold tracking-[-0.02em]">
-            {isEditing ? 'Keep existing shipments intact' : 'Pickup point'}
+            Pickup address
           </h2>
 
           <div className="text-rewear-muted space-y-2 text-sm leading-6">
-            <p className="text-rewear-text font-semibold">
-              {contactName.trim() || 'Tran Minh Quan'} ·{' '}
-              {phone.trim() || '0918 345 889'}
-            </p>
-            <p>{addressLine1.trim() || '45 Xa Dan'},</p>
-            <p>
-              {wardName ? `${wardName} Ward,` : 'Van Mieu — Quoc Tu Giam Ward,'}
-            </p>
-            <p>{provinceName || 'Hanoi'}</p>
+            {(contactName.trim() || phone.trim()) && (
+              <p className="text-rewear-text font-semibold">
+                {[contactName.trim(), phone.trim()].filter(Boolean).join(' · ')}
+              </p>
+            )}
+            {addressLine1.trim() && <p>{addressLine1.trim()}</p>}
+            {(wardName || districtName || provinceName) && (
+              <p>
+                {[wardName, districtName, provinceName]
+                  .filter(Boolean)
+                  .join(', ')}
+              </p>
+            )}
+            {!contactName.trim() &&
+              !phone.trim() &&
+              !addressLine1.trim() &&
+              !wardName &&
+              !districtName &&
+              !provinceName && <p>No pickup details yet.</p>}
           </div>
-
-          <p className="text-rewear-muted text-xs leading-5">
-            {isEditing
-              ? 'The updated pickup address is used for future shipments after shipping setup is confirmed.'
-              : 'We’ll register this pickup point with the available shipping service. No separate carrier account needed.'}
-          </p>
 
           <div className="border-rewear-border border-t pt-4">
             <button
               type="submit"
-              disabled={saving}
+              disabled={saving || !addressNeedsSave}
               className="bg-rewear-accent text-rewear-text hover:bg-rewear-accent/90 disabled:bg-rewear-border disabled:text-rewear-muted flex min-h-12 w-full items-center justify-center text-sm font-semibold transition disabled:cursor-not-allowed"
             >
               {saving

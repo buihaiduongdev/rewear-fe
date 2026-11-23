@@ -3,16 +3,23 @@
 import { useEffect, useState } from 'react';
 
 import { useAdministrativeDivisions } from '@/modules/address';
-import type { PickupLocationControllerSaveShop200 } from '@/shared/api/models';
+import type {
+  PickupLocationControllerSaveShop200,
+  PickupLocationControllerSaveShopBody,
+} from '@/shared/api/models';
 import { usePickupLocationControllerSaveShop } from '@/shared/api/query-generated/pickup-locations/pickup-locations';
-import { PickupLocationControllerSaveShopBody } from '@/shared/api/zod-generated/pickup-locations/pickup-locations';
-import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm, useWatch } from 'react-hook-form';
-import type * as zod from 'zod';
 
-export type PickupAddressFormValues = zod.infer<
-  typeof PickupLocationControllerSaveShopBody
->;
+import { useGhnConnection } from './use-ghn-connection';
+
+export type PickupAddressFormValues = {
+  contactName: string;
+  phone: string;
+  addressLine1: string;
+  provinceId: number | '';
+  districtId: number | '';
+  wardCode: string;
+};
 
 export type UsePickupAddressFormProps = {
   initial?: PickupLocationControllerSaveShop200['data']['location'] | null;
@@ -30,6 +37,13 @@ export function usePickupAddressForm({
   onSaved,
 }: UsePickupAddressFormProps) {
   const [message, setMessage] = useState('');
+  const [connecting, setConnecting] = useState(false);
+  const [ghnStatus, setGhnStatus] = useState<string | null>(null);
+  const [connectionError, setConnectionError] = useState('');
+  const ghn = useGhnConnection(shopId);
+
+  const initialLoc = initial as
+    (typeof initial & { provinceId?: number; districtId?: number }) | null;
 
   const {
     register,
@@ -40,50 +54,65 @@ export function usePickupAddressForm({
     reset,
     formState: { errors },
   } = useForm<PickupAddressFormValues>({
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    resolver: zodResolver(PickupLocationControllerSaveShopBody as any),
     defaultValues: {
-      contactName: initial?.contactName ?? '',
-      phone: initial?.phone ?? '',
-      addressLine1: initial?.addressLine1 ?? '',
-      provinceCode: initial?.provinceCode ?? '',
-      wardCode: initial?.wardCode ?? '',
+      contactName: initialLoc?.contactName ?? '',
+      phone: initialLoc?.phone ?? '',
+      addressLine1: initialLoc?.addressLine1 ?? '',
+      provinceId: initialLoc?.provinceId ?? '',
+      districtId: initialLoc?.districtId ?? '',
+      wardCode: initialLoc?.wardCode ?? '',
     },
     mode: 'onTouched',
   });
 
   useEffect(() => {
-    if (initial) {
+    if (initialLoc) {
       reset({
-        contactName: initial.contactName ?? '',
-        phone: initial.phone ?? '',
-        addressLine1: initial.addressLine1 ?? '',
-        provinceCode: initial.provinceCode ?? '',
-        wardCode: initial.wardCode ?? '',
+        contactName: initialLoc.contactName ?? '',
+        phone: initialLoc.phone ?? '',
+        addressLine1: initialLoc.addressLine1 ?? '',
+        provinceId: initialLoc.provinceId ?? '',
+        districtId: initialLoc.districtId ?? '',
+        wardCode: initialLoc.wardCode ?? '',
       });
     }
-  }, [initial, reset]);
+  }, [initialLoc, reset]);
 
-  const provinceCode = useWatch({ control, name: 'provinceCode' }) ?? '';
+  const provinceId = useWatch({ control, name: 'provinceId' }) ?? '';
+  const districtId = useWatch({ control, name: 'districtId' }) ?? '';
   const wardCode = useWatch({ control, name: 'wardCode' }) ?? '';
   const contactName = useWatch({ control, name: 'contactName' }) ?? '';
   const phone = useWatch({ control, name: 'phone' }) ?? '';
   const addressLine1 = useWatch({ control, name: 'addressLine1' }) ?? '';
 
+  const addressNeedsSave =
+    !initialLoc ||
+    contactName !== initialLoc.contactName ||
+    phone !== initialLoc.phone ||
+    addressLine1 !== initialLoc.addressLine1 ||
+    provinceId !== initialLoc.provinceId ||
+    districtId !== initialLoc.districtId ||
+    wardCode !== initialLoc.wardCode;
+
   const {
     provinces,
+    districts,
     wards,
     error: divisionError,
     refetch: refetchDivisions,
   } = useAdministrativeDivisions({
-    provinceCode,
+    provinceId: typeof provinceId === 'number' ? provinceId : undefined,
+    districtId: typeof districtId === 'number' ? districtId : undefined,
     wardCode,
     onProvinceChange: () => setMessage(''),
+    onDistrictChange: () => setMessage(''),
     onWardChange: () => setMessage(''),
   });
 
   const provinceName =
-    provinces.data?.data.find((p) => p.code === provinceCode)?.name ?? '';
+    provinces.data?.data.find((p) => p.id === provinceId)?.name ?? '';
+  const districtName =
+    districts.data?.data.find((d) => d.id === districtId)?.name ?? '';
   const wardName =
     wards.data?.data.find((w) => w.code === wardCode)?.name ?? '';
 
@@ -97,11 +126,34 @@ export function usePickupAddressForm({
     },
   };
   const shopSave = usePickupLocationControllerSaveShop(config);
-  const saving = shopSave.isPending;
+  const saving = shopSave.isPending || connecting;
   const apiError = divisionError || shopSave.error;
 
-  const handleProvinceChange = (code: string) => {
-    setValue('provinceCode', code, { shouldValidate: true });
+  const disconnectGhn = async () => {
+    try {
+      const response = await ghn.disconnect.mutateAsync();
+      ghn.shopDetails.reset();
+      setGhnStatus(null);
+      setConnectionError('');
+      onSaved(response);
+      return true;
+    } catch {
+      return false;
+    }
+  };
+
+  const handleProvinceChange = (id: string) => {
+    const num = Number(id) || '';
+    setValue('provinceId', num, { shouldValidate: true });
+    setValue('districtId', '', { shouldValidate: false });
+    setValue('wardCode', '', { shouldValidate: false });
+    clearErrors(['districtId', 'wardCode']);
+    setMessage('');
+  };
+
+  const handleDistrictChange = (id: string) => {
+    const num = Number(id) || '';
+    setValue('districtId', num, { shouldValidate: true });
     setValue('wardCode', '', { shouldValidate: false });
     clearErrors('wardCode');
     setMessage('');
@@ -112,23 +164,56 @@ export function usePickupAddressForm({
     setMessage('');
   };
 
-  const onSubmit = handleSubmit((data) => {
+  const onSubmit = handleSubmit(async (data) => {
     onSaving(true);
-    shopSave.mutate(
-      { shopId, data },
-      {
-        onSuccess: (response: PickupLocationControllerSaveShop200) => {
-          onSaved(response);
-          setMessage(
-            'Pickup address saved. Shipping availability has not been checked yet.',
-          );
-        },
-        onSettled: () => onSaving(false),
-      },
-    );
+    try {
+      const response = await shopSave.mutateAsync({
+        shopId,
+        data: data as unknown as PickupLocationControllerSaveShopBody,
+      });
+      onSaved(response);
+      setMessage('Pickup address saved.');
+    } catch {
+      // Address errors are exposed by the mutation.
+    } finally {
+      onSaving(false);
+    }
   });
 
+  const connectGhn = async () => {
+    if (addressNeedsSave || connecting) return;
+    setConnecting(true);
+    onSaving(true);
+    setConnectionError('');
+    try {
+      const connected = await ghn.connect();
+      setGhnStatus(connected.data.location?.ghnSyncStatus ?? 'UNKNOWN');
+      if (connected.data.location?.ghnSyncStatus !== 'CONNECTED') {
+        setConnectionError(
+          'GHN could not confirm the result; contact support before trying again.',
+        );
+        return;
+      }
+      onSaved(connected);
+      setGhnStatus(null);
+    } catch {
+      setGhnStatus('UNKNOWN');
+      setConnectionError(
+        'GHN could not be connected. Check the connection status before trying again.',
+      );
+    } finally {
+      setConnecting(false);
+      onSaving(false);
+    }
+  };
+
   return {
+    ghnStatus,
+    ghn,
+    disconnectGhn,
+    connectGhn,
+    addressNeedsSave,
+    connectionError,
     register,
     errors,
     onSubmit,
@@ -136,16 +221,20 @@ export function usePickupAddressForm({
     apiError,
     message,
     setMessage,
-    provinceCode,
+    provinceId,
+    districtId,
     wardCode,
     contactName,
     phone,
     addressLine1,
     provinceName,
+    districtName,
     wardName,
     handleProvinceChange,
+    handleDistrictChange,
     handleWardChange,
     provinces,
+    districts,
     wards,
     refetchDivisions,
   };

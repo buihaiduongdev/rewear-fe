@@ -1,13 +1,22 @@
 'use client';
 
-import { type FormEvent, useId, useMemo, useState } from 'react';
+import {
+  type ChangeEvent,
+  type FormEvent,
+  useEffect,
+  useId,
+  useMemo,
+  useState,
+} from 'react';
 
 import { useRouter } from 'next/navigation';
 
+import { uploadShopLogo } from '@/modules/shop/api/shop-logo';
 import {
   shopMembershipsQueryKey,
   useShopMemberships,
 } from '@/modules/shop/hooks/use-shop-memberships';
+import { getApiErrorMessage } from '@/shared/api/api-error';
 import { useShopControllerCreate } from '@/shared/api/query-generated/shops/shops';
 import { useQueryClient } from '@tanstack/react-query';
 import { useSession } from 'next-auth/react';
@@ -35,7 +44,43 @@ export function useOpenShop() {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [copied, setCopied] = useState(false);
+  const [logoFile, setLogoFile] = useState<File | null>(null);
   const [logoPreview, setLogoPreview] = useState('');
+  const [logoError, setLogoError] = useState('');
+  const [createdShopId, setCreatedShopId] = useState('');
+  const [submitting, setSubmitting] = useState(false);
+
+  useEffect(() => {
+    return () => {
+      if (logoPreview) URL.revokeObjectURL(logoPreview);
+    };
+  }, [logoPreview]);
+
+  const removeLogo = () => {
+    setLogoFile(null);
+    setLogoPreview('');
+    setLogoError('');
+  };
+
+  const handleLogoChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    event.target.value = '';
+    if (!file) return;
+    if (
+      !['image/jpeg', 'image/png', 'image/webp', 'image/avif'].includes(
+        file.type,
+      ) ||
+      file.size <= 0 ||
+      file.size > 5 * 1024 * 1024
+    ) {
+      removeLogo();
+      setLogoError('Choose a JPG, PNG, WebP or AVIF image up to 5 MB.');
+      return;
+    }
+    setLogoError('');
+    setLogoFile(file);
+    setLogoPreview(URL.createObjectURL(file));
+  };
 
   const isAuthenticated = status === 'authenticated' && !session?.error;
 
@@ -76,27 +121,32 @@ export function useOpenShop() {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    if (!name.trim()) return;
-
+    if (!name.trim() || submitting) return;
+    setSubmitting(true);
+    setLogoError('');
+    let id = createdShopId;
     try {
-      const data = {
-        name: name.trim(),
-        description: description.trim() || null,
-        ...(logoPreview.trim() ? { logoUrl: logoPreview.trim() } : {}),
-      };
-      const result = await createShop.mutateAsync({ data });
-
+      if (!id) {
+        const result = await createShop.mutateAsync({
+          data: { name: name.trim(), description: description.trim() || null },
+        });
+        id = result.data.id;
+        setCreatedShopId(id);
+      }
+      if (logoFile) await uploadShopLogo(id, logoFile);
       await queryClient.invalidateQueries({
         queryKey: shopMembershipsQueryKey,
       });
-
-      const newShopId = result.data.id;
-
       router.push(
-        `/selling/pickup?shopId=${encodeURIComponent(newShopId)}&onboarding=true`,
+        `/selling/pickup?shopId=${encodeURIComponent(id)}&onboarding=true`,
       );
-    } catch {
-      // Error handled by createShop.error
+    } catch (error) {
+      if (id)
+        setLogoError(
+          `Your shop was created, but the logo could not be uploaded. ${getApiErrorMessage(error)} You can retry or remove the logo to continue.`,
+        );
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -109,7 +159,12 @@ export function useOpenShop() {
     setDescription,
     copied,
     logoPreview,
-    setLogoPreview,
+    logoFile,
+    logoError,
+    removeLogo,
+    handleLogoChange,
+    createdShopId,
+    submitting,
     isAuthenticated,
     memberships,
     existingShop,

@@ -206,10 +206,10 @@ Ghi một mục cho mỗi task có dùng AI. Cập nhật liên kết PR/commit 
 
 - **Người thực hiện:** Bùi Hải Dương.
 - **Công cụ:** Antigravity (Gemini 3.8 Flash) kết nối Figwright MCP Server.
-- **Mục đích và phạm vi:** Khắc phục triệt để các bất cập trong luồng người bán (`/selling/pickup`, `/selling/new`, `/selling`) và dọn dẹp điều hướng trên `MarketplaceHeader`: phân tách rành mạch chế độ Thiết lập lần đầu (Onboarding - Figma `63:2256`) và Cập nhật địa chỉ kho khi đã có shop (Settings - Figma `63:2315`); sửa lỗi form địa chỉ bị trắng do mất đồng bộ bất đồng bộ khi nạp dữ liệu từ API; gỡ bỏ liên kết sai trỏ nhầm vào `/selling/packages` và chuẩn hóa điểm đến cho nút *"Create your first listing"* và *"+ List New Archive Piece"*.
+- **Mục đích và phạm vi:** Khắc phục triệt để các bất cập trong luồng người bán (`/selling/pickup`, `/selling/new`, `/selling`) và dọn dẹp điều hướng trên `MarketplaceHeader`: phân tách rành mạch chế độ Thiết lập lần đầu (Onboarding - Figma `63:2256`) và Cập nhật địa chỉ kho khi đã có shop (Settings - Figma `63:2315`); sửa lỗi form địa chỉ bị trắng do mất đồng bộ bất đồng bộ khi nạp dữ liệu từ API; gỡ bỏ liên kết sai trỏ nhầm vào `/selling/packages` và chuẩn hóa điểm đến cho nút _"Create your first listing"_ và _"+ List New Archive Piece"_.
 - **Prompt chính:** figwright đang mở á, làm theo figma 90% thấy thiết kế có gì bất logic gì báo tôi; ok lên branch hiện tại luôn.
 - **Phần AI hỗ trợ:**
-  - Đối chiếu trực tiếp cấu trúc cây node Figma qua Figwright MCP: phát hiện Frame `63:2315` (*Seller / Update pickup address*) dành riêng cho việc cập nhật địa chỉ kho khi shop đã tồn tại, đối lập với Frame `63:2256` (*Seller / Set your pickup address*) chỉ dùng khi mở shop lần đầu; phát hiện luồng `Package` trong Figma vốn nằm trong flow xử lý đơn hàng (`Order → package → review → label` - Figma `66:329`, `63:2410`), không phải trang độc lập nhét trên Header.
+  - Đối chiếu trực tiếp cấu trúc cây node Figma qua Figwright MCP: phát hiện Frame `63:2315` (_Seller / Update pickup address_) dành riêng cho việc cập nhật địa chỉ kho khi shop đã tồn tại, đối lập với Frame `63:2256` (_Seller / Set your pickup address_) chỉ dùng khi mở shop lần đầu; phát hiện luồng `Package` trong Figma vốn nằm trong flow xử lý đơn hàng (`Order → package → review → label` - Figma `66:329`, `63:2410`), không phải trang độc lập nhét trên Header.
   - Tái cấu trúc `PickupAddressPage.tsx`: nhận diện trạng thái `isSettingsMode` dựa trên địa chỉ kho hiện có và cờ `onboarding`. Khi ở chế độ cài đặt (Figma `63:2315`), ẩn Stepper 3 bước, hiển thị breadcrumb `Shop settings / Pickup`, tiêu đề `Update pickup address`, form chuyển sang `isEditing={true}`, nút submit `Save pickup address`, và thẻ bối cảnh `Keep existing shipments intact`; khi lưu thành công không bị chuyển màn hình sang "Your shop is ready".
   - Cập nhật `use-pickup-address-form.ts`: bổ sung `useEffect` và `reset()` từ `react-hook-form` để tự động điền lại dữ liệu địa chỉ khi `initial` được query tải về từ backend, giải quyết dứt điểm lỗi bị "nhập lại từ đầu".
   - Sửa lỗi điều hướng ở `Your shop is ready` (Figma `63:2291`): nút chính đổi thành `Open seller workspace` (`/selling`) và nút phụ là `Manage pickup address` (`/selling/pickup`).
@@ -228,7 +228,7 @@ Ghi một mục cho mỗi task có dùng AI. Cập nhật liên kết PR/commit 
 - **Mục đích và phạm vi:** Khắc phục phản hồi thiết kế trên trang chủ (`/`): gỡ bỏ chuyển đổi ngôn ngữ `EN / VI` khỏi `MarketplaceHeader`; loại bỏ chữ `across Vietnam` trong lời giới thiệu trên `HomePage`; chuẩn hóa Footer trang chủ sang mẫu 1 dòng tối giản thanh lịch đúng chuẩn Figma (`UX / Footer` Frame `48:684`, `48:314`), xóa bỏ khối Footer 2 tầng cồng kềnh trước đó.
 - **Prompt chính:** figma chỉ có 1 dòng mà đúng ko; bỏ khỏi header; bỏ text vietnam; sao tới tận 2 footer.
 - **Phần AI hỗ trợ:**
-  - Kiểm tra trực tiếp qua Figwright MCP trên node Figma `48:684` (*UX / Footer*) và `1:4134`: xác nhận thiết kế chuẩn của Figma toàn bộ hệ thống đều dùng Footer 1 dòng ngang (`layout: HORIZONTAL`, `height: 64px`, `justify-between`) gồm `© 2026 RE.WEAR` bên trái và `Help · Returns · Privacy` bên phải; khối Footer 2 tầng trước đây là do triển khai nhầm từ các bản nháp cũ.
+  - Kiểm tra trực tiếp qua Figwright MCP trên node Figma `48:684` (_UX / Footer_) và `1:4134`: xác nhận thiết kế chuẩn của Figma toàn bộ hệ thống đều dùng Footer 1 dòng ngang (`layout: HORIZONTAL`, `height: 64px`, `justify-between`) gồm `© 2026 RE.WEAR` bên trái và `Help · Returns · Privacy` bên phải; khối Footer 2 tầng trước đây là do triển khai nhầm từ các bản nháp cũ.
   - Tái cấu trúc [MarketplaceFooter.tsx](file:///Users/buihaiduong/Workspace/projects/rewear/rewear-fe/src/shared/components/marketplace/MarketplaceFooter.tsx) thành chuẩn 1 dòng thanh lịch đồng bộ với các trang Cart, Checkout, Wishlist.
   - Cập nhật [MarketplaceHeader.tsx](file:///Users/buihaiduong/Workspace/projects/rewear/rewear-fe/src/shared/components/marketplace/MarketplaceHeader.tsx): gỡ bỏ thẻ `<span>EN / VI</span>`.
   - Cập nhật [HomePage.tsx](file:///Users/buihaiduong/Workspace/projects/rewear/rewear-fe/src/features/home/components/HomePage.tsx): xóa cụm từ `across Vietnam` trong subtitle hero.
@@ -240,7 +240,7 @@ Ghi một mục cho mỗi task có dùng AI. Cập nhật liên kết PR/commit 
 
 - **Người thực hiện:** Bùi Hải Dương.
 - **Công cụ:** Antigravity (Gemini 3.8 Flash) kết nối Figwright MCP Server.
-- **Mục đích và phạm vi:** Thay thế ký tự Unicode `↗` bị vỡ/lệch font trên trình duyệt bằng vector icon `ArrowUpRight` (kích thước 16px, `strokeWidth: 2.5`) khớp chính xác với thiết kế Figma Node `53:644` (*Start selling  ↗*).
+- **Mục đích và phạm vi:** Thay thế ký tự Unicode `↗` bị vỡ/lệch font trên trình duyệt bằng vector icon `ArrowUpRight` (kích thước 16px, `strokeWidth: 2.5`) khớp chính xác với thiết kế Figma Node `53:644` (_Start selling ↗_).
 - **Prompt chính:** https://www.figma.com/design/xjyTlIecBwx0SdTILgBkFL/Re.wear-design?node-id=53-644&t=S07OybIvWfKNzBCm-11 dùng đúng icon mũi tên.
 - **Phần AI hỗ trợ:**
   - Kiểm tra trực tiếp qua Figwright MCP trên node `53:644` và xuất ảnh chụp kiểm chứng (`media_0.png`): xác định độ dày nét, hướng nghiêng góc 45 độ và vị trí căn hàng ngang với chữ `Start selling`.
@@ -253,10 +253,10 @@ Ghi một mục cho mỗi task có dùng AI. Cập nhật liên kết PR/commit 
 
 - **Người thực hiện:** Bùi Hải Dương.
 - **Công cụ:** Antigravity (Gemini 3.8 Flash) kết nối Figwright MCP Server.
-- **Mục đích và phạm vi:** Kết nối các liên kết ở Footer (`Help`, `Returns`, `Privacy`) mở trực tiếp Modal thông tin chính sách chuẩn thiết kế Figma Node `48:114` (*Buying secondhand*) và Node `71:2174` thuộc Section `03 · Shared / Buying help` (Node `67:419`); loại bỏ các liên kết chết (404), giúp người mua dễ dàng tra cứu quyền lợi đổi trả trong 72h và cam kết bảo vệ thanh toán ký quỹ (escrow).
+- **Mục đích và phạm vi:** Kết nối các liên kết ở Footer (`Help`, `Returns`, `Privacy`) mở trực tiếp Modal thông tin chính sách chuẩn thiết kế Figma Node `48:114` (_Buying secondhand_) và Node `71:2174` thuộc Section `03 · Shared / Buying help` (Node `67:419`); loại bỏ các liên kết chết (404), giúp người mua dễ dàng tra cứu quyền lợi đổi trả trong 72h và cam kết bảo vệ thanh toán ký quỹ (escrow).
 - **Prompt chính:** https://www.figma.com/design/xjyTlIecBwx0SdTILgBkFL/Re.wear-design?node-id=67-419&t=S07OybIvWfKNzBCm-11 footer thì cho xem các modal này nhỉ.
 - **Phần AI hỗ trợ:**
-  - Khảo sát trực tiếp cấu trúc cây node Figma qua Figwright MCP trên Node `67:419`, `48:114` và `71:2174`: trích xuất chính xác toàn bộ nội dung bản quyền, thông báo kiểm tra đồ cũ trước khi mua (*Check photos, measurements and disclosed flaws*), thời hạn báo cáo sự cố 72h (*Within 72h of delivery*), chính sách hoàn tiền sau xác minh (*Returns & refunds*).
+  - Khảo sát trực tiếp cấu trúc cây node Figma qua Figwright MCP trên Node `67:419`, `48:114` và `71:2174`: trích xuất chính xác toàn bộ nội dung bản quyền, thông báo kiểm tra đồ cũ trước khi mua (_Check photos, measurements and disclosed flaws_), thời hạn báo cáo sự cố 72h (_Within 72h of delivery_), chính sách hoàn tiền sau xác minh (_Returns & refunds_).
   - Khởi tạo [PolicyModals.tsx](file:///Users/buihaiduong/Workspace/projects/rewear/rewear-fe/src/shared/components/marketplace/PolicyModals.tsx): triển khai Modal `Buying secondhand` chuẩn Figma `48:114` và Modal `Privacy policy` theo ngôn ngữ thiết kế tối giản góc cạnh của RE.WEAR.
   - Cập nhật [MarketplaceFooter.tsx](file:///Users/buihaiduong/Workspace/projects/rewear/rewear-fe/src/shared/components/marketplace/MarketplaceFooter.tsx): chuyển các thẻ `Link` thành các nút bấm tương tác mở Modal tương ứng.
 - **Phần tự làm hoặc đã chỉnh sửa:** Định hướng trải nghiệm tại chỗ không reload trang, tối ưu hóa hiển thị trên cả desktop và mobile.
@@ -267,10 +267,10 @@ Ghi một mục cho mỗi task có dùng AI. Cập nhật liên kết PR/commit 
 
 - **Người thực hiện:** Bùi Hải Dương.
 - **Công cụ:** Antigravity (Gemini 3.8 Flash) kết nối Figwright MCP Server.
-- **Mục đích và phạm vi:** Triển khai đầy đủ thanh công cụ tìm kiếm và lọc sản phẩm (*Search and filters* - Figma Node `53:1061`) trên trang danh mục All clothing (`/products`), tích hợp Modal lọc chi tiết (*Filters modal* - Figma Node `48:143` desktop & `48:2559` mobile) bao gồm Category, Size, Condition, Price và menu sắp xếp Sort: Newest / Price low to high / Price high to low.
+- **Mục đích và phạm vi:** Triển khai đầy đủ thanh công cụ tìm kiếm và lọc sản phẩm (_Search and filters_ - Figma Node `53:1061`) trên trang danh mục All clothing (`/products`), tích hợp Modal lọc chi tiết (_Filters modal_ - Figma Node `48:143` desktop & `48:2559` mobile) bao gồm Category, Size, Condition, Price và menu sắp xếp Sort: Newest / Price low to high / Price high to low.
 - **Prompt chính:** https://www.figma.com/design/xjyTlIecBwx0SdTILgBkFL/Re.wear-design?node-id=53-1061&t=S07OybIvWfKNzBCm-11 thiếu filter.
 - **Phần AI hỗ trợ:**
-  - Khảo sát trực tiếp cấu trúc cây node Figma qua Figwright MCP trên Node `53:1052` (*Refined / All clothing*), `53:1061` (*Search and filters*), `53:1065` (*Filter controls*), `48:143` (*Filters modal*): xác định đầy đủ các trường thuộc tính lọc (Category, Size, Condition, Price), nút hành động chính *Show items*, liên kết mở modal `Filters  ↓` và menu `Sort: Newest  ↓`.
+  - Khảo sát trực tiếp cấu trúc cây node Figma qua Figwright MCP trên Node `53:1052` (_Refined / All clothing_), `53:1061` (_Search and filters_), `53:1065` (_Filter controls_), `48:143` (_Filters modal_): xác định đầy đủ các trường thuộc tính lọc (Category, Size, Condition, Price), nút hành động chính _Show items_, liên kết mở modal `Filters  ↓` và menu `Sort: Newest  ↓`.
   - Khởi tạo component [ProductFilterModal.tsx](file:///Users/buihaiduong/Workspace/projects/rewear/rewear-fe/src/features/home/components/ProductFilterModal.tsx): triển khai Modal lọc chuẩn Figma với 4 trường `RE.WEAR/Field` (Category, Size, Condition, Price) và nút bấm `Show items` màu xanh neon `bg-rewear-accent`. Nâng cấp bộ lọc Price sang dạng linh hoạt: kết hợp 2 ô nhập tùy chỉnh `Từ (₫)` – `Đến (₫)` cùng hàng nút chọn nhanh 1 chạm theo phân khúc secondhand (`Dưới 300k`, `300k - 600k`, `600k - 1tr`, `Trên 1tr`).
   - Cập nhật hook [use-home-catalog.ts](file:///Users/buihaiduong/Workspace/projects/rewear/rewear-fe/src/features/home/hooks/use-home-catalog.ts): mở rộng hỗ trợ nhận và đồng bộ các query parameters `size`, `condition`, `minPrice`, `maxPrice`, `sortBy` khớp với API contract phân trang của backend (`filter.price=$gte:min`, `filter.price=$lte:max`).
   - Tái cấu trúc [ProductsPage.tsx](file:///Users/buihaiduong/Workspace/projects/rewear/rewear-fe/src/features/home/components/ProductsPage.tsx): đổi tiêu đề thành `All clothing` chuẩn Figma `53:1053`, bổ sung khung Search lớn (Figma `53:1062`), tích hợp nút mở bộ lọc `Filters  ↓`, menu sắp xếp giá/mới nhất `Sort  ↓` và dải ruy-băng hiển thị các tag lọc đang kích hoạt kèm nút xóa tiện lợi.
@@ -282,7 +282,7 @@ Ghi một mục cho mỗi task có dùng AI. Cập nhật liên kết PR/commit 
 
 - **Người thực hiện:** Bùi Hải Dương.
 - **Công cụ:** Antigravity (Gemini 3.8 Flash) kết nối Figwright MCP Server & shadcn CLI.
-- **Mục đích và phạm vi:** Tải component phân trang shadcn (`@/shared/components/ui/pagination.tsx`) và tùy biến lại giao diện theo đúng Figma Node `86:1606` (*Pagination footer*): gồm cụm bên trái điều khiển `Items per page` (12, 24, 48) và cụm bên phải gồm các nút thẻ `‹ Previous`, các số trang (active trang nền xanh neon `#c3f832`), và `Next ›`.
+- **Mục đích và phạm vi:** Tải component phân trang shadcn (`@/shared/components/ui/pagination.tsx`) và tùy biến lại giao diện theo đúng Figma Node `86:1606` (_Pagination footer_): gồm cụm bên trái điều khiển `Items per page` (12, 24, 48) và cụm bên phải gồm các nút thẻ `‹ Previous`, các số trang (active trang nền xanh neon `#c3f832`), và `Next ›`.
 - **Prompt chính:** ok tai paginate shadcn ve roi custom lai thoi cho it code.
 - **Phần AI hỗ trợ:**
   - Chạy `pnpm dlx shadcn@latest add pagination` tải component nền tảng chuẩn của thư viện.
@@ -425,6 +425,7 @@ Ghi một mục cho mỗi task có dùng AI. Cập nhật liên kết PR/commit 
 - **Cách kiểm chứng:** `pnpm check`, `pnpm test` (12 suites, 36 tests), `pnpm build` đạt. Kiểm tra trình duyệt với buyer seed: danh sách ba đơn và lọc trạng thái gọi API thành công; phiên kiểm thử dùng CORS nới riêng.
 - **Giới hạn:** Chưa có trang chi tiết đơn hoặc luồng thanh toán hoàn chỉnh; kiểm thử trình duyệt không xác nhận cấu hình CORS triển khai.
 - **Minh chứng:** PR #16, branch `buihaiduongdev/fe-cleanup-review`.
+
 ### 2026-11-22 — Chuẩn hóa trang Chi tiết sản phẩm (/products/[id]) theo thiết kế Figma 53:754 và kết nối dữ liệu thật
 
 - **Người thực hiện:** Bùi Hải Dương.
@@ -665,3 +666,15 @@ Ghi một mục cho mỗi task có dùng AI. Cập nhật liên kết PR/commit 
 - **Cách kiểm chứng:** Chạy `pnpm check` (tsc + eslint) pass 0 lỗi, `pnpm test` (15/15 suites, 41/41 tests) pass 100%, `pnpm build` thành công toàn bộ routes qua Turbopack.
 - **Lỗi hoặc đề xuất sai của AI đã phát hiện:** Không phát hiện.
 - **Minh chứng:** PR #17; branch `buihaiduongdev/buyer-orders-2`.
+
+### 2026-11-24 — Tối ưu hóa form địa chỉ lấy hàng và tích hợp GHN trực tiếp
+
+- **Người thực hiện:** Bùi Hải Dương
+- **Công cụ:** Antigravity (Gemini 3.8 Flash)
+- **Mục đích và phạm vi:** Hợp nhất form thiết lập địa chỉ lấy hàng tại `/selling/pickup` thành một form 3 cấp duy nhất (Tỉnh, Huyện, Xã), loại bỏ dropdown địa chỉ trùng lặp của GHN; kết nối trực tiếp với GHN qua Shop ID dựa trên thông tin địa chỉ đã lưu.
+- **Prompt chính:** Tối ưu hóa giao diện thiết lập địa chỉ lấy hàng của người bán, chuyển sang form địa chỉ 3 cấp chuẩn logistics và tích hợp một chạm với đơn vị vận chuyển GHN mà không cần điền lại địa chỉ lần hai.
+- **Đầu ra AI được sử dụng:** Cập nhật `AdministrativeDivisionFields`, `useAdministrativeDivisions`, `PickupAddressForm`, `usePickupAddressForm`, `GhnPickupProvider`, `useGhnConnection`, tách `AddressDivisionSelect` dùng chung và cập nhật kiểm thử unit tương ứng.
+- **Phần tự làm hoặc đã chỉnh sửa:** Định hướng lược bỏ form chọn địa chỉ GHN thừa, tối ưu trải nghiệm người bán, đồng bộ trạng thái lưu và kết nối.
+- **Cách kiểm chứng:** Chạy `pnpm check` (TypeScript noEmit pass, ESLint 0 errors, Prettier pass), `vitest run tests/administrative-division-fields.test.tsx` pass 2/2.
+- **Lỗi hoặc đề xuất sai của AI đã phát hiện:** Lỗi type casting `any` kích hoạt cảnh báo lint trong `use-pickup-address-form.ts`; đã điều chỉnh dùng `as unknown as PickupLocationControllerSaveShopBody`.
+- **Minh chứng:** PR #18; branch `buihaiduongdev/ghn-pickup-settings`.
