@@ -1,9 +1,7 @@
-import { render, screen, fireEvent } from '@testing-library/react';
-import { describe, expect, it, vi } from 'vitest';
-import {
-  ProductHowToMeasureModal
-} from '@/features/product-detail/components/ProductModals';
+import { ProductHowToMeasureModal } from '@/features/product-detail/components/ProductModals';
 import type { ProductControllerFindOne200Data } from '@/shared/api/models';
+import { fireEvent, render, screen } from '@testing-library/react';
+import { describe, expect, it, vi } from 'vitest';
 
 const mockProduct: ProductControllerFindOne200Data = {
   id: 'prod-lemaire-1',
@@ -22,7 +20,9 @@ const mockProduct: ProductControllerFindOne200Data = {
     sleeve: 64,
   },
   repairs: 'Reinforced extra horn button',
-  defects: [{ description: 'Faint scuff on inner bottom hem lining', mediaIds: [] }],
+  defects: [
+    { description: 'Faint scuff on inner bottom hem lining', mediaIds: [] },
+  ],
   shippingPackage: {
     weightGrams: 850,
     lengthCm: 40,
@@ -44,7 +44,13 @@ const mockProduct: ProductControllerFindOne200Data = {
 describe('ProductModals', () => {
   it('renders ProductHowToMeasureModal with custom measurements guide in English', () => {
     const handleClose = vi.fn();
-    render(<ProductHowToMeasureModal isOpen={true} onClose={handleClose} product={mockProduct} />);
+    render(
+      <ProductHowToMeasureModal
+        isOpen={true}
+        onClose={handleClose}
+        product={mockProduct}
+      />,
+    );
 
     expect(screen.getByText('How to measure')).toBeDefined();
     expect(screen.getByText('Chest')).toBeDefined();
@@ -55,5 +61,4 @@ describe('ProductModals', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Got it' }));
     expect(handleClose).toHaveBeenCalledOnce();
   });
-
 });

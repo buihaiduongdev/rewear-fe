@@ -105,6 +105,7 @@ export function usePickupAddressPage() {
     activeAddress,
     hasExistingLocation,
     isSettingsMode,
+    openSettings: () => setIsReady(false),
     handleSaved,
     handleBeforeSave,
   };

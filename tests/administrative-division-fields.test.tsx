@@ -7,18 +7,20 @@ const mockProvinces = {
   isPending: false,
   error: null,
   data: {
-    statusCode: 200 as const,
-    message: 'OK',
     data: [
-      { code: '01', name: 'Thành phố Hà Nội', type: 'thanh-pho-trung-uong' },
-      {
-        code: '79',
-        name: 'Thành phố Hồ Chí Minh',
-        type: 'thanh-pho-trung-uong',
-      },
-      { code: '48', name: 'Thành phố Đà Nẵng', type: 'thanh-pho-trung-uong' },
-      { code: '31', name: 'Thành phố Hải Phòng', type: 'thanh-pho-trung-uong' },
+      { id: 201, name: 'Hà Nội' },
+      { id: 202, name: 'Hồ Chí Minh' },
+      { id: 203, name: 'Đà Nẵng' },
+      { id: 204, name: 'Hải Phòng' },
     ],
+  },
+};
+
+const mockDistricts = {
+  isPending: false,
+  error: null,
+  data: {
+    data: [],
   },
 };
 
@@ -26,8 +28,6 @@ const mockWards = {
   isPending: false,
   error: null,
   data: {
-    statusCode: 200 as const,
-    message: 'OK',
     data: [],
   },
 };
@@ -36,15 +36,19 @@ describe('AdministrativeDivisionFields', () => {
   it('filters province list when user types search text', async () => {
     const user = userEvent.setup();
     const onProvinceChange = vi.fn();
+    const onDistrictChange = vi.fn();
     const onWardChange = vi.fn();
 
     render(
       <AdministrativeDivisionFields
-        provinceCode=""
+        provinceId=""
+        districtId=""
         wardCode=""
         onProvinceChange={onProvinceChange}
+        onDistrictChange={onDistrictChange}
         onWardChange={onWardChange}
         provinces={mockProvinces}
+        districts={mockDistricts}
         wards={mockWards}
       />,
     );
@@ -57,42 +61,38 @@ describe('AdministrativeDivisionFields', () => {
     await user.click(input);
 
     // Initial popup should display items
-    expect(screen.getByText('Thành phố Hà Nội')).toBeInTheDocument();
-    expect(screen.getByText('Thành phố Hồ Chí Minh')).toBeInTheDocument();
+    expect(screen.getByText('Hà Nội')).toBeInTheDocument();
+    expect(screen.getByText('Hồ Chí Minh')).toBeInTheDocument();
 
     // Type "Da Nang" or "Đà Nẵng" without accents
     await user.type(input, 'Da Nang');
 
-    // Only "Thành phố Đà Nẵng" should match
-    expect(screen.getByText('Thành phố Đà Nẵng')).toBeInTheDocument();
-    expect(screen.queryByText('Thành phố Hà Nội')).not.toBeInTheDocument();
-    expect(screen.queryByText('Thành phố Hồ Chí Minh')).not.toBeInTheDocument();
+    // Only "Đà Nẵng" should match
+    expect(screen.getByText('Đà Nẵng')).toBeInTheDocument();
+    expect(screen.queryByText('Hà Nội')).not.toBeInTheDocument();
+    expect(screen.queryByText('Hồ Chí Minh')).not.toBeInTheDocument();
   });
 
-  it('formats raw regex pattern errors into user-friendly messages', () => {
+  it('renders errors properly', () => {
     render(
       <AdministrativeDivisionFields
-        provinceCode="01"
+        provinceId={201}
+        districtId=""
         wardCode=""
         onProvinceChange={vi.fn()}
+        onDistrictChange={vi.fn()}
         onWardChange={vi.fn()}
         provinces={mockProvinces}
+        districts={mockDistricts}
         wards={mockWards}
         errors={{
-          wardCode: 'Invalid string: must match pattern /^\\d{5}$/',
-          provinceCode: 'Invalid string: must match pattern /^\\d{2}$/',
+          wardCode: 'Please select a ward',
+          districtId: 'Please select a district',
         }}
       />,
     );
 
-    expect(
-      screen.getByText('Please select a valid ward or commune'),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByText('Please select a valid province or city'),
-    ).toBeInTheDocument();
-    expect(
-      screen.queryByText('Invalid string: must match pattern /^\\d{5}$/'),
-    ).not.toBeInTheDocument();
+    expect(screen.getByText('Please select a ward')).toBeInTheDocument();
+    expect(screen.getByText('Please select a district')).toBeInTheDocument();
   });
 });

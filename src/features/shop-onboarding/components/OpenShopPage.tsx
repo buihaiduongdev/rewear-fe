@@ -18,7 +18,12 @@ export function OpenShopPage() {
     setDescription,
     copied,
     logoPreview,
-    setLogoPreview,
+    logoFile,
+    logoError,
+    removeLogo,
+    handleLogoChange,
+    createdShopId,
+    submitting,
     existingShop,
     createShop,
     slug,
@@ -28,7 +33,7 @@ export function OpenShopPage() {
   } = useOpenShop();
 
   // If user already owns a shop, show Figma 66:311 existing shop notice
-  if (existingShop) {
+  if (existingShop && !createdShopId) {
     return (
       <div className="bg-rewear-surface text-rewear-text min-h-dvh">
         <header className="mx-auto flex min-h-20 w-full max-w-[1280px] items-center justify-between gap-6 px-4 text-sm leading-5 font-semibold md:px-8">
@@ -193,6 +198,7 @@ export function OpenShopPage() {
                 type="text"
                 required
                 maxLength={100}
+                disabled={Boolean(createdShopId) || submitting}
                 placeholder="e.g. Hanoi Archive"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
@@ -211,6 +217,7 @@ export function OpenShopPage() {
               <textarea
                 id={shopAboutInputId}
                 rows={3}
+                disabled={Boolean(createdShopId) || submitting}
                 maxLength={1000}
                 placeholder="Curated pre-owned clothing, based in Hanoi."
                 value={description}
@@ -221,22 +228,44 @@ export function OpenShopPage() {
 
             <div className="space-y-2 py-2">
               <label
-                htmlFor="shop-logo-url"
+                htmlFor="shop-logo-file"
                 className="text-rewear-text block text-sm font-semibold"
               >
-                Shop logo URL (optional)
+                Upload shop logo (optional)
               </label>
               <input
-                id="shop-logo-url"
-                type="url"
-                value={logoPreview}
-                onChange={(event) => setLogoPreview(event.target.value)}
-                placeholder="https://example.com/logo.jpg"
-                className="bg-rewear-soft w-full px-4 py-3 text-sm"
+                id="shop-logo-file"
+                type="file"
+                accept="image/jpeg,image/png,image/webp,image/avif"
+                onChange={handleLogoChange}
+                disabled={submitting}
+                className="sr-only"
               />
+              <label
+                htmlFor="shop-logo-file"
+                className="border-rewear-border inline-flex min-h-11 cursor-pointer items-center border px-4 text-sm font-semibold"
+              >
+                Choose image
+              </label>
+              {logoFile && <p className="text-sm break-all">{logoFile.name}</p>}
               <p className="text-rewear-muted text-xs">
-                Use a publicly accessible image URL.
+                JPG, PNG, WebP or AVIF, up to 5 MB.
               </p>
+              {logoFile && (
+                <button
+                  type="button"
+                  onClick={removeLogo}
+                  disabled={submitting}
+                  className="text-sm underline"
+                >
+                  Remove logo
+                </button>
+              )}
+              {logoError && (
+                <p role="alert" className="text-sm text-red-700">
+                  {logoError}
+                </p>
+              )}
             </div>
 
             {/* Error Display */}
@@ -299,13 +328,11 @@ export function OpenShopPage() {
               <div className="border-rewear-border border-t pt-4">
                 <button
                   type="button"
-                  disabled={!name.trim() || createShop.isPending}
+                  disabled={!name.trim() || submitting}
                   onClick={handleSubmit}
                   className="bg-rewear-accent text-rewear-text hover:bg-rewear-accent/90 disabled:bg-rewear-border disabled:text-rewear-muted flex min-h-12 w-full items-center justify-center text-sm font-semibold transition disabled:cursor-not-allowed"
                 >
-                  {createShop.isPending
-                    ? 'Creating shop…'
-                    : 'Continue to pickup address'}
+                  {submitting ? 'Creating shop…' : 'Continue to pickup address'}
                 </button>
               </div>
             </div>

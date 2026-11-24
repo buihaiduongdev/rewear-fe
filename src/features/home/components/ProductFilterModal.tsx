@@ -101,7 +101,7 @@ function FilterForm({
         <button
           type="button"
           onClick={onClose}
-          className="text-rewear-text hover:opacity-70 cursor-pointer text-sm font-semibold transition"
+          className="text-rewear-text cursor-pointer text-sm font-semibold transition hover:opacity-70"
         >
           Close ×
         </button>
@@ -223,7 +223,7 @@ function FilterForm({
               min={0}
               max={MAX_SLIDER_PRICE}
               step={SLIDER_STEP}
-              className="relative flex w-full touch-none select-none items-center py-2"
+              className="relative flex w-full touch-none items-center py-2 select-none"
             >
               <Slider.Control className="relative flex w-full items-center">
                 <Slider.Track className="bg-rewear-border relative h-1.5 w-full grow overflow-hidden rounded-full">
@@ -232,19 +232,19 @@ function FilterForm({
                 <Slider.Thumb
                   index={0}
                   aria-label="Minimum price"
-                  className="border-rewear-text bg-rewear-surface focus-visible:ring-rewear-text block size-5 cursor-grab rounded-full border-2 shadow-sm transition hover:scale-110 active:cursor-grabbing focus-visible:ring-2 focus-visible:outline-none"
+                  className="border-rewear-text bg-rewear-surface focus-visible:ring-rewear-text block size-5 cursor-grab rounded-full border-2 shadow-sm transition hover:scale-110 focus-visible:ring-2 focus-visible:outline-none active:cursor-grabbing"
                 />
                 <Slider.Thumb
                   index={1}
                   aria-label="Maximum price"
-                  className="border-rewear-text bg-rewear-surface focus-visible:ring-rewear-text block size-5 cursor-grab rounded-full border-2 shadow-sm transition hover:scale-110 active:cursor-grabbing focus-visible:ring-2 focus-visible:outline-none"
+                  className="border-rewear-text bg-rewear-surface focus-visible:ring-rewear-text block size-5 cursor-grab rounded-full border-2 shadow-sm transition hover:scale-110 focus-visible:ring-2 focus-visible:outline-none active:cursor-grabbing"
                 />
               </Slider.Control>
             </Slider.Root>
           </div>
 
           {/* Quick presets as rectangular boxes filling parent width */}
-          <div className="grid grid-cols-2 gap-2 w-full sm:grid-cols-4">
+          <div className="grid w-full grid-cols-2 gap-2 sm:grid-cols-4">
             {QUICK_PRICE_PRESETS.map((preset) => {
               const isSelected =
                 selectedMinPrice === preset.min &&
