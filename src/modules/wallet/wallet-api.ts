@@ -4,9 +4,10 @@ type Envelope<T> = { data: T };
 
 export type WalletCredit = {
   id: string;
-  orderId: string;
+  orderId: string | null;
+  paymentRefundId?: string | null;
   amount: number;
-  reason: 'ORDER_CANCELLED' | string;
+  reason: 'ORDER_CANCELLED' | 'LATE_PAYMENT_REFUND' | string;
   mode: 'EVIDENCE' | 'SIMULATION' | null;
   createdAt: string;
 };

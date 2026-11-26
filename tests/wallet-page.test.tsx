@@ -129,4 +129,36 @@ describe('WalletPage', () => {
     ).toBeInTheDocument();
     expect(screen.getByText('Applied at checkout')).toBeInTheDocument();
   });
+
+  it('renders a LATE_PAYMENT_REFUND credit with null orderId without crashing', async () => {
+    api.getWallet.mockResolvedValueOnce({
+      data: {
+        balance: 200000,
+        simulationBalance: 0,
+        heldBalance: 0,
+        simulationHeldBalance: 0,
+        currency: 'VND',
+        credits: [
+          {
+            id: 'cred-late-1',
+            orderId: null,
+            paymentRefundId: '44444444-4444-4444-4444-444444444444',
+            amount: 200000,
+            reason: 'LATE_PAYMENT_REFUND',
+            mode: 'EVIDENCE',
+            createdAt: '2026-11-26T10:00:00.000Z',
+          },
+        ],
+        disputeRefunds: [],
+      },
+    });
+
+    renderWallet();
+
+    expect(
+      await screen.findByText('Late payment refund credit'),
+    ).toBeInTheDocument();
+    expect(screen.getByText('Late payment refund')).toBeInTheDocument();
+    expect(screen.queryByRole('link', { name: /null/i })).toBeNull();
+  });
 });

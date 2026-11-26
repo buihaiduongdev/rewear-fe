@@ -74,7 +74,9 @@ export function WalletPage() {
       label:
         entry.reason === 'ORDER_CANCELLED'
           ? 'Cancelled order refund'
-          : entry.reason.replaceAll('_', ' ').toLowerCase(),
+          : entry.reason === 'LATE_PAYMENT_REFUND'
+            ? 'Late payment refund credit'
+            : entry.reason.replaceAll('_', ' ').toLowerCase(),
       amount: entry.amount,
       createdAt: entry.createdAt,
     }));
@@ -332,12 +334,18 @@ export function WalletPage() {
                               {row.label}
                             </td>
                             <td className="px-4 py-3.5 font-mono text-xs">
-                              <Link
-                                href={`/orders/${row.orderId}`}
-                                className="underline underline-offset-4"
-                              >
-                                {row.orderId.slice(0, 8)}
-                              </Link>
+                              {row.orderId ? (
+                                <Link
+                                  href={`/orders/${row.orderId}`}
+                                  className="underline underline-offset-4"
+                                >
+                                  {row.orderId.slice(0, 8)}
+                                </Link>
+                              ) : (
+                                <span className="bg-rewear-soft text-rewear-muted inline-block px-2 py-0.5 font-sans text-xs font-medium">
+                                  Late payment refund
+                                </span>
+                              )}
                             </td>
                             <td className="text-rewear-muted px-4 py-3.5 text-xs">
                               {formatDateTime(row.createdAt)}
