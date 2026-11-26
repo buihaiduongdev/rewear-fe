@@ -114,6 +114,33 @@ describe('AdminPayoutsPage', () => {
     expect(screen.getByText('Admin access required')).toBeInTheDocument();
   });
 
+  it('renders all 6 unified admin workspace navigation links with Withdrawals active', async () => {
+    renderAdminPayouts();
+
+    const expectedLinks = [
+      { name: 'Moderation', href: '/admin/products', current: null },
+      { name: 'Categories', href: '/admin/categories', current: null },
+      { name: 'Disputes', href: '/admin/disputes', current: null },
+      { name: 'Users & Shops', href: '/admin/users', current: null },
+      { name: 'Withdrawals', href: '/admin/payouts', current: 'page' },
+      { name: 'COD & Settings', href: '/admin/settings', current: null },
+    ];
+
+    for (const item of expectedLinks) {
+      const link = screen.getByRole('link', { name: item.name });
+      expect(link).toHaveAttribute('href', item.href);
+      if (item.current) {
+        expect(link).toHaveAttribute('aria-current', item.current);
+      } else {
+        expect(link).not.toHaveAttribute('aria-current');
+      }
+    }
+
+    expect(
+      screen.getByRole('link', { name: /View marketplace/i }),
+    ).toHaveAttribute('href', '/');
+  });
+
   it('uploads UNC receipt image and confirms completed transfer with transferEvidenceMediaId', async () => {
     renderAdminPayouts();
 

@@ -42,6 +42,15 @@ const FILTER_TABS: { key: StatusFilter; label: string }[] = [
   { key: 'CLOSED', label: 'Failed / Rejected' },
 ];
 
+const ADMIN_NAV_ITEMS = [
+  { key: 'products', label: 'Moderation', href: '/admin/products' },
+  { key: 'categories', label: 'Categories', href: '/admin/categories' },
+  { key: 'disputes', label: 'Disputes', href: '/admin/disputes' },
+  { key: 'users', label: 'Users & Shops', href: '/admin/users' },
+  { key: 'payouts', label: 'Withdrawals', href: '/admin/payouts' },
+  { key: 'settings', label: 'COD & Settings', href: '/admin/settings' },
+] as const;
+
 function formatDate(value: string | null) {
   if (!value) return '—';
   return new Intl.DateTimeFormat('en-GB', {
@@ -200,14 +209,24 @@ export function AdminPayoutsPage() {
             </Link>
             <p className="text-rewear-muted text-sm">Admin workspace</p>
           </div>
-          <nav aria-label="Admin workspace" className="space-y-2">
-            <Link
-              href="/admin/payouts"
-              aria-current="page"
-              className="bg-rewear-accent text-rewear-text flex h-11 items-center px-3 text-sm font-semibold"
-            >
-              Withdrawals
-            </Link>
+          <nav aria-label="Admin workspace" className="space-y-1.5">
+            {ADMIN_NAV_ITEMS.map((item) => {
+              const isActive = item.key === 'payouts';
+              return (
+                <Link
+                  key={item.key}
+                  href={item.href}
+                  aria-current={isActive ? 'page' : undefined}
+                  className={`flex min-h-11 w-full items-center rounded-lg px-3 text-sm font-semibold transition-colors ${
+                    isActive
+                      ? 'bg-rewear-accent text-rewear-text'
+                      : 'text-rewear-text hover:bg-rewear-soft'
+                  }`}
+                >
+                  {item.label}
+                </Link>
+              );
+            })}
           </nav>
         </div>
         <div className="pt-8">
