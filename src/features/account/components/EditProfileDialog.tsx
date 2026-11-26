@@ -41,15 +41,6 @@ export function EditProfileDialog({
     mutation: { meta: { skipSuccessToast: true, skipErrorToast: true } },
   });
 
-  const handleOpenChange = (nextOpen: boolean) => {
-    if (nextOpen) {
-      setFullName(currentFullName);
-      setValidationError('');
-      updateProfile.reset();
-    }
-    onOpenChange(nextOpen);
-  };
-
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
     const trimmed = fullName.trim();
@@ -78,7 +69,7 @@ export function EditProfileDialog({
   };
 
   return (
-    <Dialog open={open} onOpenChange={handleOpenChange}>
+    <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
         showCloseButton={false}
         className="border-rewear-border bg-rewear-surface max-w-[520px] rounded-none border p-6 sm:max-w-[520px] sm:p-8"

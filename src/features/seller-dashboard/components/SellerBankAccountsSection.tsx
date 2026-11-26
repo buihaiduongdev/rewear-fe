@@ -44,6 +44,7 @@ export function SellerBankAccountsSection({
   const [isDefault, setIsDefault] = useState(true);
   const [ownerConfirmed, setOwnerConfirmed] = useState(false);
   const [errors, setErrors] = useState<BankAccountValidationErrors>({});
+  const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
   const [actionError, setActionError] = useState('');
 
   const payoutsQuery = useQuery({
@@ -83,6 +84,7 @@ export function SellerBankAccountsSection({
   const deleteMutation = useMutation({
     mutationFn: (accountId: string) => deleteShopBankAccount(shopId, accountId),
     onSuccess: async () => {
+      setConfirmDeleteId(null);
       await queryClient.invalidateQueries({
         queryKey: shopBankAccountsQueryKey(shopId),
       });
@@ -232,18 +234,38 @@ export function SellerBankAccountsSection({
                 >
                   Edit
                 </button>
-                <button
-                  type="button"
-                  disabled={deleteMutation.isPending}
-                  onClick={() => {
-                    setActionError('');
-                    deleteMutation.mutate(account.id);
-                  }}
-                  className="text-rewear-muted hover:text-destructive inline-flex min-h-11 cursor-pointer items-center gap-1 disabled:opacity-50"
-                >
-                  <Trash2 size={14} aria-hidden="true" />
-                  Remove
-                </button>
+                {confirmDeleteId === account.id ? (
+                  <div className="flex items-center gap-2">
+                    <button
+                      type="button"
+                      disabled={deleteMutation.isPending}
+                      onClick={() => {
+                        setActionError('');
+                        deleteMutation.mutate(account.id);
+                      }}
+                      className="text-destructive min-h-11 cursor-pointer underline underline-offset-4 disabled:opacity-50"
+                    >
+                      Confirm remove
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setConfirmDeleteId(null)}
+                      className="text-rewear-muted min-h-11 cursor-pointer"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                ) : (
+                  <button
+                    type="button"
+                    disabled={deleteMutation.isPending}
+                    onClick={() => setConfirmDeleteId(account.id)}
+                    className="text-rewear-muted hover:text-destructive inline-flex min-h-11 cursor-pointer items-center gap-1 disabled:opacity-50"
+                  >
+                    <Trash2 size={14} aria-hidden="true" />
+                    Remove
+                  </button>
+                )}
               </div>
             </div>
           ))}
