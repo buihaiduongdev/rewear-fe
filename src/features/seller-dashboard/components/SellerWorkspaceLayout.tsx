@@ -35,7 +35,7 @@ const NAV_ITEMS: { key: SellerNavKey; label: string; href?: string }[] = [
 
 export function SellerWorkspaceLayout({
   children,
-  activeNav = 'products',
+  activeNav = 'overview',
   onSelectNav,
   shopName = 'My shop',
   shopLogo,

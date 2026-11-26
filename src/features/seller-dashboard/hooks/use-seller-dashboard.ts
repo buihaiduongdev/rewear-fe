@@ -11,10 +11,27 @@ import { useSession } from 'next-auth/react';
 
 import type { SellerNavKey, SellerProductItem } from '../types';
 
+const VALID_SELLER_TABS: readonly SellerNavKey[] = [
+  'overview',
+  'products',
+  'orders',
+  'returns',
+  'funds',
+  'settings',
+  'messages',
+];
+
+function resolveSellerTab(rawTab: string | null | undefined): SellerNavKey {
+  if (rawTab && VALID_SELLER_TABS.includes(rawTab as SellerNavKey)) {
+    return rawTab as SellerNavKey;
+  }
+  return 'overview';
+}
+
 export function useSellerDashboard() {
   const { data: session, status } = useSession();
   const searchParams = useSearchParams();
-  const initialTab = (searchParams?.get('tab') as SellerNavKey) || 'products';
+  const initialTab = resolveSellerTab(searchParams?.get('tab'));
 
   const [activeTab, setActiveTab] = useState<SellerNavKey>(initialTab);
   const [productsPage, setProductsPage] = useState(1);
