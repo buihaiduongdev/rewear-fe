@@ -37,7 +37,6 @@ export function UserAccountModal({
   const [status, setStatus] = useState<UserControllerUpdateBodyStatus>(
     user.status,
   );
-  const [reason, setReason] = useState('');
   const [error, setError] = useState('');
 
   const updateMutation = useUserControllerUpdate({
@@ -91,16 +90,6 @@ export function UserAccountModal({
               <option value="USER">User</option>
               <option value="ADMIN">Admin</option>
             </select>
-          </label>
-          <label className="grid gap-1.5 text-sm font-semibold">
-            Reason for change
-            <textarea
-              rows={2}
-              value={reason}
-              onChange={(e) => setReason(e.target.value)}
-              placeholder="Document the administrative reason for this update…"
-              className="border-rewear-border rounded-lg border p-2.5 font-normal"
-            />
           </label>
           {error && (
             <p role="alert" className="text-sm text-[#BA1A1A]">

@@ -5,6 +5,7 @@ import { AdminDisputesPage } from '@/features/admin/disputes/AdminDisputesPage';
 import { AdminCodSettingsPage } from '@/features/admin/settings/AdminCodSettingsPage';
 import { AdminUsersShopsPage } from '@/features/admin/users/AdminUsersShopsPage';
 import { BuyerDisputePanel } from '@/features/orders/components/BuyerDisputePanel';
+import { SellerKycForm } from '@/features/seller-dashboard/components/SellerKycForm';
 import { SellerReturnsSection } from '@/features/seller-dashboard/components/SellerReturnsSection';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
@@ -499,5 +500,55 @@ describe('Admin workspace, disputes, KYC & COD reconciliation', () => {
     expect(screen.getByText('72 hours after delivery')).toBeInTheDocument();
     expect(screen.getByText('3–5 business days')).toBeInTheDocument();
     expect(screen.getByText('2 business days')).toBeInTheDocument();
+  });
+
+  it('initializes SellerKycForm from existing PASSPORT identity, syncs upload slots, and allows switching/clearing', () => {
+    renderWithQuery(
+      <SellerKycForm
+        shopId="44444444-4444-4444-8444-444444444444"
+        detail={{
+          id: 'app-1',
+          shopId: '44444444-4444-4444-8444-444444444444',
+          kind: 'INITIAL',
+          state: 'NEEDS_INFO',
+          submittedAt: null,
+          reviewedAt: null,
+          reason: 'Please upload clearer scan',
+          createdAt: '2026-11-25T10:00:00.000Z',
+          updatedAt: '2026-11-25T10:00:00.000Z',
+          identity: {
+            documentType: 'PASSPORT',
+            documentNumber: 'P98765432',
+            issuingCountry: 'VN',
+            fullName: 'TRAN VAN B',
+            birthDate: '1998-01-01',
+            expiresOn: '2032-01-01',
+          },
+          shop: {
+            id: '44444444-4444-4444-8444-444444444444',
+            name: 'Archive Shop',
+            description: null,
+            logoUrl: null,
+          },
+          pickup: null,
+          bank: null,
+          documents: [],
+        }}
+        accounts={[]}
+        onFeedback={vi.fn()}
+        onRefresh={vi.fn().mockResolvedValue(undefined)}
+      />,
+    );
+
+    expect(screen.getByText('Upload Passport Photo Page')).toBeInTheDocument();
+    const docNumInput = screen.getByDisplayValue('P98765432');
+    fireEvent.change(docNumInput, { target: { value: '' } });
+    expect(docNumInput).toHaveValue('');
+
+    fireEvent.change(screen.getByLabelText('Document type'), {
+      target: { value: 'NATIONAL_ID' },
+    });
+    expect(screen.getByText('Upload CCCD Front')).toBeInTheDocument();
+    expect(screen.getByText('Upload CCCD Back')).toBeInTheDocument();
   });
 });
