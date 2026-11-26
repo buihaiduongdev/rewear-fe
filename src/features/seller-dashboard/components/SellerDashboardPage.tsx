@@ -8,6 +8,7 @@ import { Store } from 'lucide-react';
 import { useSellerDashboard } from '../hooks/use-seller-dashboard';
 import { SellerPendingOrders } from './SellerPendingOrders';
 import { SellerProductsPage } from './SellerProductsPage';
+import { SellerReturnsSection } from './SellerReturnsSection';
 import { SellerSettingsSection } from './SellerSettingsSection';
 import { SellerWorkspaceLayout } from './SellerWorkspaceLayout';
 
@@ -156,15 +157,25 @@ export function SellerDashboardPage() {
                 Orders awaiting seller confirmation
               </p>
             </div>
-            <Link
-              href="/selling/new"
-              className="bg-rewear-accent px-4 py-3 text-sm font-semibold"
-            >
-              Create listing
-            </Link>
+            <div className="flex flex-wrap items-center gap-3">
+              <Link
+                href="/selling/kyc"
+                className="border-rewear-border hover:bg-rewear-soft inline-flex min-h-11 items-center rounded-lg border px-4 text-sm font-semibold"
+              >
+                Identity verification (KYC)
+              </Link>
+              <Link
+                href="/selling/new"
+                className="bg-rewear-accent inline-flex min-h-11 items-center rounded-lg px-4 text-sm font-semibold"
+              >
+                Create listing
+              </Link>
+            </div>
           </section>
           <SellerPendingOrders key={shopId} shopId={shopId} enabled={enabled} />
         </div>
+      ) : activeTab === 'returns' ? (
+        <SellerReturnsSection shopId={shopId} enabled={enabled} />
       ) : activeTab === 'settings' ? (
         <SellerSettingsSection
           key={shopId}
