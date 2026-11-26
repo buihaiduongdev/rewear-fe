@@ -290,12 +290,20 @@ export function PaymentResultPage() {
                 </p>
                 <div className="flex flex-col gap-3">
                   {effectiveCheckoutId ? (
-                    <Link
-                      href={`/checkout?id=${encodeURIComponent(effectiveCheckoutId)}`}
-                      className="bg-rewear-accent text-rewear-text flex h-12 w-full items-center justify-center text-sm font-semibold"
-                    >
-                      Return to checkout
-                    </Link>
+                    <>
+                      <Link
+                        href={`/checkout?id=${encodeURIComponent(effectiveCheckoutId)}`}
+                        className="bg-rewear-accent text-rewear-text flex h-12 w-full items-center justify-center text-sm font-semibold"
+                      >
+                        Return to checkout
+                      </Link>
+                      <Link
+                        href="/cart"
+                        className="text-rewear-muted hover:text-rewear-text flex min-h-11 items-center justify-center text-sm font-semibold hover:underline"
+                      >
+                        Back to cart
+                      </Link>
+                    </>
                   ) : (
                     <Link
                       href="/cart"
@@ -304,12 +312,6 @@ export function PaymentResultPage() {
                       Back to cart
                     </Link>
                   )}
-                  <Link
-                    href="/cart"
-                    className="text-rewear-muted hover:text-rewear-text flex min-h-11 items-center justify-center text-sm font-semibold hover:underline"
-                  >
-                    Back to cart
-                  </Link>
                 </div>
               </div>
             )}

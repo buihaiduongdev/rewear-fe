@@ -140,4 +140,30 @@ describe('Payment return pages', () => {
       '/cart',
     );
   });
+
+  it('renders a single Back to cart action on failed payment without checkoutId', () => {
+    searchParamsValue.current = 'paymentId=pay-1&status=CANCELLED';
+    usePaymentFind.mockReturnValue({
+      isFetching: false,
+      isError: false,
+      refetch: vi.fn(),
+      data: {
+        data: {
+          id: 'pay-1',
+          checkoutId: '',
+          amount: 450000,
+          state: 'FAILED',
+          payUrl: null,
+          paidAt: null,
+          refunds: [],
+        },
+      },
+    });
+
+    render(<PaymentResultPage />);
+    expect(screen.getByText('Payment was not completed')).toBeInTheDocument();
+    const cartLinks = screen.getAllByRole('link', { name: 'Back to cart' });
+    expect(cartLinks).toHaveLength(1);
+    expect(cartLinks[0]).toHaveAttribute('href', '/cart');
+  });
 });
