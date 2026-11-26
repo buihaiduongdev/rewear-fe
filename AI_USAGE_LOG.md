@@ -722,4 +722,4 @@ Ghi một mục cho mỗi task có dùng AI. Cập nhật liên kết PR/commit 
 - **Phần tự làm hoặc đã chỉnh sửa:** Đối chiếu hợp đồng API thực tế với backend (bao gồm endpoint MoMo mới và cấu trúc gọi ví hoàn tiền mới không còn `requestId`), kiểm tra độ rõ ràng dễ đọc và xác minh toàn bộ bộ test, lint và build trước khi mở PR.
 - **Cách kiểm chứng:** `pnpm check` (`tsc --noEmit` + ESLint) pass 100% (0 lỗi, 0 cảnh báo); `pnpm test` pass 18/18 files (54/54 tests); `pnpm build` pass (23/23 routes bao gồm `/payment-result` và `/payment-cancel`); `git diff --check` pass 0 lỗi.
 - **Lỗi hoặc đề xuất sai của AI đã phát hiện:** Không phát hiện (đã né các hook Orval cũ ở Issue #21 bằng cách gọi trực tiếp endpoint thực tế qua `orvalRequest`).
-- **Minh chứng:** Branch `feat/checkout-payments-and-seller-fulfillment`, commit `d235311`.
+- **Minh chứng:** PR #23; branch `feat/checkout-payments-and-seller-fulfillment`, commit `d235311`.
