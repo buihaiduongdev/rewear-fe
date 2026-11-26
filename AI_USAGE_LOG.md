@@ -689,4 +689,4 @@ Ghi một mục cho mỗi task có dùng AI. Cập nhật liên kết PR/commit 
 - **Phần tự làm hoặc đã chỉnh sửa:** Đối chiếu bố cục và token từ Figma (`05 · Buyer / Profile & addresses`, `17 · Seller / Shop settings & team`), rà soát tách nhỏ hai component quá dài (`AccountPage` và `SellerTeamSection`), sửa lỗi giữ trạng thái cũ của hộp thoại sửa hồ sơ và thêm bước xác nhận nội tuyến trước khi xóa tài khoản ngân hàng.
 - **Cách kiểm chứng:** `pnpm check` (`tsc --noEmit` + ESLint) pass 100% (0 lỗi, 0 cảnh báo); `pnpm test` pass 18/18 files (47/47 tests); `pnpm build` pass (24/24 routes bao gồm `/account`, `/help`, `/shops/[id]`); `git diff --check` pass 0 lỗi.
 - **Lỗi hoặc đề xuất sai của AI đã phát hiện:** Lần đầu AI để `EditProfileDialog` giữ trạng thái cũ khi mở lại bằng controlled state, gộp `AccountPage` (700 dòng) và `SellerTeamSection` (876 dòng) quá dài khó đọc và cho xóa ngay tài khoản ngân hàng không xác nhận; toàn bộ đã được khắc phục ở commit `e99c163`.
-- **Minh chứng:** Branch `feat/account-shop-rbac-and-storefront`, commits `5b3c038`, `e99c163`.
+- **Minh chứng:** PR #20; branch `feat/account-shop-rbac-and-storefront`, commits `5b3c038`, `e99c163`.
