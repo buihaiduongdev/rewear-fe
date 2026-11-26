@@ -2,11 +2,18 @@
 
 import { useRouter, useSearchParams } from 'next/navigation';
 
-import { ProductControllerFindAllSortByItem } from '@/shared/api/models';
+import {
+  type ProductControllerFindAllParams,
+  ProductControllerFindAllSortByItem,
+} from '@/shared/api/models';
 import { useCategoryControllerFindAll } from '@/shared/api/query-generated/categories/categories';
 import { useProductControllerFindAll } from '@/shared/api/query-generated/products/products';
 import { useShopControllerFindAll } from '@/shared/api/query-generated/shops/shops';
 import { keepPreviousData } from '@tanstack/react-query';
+
+type CatalogFindAllParams = ProductControllerFindAllParams & {
+  provinceId?: number;
+};
 
 export function useHomeCatalog(catalog = false) {
   const router = useRouter();
@@ -14,6 +21,7 @@ export function useHomeCatalog(catalog = false) {
   const search = searchParams.get('search') ?? '';
   const categoryId = searchParams.get('categoryId') ?? '';
   const shopId = searchParams.get('shopId') ?? '';
+  const provinceId = searchParams.get('provinceId') ?? '';
   const size = searchParams.get('size') ?? '';
   const condition = searchParams.get('condition') ?? '';
   const minPrice = searchParams.get('minPrice') ?? '';
@@ -39,29 +47,34 @@ export function useHomeCatalog(catalog = false) {
       ? [sortBy as ProductControllerFindAllSortByItem]
       : undefined;
 
+  const parsedProvinceId =
+    /^\d+$/.test(provinceId) && Number(provinceId) > 0
+      ? Number(provinceId)
+      : undefined;
+
   const priceFilters: string[] = [];
   if (minPrice) priceFilters.push(`$gte:${minPrice}`);
   if (maxPrice) priceFilters.push(`$lte:${maxPrice}`);
 
-  const products = useProductControllerFindAll(
-    {
-      page,
-      limit,
-      ...(search ? { search } : {}),
-      ...(categoryId ? { 'filter.categoryId': [categoryId] } : {}),
-      ...(shopId ? { 'filter.shopId': [shopId] } : {}),
-      ...(size ? { 'filter.size': [`$ilike:${size}`] } : {}),
-      ...(condition ? { 'filter.condition': [condition] } : {}),
-      ...(priceFilters.length > 0 ? { 'filter.price': priceFilters } : {}),
-      ...(validSortBy ? { sortBy: validSortBy } : {}),
+  const findAllParams: CatalogFindAllParams = {
+    page,
+    limit,
+    ...(search ? { search } : {}),
+    ...(categoryId ? { 'filter.categoryId': [categoryId] } : {}),
+    ...(shopId ? { 'filter.shopId': [shopId] } : {}),
+    ...(parsedProvinceId !== undefined ? { provinceId: parsedProvinceId } : {}),
+    ...(size ? { 'filter.size': [`$ilike:${size}`] } : {}),
+    ...(condition ? { 'filter.condition': [condition] } : {}),
+    ...(priceFilters.length > 0 ? { 'filter.price': priceFilters } : {}),
+    ...(validSortBy ? { sortBy: validSortBy } : {}),
+  };
+
+  const products = useProductControllerFindAll(findAllParams, {
+    query: {
+      placeholderData: keepPreviousData,
+      meta: { skipErrorToast: true },
     },
-    {
-      query: {
-        placeholderData: keepPreviousData,
-        meta: { skipErrorToast: true },
-      },
-    },
-  );
+  });
 
   function updateFilters(updates: Record<string, string | undefined>) {
     const next = new URLSearchParams(searchParams.toString());
@@ -81,6 +94,7 @@ export function useHomeCatalog(catalog = false) {
     search,
     categoryId,
     shopId,
+    provinceId,
     size,
     condition,
     minPrice,
