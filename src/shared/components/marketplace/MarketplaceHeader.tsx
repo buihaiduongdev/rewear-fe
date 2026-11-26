@@ -8,6 +8,8 @@ import Link from 'next/link';
 
 import { signOut, useSession } from 'next-auth/react';
 
+import { NotificationBell } from './NotificationBell';
+
 export function MarketplaceHeader({
   search,
   onSearch,
@@ -106,10 +108,14 @@ export function MarketplaceHeader({
           >
             Wishlist
           </Link>
-          <button type="button" disabled title="Messages are coming soon">
+          <Link
+            href="/messages"
+            className="inline-flex min-h-11 items-center hover:underline"
+          >
             Messages
-          </button>
+          </Link>
           {cartAction}
+          {session?.user && !session?.error && <NotificationBell />}
           {session?.user && !session?.error ? (
             <details className="relative">
               <summary className="flex min-h-11 cursor-pointer list-none items-center">
@@ -136,6 +142,18 @@ export function MarketplaceHeader({
                   className="flex min-h-11 items-center underline underline-offset-4"
                 >
                   Orders
+                </Link>
+                <Link
+                  href="/wallet"
+                  className="flex min-h-11 items-center underline underline-offset-4"
+                >
+                  Wallet &amp; Coins
+                </Link>
+                <Link
+                  href="/messages"
+                  className="flex min-h-11 items-center underline underline-offset-4"
+                >
+                  Messages
                 </Link>
                 <Link
                   href="/selling"
