@@ -689,4 +689,4 @@ Ghi một mục cho mỗi task có dùng AI. Cập nhật liên kết PR/commit 
 - **Phần tự làm hoặc đã chỉnh sửa:** Đối chiếu bố cục và token thiết kế từ Figma (`13 · Seller / Products & listings`, `18 · Admin / Product moderation`, `20 · Admin / Categories`), kiểm tra hợp đồng API với backend, rà soát độ rõ ràng dễ đọc và xác minh toàn bộ kết quả lint, build và kiểm thử trước khi mở PR.
 - **Cách kiểm chứng:** `pnpm check` (`tsc --noEmit` + ESLint) pass 100% (0 lỗi, 0 cảnh báo); `pnpm test` pass 17/17 files (51/51 tests, gồm 13 tests mới cho Gemini AI, bộ lọc khu vực và quản trị sản phẩm/danh mục); `pnpm build` pass (23/23 routes); `git diff --check` pass 0 lỗi.
 - **Lỗi hoặc đề xuất sai của AI đã phát hiện:** Không phát hiện.
-- **Minh chứng:** Branch `feat/gemini-ai-region-filter-and-admin-catalog`, commit `aad5e88`.
+- **Minh chứng:** PR #19; branch `feat/gemini-ai-region-filter-and-admin-catalog`, commit `aad5e88`.
