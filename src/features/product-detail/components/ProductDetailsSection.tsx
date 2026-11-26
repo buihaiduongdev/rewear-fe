@@ -44,7 +44,7 @@ export function ProductDetailsSection({
             <h3 className="text-rewear-text min-w-0 text-xl leading-snug font-semibold break-words">
               {product.shopId ? (
                 <Link
-                  href={`/products?shopId=${encodeURIComponent(product.shopId)}`}
+                  href={`/shops/${encodeURIComponent(product.shopId)}`}
                   className="decoration-rewear-muted hover:decoration-rewear-text underline underline-offset-4"
                 >
                   {product.shop?.name || 'Seller'}{' '}

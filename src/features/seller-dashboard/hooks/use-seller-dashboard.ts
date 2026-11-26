@@ -24,12 +24,17 @@ export function useSellerDashboard() {
   const memberships = useShopMemberships(enabled, session?.user.id);
 
   const activeShop = useMemo(() => {
-    return memberships.data?.data.find(
-      (m) => m.memberRole === 'OWNER' && m.status === 'ACTIVE',
+    const list = memberships.data?.data ?? [];
+    return (
+      list.find((m) => m.memberRole === 'OWNER' && m.status === 'ACTIVE') ??
+      list.find((m) => m.status === 'ACTIVE')
     );
   }, [memberships.data?.data]);
 
+  const isOwner = activeShop?.memberRole === 'OWNER';
   const shopName = activeShop?.shop.name || 'Seller workspace';
+  const shopDescription = activeShop?.shop.description ?? '';
+  const shopStatus = activeShop?.shop.status ?? 'ACTIVE';
   const shopId = activeShop?.shopId || '';
 
   const shopLogo =
@@ -74,7 +79,10 @@ export function useSellerDashboard() {
     enabled,
     memberships,
     activeShop,
+    isOwner,
     shopName,
+    shopDescription,
+    shopStatus,
     shopId,
     shopLogo,
     myProductsQuery,

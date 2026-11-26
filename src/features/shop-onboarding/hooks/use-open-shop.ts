@@ -11,6 +11,11 @@ import {
 
 import { useRouter } from 'next/navigation';
 
+import {
+  type BankAccountValidationErrors,
+  createShopBankAccount,
+  validateBankAccountFields,
+} from '@/modules/shop/api/shop-bank-accounts';
 import { uploadShopLogo } from '@/modules/shop/api/shop-logo';
 import {
   shopMembershipsQueryKey,
@@ -40,9 +45,20 @@ export function useOpenShop() {
   const { data: session, status } = useSession();
   const shopNameInputId = useId();
   const shopAboutInputId = useId();
+  const bankCodeInputId = useId();
+  const accountNumberInputId = useId();
+  const accountNameInputId = useId();
 
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
+  const [bankCode, setBankCode] = useState('');
+  const [accountNumber, setAccountNumber] = useState('');
+  const [accountName, setAccountName] = useState('');
+  const [ownerConfirmed, setOwnerConfirmed] = useState(false);
+  const [bankErrors, setBankErrors] = useState<BankAccountValidationErrors>({});
+  const [bankSaved, setBankSaved] = useState(false);
+  const [stepError, setStepError] = useState('');
+
   const [copied, setCopied] = useState(false);
   const [logoFile, setLogoFile] = useState<File | null>(null);
   const [logoPreview, setLogoPreview] = useState('');
@@ -122,9 +138,24 @@ export function useOpenShop() {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     if (!name.trim() || submitting) return;
+
+    if (!bankSaved) {
+      const validationErrors = validateBankAccountFields({
+        bankCode,
+        accountNumber,
+        accountName,
+        ownerConfirmed,
+      });
+      setBankErrors(validationErrors);
+      if (Object.keys(validationErrors).length > 0) return;
+    }
+
     setSubmitting(true);
     setLogoError('');
+    setStepError('');
+
     let id = createdShopId;
+    let isBankSaved = bankSaved;
     try {
       if (!id) {
         const result = await createShop.mutateAsync({
@@ -133,7 +164,23 @@ export function useOpenShop() {
         id = result.data.id;
         setCreatedShopId(id);
       }
-      if (logoFile) await uploadShopLogo(id, logoFile);
+
+      if (!isBankSaved) {
+        await createShopBankAccount(id, {
+          bankCode: bankCode.trim().toUpperCase(),
+          accountNumber: accountNumber.replace(/\s+/g, ''),
+          accountName: accountName.trim(),
+          ownerConfirmed: true,
+          isDefault: true,
+        });
+        isBankSaved = true;
+        setBankSaved(true);
+      }
+
+      if (logoFile) {
+        await uploadShopLogo(id, logoFile);
+      }
+
       await queryClient.invalidateQueries({
         queryKey: shopMembershipsQueryKey,
       });
@@ -141,10 +188,15 @@ export function useOpenShop() {
         `/selling/pickup?shopId=${encodeURIComponent(id)}&onboarding=true`,
       );
     } catch (error) {
-      if (id)
+      if (id && !isBankSaved) {
+        setStepError(
+          `Your shop was created, but your payout bank account could not be saved. ${getApiErrorMessage(error)} Fix the bank details and submit again.`,
+        );
+      } else if (id) {
         setLogoError(
           `Your shop was created, but the logo could not be uploaded. ${getApiErrorMessage(error)} You can retry or remove the logo to continue.`,
         );
+      }
     } finally {
       setSubmitting(false);
     }
@@ -153,10 +205,40 @@ export function useOpenShop() {
   return {
     shopNameInputId,
     shopAboutInputId,
+    bankCodeInputId,
+    accountNumberInputId,
+    accountNameInputId,
     name,
     setName,
     description,
     setDescription,
+    bankCode,
+    setBankCode: (value: string) => {
+      setBankCode(value);
+      if (bankErrors.bankCode)
+        setBankErrors((prev) => ({ ...prev, bankCode: undefined }));
+    },
+    accountNumber,
+    setAccountNumber: (value: string) => {
+      setAccountNumber(value);
+      if (bankErrors.accountNumber)
+        setBankErrors((prev) => ({ ...prev, accountNumber: undefined }));
+    },
+    accountName,
+    setAccountName: (value: string) => {
+      setAccountName(value);
+      if (bankErrors.accountName)
+        setBankErrors((prev) => ({ ...prev, accountName: undefined }));
+    },
+    ownerConfirmed,
+    setOwnerConfirmed: (value: boolean) => {
+      setOwnerConfirmed(value);
+      if (bankErrors.ownerConfirmed)
+        setBankErrors((prev) => ({ ...prev, ownerConfirmed: undefined }));
+    },
+    bankErrors,
+    bankSaved,
+    stepError,
     copied,
     logoPreview,
     logoFile,
