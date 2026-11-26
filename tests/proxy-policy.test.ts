@@ -47,6 +47,21 @@ describe('Public marketplace access', () => {
     }
   });
 
+  it('allows payment return and cancel routes through without redirecting mid-callback', () => {
+    expect(
+      getProxyDecision(
+        new URL('http://localhost:5000/payment-result?paymentId=pay-1'),
+        false,
+      ),
+    ).toEqual({ action: 'next' });
+    expect(
+      getProxyDecision(
+        new URL('http://localhost:5000/payment-cancel?checkoutId=chk-1'),
+        false,
+      ),
+    ).toEqual({ action: 'next' });
+  });
+
   it('keeps auth forms available to guests and redirects signed-in users Home', () => {
     const url = new URL('http://localhost:5000/login');
     expect(getProxyDecision(url, false)).toEqual({ action: 'next' });

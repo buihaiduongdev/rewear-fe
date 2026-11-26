@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 
-import { Badge } from '@/shared/components/ui/badge';
 import {
   Dialog,
   DialogContent,
@@ -19,40 +18,34 @@ export type { PaymentMethodId } from '../types';
 export type PaymentMethodOption = {
   id: PaymentMethodId;
   name: string;
-  category: string;
-  available: boolean;
-  statusText?: string;
+  description: string;
+  badge?: string;
 };
 
 export const PAYMENT_METHODS: PaymentMethodOption[] = [
   {
     id: 'MOMO',
-    name: 'MoMo',
-    category: 'Wallet',
-    available: true,
+    name: 'MoMo Sandbox',
+    description: 'Pay online via MoMo e-wallet or QR code',
+    badge: 'Instant',
   },
   {
-    id: 'VNPAY',
-    name: 'VNPAY',
-    category: 'Bank app / QR code',
-    available: false,
-    statusText: 'Unavailable',
+    id: 'PAYOS',
+    name: 'PayOS VietQR',
+    description: 'Bank transfer via VietQR with instant verification',
+    badge: 'VietQR',
   },
   {
-    id: 'ZALOPAY',
-    name: 'ZaloPay',
-    category: 'Wallet',
-    available: false,
-    statusText: 'Unavailable',
-  },
-  {
-    id: 'CARD',
-    name: 'Bank card',
-    category: 'Domestic / Visa / Mastercard',
-    available: false,
-    statusText: 'Unavailable',
+    id: 'COD',
+    name: 'Cash on Delivery (COD)',
+    description: 'Pay in cash when GHN delivers your parcel',
   },
 ];
+
+export function getPaymentMethodLabel(method: PaymentMethodId): string {
+  const found = PAYMENT_METHODS.find((item) => item.id === method);
+  return found?.name ?? 'MoMo Sandbox';
+}
 
 export type PaymentMethodModalProps = {
   open: boolean;
@@ -69,10 +62,13 @@ export function PaymentMethodModal({
 }: PaymentMethodModalProps) {
   const [tempMethod, setTempMethod] = useState<PaymentMethodId>(selectedMethod);
 
+  const handleClose = () => {
+    setTempMethod(selectedMethod);
+    onOpenChange(false);
+  };
+
   const handleOpenChange = (nextOpen: boolean) => {
-    if (nextOpen) {
-      setTempMethod(selectedMethod);
-    }
+    setTempMethod(selectedMethod);
     onOpenChange(nextOpen);
   };
 
@@ -83,92 +79,91 @@ export function PaymentMethodModal({
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogContent className="max-w-[480px] space-y-6 p-6">
-        <DialogHeader>
+      <DialogContent
+        showCloseButton={false}
+        className="border-rewear-border bg-rewear-surface max-w-[520px] space-y-6 rounded-none border p-6 sm:p-8"
+      >
+        <div className="flex items-center justify-between">
+          <button
+            type="button"
+            onClick={handleClose}
+            className="text-rewear-muted hover:text-rewear-text min-h-11 cursor-pointer text-sm font-semibold"
+          >
+            Close ×
+          </button>
+        </div>
+
+        <DialogHeader className="gap-1">
           <DialogTitle className="text-[28px] leading-[34px] font-semibold tracking-[-0.02em]">
             Payment method
           </DialogTitle>
-          <DialogDescription className="sr-only">
-            Payment method selection.
+          <DialogDescription className="text-rewear-muted text-sm">
+            Choose how you want to pay for this checkout.
           </DialogDescription>
         </DialogHeader>
 
-        <div className="space-y-3">
+        <div
+          className="space-y-3"
+          role="radiogroup"
+          aria-label="Payment method"
+        >
           {PAYMENT_METHODS.map((method) => {
             const isSelected = method.id === tempMethod;
             return (
-              <div
+              <button
                 key={method.id}
-                role={method.available ? 'button' : undefined}
-                tabIndex={method.available ? 0 : -1}
-                aria-disabled={!method.available}
-                onClick={() => {
-                  if (method.available) {
-                    setTempMethod(method.id);
-                  }
-                }}
-                onKeyDown={(e) => {
-                  if (
-                    method.available &&
-                    (e.key === 'Enter' || e.key === ' ')
-                  ) {
-                    setTempMethod(method.id);
-                  }
-                }}
+                type="button"
+                role="radio"
+                aria-checked={isSelected}
+                onClick={() => setTempMethod(method.id)}
                 className={cn(
-                  'flex items-center justify-between gap-3 border p-4 text-left transition-all',
-                  method.available
-                    ? 'cursor-pointer'
-                    : 'bg-rewear-soft/30 cursor-not-allowed opacity-50',
-                  isSelected && method.available
-                    ? 'border-rewear-text bg-rewear-soft/50 ring-rewear-text ring-1'
-                    : method.available
-                      ? 'border-rewear-border/40 hover:border-rewear-border bg-rewear-surface'
-                      : 'border-rewear-border/20',
+                  'flex min-h-[64px] w-full cursor-pointer items-center justify-between gap-3 border p-4 text-left transition-colors',
+                  isSelected
+                    ? 'border-rewear-text bg-rewear-soft/70 ring-rewear-text ring-1'
+                    : 'border-rewear-border bg-rewear-surface hover:border-rewear-text/60',
                 )}
               >
                 <div className="flex min-w-0 items-center gap-3">
                   <span
                     className={cn(
-                      'text-lg font-bold',
-                      isSelected ? 'text-rewear-text' : 'text-rewear-muted',
+                      'flex size-5 shrink-0 items-center justify-center rounded-full border',
+                      isSelected
+                        ? 'border-rewear-text bg-rewear-text'
+                        : 'border-rewear-muted bg-transparent',
                     )}
                     aria-hidden="true"
                   >
-                    {isSelected ? '◉' : '○'}
+                    {isSelected && (
+                      <span className="bg-rewear-accent size-2 rounded-full" />
+                    )}
                   </span>
                   <div className="min-w-0">
                     <p className="text-rewear-text text-base font-semibold">
                       {method.name}
                     </p>
-                    <p className="text-rewear-muted truncate text-xs">
-                      {method.category}
+                    <p className="text-rewear-muted text-xs">
+                      {method.description}
                     </p>
                   </div>
                 </div>
 
-                {!method.available && method.statusText && (
-                  <Badge
-                    variant="outline"
-                    className="h-5 shrink-0 border-amber-200 bg-amber-50 px-1.5 text-[11px] text-amber-700"
-                  >
-                    {method.statusText}
-                  </Badge>
+                {method.badge && (
+                  <span className="border-rewear-border bg-rewear-surface text-rewear-muted shrink-0 border px-2 py-0.5 font-mono text-[11px] font-semibold uppercase">
+                    {method.badge}
+                  </span>
                 )}
-              </div>
+              </button>
             );
           })}
         </div>
 
-        <div className="pt-2">
-          <button
-            type="button"
-            onClick={handleConfirm}
-            className="bg-rewear-accent text-rewear-text flex h-12 w-full cursor-pointer items-center justify-center text-sm font-semibold transition-opacity hover:opacity-90"
-          >
-            Use this payment method
-          </button>
-        </div>
+        <button
+          type="button"
+          onClick={handleConfirm}
+          className="bg-rewear-accent text-rewear-text flex h-12 w-full cursor-pointer items-center justify-center text-sm font-semibold transition-opacity hover:opacity-90"
+        >
+          Use selected method
+        </button>
       </DialogContent>
     </Dialog>
   );

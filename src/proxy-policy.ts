@@ -13,7 +13,9 @@ const isPublicMarketplaceRoute = (pathname: string) =>
   pathname.startsWith('/products/') ||
   pathname === '/shops' ||
   pathname.startsWith('/shops/') ||
-  pathname === '/help';
+  pathname === '/help' ||
+  pathname === '/payment-result' ||
+  pathname === '/payment-cancel';
 
 export const getProxyDecision = (
   url: URL,
