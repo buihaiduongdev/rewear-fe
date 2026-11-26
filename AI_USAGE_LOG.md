@@ -733,4 +733,4 @@ Ghi một mục cho mỗi task có dùng AI. Cập nhật liên kết PR/commit 
 - **Phần tự làm hoặc đã chỉnh sửa:** Đối chiếu hợp đồng API thực tế của backend (`wallet`, `coins`, `shop-finance`, `chat`, `ratings`, `reports`, `shop-follows`, `notifications`), kiểm tra thiết kế Figma (`10 · Buyer / Messages`, `16 · Seller / Funds & withdrawals`, `22 · Admin / Withdrawals`) và rà soát toàn bộ kiểm thử, lint và build trước khi mở PR.
 - **Cách kiểm chứng:** `pnpm check` (`tsc --noEmit` + ESLint) pass 100% (0 lỗi, 0 cảnh báo); `pnpm test` pass 20/20 files (54/54 tests); `pnpm build` pass (24/24 routes bao gồm `/wallet`, `/messages`, `/admin/payouts`); `git diff --check` pass 0 lỗi.
 - **Lỗi hoặc đề xuất sai của AI đã phát hiện:** Không phát hiện.
-- **Minh chứng:** Branch `feat/wallet-payouts-chat-and-social`, commit `21d2399`.
+- **Minh chứng:** PR #24; branch `feat/wallet-payouts-chat-and-social`, commit `21d2399`.
