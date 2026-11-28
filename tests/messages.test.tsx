@@ -10,9 +10,8 @@ const { api } = vi.hoisted(() => ({
     listMessages: vi.fn(),
     sendMessage: vi.fn(),
     markRead: vi.fn(),
-    listShopProducts: vi.fn(),
-    listBuyerOrders: vi.fn(),
-    listShopOrders: vi.fn(),
+    getProductContext: vi.fn(),
+    getOrderContext: vi.fn(),
   },
 }));
 
@@ -35,13 +34,17 @@ const conversation = {
   lastMessageAt: '2026-11-25T10:00:00.000Z',
 };
 
-function renderChat() {
+function renderChat(props?: {
+  initialShopId?: string;
+  initialProductId?: string;
+  initialOrderId?: string;
+}) {
   const queryClient = new QueryClient({
     defaultOptions: { queries: { retry: false }, mutations: { retry: false } },
   });
   return render(
     <QueryClientProvider client={queryClient}>
-      <MessageWorkspace side="BUYER" />
+      <MessageWorkspace side="BUYER" {...props} />
     </QueryClientProvider>,
   );
 }
@@ -53,6 +56,7 @@ describe('MessageWorkspace', () => {
     api.listConversations.mockResolvedValue({
       data: { items: [conversation], total: 1, limit: 50, offset: 0 },
     });
+    api.openConversation.mockResolvedValue({ data: conversation });
     api.listMessages.mockResolvedValue({
       data: {
         items: [
@@ -60,22 +64,8 @@ describe('MessageWorkspace', () => {
             id: 'msg-1',
             conversationId: 'thread-1',
             senderId: 'seller-1',
-            text: 'Here is your piece and order reference.',
+            text: 'Hello, this item is available.',
             media: [],
-            product: {
-              id: 'prod-1',
-              title: 'Lemaire wool coat',
-              price: 580000,
-              status: 'ACTIVE',
-            },
-            orderId: 'order-1',
-            order: {
-              id: 'order-1',
-              orderCode: 'RW-009911',
-              status: 'shipping',
-              total: 610000,
-              itemCount: 1,
-            },
             createdAt: '2026-11-25T10:00:00.000Z',
           },
         ],
@@ -88,46 +78,34 @@ describe('MessageWorkspace', () => {
       data: { ...conversation, unreadCount: 0 },
     });
     api.sendMessage.mockResolvedValue({ data: { id: 'msg-2' } });
-    api.listShopProducts.mockResolvedValue({
+    api.getProductContext.mockResolvedValue({
       data: {
-        data: [
-          {
-            id: 'prod-2',
-            title: 'Vintage linen shirt',
-            price: 320000,
-            status: 'ACTIVE',
-          },
-        ],
+        id: 'prod-1',
+        title: 'Lemaire wool coat',
+        price: 580000,
+        status: 'ACTIVE',
       },
     });
-    api.listBuyerOrders.mockResolvedValue({
-      data: [
-        {
-          id: 'order-2',
-          orderCode: 'RW-009922',
-          status: 'delivered',
-          total: 420000,
-          shopId: 'shop-1',
-        },
-      ],
+    api.getOrderContext.mockResolvedValue({
+      data: {
+        id: 'order-1',
+        orderCode: 'RW-009911',
+        status: 'shipping',
+        total: 610000,
+      },
     });
   });
 
-  it('renders product and order cards, marks unread conversation read, and sends an attached order card', async () => {
+  it('marks unread conversation read and sends text-only messages', async () => {
     renderChat();
 
     expect(await screen.findByLabelText('2 unread')).toBeInTheDocument();
     fireEvent.click(screen.getByRole('button', { name: /Hanoi Archive/i }));
 
-    expect(await screen.findByText('Lemaire wool coat')).toBeInTheDocument();
-    expect(screen.getByText('Order RW-009911')).toBeInTheDocument();
+    expect(
+      await screen.findByText('Hello, this item is available.'),
+    ).toBeInTheDocument();
     await waitFor(() => expect(api.markRead).toHaveBeenCalledWith('thread-1'));
-
-    // Attach order card
-    fireEvent.click(screen.getByRole('button', { name: 'Attach order' }));
-    fireEvent.click(
-      await screen.findByRole('button', { name: /Order RW-009922/i }),
-    );
 
     const input = screen.getByRole('textbox', { name: 'Message' });
     fireEvent.change(input, { target: { value: 'Checking on delivery' } });
@@ -136,29 +114,20 @@ describe('MessageWorkspace', () => {
     await waitFor(() =>
       expect(api.sendMessage).toHaveBeenCalledWith('thread-1', {
         text: 'Checking on delivery',
-        orderId: 'order-2',
       }),
     );
   });
 
-  it('attaches and sends a product card from the shop', async () => {
-    renderChat();
+  it('loads product and order context from query params via separate APIs', async () => {
+    renderChat({
+      initialShopId: 'shop-1',
+      initialProductId: 'prod-1',
+      initialOrderId: 'order-1',
+    });
 
-    fireEvent.click(
-      await screen.findByRole('button', { name: /Hanoi Archive/i }),
-    );
-    fireEvent.click(
-      await screen.findByRole('button', { name: 'Attach product' }),
-    );
-    fireEvent.click(
-      await screen.findByRole('button', { name: /Vintage linen shirt/i }),
-    );
-    fireEvent.click(screen.getByRole('button', { name: 'Send' }));
-
-    await waitFor(() =>
-      expect(api.sendMessage).toHaveBeenCalledWith('thread-1', {
-        productId: 'prod-2',
-      }),
-    );
+    expect(await screen.findByText('Lemaire wool coat')).toBeInTheDocument();
+    expect(await screen.findByText('Order RW-009911')).toBeInTheDocument();
+    expect(api.getProductContext).toHaveBeenCalledWith('prod-1');
+    expect(api.getOrderContext).toHaveBeenCalledWith('order-1');
   });
 });

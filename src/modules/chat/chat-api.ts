@@ -15,30 +15,12 @@ export type ChatConversation = {
   lastMessageAt: string | null;
 };
 
-export type ChatProductCard = {
-  id: string;
-  title: string;
-  price: number | null;
-  status: string;
-};
-
-export type ChatOrderCard = {
-  id: string;
-  orderCode: string;
-  status: string;
-  total: number;
-  itemCount: number;
-};
-
 export type ChatMessage = {
   id: string;
   conversationId: string;
   senderId: string;
   text: string | null;
   media: { id: string; mimeType: string; sizeBytes: number }[];
-  product: ChatProductCard | null;
-  orderId: string | null;
-  order: ChatOrderCard | null;
   createdAt: string;
 };
 
@@ -52,24 +34,20 @@ export type ChatPage<T> = {
 export type SendChatPayload = {
   text?: string;
   mediaIds?: string[];
-  productId?: string;
-  orderId?: string;
 };
 
-export type ShopProductOption = {
+export type ChatProductContext = {
   id: string;
   title: string;
   price: number | null;
   status: string;
 };
 
-export type ChatOrderOption = {
+export type ChatOrderContext = {
   id: string;
   orderCode: string;
   status: string;
   total: number;
-  shopId?: string;
-  buyerId?: string;
 };
 
 export const chatApi = {
@@ -97,18 +75,12 @@ export const chatApi = {
       `/chat/conversations/${conversationId}/read`,
       {},
     ),
-  listShopProducts: (shopId: string) =>
-    axiosClient.get<never, Envelope<{ data: ShopProductOption[] }>>(
-      '/products',
-      { params: { limit: 20, page: 1, 'filter.shopId': [shopId] } },
+  getProductContext: (productId: string) =>
+    axiosClient.get<never, Envelope<ChatProductContext>>(
+      `/products/${encodeURIComponent(productId)}`,
     ),
-  listBuyerOrders: () =>
-    axiosClient.get<never, Envelope<ChatOrderOption[]>>('/orders/mine', {
-      params: { limit: 20, offset: 0 },
-    }),
-  listShopOrders: (shopId: string) =>
-    axiosClient.get<never, Envelope<ChatOrderOption[]>>(
-      `/shops/${shopId}/orders`,
-      { params: { limit: 20, offset: 0 } },
+  getOrderContext: (orderId: string) =>
+    axiosClient.get<never, Envelope<ChatOrderContext>>(
+      `/orders/${encodeURIComponent(orderId)}`,
     ),
 };

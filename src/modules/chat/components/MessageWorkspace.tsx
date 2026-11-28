@@ -14,12 +14,11 @@ import { formatPrice } from '@/shared/utils/product';
 import {
   useInfiniteQuery,
   useMutation,
+  useQuery,
   useQueryClient,
 } from '@tanstack/react-query';
-import { Package, ReceiptText, Send } from 'lucide-react';
+import { Package, ReceiptText, Send, X } from 'lucide-react';
 import { useSession } from 'next-auth/react';
-
-import { type ChatAttachment, ChatAttachmentBar } from './ChatAttachmentBar';
 
 export function MessageWorkspace({
   side,
@@ -40,27 +39,23 @@ export function MessageWorkspace({
 
   const [selectedId, setSelectedId] = useState<string>();
   const [text, setText] = useState('');
-  const [attachment, setAttachment] = useState<ChatAttachment | null>(() => {
-    if (initialProductId) {
-      return {
-        kind: 'PRODUCT',
-        id: initialProductId,
-        label: `Product ${initialProductId.slice(0, 8)}`,
-      };
-    }
-    if (initialOrderId) {
-      return {
-        kind: 'ORDER',
-        id: initialOrderId,
-        label: `Order ${initialOrderId.slice(0, 8)}`,
-      };
-    }
-    return null;
-  });
-  const [picker, setPicker] = useState<'PRODUCT' | 'ORDER' | null>(null);
+  const [dismissedProduct, setDismissedProduct] = useState(false);
+  const [dismissedOrder, setDismissedOrder] = useState(false);
 
   const bottomRef = useRef<HTMLDivElement>(null);
   const openedShopRef = useRef<string | null>(null);
+
+  const productContextQuery = useQuery({
+    queryKey: ['chat', 'context-product', initialProductId],
+    queryFn: () => chatApi.getProductContext(initialProductId!),
+    enabled: enabled && Boolean(initialProductId) && !dismissedProduct,
+  });
+
+  const orderContextQuery = useQuery({
+    queryKey: ['chat', 'context-order', initialOrderId],
+    queryFn: () => chatApi.getOrderContext(initialOrderId!),
+    enabled: enabled && Boolean(initialOrderId) && !dismissedOrder,
+  });
 
   const conversationsQuery = useInfiniteQuery({
     queryKey: ['chat', 'conversations', session?.user.id],
@@ -150,21 +145,10 @@ export function MessageWorkspace({
   }, [selectedId, activeConversation?.unreadCount, queryClient]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const sendMutation = useMutation({
-    mutationFn: (payload: {
-      conversationId: string;
-      text?: string;
-      productId?: string;
-      orderId?: string;
-    }) =>
-      chatApi.sendMessage(payload.conversationId, {
-        ...(payload.text ? { text: payload.text } : {}),
-        ...(payload.productId ? { productId: payload.productId } : {}),
-        ...(payload.orderId ? { orderId: payload.orderId } : {}),
-      }),
+    mutationFn: (payload: { conversationId: string; text: string }) =>
+      chatApi.sendMessage(payload.conversationId, { text: payload.text }),
     onSuccess: () => {
       setText('');
-      setAttachment(null);
-      setPicker(null);
       void queryClient.invalidateQueries({ queryKey: ['chat'] });
     },
   });
@@ -199,20 +183,21 @@ export function MessageWorkspace({
   }
 
   const canSend =
-    Boolean(selectedId) &&
-    !sendMutation.isPending &&
-    (Boolean(text.trim()) || Boolean(attachment));
+    Boolean(selectedId) && !sendMutation.isPending && Boolean(text.trim());
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-    if (!canSend || !selectedId) return;
-    sendMutation.mutate({
-      conversationId: selectedId,
-      text: text.trim() || undefined,
-      productId: attachment?.kind === 'PRODUCT' ? attachment.id : undefined,
-      orderId: attachment?.kind === 'ORDER' ? attachment.id : undefined,
-    });
+    const trimmed = text.trim();
+    if (!canSend || !selectedId || !trimmed) return;
+    sendMutation.mutate({ conversationId: selectedId, text: trimmed });
   };
+
+  const productContext = !dismissedProduct
+    ? productContextQuery.data?.data
+    : undefined;
+  const orderContext = !dismissedOrder
+    ? orderContextQuery.data?.data
+    : undefined;
 
   return (
     <section className="space-y-6">
@@ -221,7 +206,6 @@ export function MessageWorkspace({
       </h1>
 
       <div className="border-rewear-border grid min-h-[560px] border bg-white md:grid-cols-[288px_1fr]">
-        {/* Left thread list */}
         <aside className="border-rewear-border flex flex-col border-b p-4 md:border-r md:border-b-0">
           <h2 className="mb-3 text-sm font-semibold">Conversations</h2>
           {conversationsQuery.isPending ? (
@@ -246,10 +230,7 @@ export function MessageWorkspace({
                     <button
                       type="button"
                       disabled={sendMutation.isPending}
-                      onClick={() => {
-                        setSelectedId(item.id);
-                        setPicker(null);
-                      }}
+                      onClick={() => setSelectedId(item.id)}
                       className={`flex min-h-12 w-full items-center justify-between gap-3 px-3 py-3 text-left text-sm transition ${
                         isSelected
                           ? 'bg-rewear-soft font-semibold'
@@ -284,7 +265,6 @@ export function MessageWorkspace({
           )}
         </aside>
 
-        {/* Right active thread */}
         <div className="flex min-h-[560px] flex-col p-5">
           {!selectedId ? (
             <p className="text-rewear-muted m-auto text-sm">
@@ -302,13 +282,66 @@ export function MessageWorkspace({
                 </h2>
                 {activeConversation && side === 'BUYER' && (
                   <Link
-                    href={`/products?shopId=${encodeURIComponent(activeConversation.shopId)}`}
+                    href={`/shops/${encodeURIComponent(activeConversation.shopId)}`}
                     className="text-rewear-muted hover:text-rewear-text text-xs font-semibold underline underline-offset-4"
                   >
                     Visit shop
                   </Link>
                 )}
               </div>
+
+              {(productContext || orderContext) && (
+                <div className="border-rewear-border bg-rewear-soft mt-3 space-y-2 border p-3">
+                  {productContext && (
+                    <div className="flex items-center justify-between gap-3">
+                      <Link
+                        href={`/products/${productContext.id}`}
+                        className="flex min-w-0 items-center gap-2 text-xs hover:underline"
+                      >
+                        <Package size={14} aria-hidden="true" />
+                        <span className="truncate font-semibold">
+                          {productContext.title}
+                        </span>
+                        <span className="font-mono tabular-nums">
+                          {formatPrice(productContext.price)}
+                        </span>
+                      </Link>
+                      <button
+                        type="button"
+                        aria-label="Dismiss product context"
+                        onClick={() => setDismissedProduct(true)}
+                        className="text-rewear-muted hover:text-rewear-text p-1"
+                      >
+                        <X size={14} />
+                      </button>
+                    </div>
+                  )}
+                  {orderContext && (
+                    <div className="flex items-center justify-between gap-3">
+                      <Link
+                        href={`/orders/${orderContext.id}`}
+                        className="flex min-w-0 items-center gap-2 text-xs hover:underline"
+                      >
+                        <ReceiptText size={14} aria-hidden="true" />
+                        <span className="font-mono font-semibold">
+                          Order {orderContext.orderCode}
+                        </span>
+                        <span className="font-mono tabular-nums">
+                          {formatPrice(orderContext.total)}
+                        </span>
+                      </Link>
+                      <button
+                        type="button"
+                        aria-label="Dismiss order context"
+                        onClick={() => setDismissedOrder(true)}
+                        className="text-rewear-muted hover:text-rewear-text p-1"
+                      >
+                        <X size={14} />
+                      </button>
+                    </div>
+                  )}
+                </div>
+              )}
 
               <div
                 className="flex-1 space-y-4 overflow-y-auto py-5"
@@ -339,16 +372,13 @@ export function MessageWorkspace({
 
                 {messages.map((message) => {
                   const isMine = message.senderId === session?.user.id;
-                  const cardClass = isMine
-                    ? 'border-white/20 bg-white/10 hover:bg-white/15'
-                    : 'border-rewear-border bg-white hover:bg-rewear-soft/40';
                   return (
                     <div
                       key={message.id}
                       className={`flex ${isMine ? 'justify-end' : 'justify-start'}`}
                     >
                       <div
-                        className={`max-w-[82%] space-y-2.5 p-4 ${
+                        className={`max-w-[82%] space-y-2 p-4 ${
                           isMine
                             ? 'bg-rewear-text text-white'
                             : 'bg-rewear-soft text-rewear-text'
@@ -358,60 +388,6 @@ export function MessageWorkspace({
                           <p className="text-sm leading-6 break-words whitespace-pre-wrap">
                             {message.text}
                           </p>
-                        )}
-
-                        {message.product && (
-                          <Link
-                            href={`/products/${message.product.id}`}
-                            className={`block border p-3 text-left transition ${cardClass}`}
-                          >
-                            <div className="flex items-center gap-2 text-xs font-semibold opacity-80">
-                              <Package size={14} aria-hidden="true" />
-                              <span>Product card</span>
-                            </div>
-                            <p className="mt-1 text-sm font-semibold">
-                              {message.product.title}
-                            </p>
-                            <div className="mt-1 flex items-center justify-between gap-4 text-xs">
-                              <span className="font-mono font-semibold tabular-nums">
-                                {formatPrice(message.product.price)}
-                              </span>
-                              <span className="uppercase opacity-80">
-                                {message.product.status}
-                              </span>
-                            </div>
-                          </Link>
-                        )}
-
-                        {message.order && (
-                          <Link
-                            href={
-                              side === 'BUYER'
-                                ? `/orders/${message.order.id}`
-                                : '/selling?tab=orders'
-                            }
-                            className={`block border p-3 text-left transition ${cardClass}`}
-                          >
-                            <div className="flex items-center gap-2 text-xs font-semibold opacity-80">
-                              <ReceiptText size={14} aria-hidden="true" />
-                              <span>Order card</span>
-                            </div>
-                            <p className="mt-1 font-mono text-sm font-semibold">
-                              Order {message.order.orderCode}
-                            </p>
-                            <div className="mt-1 flex items-center justify-between gap-4 text-xs">
-                              <span className="font-mono font-semibold tabular-nums">
-                                {formatPrice(message.order.total)} ·{' '}
-                                {message.order.itemCount}{' '}
-                                {message.order.itemCount === 1
-                                  ? 'item'
-                                  : 'items'}
-                              </span>
-                              <span className="uppercase opacity-80">
-                                {message.order.status}
-                              </span>
-                            </div>
-                          </Link>
                         )}
 
                         {message.media.length > 0 && (
@@ -433,47 +409,10 @@ export function MessageWorkspace({
                 <div ref={bottomRef} />
               </div>
 
-              <ChatAttachmentBar
-                side={side}
-                enabled={enabled}
-                userId={session?.user.id}
-                activeShopId={activeConversation?.shopId ?? shopId}
-                activeConversation={activeConversation}
-                picker={picker}
-                setPicker={setPicker}
-                attachment={attachment}
-                onSelectAttachment={setAttachment}
-              />
-
               <form
                 onSubmit={handleSubmit}
-                className="border-rewear-border space-y-3 border-t pt-4"
+                className="border-rewear-border border-t pt-4"
               >
-                <div className="flex flex-wrap gap-2">
-                  <button
-                    type="button"
-                    onClick={() =>
-                      setPicker((curr) =>
-                        curr === 'PRODUCT' ? null : 'PRODUCT',
-                      )
-                    }
-                    className="border-rewear-border hover:bg-rewear-soft inline-flex min-h-9 items-center gap-1.5 border px-3 text-xs font-semibold"
-                  >
-                    <Package size={14} aria-hidden="true" />
-                    Attach product
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() =>
-                      setPicker((curr) => (curr === 'ORDER' ? null : 'ORDER'))
-                    }
-                    className="border-rewear-border hover:bg-rewear-soft inline-flex min-h-9 items-center gap-1.5 border px-3 text-xs font-semibold"
-                  >
-                    <ReceiptText size={14} aria-hidden="true" />
-                    Attach order
-                  </button>
-                </div>
-
                 <div className="flex gap-3">
                   <label className="sr-only" htmlFor="message-text">
                     Message
