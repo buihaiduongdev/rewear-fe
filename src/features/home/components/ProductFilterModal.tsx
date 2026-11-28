@@ -28,8 +28,10 @@ type Props = {
   isOpen: boolean;
   onClose: () => void;
   categories: Array<{ id: string; name: string }>;
+  provinces?: Array<{ id: number; name: string }>;
   currentFilters: {
     categoryId?: string;
+    provinceId?: string;
     size?: string;
     condition?: string;
     minPrice?: string;
@@ -37,6 +39,7 @@ type Props = {
   };
   onApply: (filters: {
     categoryId?: string;
+    provinceId?: string;
     size?: string;
     condition?: string;
     minPrice?: string;
@@ -46,12 +49,16 @@ type Props = {
 
 function FilterForm({
   categories,
+  provinces = [],
   currentFilters,
   onApply,
   onClose,
 }: Omit<Props, 'isOpen'>) {
   const [selectedCategory, setSelectedCategory] = useState(
     currentFilters.categoryId ?? '',
+  );
+  const [selectedProvince, setSelectedProvince] = useState(
+    currentFilters.provinceId ?? '',
   );
   const [selectedSize, setSelectedSize] = useState(currentFilters.size ?? '');
   const [selectedCondition, setSelectedCondition] = useState(
@@ -87,6 +94,7 @@ function FilterForm({
   const handleApply = () => {
     onApply({
       categoryId: selectedCategory || undefined,
+      provinceId: selectedProvince || undefined,
       size: selectedSize || undefined,
       condition: selectedCondition || undefined,
       minPrice: selectedMinPrice || undefined,
@@ -112,7 +120,7 @@ function FilterForm({
           Filters
         </DialogTitle>
         <DialogDescription className="sr-only">
-          Filter garments by category, size, condition, and price.
+          Filter garments by category, shop region, size, condition, and price.
         </DialogDescription>
       </DialogHeader>
 
@@ -135,6 +143,29 @@ function FilterForm({
             {categories.map((cat) => (
               <option key={cat.id} value={cat.id}>
                 {cat.name}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        {/* Shop Region / Province Field */}
+        <div className="bg-rewear-soft border-rewear-border flex h-20 flex-col justify-between border p-3 px-4">
+          <label
+            htmlFor="filter-province"
+            className="text-rewear-text text-sm leading-5 font-semibold"
+          >
+            Shop region
+          </label>
+          <select
+            id="filter-province"
+            value={selectedProvince}
+            onChange={(e) => setSelectedProvince(e.target.value)}
+            className="text-rewear-text w-full cursor-pointer bg-transparent text-base leading-6 outline-none"
+          >
+            <option value="">All regions</option>
+            {provinces.map((province) => (
+              <option key={province.id} value={String(province.id)}>
+                {province.name}
               </option>
             ))}
           </select>
@@ -293,6 +324,7 @@ export function ProductFilterModal({
   isOpen,
   onClose,
   categories,
+  provinces = [],
   currentFilters,
   onApply,
 }: Props) {
@@ -305,11 +337,12 @@ export function ProductFilterModal({
     >
       <DialogContent
         showCloseButton={false}
-        className="border-rewear-border bg-rewear-surface max-w-[520px] rounded-none border p-6 shadow-2xl sm:max-w-[520px] md:p-8"
+        className="border-rewear-border bg-rewear-surface max-h-[90dvh] max-w-[520px] overflow-y-auto rounded-none border p-6 shadow-2xl sm:max-w-[520px] md:p-8"
       >
         {isOpen && (
           <FilterForm
             categories={categories}
+            provinces={provinces}
             currentFilters={currentFilters}
             onApply={onApply}
             onClose={onClose}

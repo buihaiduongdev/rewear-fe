@@ -27,6 +27,7 @@ export function ProductsPage() {
   const {
     search,
     categoryId,
+    provinceId,
     size,
     condition,
     minPrice,
@@ -35,6 +36,7 @@ export function ProductsPage() {
     page,
     limit,
     categories,
+    provinces,
     products,
     updateFilters,
     localSearch,
@@ -48,6 +50,7 @@ export function ProductsPage() {
     meta,
     activeShop,
     activeCategory,
+    activeProvince,
     hasFilters,
     activeFilterCount,
     sortLabel,
@@ -301,6 +304,19 @@ export function ProductsPage() {
                   </button>
                 </span>
               )}
+              {provinceId && (
+                <span className="bg-rewear-soft text-rewear-text inline-flex items-center gap-1.5 rounded-full px-3 py-1 font-medium">
+                  Region: {activeProvince?.name ?? `#${provinceId}`}
+                  <button
+                    type="button"
+                    onClick={() => updateFilters({ provinceId: undefined })}
+                    className="text-rewear-muted hover:text-rewear-text ml-0.5 cursor-pointer"
+                    aria-label="Remove region filter"
+                  >
+                    ×
+                  </button>
+                </span>
+              )}
               <button
                 type="button"
                 className="text-rewear-muted hover:text-rewear-text ml-2 cursor-pointer font-semibold underline underline-offset-4"
@@ -310,6 +326,7 @@ export function ProductsPage() {
                     search: undefined,
                     categoryId: undefined,
                     shopId: undefined,
+                    provinceId: undefined,
                     size: undefined,
                     condition: undefined,
                     minPrice: undefined,
@@ -417,8 +434,10 @@ export function ProductsPage() {
         isOpen={isFilterModalOpen}
         onClose={() => setIsFilterModalOpen(false)}
         categories={categories.data?.data ?? []}
+        provinces={provinces.data?.data ?? []}
         currentFilters={{
           categoryId: categoryId || undefined,
+          provinceId: provinceId || undefined,
           size: size || undefined,
           condition: condition || undefined,
           minPrice: minPrice || undefined,

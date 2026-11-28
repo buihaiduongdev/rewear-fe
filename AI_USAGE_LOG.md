@@ -678,3 +678,15 @@ Ghi một mục cho mỗi task có dùng AI. Cập nhật liên kết PR/commit 
 - **Cách kiểm chứng:** Chạy `pnpm check` (TypeScript noEmit pass, ESLint 0 errors, Prettier pass), `vitest run tests/administrative-division-fields.test.tsx` pass 2/2.
 - **Lỗi hoặc đề xuất sai của AI đã phát hiện:** Lỗi type casting `any` kích hoạt cảnh báo lint trong `use-pickup-address-form.ts`; đã điều chỉnh dùng `as unknown as PickupLocationControllerSaveShopBody`.
 - **Minh chứng:** PR #18; branch `buihaiduongdev/ghn-pickup-settings`.
+
+### 2026-11-26 — Gợi ý mô tả Gemini AI cùng bộ lọc khu vực và quản trị danh mục
+
+- **Người thực hiện:** Bùi Hải Dương
+- **Công cụ:** Antigravity (Gemini 4 Carbon)
+- **Mục đích và phạm vi:** Hoàn thiện giao diện đăng/sửa tin bán với nút gợi ý mô tả bằng Gemini AI và cảnh báo kiểm duyệt lại, bổ sung bộ lọc khu vực cửa hàng (`provinceId`) trên danh mục sản phẩm, và xây dựng hai màn hình quản trị duyệt sản phẩm (`/admin/products`) cùng quản lý danh mục (`/admin/categories`) theo thiết kế Figma `RE.WEAR` (`FEAT-03`).
+- **Prompt chính:** Cải thiện trang chỉnh sửa tin đăng của người bán khớp bố cục workspace, tích hợp nút gợi ý mô tả bằng Gemini AI (`POST /api/products/suggest-description`) kèm banner nhắc kiểm duyệt lại khi sửa tin đang hoạt động/đang ẩn; thêm bộ lọc khu vực cửa hàng (`provinceId`) vào hộp lọc danh mục công khai kèm thẻ lọc đang chọn; xây dựng giao diện quản trị kiểm duyệt sản phẩm và quản lý danh mục phẳng một cấp kèm bảo vệ quyền ADMIN và kiểm thử Vitest.
+- **Đầu ra AI được sử dụng:** Hoàn thiện `SellerListingEditorPage` và `use-seller-listing-editor` cùng `/selling/new`; bổ sung bộ lọc `provinceId` trong `ProductFilterModal`, `ProductsPage`, `use-home-catalog`, `use-products-page` và `use-administrative-divisions`; xây dựng `AdminWorkspaceLayout`, `AdminProductModerationPage`, `AdminReviewListingModal`, `AdminCategoriesPage`, `AdminCategoryModal` và các route `/admin/products`, `/admin/categories`; bổ sung kiểm thử tại `tests/seller-listing-editor.test.tsx`, `tests/product-region-filter.test.tsx`, `tests/admin-moderation-and-categories.test.tsx`.
+- **Phần tự làm hoặc đã chỉnh sửa:** Đối chiếu bố cục và token thiết kế từ Figma (`13 · Seller / Products & listings`, `18 · Admin / Product moderation`, `20 · Admin / Categories`), kiểm tra hợp đồng API với backend, rà soát độ rõ ràng dễ đọc và xác minh toàn bộ kết quả lint, build và kiểm thử trước khi mở PR.
+- **Cách kiểm chứng:** `pnpm check` (`tsc --noEmit` + ESLint) pass 100% (0 lỗi, 0 cảnh báo); `pnpm test` pass 17/17 files (51/51 tests, gồm 13 tests mới cho Gemini AI, bộ lọc khu vực và quản trị sản phẩm/danh mục); `pnpm build` pass (23/23 routes); `git diff --check` pass 0 lỗi.
+- **Lỗi hoặc đề xuất sai của AI đã phát hiện:** Không phát hiện.
+- **Minh chứng:** PR #19; branch `feat/gemini-ai-region-filter-and-admin-catalog`, commit `aad5e88`.

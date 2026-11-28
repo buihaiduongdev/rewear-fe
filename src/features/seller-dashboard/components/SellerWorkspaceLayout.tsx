@@ -87,12 +87,18 @@ export function SellerWorkspaceLayout({
           <nav className="space-y-3" aria-label="Seller workspace">
             {NAV_ITEMS.map((item) => {
               const isActive = activeNav === item.key;
+              const itemClasses = `flex h-11 w-full items-center rounded-[8px] px-3 text-left text-sm font-semibold transition ${
+                isActive
+                  ? 'bg-rewear-accent text-rewear-text'
+                  : 'text-rewear-text hover:bg-rewear-soft'
+              }`;
               if (!onSelectNav)
                 return (
                   <Link
                     key={item.key}
                     href={`/selling?tab=${item.key}`}
-                    className="hover:bg-rewear-soft flex h-11 w-full items-center px-3 text-sm font-semibold"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className={itemClasses}
                   >
                     {item.label}
                   </Link>
@@ -105,11 +111,7 @@ export function SellerWorkspaceLayout({
                     onSelectNav?.(item.key);
                     setMobileMenuOpen(false);
                   }}
-                  className={`flex h-11 w-full items-center px-3 text-left text-sm font-semibold transition ${
-                    isActive
-                      ? 'bg-rewear-accent text-rewear-text'
-                      : 'text-rewear-text hover:bg-rewear-soft'
-                  }`}
+                  className={itemClasses}
                 >
                   {item.label}
                 </button>
