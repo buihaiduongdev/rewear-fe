@@ -734,3 +734,15 @@ Ghi một mục cho mỗi task có dùng AI. Cập nhật liên kết PR/commit 
 - **Cách kiểm chứng:** `pnpm check` (`tsc --noEmit` + ESLint) pass 100% (0 lỗi, 0 cảnh báo); `pnpm test` pass 20/20 files (54/54 tests); `pnpm build` pass (24/24 routes bao gồm `/wallet`, `/messages`, `/admin/payouts`); `git diff --check` pass 0 lỗi.
 - **Lỗi hoặc đề xuất sai của AI đã phát hiện:** Không phát hiện.
 - **Minh chứng:** PR #24; branch `feat/wallet-payouts-chat-and-social`, commit `21d2399`.
+
+### 2026-11-28 — Đọc ngữ cảnh sản phẩm và đơn hàng từ tham số đường dẫn trong trò chuyện
+
+- **Người thực hiện:** Bùi Thành Tâm
+- **Công cụ:** Antigravity (Gemini 4 Hydrogen)
+- **Mục đích và phạm vi:** Tinh gọn luồng trò chuyện phía giao diện để không gửi kèm mã sản phẩm hay mã đơn hàng vào API gửi tin nhắn, mà đọc tham số đường dẫn (`productId`, `orderId`) và tự tra cứu qua API sản phẩm/đơn hàng riêng cho đồng bộ với backend.
+- **Prompt chính:** Cập nhật màn hình trò chuyện để bỏ gửi `productId`/`orderId` vào API chat, chuyển sang đọc tham số từ URL và gọi API lấy thông tin sản phẩm/đơn hàng hiển thị ngữ cảnh trực tiếp, đồng thời cập nhật lại kiểm thử liên quan.
+- **Đầu ra AI được sử dụng:** Bỏ `product`/`orderId`/`order` khỏi payload và kiểu tin nhắn trong `src/modules/chat/chat-api.ts` và thêm hàm tra cứu ngữ cảnh sản phẩm/đơn hàng riêng; tinh gọn `src/modules/chat/components/MessageWorkspace.tsx` để hiển thị banner ngữ cảnh từ query param có thể đóng gọn và chỉ gửi nội dung văn bản; xóa `ChatAttachmentBar.tsx` không còn dùng và cập nhật `tests/messages.test.tsx`.
+- **Phần tự làm hoặc đã chỉnh sửa:** Đối chiếu hợp đồng API chat thuần văn bản/tệp đính kèm với backend và xác minh bộ kiểm thử, lint và build trước khi mở PR.
+- **Cách kiểm chứng:** `pnpm check` (`tsc --noEmit` + ESLint) pass 100% (0 lỗi, 0 cảnh báo); `pnpm test` pass 30/30 files (96/96 tests); `pnpm build` pass (36/36 routes).
+- **Lỗi hoặc đề xuất sai của AI đã phát hiện:** Không phát hiện.
+- **Minh chứng:** PR #28; branch `feat/chat-query-param-cards`.
