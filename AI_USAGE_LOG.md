@@ -679,6 +679,17 @@ Ghi một mục cho mỗi task có dùng AI. Cập nhật liên kết PR/commit 
 - **Lỗi hoặc đề xuất sai của AI đã phát hiện:** Lỗi type casting `any` kích hoạt cảnh báo lint trong `use-pickup-address-form.ts`; đã điều chỉnh dùng `as unknown as PickupLocationControllerSaveShopBody`.
 - **Minh chứng:** PR #18; branch `buihaiduongdev/ghn-pickup-settings`.
 
+### 2026-11-26 — Trang tài khoản người mua cùng thiết lập cửa hàng và phân quyền
+
+- **Người thực hiện:** Bùi Hải Dương
+- **Công cụ:** Antigravity (Gemini 4 Carbon)
+- **Mục đích và phạm vi:** Triển khai trang tài khoản và sổ địa chỉ 3 cấp cho người mua (`/account`), hoàn thiện tab cài đặt cửa hàng kèm tài khoản ngân hàng và quản lý nhóm/phân quyền RBAC (`/selling?tab=settings` cùng bước mở cửa hàng), xây dựng trang gian hàng công khai (`/shops/[id]`) và trang hướng dẫn mua hàng (`/help`) theo thiết kế Figma `RE.WEAR` (`FEAT-01`, `FEAT-02`, `FEAT-05`).
+- **Prompt chính:** Triển khai màn hình tài khoản người mua (`/account`) có sửa hồ sơ, quản lý sổ địa chỉ Việt Nam 3 cấp và tóm tắt đơn gần đây; thay mục cài đặt cửa hàng đang chờ bằng màn hình cài đặt thông tin cửa hàng, tài khoản ngân hàng nhận tiền và phân quyền thành viên RBAC; bổ sung trang gian hàng công khai `/shops/[id]` kèm nút theo dõi/đánh giá và trang trợ giúp `/help` sửa liên kết chết ở chân trang, kèm bộ kiểm thử Vitest.
+- **Đầu ra AI được sử dụng:** Xây dựng `AccountPage`, `AccountAddressesSection`, `AccountRecentOrdersCard`, `EditProfileDialog`, `AddressFormDialog` tại `/account`; xây dựng `SellerSettingsSection`, `SellerBankAccountsSection`, `SellerTeamSection`, `SellerRolesSection`, `SellerTeamModals` tại `/selling?tab=settings` và bổ sung thông tin tài khoản ngân hàng ở `/selling/open`; xây dựng trang `/shops/[id]` và `/help`, cập nhật `proxy-policy.ts` và liên kết cửa hàng trên trang chi tiết sản phẩm; bổ sung kiểm thử tại `tests/account-and-help.test.tsx`, `tests/seller-settings-and-rbac.test.tsx`, `tests/shop-storefront.test.tsx` và `tests/proxy-policy.test.ts`.
+- **Phần tự làm hoặc đã chỉnh sửa:** Đối chiếu bố cục và token từ Figma (`05 · Buyer / Profile & addresses`, `17 · Seller / Shop settings & team`), rà soát tách nhỏ hai component quá dài (`AccountPage` và `SellerTeamSection`), sửa lỗi giữ trạng thái cũ của hộp thoại sửa hồ sơ và thêm bước xác nhận nội tuyến trước khi xóa tài khoản ngân hàng.
+- **Cách kiểm chứng:** `pnpm check` (`tsc --noEmit` + ESLint) pass 100% (0 lỗi, 0 cảnh báo); `pnpm test` pass 18/18 files (47/47 tests); `pnpm build` pass (24/24 routes bao gồm `/account`, `/help`, `/shops/[id]`); `git diff --check` pass 0 lỗi.
+- **Lỗi hoặc đề xuất sai của AI đã phát hiện:** Lần đầu AI để `EditProfileDialog` giữ trạng thái cũ khi mở lại bằng controlled state, gộp `AccountPage` (700 dòng) và `SellerTeamSection` (876 dòng) quá dài khó đọc và cho xóa ngay tài khoản ngân hàng không xác nhận; toàn bộ đã được khắc phục ở commit `e99c163`.
+- **Minh chứng:** PR #20; branch `feat/account-shop-rbac-and-storefront`, commits `5b3c038`, `e99c163`.
 ### 2026-11-26 — Gợi ý mô tả Gemini AI cùng bộ lọc khu vực và quản trị danh mục
 
 - **Người thực hiện:** Bùi Hải Dương

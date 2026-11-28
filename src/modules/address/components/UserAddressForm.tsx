@@ -5,16 +5,23 @@ import type { UserAddressControllerCreate201Data } from '@/shared/api/models';
 import { Button } from '@/shared/components/ui/button';
 import { BaseInputField } from '@/shared/components/ui/input/BaseInputField';
 
-import { useUserAddressForm } from '../hooks/use-user-address-form';
+import {
+  type UserAddressFormValues,
+  useUserAddressForm,
+} from '../hooks/use-user-address-form';
 import { AdministrativeDivisionFields } from './AdministrativeDivisionFields';
 
 export type UserAddressFormProps = {
+  addressId?: string;
+  initialValues?: Partial<UserAddressFormValues>;
   onSuccess: (address: UserAddressControllerCreate201Data) => void;
   onCancel?: () => void;
   className?: string;
 };
 
 export function UserAddressForm({
+  addressId,
+  initialValues,
   onSuccess,
   onCancel,
   className = '',
@@ -37,6 +44,8 @@ export function UserAddressForm({
     districts,
     wards,
   } = useUserAddressForm({
+    addressId,
+    initialValues,
     onSuccess,
   });
 

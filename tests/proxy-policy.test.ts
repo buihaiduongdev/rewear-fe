@@ -20,6 +20,17 @@ describe('Public marketplace access', () => {
         false,
       ),
     ).toEqual({ action: 'next' });
+    expect(
+      getProxyDecision(
+        new URL(
+          'http://localhost:5000/shops/b0c16928-8686-4e58-86fc-b7ef5d89fb0e',
+        ),
+        false,
+      ),
+    ).toEqual({ action: 'next' });
+    expect(
+      getProxyDecision(new URL('http://localhost:5000/help'), false),
+    ).toEqual({ action: 'next' });
   });
 
   it('keeps other application routes protected and preserves their destination', () => {

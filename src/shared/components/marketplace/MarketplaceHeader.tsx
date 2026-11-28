@@ -120,6 +120,12 @@ export function MarketplaceHeader({
                   {session.user.fullName}
                 </p>
                 <Link
+                  href="/account"
+                  className="flex min-h-11 items-center underline underline-offset-4"
+                >
+                  Profile &amp; addresses
+                </Link>
+                <Link
                   href="/wishlist"
                   className="flex min-h-11 items-center underline underline-offset-4"
                 >

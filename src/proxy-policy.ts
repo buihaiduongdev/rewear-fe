@@ -10,7 +10,10 @@ const isAuthRoute = (pathname: string) =>
 const isPublicMarketplaceRoute = (pathname: string) =>
   pathname === '/' ||
   pathname === '/products' ||
-  pathname.startsWith('/products/');
+  pathname.startsWith('/products/') ||
+  pathname === '/shops' ||
+  pathname.startsWith('/shops/') ||
+  pathname === '/help';
 
 export const getProxyDecision = (
   url: URL,

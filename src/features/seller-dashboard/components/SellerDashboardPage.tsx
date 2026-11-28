@@ -8,6 +8,7 @@ import { Store } from 'lucide-react';
 import { useSellerDashboard } from '../hooks/use-seller-dashboard';
 import { SellerPendingOrders } from './SellerPendingOrders';
 import { SellerProductsPage } from './SellerProductsPage';
+import { SellerSettingsSection } from './SellerSettingsSection';
 import { SellerWorkspaceLayout } from './SellerWorkspaceLayout';
 
 export function SellerDashboardPage() {
@@ -15,7 +16,10 @@ export function SellerDashboardPage() {
     enabled,
     memberships,
     activeShop,
+    isOwner,
     shopName,
+    shopDescription,
+    shopStatus,
     shopId,
     shopLogo,
     myProductsQuery,
@@ -162,23 +166,15 @@ export function SellerDashboardPage() {
           <SellerPendingOrders key={shopId} shopId={shopId} enabled={enabled} />
         </div>
       ) : activeTab === 'settings' ? (
-        <section className="space-y-6">
-          <h2 className="text-2xl font-semibold">Shop settings</h2>
-          <div className="border-rewear-border space-y-4 border bg-white p-6">
-            <div>
-              <h3 className="font-semibold">Pickup address</h3>
-              <p className="text-rewear-muted mt-1 text-sm">
-                Manage your pickup contact, address and shipping providers.
-              </p>
-            </div>
-            <Link
-              href={`/selling/pickup?shopId=${encodeURIComponent(shopId)}`}
-              className="text-rewear-text inline-flex min-h-11 items-center text-sm font-semibold underline"
-            >
-              Manage pickup address →
-            </Link>
-          </div>
-        </section>
+        <SellerSettingsSection
+          key={shopId}
+          shopId={shopId}
+          initialName={shopName}
+          initialDescription={shopDescription}
+          initialStatus={shopStatus}
+          shopLogo={shopLogo}
+          isOwner={isOwner}
+        />
       ) : (
         <section>
           <h2 className="text-2xl font-semibold capitalize">{activeTab}</h2>
