@@ -178,7 +178,12 @@ export function SellerDashboardPage() {
           />
         )
       ) : activeTab === 'orders' ? (
-        <SellerOrdersSection key={`${shopId}-${orderFilter}`} shopId={shopId} enabled={enabled} initialFilter={orderFilter} />
+        <SellerOrdersSection
+          key={`${shopId}-${orderFilter}`}
+          shopId={shopId}
+          enabled={enabled}
+          initialFilter={orderFilter}
+        />
       ) : activeTab === 'returns' ? (
         <SellerReturnsSection shopId={shopId} enabled={enabled} />
       ) : activeTab === 'funds' ? (
