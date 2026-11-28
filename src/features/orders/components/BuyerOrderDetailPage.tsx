@@ -13,20 +13,17 @@ import { formatPrice } from '@/shared/utils/product';
 import { useBuyerOrderDetail } from '../hooks/use-buyer-order-detail';
 import { useDisputeWindow } from '../hooks/use-dispute-window';
 import { useOrderActions } from '../hooks/use-order-actions';
+import { OrderDetailSkeleton } from '../skeletons/OrderDetailSkeleton';
 import {
   getAddressLines,
   getItemCondition,
   getItemText,
   ORDER_STATUS_LABELS,
 } from '../utils/order-display';
+import { BuyerDisputePanel } from './BuyerDisputePanel';
 import { ConfirmReceiptDialog } from './ConfirmReceiptDialog';
-import {
-  CancelOrderDialog,
-  ReportIssueDialog,
-  SupplementEvidenceDialog,
-} from './OrderActionDialogs';
+import { CancelOrderDialog, ReportIssueDialog } from './OrderActionDialogs';
 import { OrderTimeline } from './OrderTimeline';
-import { OrderDetailSkeleton } from '../skeletons/OrderDetailSkeleton';
 
 export function BuyerOrderDetailPage({ id }: { id: string }) {
   const router = useRouter();
@@ -47,7 +44,7 @@ export function BuyerOrderDetailPage({ id }: { id: string }) {
       ['shipping', 'delivered', 'completed', 'dispute', 'returns'].includes(
         order.status,
       ),
-    enabled && order?.status === 'dispute',
+    false,
     async () => {
       await query.refetch();
     },
@@ -299,60 +296,13 @@ export function BuyerOrderDetailPage({ id }: { id: string }) {
                 )}
               </section>
             )}
-            {order.status === 'dispute' && (
-              <section className="bg-rewear-soft space-y-3 p-5">
-                <h2 className="text-xl font-semibold">Reported issues</h2>
-                {actions.dispute.isPending ? (
-                  <p>Loading report…</p>
-                ) : actions.dispute.isError ? (
-                  <p>
-                    Could not load the report.{' '}
-                    <button
-                      className="underline"
-                      type="button"
-                      onClick={() => void actions.dispute.refetch()}
-                    >
-                      Retry
-                    </button>
-                  </p>
-                ) : (
-                  actions.dispute.data?.data.issues.map((issue) => (
-                    <article
-                      className="border-rewear-border space-y-1 border-t pt-3"
-                      key={issue.id}
-                    >
-                      <p className="font-semibold">
-                        {issue.kind.replaceAll('_', ' ').toLowerCase()}
-                      </p>
-                      <p>{issue.description}</p>
-                      <p className="text-rewear-muted text-sm">
-                        Status:{' '}
-                        {issue.status.replaceAll('_', ' ').toLowerCase()}
-                      </p>
-                      {issue.status === 'NEEDS_EVIDENCE' && (
-                        <>
-                          <p className="text-sm">
-                            Add the required evidence before{' '}
-                            {new Intl.DateTimeFormat('en-GB', {
-                              dateStyle: 'medium',
-                              timeStyle: 'short',
-                              timeZone: 'Asia/Ho_Chi_Minh',
-                            }).format(new Date(issue.supplementBy))}{' '}
-                            ICT.
-                          </p>
-                          <SupplementEvidenceDialog
-                            submitEvidence={(files, tags) =>
-                              actions.supplementIssue(issue.id, files, tags)
-                            }
-                            pending={actions.issuePending}
-                            error={actions.issueError}
-                          />
-                        </>
-                      )}
-                    </article>
-                  ))
-                )}
-              </section>
+            {(order.status === 'dispute' || order.status === 'returns') && (
+              <BuyerDisputePanel
+                orderId={order.id}
+                shopName={order.shopName}
+                enabled={enabled}
+                onUpdated={() => query.refetch()}
+              />
             )}
           </>
         )}
