@@ -159,7 +159,7 @@ describe('ShopStorefrontPage & ProductDetailsSection shop link', () => {
       shop: { id: 'shop-1', name: 'Hanoi Archive' },
     } as unknown as ProductControllerFindOne200Data;
 
-    render(
+    renderWithQuery(
       <ProductDetailsSection
         product={product}
         media={[]}
