@@ -1257,256 +1257,6 @@ export type CheckoutControllerCancel200 = {
   data: CheckoutControllerCancel200Data;
 };
 
-export type PaymentControllerCreateBody = {
-  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
-  requestId: string;
-};
-
-export type PaymentControllerCreate200StatusCode =
-  (typeof PaymentControllerCreate200StatusCode)[keyof typeof PaymentControllerCreate200StatusCode];
-
-export const PaymentControllerCreate200StatusCode = {
-  NUMBER_200: 200,
-} as const;
-
-export type PaymentControllerCreate200DataState =
-  (typeof PaymentControllerCreate200DataState)[keyof typeof PaymentControllerCreate200DataState];
-
-export const PaymentControllerCreate200DataState = {
-  CREATING: 'CREATING',
-  PENDING: 'PENDING',
-  UNKNOWN: 'UNKNOWN',
-  FAILED: 'FAILED',
-  PAID: 'PAID',
-  REFUND_REQUIRED: 'REFUND_REQUIRED',
-  REFUNDED: 'REFUNDED',
-} as const;
-
-export type PaymentControllerCreate200DataRefundsItemState =
-  (typeof PaymentControllerCreate200DataRefundsItemState)[keyof typeof PaymentControllerCreate200DataRefundsItemState];
-
-export const PaymentControllerCreate200DataRefundsItemState = {
-  QUEUED: 'QUEUED',
-  UNKNOWN: 'UNKNOWN',
-  COMPLETED: 'COMPLETED',
-  REVIEW_REQUIRED: 'REVIEW_REQUIRED',
-} as const;
-
-export type PaymentControllerCreate200DataRefundsItem = {
-  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
-  id: string;
-  /**
-   * @minimum -9007199254740991
-   * @maximum 9007199254740991
-   */
-  amount: number;
-  state: PaymentControllerCreate200DataRefundsItemState;
-};
-
-export type PaymentControllerCreate200Data = {
-  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
-  id: string;
-  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
-  checkoutId: string;
-  /**
-   * @minimum -9007199254740991
-   * @maximum 9007199254740991
-   */
-  amount: number;
-  state: PaymentControllerCreate200DataState;
-  /** @nullable */
-  payUrl: string | null;
-  /**
-   * @nullable
-   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
-   */
-  paidAt: string | null;
-  refunds: PaymentControllerCreate200DataRefundsItem[];
-};
-
-export type PaymentControllerCreate200 = {
-  statusCode: PaymentControllerCreate200StatusCode;
-  message: string;
-  data: PaymentControllerCreate200Data;
-};
-
-export type PaymentControllerFind200StatusCode =
-  (typeof PaymentControllerFind200StatusCode)[keyof typeof PaymentControllerFind200StatusCode];
-
-export const PaymentControllerFind200StatusCode = {
-  NUMBER_200: 200,
-} as const;
-
-export type PaymentControllerFind200DataState =
-  (typeof PaymentControllerFind200DataState)[keyof typeof PaymentControllerFind200DataState];
-
-export const PaymentControllerFind200DataState = {
-  CREATING: 'CREATING',
-  PENDING: 'PENDING',
-  UNKNOWN: 'UNKNOWN',
-  FAILED: 'FAILED',
-  PAID: 'PAID',
-  REFUND_REQUIRED: 'REFUND_REQUIRED',
-  REFUNDED: 'REFUNDED',
-} as const;
-
-export type PaymentControllerFind200DataRefundsItemState =
-  (typeof PaymentControllerFind200DataRefundsItemState)[keyof typeof PaymentControllerFind200DataRefundsItemState];
-
-export const PaymentControllerFind200DataRefundsItemState = {
-  QUEUED: 'QUEUED',
-  UNKNOWN: 'UNKNOWN',
-  COMPLETED: 'COMPLETED',
-  REVIEW_REQUIRED: 'REVIEW_REQUIRED',
-} as const;
-
-export type PaymentControllerFind200DataRefundsItem = {
-  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
-  id: string;
-  /**
-   * @minimum -9007199254740991
-   * @maximum 9007199254740991
-   */
-  amount: number;
-  state: PaymentControllerFind200DataRefundsItemState;
-};
-
-export type PaymentControllerFind200Data = {
-  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
-  id: string;
-  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
-  checkoutId: string;
-  /**
-   * @minimum -9007199254740991
-   * @maximum 9007199254740991
-   */
-  amount: number;
-  state: PaymentControllerFind200DataState;
-  /** @nullable */
-  payUrl: string | null;
-  /**
-   * @nullable
-   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
-   */
-  paidAt: string | null;
-  refunds: PaymentControllerFind200DataRefundsItem[];
-};
-
-export type PaymentControllerFind200 = {
-  statusCode: PaymentControllerFind200StatusCode;
-  message: string;
-  data: PaymentControllerFind200Data;
-};
-
-export type PaymentControllerReconcile200StatusCode =
-  (typeof PaymentControllerReconcile200StatusCode)[keyof typeof PaymentControllerReconcile200StatusCode];
-
-export const PaymentControllerReconcile200StatusCode = {
-  NUMBER_200: 200,
-} as const;
-
-export type PaymentControllerReconcile200DataState =
-  (typeof PaymentControllerReconcile200DataState)[keyof typeof PaymentControllerReconcile200DataState];
-
-export const PaymentControllerReconcile200DataState = {
-  CREATING: 'CREATING',
-  PENDING: 'PENDING',
-  UNKNOWN: 'UNKNOWN',
-  FAILED: 'FAILED',
-  PAID: 'PAID',
-  REFUND_REQUIRED: 'REFUND_REQUIRED',
-  REFUNDED: 'REFUNDED',
-} as const;
-
-export type PaymentControllerReconcile200DataRefundsItemState =
-  (typeof PaymentControllerReconcile200DataRefundsItemState)[keyof typeof PaymentControllerReconcile200DataRefundsItemState];
-
-export const PaymentControllerReconcile200DataRefundsItemState = {
-  QUEUED: 'QUEUED',
-  UNKNOWN: 'UNKNOWN',
-  COMPLETED: 'COMPLETED',
-  REVIEW_REQUIRED: 'REVIEW_REQUIRED',
-} as const;
-
-export type PaymentControllerReconcile200DataRefundsItem = {
-  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
-  id: string;
-  /**
-   * @minimum -9007199254740991
-   * @maximum 9007199254740991
-   */
-  amount: number;
-  state: PaymentControllerReconcile200DataRefundsItemState;
-};
-
-export type PaymentControllerReconcile200Data = {
-  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
-  id: string;
-  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
-  checkoutId: string;
-  /**
-   * @minimum -9007199254740991
-   * @maximum 9007199254740991
-   */
-  amount: number;
-  state: PaymentControllerReconcile200DataState;
-  /** @nullable */
-  payUrl: string | null;
-  /**
-   * @nullable
-   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
-   */
-  paidAt: string | null;
-  refunds: PaymentControllerReconcile200DataRefundsItem[];
-};
-
-export type PaymentControllerReconcile200 = {
-  statusCode: PaymentControllerReconcile200StatusCode;
-  message: string;
-  data: PaymentControllerReconcile200Data;
-};
-
-export type PaymentControllerIpnBody = {
-  /** @maxLength 50 */
-  partnerCode: string;
-  /** @maxLength 200 */
-  orderId: string;
-  /** @maxLength 50 */
-  requestId: string;
-  /**
-   * @minimum 0
-   * @maximum 9007199254740991
-   */
-  amount: number;
-  /**
-   * @minimum 0
-   * @maximum 9007199254740991
-   */
-  transId: number;
-  /**
-   * @minimum 0
-   * @maximum 9007199254740991
-   */
-  resultCode: number;
-  /**
-   * @minimum 0
-   * @maximum 9007199254740991
-   */
-  responseTime: number;
-  /** @maxLength 1000 */
-  message: string;
-  /** @maxLength 255 */
-  orderInfo: string;
-  /** @maxLength 50 */
-  orderType: string;
-  /** @maxLength 50 */
-  payType: string;
-  /** @maxLength 1000 */
-  extraData: string;
-  /** @pattern ^[a-f0-9]{64}$ */
-  signature: string;
-};
-
 export type ShopRoleControllerMyPermissions200StatusCode =
   (typeof ShopRoleControllerMyPermissions200StatusCode)[keyof typeof ShopRoleControllerMyPermissions200StatusCode];
 
@@ -16729,4 +16479,238 @@ export type ShopLogoControllerConfirm200 = {
   statusCode: ShopLogoControllerConfirm200StatusCode;
   message: string;
   data: ShopLogoControllerConfirm200Data;
+};
+
+export type PaymentControllerCreateBody = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  requestId: string;
+};
+
+export type PaymentControllerCreate200StatusCode =
+  (typeof PaymentControllerCreate200StatusCode)[keyof typeof PaymentControllerCreate200StatusCode];
+
+export const PaymentControllerCreate200StatusCode = {
+  NUMBER_200: 200,
+} as const;
+
+export type PaymentControllerCreate200DataState =
+  (typeof PaymentControllerCreate200DataState)[keyof typeof PaymentControllerCreate200DataState];
+
+export const PaymentControllerCreate200DataState = {
+  CREATING: 'CREATING',
+  PENDING: 'PENDING',
+  UNKNOWN: 'UNKNOWN',
+  FAILED: 'FAILED',
+  PAID: 'PAID',
+  REFUND_REQUIRED: 'REFUND_REQUIRED',
+  REFUNDED: 'REFUNDED',
+} as const;
+
+export type PaymentControllerCreate200DataRefundsItemState =
+  (typeof PaymentControllerCreate200DataRefundsItemState)[keyof typeof PaymentControllerCreate200DataRefundsItemState];
+
+export const PaymentControllerCreate200DataRefundsItemState = {
+  QUEUED: 'QUEUED',
+  UNKNOWN: 'UNKNOWN',
+  COMPLETED: 'COMPLETED',
+  REVIEW_REQUIRED: 'REVIEW_REQUIRED',
+} as const;
+
+export type PaymentControllerCreate200DataRefundsItem = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  /**
+   * @minimum -9007199254740991
+   * @maximum 9007199254740991
+   */
+  amount: number;
+  state: PaymentControllerCreate200DataRefundsItemState;
+};
+
+export type PaymentControllerCreate200Data = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  checkoutId: string;
+  /**
+   * @minimum -9007199254740991
+   * @maximum 9007199254740991
+   */
+  amount: number;
+  state: PaymentControllerCreate200DataState;
+  /** @nullable */
+  payUrl: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  paidAt: string | null;
+  refunds: PaymentControllerCreate200DataRefundsItem[];
+};
+
+export type PaymentControllerCreate200 = {
+  statusCode: PaymentControllerCreate200StatusCode;
+  message: string;
+  data: PaymentControllerCreate200Data;
+};
+
+export type PaymentControllerFind200StatusCode =
+  (typeof PaymentControllerFind200StatusCode)[keyof typeof PaymentControllerFind200StatusCode];
+
+export const PaymentControllerFind200StatusCode = {
+  NUMBER_200: 200,
+} as const;
+
+export type PaymentControllerFind200DataState =
+  (typeof PaymentControllerFind200DataState)[keyof typeof PaymentControllerFind200DataState];
+
+export const PaymentControllerFind200DataState = {
+  CREATING: 'CREATING',
+  PENDING: 'PENDING',
+  UNKNOWN: 'UNKNOWN',
+  FAILED: 'FAILED',
+  PAID: 'PAID',
+  REFUND_REQUIRED: 'REFUND_REQUIRED',
+  REFUNDED: 'REFUNDED',
+} as const;
+
+export type PaymentControllerFind200DataRefundsItemState =
+  (typeof PaymentControllerFind200DataRefundsItemState)[keyof typeof PaymentControllerFind200DataRefundsItemState];
+
+export const PaymentControllerFind200DataRefundsItemState = {
+  QUEUED: 'QUEUED',
+  UNKNOWN: 'UNKNOWN',
+  COMPLETED: 'COMPLETED',
+  REVIEW_REQUIRED: 'REVIEW_REQUIRED',
+} as const;
+
+export type PaymentControllerFind200DataRefundsItem = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  /**
+   * @minimum -9007199254740991
+   * @maximum 9007199254740991
+   */
+  amount: number;
+  state: PaymentControllerFind200DataRefundsItemState;
+};
+
+export type PaymentControllerFind200Data = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  checkoutId: string;
+  /**
+   * @minimum -9007199254740991
+   * @maximum 9007199254740991
+   */
+  amount: number;
+  state: PaymentControllerFind200DataState;
+  /** @nullable */
+  payUrl: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  paidAt: string | null;
+  refunds: PaymentControllerFind200DataRefundsItem[];
+};
+
+export type PaymentControllerFind200 = {
+  statusCode: PaymentControllerFind200StatusCode;
+  message: string;
+  data: PaymentControllerFind200Data;
+};
+
+export type PaymentControllerReconcile200StatusCode =
+  (typeof PaymentControllerReconcile200StatusCode)[keyof typeof PaymentControllerReconcile200StatusCode];
+
+export const PaymentControllerReconcile200StatusCode = {
+  NUMBER_200: 200,
+} as const;
+
+export type PaymentControllerReconcile200DataState =
+  (typeof PaymentControllerReconcile200DataState)[keyof typeof PaymentControllerReconcile200DataState];
+
+export const PaymentControllerReconcile200DataState = {
+  CREATING: 'CREATING',
+  PENDING: 'PENDING',
+  UNKNOWN: 'UNKNOWN',
+  FAILED: 'FAILED',
+  PAID: 'PAID',
+  REFUND_REQUIRED: 'REFUND_REQUIRED',
+  REFUNDED: 'REFUNDED',
+} as const;
+
+export type PaymentControllerReconcile200DataRefundsItemState =
+  (typeof PaymentControllerReconcile200DataRefundsItemState)[keyof typeof PaymentControllerReconcile200DataRefundsItemState];
+
+export const PaymentControllerReconcile200DataRefundsItemState = {
+  QUEUED: 'QUEUED',
+  UNKNOWN: 'UNKNOWN',
+  COMPLETED: 'COMPLETED',
+  REVIEW_REQUIRED: 'REVIEW_REQUIRED',
+} as const;
+
+export type PaymentControllerReconcile200DataRefundsItem = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  /**
+   * @minimum -9007199254740991
+   * @maximum 9007199254740991
+   */
+  amount: number;
+  state: PaymentControllerReconcile200DataRefundsItemState;
+};
+
+export type PaymentControllerReconcile200Data = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  checkoutId: string;
+  /**
+   * @minimum -9007199254740991
+   * @maximum 9007199254740991
+   */
+  amount: number;
+  state: PaymentControllerReconcile200DataState;
+  /** @nullable */
+  payUrl: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  paidAt: string | null;
+  refunds: PaymentControllerReconcile200DataRefundsItem[];
+};
+
+export type PaymentControllerReconcile200 = {
+  statusCode: PaymentControllerReconcile200StatusCode;
+  message: string;
+  data: PaymentControllerReconcile200Data;
+};
+
+export type PaymentControllerWebhookBodyData = {
+  /**
+   * @minimum 0
+   * @maximum 9007199254740991
+   */
+  orderCode: number;
+  /**
+   * @minimum 0
+   * @maximum 9007199254740991
+   */
+  amount: number;
+  description: string;
+  reference: string;
+  [key: string]: unknown;
+};
+
+export type PaymentControllerWebhookBody = {
+  code: string;
+  desc: string;
+  success?: boolean;
+  data: PaymentControllerWebhookBodyData;
+  /** @minLength 1 */
+  signature: string;
 };

@@ -1,11 +1,9 @@
 import type { ReactNode } from 'react';
 
-import { DM_Sans } from 'next/font/google';
 import Link from 'next/link';
 
 import { AUTH_ROUTES } from '@/modules/auth/constants/route.constant';
-
-const dmSans = DM_Sans({ subsets: ['latin', 'latin-ext'], display: 'swap' });
+import { dmSans } from '@/shared/config/fonts';
 
 export function AuthPageShell({ children }: { children: ReactNode }) {
   return (

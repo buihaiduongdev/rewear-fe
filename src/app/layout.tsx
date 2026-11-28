@@ -1,21 +1,9 @@
 import type { Metadata } from 'next';
 
-import { DM_Sans, Geist_Mono } from 'next/font/google';
-
+import { dmSans, geistMono } from '@/shared/config/fonts';
 import { AuthProvider, QueryProvider } from '@/shared/providers';
 
 import './globals.css';
-
-const dmSans = DM_Sans({
-  variable: '--font-dm-sans',
-  subsets: ['latin', 'latin-ext'],
-  display: 'swap',
-});
-
-const geistMono = Geist_Mono({
-  variable: '--font-geist-mono',
-  subsets: ['latin'],
-});
 
 export const metadata: Metadata = {
   title: 'RE.WEAR',

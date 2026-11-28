@@ -1,1 +1,1 @@
-export type PaymentMethodId = 'MOMO' | 'VNPAY' | 'ZALOPAY' | 'CARD';
+export type PaymentMethodId = 'PAYOS';
