@@ -19,19 +19,8 @@ export default function NewListingPage() {
     );
   }, [memberships.data?.data]);
 
-  if (enabled && memberships.isPending)
-    return <p role="status">Loading shop…</p>;
-  if (enabled && memberships.isError)
-    return (
-      <div role="alert">
-        Could not load your shop.{' '}
-        <button onClick={() => void memberships.refetch()}>Retry</button>
-      </div>
-    );
-
   const shopName = activeShop?.shop.name || 'Seller workspace';
   const shopId = activeShop?.shopId || '';
-
   const shopLogo =
     (activeShop?.shop as { logoUrl?: string | null } | undefined)?.logoUrl ??
     null;
@@ -42,17 +31,42 @@ export default function NewListingPage() {
       shopName={shopName}
       shopLogo={shopLogo}
     >
-      <React.Suspense
-        fallback={
-          <div className="flex h-64 items-center justify-center">
-            <span className="text-rewear-muted text-sm">
-              Loading listing editor...
-            </span>
-          </div>
-        }
-      >
-        <SellerListingEditorPage shopId={shopId} />
-      </React.Suspense>
+      {enabled && memberships.isPending ? (
+        <div
+          role="status"
+          className="border-rewear-border bg-rewear-soft/40 flex h-64 items-center justify-center rounded-[8px] border"
+        >
+          <span className="text-rewear-muted text-sm">Loading shop…</span>
+        </div>
+      ) : enabled && memberships.isError ? (
+        <div
+          role="alert"
+          className="border-rewear-border bg-rewear-surface flex flex-col items-start gap-3 rounded-[8px] border p-6"
+        >
+          <p className="text-rewear-text text-sm font-semibold">
+            Could not load your shop.
+          </p>
+          <button
+            type="button"
+            onClick={() => void memberships.refetch()}
+            className="border-rewear-border text-rewear-text hover:bg-rewear-soft min-h-11 rounded-[8px] border px-4 text-sm font-semibold transition"
+          >
+            Retry
+          </button>
+        </div>
+      ) : (
+        <React.Suspense
+          fallback={
+            <div className="flex h-64 items-center justify-center">
+              <span className="text-rewear-muted text-sm">
+                Loading listing editor...
+              </span>
+            </div>
+          }
+        >
+          <SellerListingEditorPage shopId={shopId} />
+        </React.Suspense>
+      )}
     </SellerWorkspaceLayout>
   );
 }

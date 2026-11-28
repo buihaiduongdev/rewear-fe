@@ -9,6 +9,21 @@ export type DivisionProvince = { id: number; name: string };
 export type DivisionDistrict = { id: number; name: string; provinceId: number };
 export type DivisionWard = { code: string; name: string; districtId: number };
 
+export function useProvinces(options?: { skipErrorToast?: boolean }) {
+  return useQuery({
+    queryKey: ['/api/administrative-divisions/provinces'],
+    queryFn: ({ signal }) =>
+      orvalRequest<{ data: DivisionProvince[] }>({
+        url: '/api/administrative-divisions/provinces',
+        method: 'GET',
+        signal,
+      }),
+    staleTime: Infinity,
+    gcTime: 1000 * 60 * 60 * 24,
+    ...(options?.skipErrorToast ? { meta: { skipErrorToast: true } } : {}),
+  });
+}
+
 export type UseAdministrativeDivisionsOptions = {
   provinceId?: number | '';
   districtId?: number | '';
@@ -52,17 +67,7 @@ export function useAdministrativeDivisions(
       ? options.initialWardCode
       : internalWardCode);
 
-  const provinces = useQuery({
-    queryKey: ['/api/administrative-divisions/provinces'],
-    queryFn: ({ signal }) =>
-      orvalRequest<{ data: DivisionProvince[] }>({
-        url: '/api/administrative-divisions/provinces',
-        method: 'GET',
-        signal,
-      }),
-    staleTime: Infinity,
-    gcTime: 1000 * 60 * 60 * 24,
-  });
+  const provinces = useProvinces();
 
   const districts = useQuery({
     queryKey: ['/api/administrative-divisions/districts', provinceId],

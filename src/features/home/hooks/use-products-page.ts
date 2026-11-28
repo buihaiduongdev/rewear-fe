@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 
+import { useProvinces } from '@/modules/address/hooks/use-administrative-divisions';
 import { useDebounce } from '@/shared/hooks';
 
 import { useHomeCatalog } from './use-home-catalog';
@@ -17,6 +18,7 @@ export function useProductsPage() {
     search,
     categoryId,
     shopId,
+    provinceId,
     size,
     condition,
     minPrice,
@@ -29,6 +31,8 @@ export function useProductsPage() {
     products,
     updateFilters,
   } = useHomeCatalog(true);
+
+  const provinces = useProvinces({ skipErrorToast: true });
 
   const [prevSearch, setPrevSearch] = useState(search);
   const [localSearch, setLocalSearch] = useState(search);
@@ -71,11 +75,15 @@ export function useProductsPage() {
   const activeCategory = categories.data?.data.find(
     ({ id }) => id === categoryId,
   );
+  const activeProvince = provinces.data?.data.find(
+    ({ id }) => String(id) === provinceId,
+  );
 
   const hasFilters = Boolean(
     search ||
     categoryId ||
     shopId ||
+    provinceId ||
     size ||
     condition ||
     minPrice ||
@@ -86,6 +94,7 @@ export function useProductsPage() {
   const activeFilterCount =
     (categoryId ? 1 : 0) +
     (shopId ? 1 : 0) +
+    (provinceId ? 1 : 0) +
     (size ? 1 : 0) +
     (condition ? 1 : 0) +
     (minPrice || maxPrice ? 1 : 0);
@@ -97,6 +106,7 @@ export function useProductsPage() {
     search,
     categoryId,
     shopId,
+    provinceId,
     size,
     condition,
     minPrice,
@@ -106,6 +116,7 @@ export function useProductsPage() {
     limit,
     categories,
     shops,
+    provinces,
     products,
     updateFilters,
     localSearch,
@@ -119,6 +130,7 @@ export function useProductsPage() {
     meta,
     activeShop,
     activeCategory,
+    activeProvince,
     hasFilters,
     activeFilterCount,
     sortLabel,

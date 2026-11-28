@@ -143,6 +143,14 @@ export function MarketplaceHeader({
                 >
                   Seller workspace
                 </Link>
+                {session.user.role === 'ADMIN' && (
+                  <Link
+                    href="/admin/products"
+                    className="flex min-h-11 items-center underline underline-offset-4"
+                  >
+                    Admin workspace
+                  </Link>
+                )}
                 <button
                   type="button"
                   className="min-h-11 cursor-pointer underline underline-offset-4"
