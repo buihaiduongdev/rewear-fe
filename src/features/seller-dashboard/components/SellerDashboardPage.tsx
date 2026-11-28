@@ -131,17 +131,25 @@ export function SellerDashboardPage() {
       shopLogo={shopLogo}
     >
       {activeTab === 'overview' ? (
-        <SellerOverviewSection
-          shopId={shopId}
-          shopName={shopName}
-          enabled={enabled}
-          products={sellerProducts}
-          totalListings={myProductsQuery.data?.data.meta.totalItems}
-          onNavigate={(tab, nextFilter) => {
-            if (nextFilter) setOrderFilter(nextFilter);
-            setActiveTab(tab);
-          }}
-        />
+        <>
+          <Link
+            href="/selling/kyc"
+            className="mb-4 inline-flex min-h-11 items-center underline"
+          >
+            Identity verification (KYC)
+          </Link>
+          <SellerOverviewSection
+            shopId={shopId}
+            shopName={shopName}
+            enabled={enabled}
+            products={sellerProducts}
+            totalListings={myProductsQuery.data?.data.meta.totalItems}
+            onNavigate={(tab, nextFilter) => {
+              if (nextFilter) setOrderFilter(nextFilter);
+              setActiveTab(tab);
+            }}
+          />
+        </>
       ) : activeTab === 'products' ? (
         myProductsQuery.isPending ? (
           <p className="text-rewear-muted" role="status">
