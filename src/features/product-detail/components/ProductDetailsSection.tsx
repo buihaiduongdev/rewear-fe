@@ -1,6 +1,12 @@
+'use client';
+
 import Link from 'next/link';
 
+import { ShopRatingSummary } from '@/modules/ratings/components/ShopRatingSummary';
+import { ReportViolationDialog } from '@/modules/reports/components/ReportViolationDialog';
+import { FollowShopButton } from '@/modules/shop-follows/components/FollowShopButton';
 import type { ProductControllerFindOne200Data } from '@/shared/api/models';
+import { MessageSquare } from 'lucide-react';
 
 import { ProductConditionDetails } from './ProductConditionDetails';
 
@@ -32,28 +38,64 @@ export function ProductDetailsSection({
       {/* Product description and measurements */}
       <div className="bg-rewear-soft grid gap-10 p-6 sm:p-10 md:grid-cols-2 md:gap-16">
         <section aria-label="Seller" className="md:col-span-2">
-          <div className="flex items-center gap-4">
-            <div className="text-rewear-text flex size-11 shrink-0 items-center justify-center overflow-hidden rounded-full bg-white text-base font-semibold">
-              {shopLogo ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img src={shopLogo} alt="" className="size-full object-cover" />
-              ) : (
-                shopInitials
-              )}
+          <div className="flex flex-wrap items-center justify-between gap-4">
+            <div className="flex items-center gap-4">
+              <div className="text-rewear-text flex size-11 shrink-0 items-center justify-center overflow-hidden rounded-full bg-white text-base font-semibold">
+                {shopLogo ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={shopLogo}
+                    alt=""
+                    className="size-full object-cover"
+                  />
+                ) : (
+                  shopInitials
+                )}
+              </div>
+              <div className="min-w-0 space-y-1">
+                <h3 className="text-rewear-text text-xl leading-snug font-semibold break-words">
+                  {product.shopId ? (
+                    <Link
+                      href={`/shops/${encodeURIComponent(product.shopId)}`}
+                      className="decoration-rewear-muted hover:decoration-rewear-text underline underline-offset-4"
+                    >
+                      {product.shop?.name || 'Seller'}{' '}
+                      <span aria-hidden="true">→</span>
+                    </Link>
+                  ) : (
+                    product.shop?.name || 'Seller'
+                  )}
+                </h3>
+                {product.shopId && (
+                  <ShopRatingSummary
+                    shopId={product.shopId}
+                    shopName={product.shop?.name || 'Seller'}
+                  />
+                )}
+              </div>
             </div>
-            <h3 className="text-rewear-text min-w-0 text-xl leading-snug font-semibold break-words">
-              {product.shopId ? (
-                <Link
-                  href={`/shops/${encodeURIComponent(product.shopId)}`}
-                  className="decoration-rewear-muted hover:decoration-rewear-text underline underline-offset-4"
-                >
-                  {product.shop?.name || 'Seller'}{' '}
-                  <span aria-hidden="true">→</span>
-                </Link>
-              ) : (
-                product.shop?.name || 'Seller'
+
+            <div className="flex flex-wrap items-center gap-3">
+              {product.shopId && (
+                <>
+                  <FollowShopButton
+                    shopId={product.shopId}
+                    shopName={product.shop?.name || 'Seller'}
+                  />
+                  <Link
+                    href={`/messages?shopId=${encodeURIComponent(product.shopId)}&productId=${encodeURIComponent(product.id)}`}
+                    className="border-rewear-border bg-rewear-surface hover:bg-rewear-soft inline-flex min-h-10 items-center gap-1.5 border px-3.5 text-xs font-semibold transition"
+                  >
+                    <MessageSquare size={14} aria-hidden="true" />
+                    Message seller
+                  </Link>
+                </>
               )}
-            </h3>
+              <ReportViolationDialog
+                productId={product.id}
+                shopId={product.shopId}
+              />
+            </div>
           </div>
         </section>
         <section className="space-y-5">

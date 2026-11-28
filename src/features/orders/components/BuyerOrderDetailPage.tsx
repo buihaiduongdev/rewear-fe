@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
 import { CartLink } from '@/modules/cart/components/CartLink';
+import { RateShopDialog } from '@/modules/ratings/components/RateShopDialog';
 import { MarketplaceFooter } from '@/shared/components/marketplace/MarketplaceFooter';
 import { MarketplaceHeader } from '@/shared/components/marketplace/MarketplaceHeader';
 import { MobileNavigation } from '@/shared/components/marketplace/MobileNavigation';
@@ -251,6 +252,21 @@ export function BuyerOrderDetailPage({ id }: { id: string }) {
                       error={actions.issueError}
                     />
                   )}
+                {order.status === 'completed' && (
+                  <RateShopDialog
+                    orderId={order.id}
+                    shopName={order.shopName}
+                    enabled={enabled}
+                  />
+                )}
+                {order.shopId && (
+                  <Link
+                    href={`/messages?shopId=${encodeURIComponent(order.shopId)}&orderId=${encodeURIComponent(order.id)}`}
+                    className="border-rewear-border bg-rewear-surface hover:bg-rewear-soft flex min-h-11 w-full items-center justify-center border px-4 text-sm font-semibold transition"
+                  >
+                    Message seller
+                  </Link>
+                )}
               </aside>
             </div>
             {[

@@ -5,10 +5,12 @@ import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 
+import { MessageWorkspace } from '@/modules/chat/components/MessageWorkspace';
 import { Store } from 'lucide-react';
 
 import { useSellerDashboard } from '../hooks/use-seller-dashboard';
 import type { SellerOrderFilter } from '../utils/seller-order-display';
+import { SellerFundsSection } from './SellerFundsSection';
 import { SellerOrdersSection } from './SellerOrdersSection';
 import { SellerOverviewSection } from './SellerOverviewSection';
 import { SellerProductsPage } from './SellerProductsPage';
@@ -184,6 +186,10 @@ export function SellerDashboardPage() {
         />
       ) : activeTab === 'returns' ? (
         <SellerReturnsSection shopId={shopId} enabled={enabled} />
+      ) : activeTab === 'funds' ? (
+        <SellerFundsSection key={shopId} shopId={shopId} enabled={enabled} />
+      ) : activeTab === 'messages' ? (
+        <MessageWorkspace side="SHOP" shopId={shopId} />
       ) : activeTab === 'settings' ? (
         <SellerSettingsSection
           key={shopId}
