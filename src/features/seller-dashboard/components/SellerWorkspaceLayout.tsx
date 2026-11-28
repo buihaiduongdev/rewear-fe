@@ -5,6 +5,10 @@ import * as React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 
+import {
+  PolicyModals,
+  type PolicyModalType,
+} from '@/shared/components/marketplace/PolicyModals';
 import { Menu, X } from 'lucide-react';
 
 import type { SellerNavKey } from '../types';
@@ -31,12 +35,13 @@ const NAV_ITEMS: { key: SellerNavKey; label: string; href?: string }[] = [
 
 export function SellerWorkspaceLayout({
   children,
-  activeNav = 'products',
+  activeNav = 'overview',
   onSelectNav,
   shopName = 'My shop',
   shopLogo,
 }: SellerWorkspaceLayoutProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
+  const [policyModal, setPolicyModal] = React.useState<PolicyModalType>(null);
 
   return (
     <div className="bg-rewear-surface text-rewear-text flex min-h-dvh flex-col lg:flex-row">
@@ -163,11 +168,19 @@ export function SellerWorkspaceLayout({
         {/* Footer: Figma 48:982 / 53:1221 */}
         <footer className="border-rewear-border text-rewear-muted flex items-center justify-between border-t px-6 py-6 text-sm lg:px-8">
           <span>© 2026 RE.WEAR</span>
-          <Link href="/help" className="hover:text-rewear-text hover:underline">
-            Help & returns
-          </Link>
+          <button
+            type="button"
+            onClick={() => setPolicyModal('help')}
+            className="hover:text-rewear-text cursor-pointer hover:underline"
+          >
+            Help &amp; returns
+          </button>
         </footer>
       </div>
+      <PolicyModals
+        openType={policyModal}
+        onClose={() => setPolicyModal(null)}
+      />
     </div>
   );
 }

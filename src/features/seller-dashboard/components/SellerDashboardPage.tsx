@@ -1,18 +1,24 @@
 'use client';
 
+import { useState } from 'react';
+
 import Image from 'next/image';
 import Link from 'next/link';
 
 import { Store } from 'lucide-react';
 
 import { useSellerDashboard } from '../hooks/use-seller-dashboard';
-import { SellerPendingOrders } from './SellerPendingOrders';
+import type { SellerOrderFilter } from '../utils/seller-order-display';
+import { SellerOrdersSection } from './SellerOrdersSection';
+import { SellerOverviewSection } from './SellerOverviewSection';
 import { SellerProductsPage } from './SellerProductsPage';
 import { SellerReturnsSection } from './SellerReturnsSection';
 import { SellerSettingsSection } from './SellerSettingsSection';
 import { SellerWorkspaceLayout } from './SellerWorkspaceLayout';
 
 export function SellerDashboardPage() {
+  const [orderFilter, setOrderFilter] = useState<SellerOrderFilter>('all');
+
   const {
     enabled,
     memberships,
@@ -117,11 +123,34 @@ export function SellerDashboardPage() {
   return (
     <SellerWorkspaceLayout
       activeNav={activeTab}
-      onSelectNav={(nav) => setActiveTab(nav)}
+      onSelectNav={(nav) => {
+        if (nav === 'orders') setOrderFilter('all');
+        setActiveTab(nav);
+      }}
       shopName={shopName}
       shopLogo={shopLogo}
     >
-      {activeTab === 'products' ? (
+      {activeTab === 'overview' ? (
+        <>
+          <Link
+            href="/selling/kyc"
+            className="mb-4 inline-flex min-h-11 items-center underline"
+          >
+            Identity verification (KYC)
+          </Link>
+          <SellerOverviewSection
+            shopId={shopId}
+            shopName={shopName}
+            enabled={enabled}
+            products={sellerProducts}
+            totalListings={myProductsQuery.data?.data.meta.totalItems}
+            onNavigate={(tab, nextFilter) => {
+              if (nextFilter) setOrderFilter(nextFilter);
+              setActiveTab(tab);
+            }}
+          />
+        </>
+      ) : activeTab === 'products' ? (
         myProductsQuery.isPending ? (
           <p className="text-rewear-muted" role="status">
             Loading products…
@@ -146,34 +175,13 @@ export function SellerDashboardPage() {
             onPageChange={setProductsPage}
           />
         )
-      ) : activeTab === 'overview' || activeTab === 'orders' ? (
-        <div className="space-y-8">
-          <section className="border-rewear-border flex flex-wrap items-center justify-between gap-4 border bg-white p-6">
-            <div>
-              <h2 className="text-2xl font-semibold">
-                {activeTab === 'orders' ? 'Orders' : shopName}
-              </h2>
-              <p className="text-rewear-muted mt-1 text-sm">
-                Orders awaiting seller confirmation
-              </p>
-            </div>
-            <div className="flex flex-wrap items-center gap-3">
-              <Link
-                href="/selling/kyc"
-                className="border-rewear-border hover:bg-rewear-soft inline-flex min-h-11 items-center rounded-lg border px-4 text-sm font-semibold"
-              >
-                Identity verification (KYC)
-              </Link>
-              <Link
-                href="/selling/new"
-                className="bg-rewear-accent inline-flex min-h-11 items-center rounded-lg px-4 text-sm font-semibold"
-              >
-                Create listing
-              </Link>
-            </div>
-          </section>
-          <SellerPendingOrders key={shopId} shopId={shopId} enabled={enabled} />
-        </div>
+      ) : activeTab === 'orders' ? (
+        <SellerOrdersSection
+          key={`${shopId}-${orderFilter}`}
+          shopId={shopId}
+          enabled={enabled}
+          initialFilter={orderFilter}
+        />
       ) : activeTab === 'returns' ? (
         <SellerReturnsSection shopId={shopId} enabled={enabled} />
       ) : activeTab === 'settings' ? (

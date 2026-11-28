@@ -13,6 +13,7 @@ import { formatPrice } from '@/shared/utils/product';
 import type { PaymentMethodId } from '../types';
 import { getShippingEstimateState } from '../utils/shipping-estimate-state';
 import { DeliveryMethodModal } from './DeliveryMethodModal';
+import { getPaymentMethodLabel } from './PaymentMethodModal';
 
 type Checkout = CheckoutControllerFind200['data'];
 
@@ -86,13 +87,15 @@ export function ShippingEstimateForOrder({
     <div className="bg-rewear-soft/40 border-rewear-text/70 mt-3 space-y-1.5 border p-4 transition-colors">
       <div className="flex items-center justify-between text-base">
         <span className="font-semibold">Delivery method</span>
-        <span className="text-sm font-semibold">
+        <span className="font-mono text-sm font-semibold">
           {quoted ? (
             formatPrice(order.fee)
           ) : order?.status === 'UNAVAILABLE' ? (
-            <span className="text-xs text-amber-600">Unavailable</span>
+            <span className="font-sans text-xs text-amber-600">
+              Unavailable
+            </span>
           ) : (
-            <span className="text-rewear-muted animate-pulse text-xs">
+            <span className="text-rewear-muted animate-pulse font-sans text-xs">
               Calculating…
             </span>
           )}
@@ -134,6 +137,9 @@ export function ShippingEstimateSummary({
   onQuote,
   selectedPaymentMethod = 'MOMO',
   onChangePaymentMethod,
+  coinDiscount = 0,
+  useWallet = false,
+  payableTotal,
 }: {
   checkout: Checkout;
   state: State;
@@ -141,6 +147,9 @@ export function ShippingEstimateSummary({
   onQuote: (quote: CheckoutControllerQuote200Data) => void;
   selectedPaymentMethod?: PaymentMethodId;
   onChangePaymentMethod?: () => void;
+  coinDiscount?: number;
+  useWallet?: boolean;
+  payableTotal?: number;
 }) {
   const refresh = useCheckoutControllerQuote({
     mutation: {
@@ -164,6 +173,14 @@ export function ShippingEstimateSummary({
 
   const sellerCount = checkout.orders.length;
   const hasQuotedFee = state.complete && quote?.totalShippingFee !== null;
+  const grossTotal =
+    hasQuotedFee && quote?.grandTotal !== null
+      ? quote!.grandTotal
+      : checkout.subtotal;
+  const finalTotal =
+    payableTotal !== undefined
+      ? payableTotal
+      : Math.max(0, grossTotal - coinDiscount);
 
   return (
     <div className="space-y-4">
@@ -171,53 +188,73 @@ export function ShippingEstimateSummary({
         <span className="text-rewear-muted">
           Shipping · {sellerCount} {sellerCount === 1 ? 'seller' : 'sellers'}
         </span>
-        <span className="text-sm font-semibold">
+        <span className="font-mono text-sm font-semibold">
           {refresh.isPending ? (
-            <span className="text-rewear-muted animate-pulse">
+            <span className="text-rewear-muted animate-pulse font-sans">
               Calculating…
             </span>
           ) : hasQuotedFee ? (
             formatPrice(quote!.totalShippingFee)
           ) : quote?.status === 'UNAVAILABLE' ? (
-            <span className="text-xs text-amber-600">Unavailable</span>
+            <span className="font-sans text-xs text-amber-600">
+              Unavailable
+            </span>
           ) : (
-            <span className="text-rewear-muted animate-pulse">
+            <span className="text-rewear-muted animate-pulse font-sans">
               Calculating…
             </span>
           )}
         </span>
       </div>
 
-      <div className="border-rewear-border/20 flex items-center justify-between border-t pt-4">
-        <span className="text-base font-normal">Total</span>
+      {coinDiscount > 0 && (
+        <div className="flex items-center justify-between text-sm">
+          <span className="text-rewear-muted">Reward coins applied</span>
+          <span className="font-mono font-semibold text-emerald-700">
+            -{formatPrice(coinDiscount)}
+          </span>
+        </div>
+      )}
+
+      {useWallet && (
+        <div className="flex items-center justify-between text-sm">
+          <span className="text-rewear-muted">Paid from RE.WEAR Wallet</span>
+          <span className="font-mono font-semibold text-emerald-700">
+            -{formatPrice(finalTotal)}
+          </span>
+        </div>
+      )}
+
+      <div className="border-rewear-border flex items-center justify-between border-t pt-4">
+        <span className="text-base font-normal">
+          {useWallet ? 'Amount due now' : 'Total'}
+        </span>
         <span
           aria-label="Estimated checkout total"
-          className="text-[28px] leading-[34px] font-semibold tracking-[-0.02em]"
+          className="text-[28px] leading-[34px] font-semibold tracking-[-0.02em] tabular-nums"
         >
-          {hasQuotedFee && quote?.grandTotal !== null
-            ? formatPrice(quote!.grandTotal)
-            : formatPrice(checkout.subtotal)}
+          {useWallet ? formatPrice(0) : formatPrice(finalTotal)}
         </span>
       </div>
 
-      <div className="space-y-1 pt-2">
+      <div className="space-y-1 pt-1">
         <p className="text-sm font-semibold">Payment method &rsaquo;</p>
-        <p className="text-rewear-muted text-base">
-          {selectedPaymentMethod === 'CARD'
-            ? 'Bank card'
-            : selectedPaymentMethod === 'VNPAY'
-              ? 'VNPAY'
-              : selectedPaymentMethod === 'ZALOPAY'
-                ? 'ZaloPay'
-                : 'MoMo'}
-          {' · '}
-          <button
-            type="button"
-            onClick={onChangePaymentMethod}
-            className="text-rewear-text cursor-pointer font-semibold hover:underline"
-          >
-            Change
-          </button>
+        <p className="text-rewear-muted text-sm md:text-base">
+          {useWallet
+            ? 'RE.WEAR Refund Wallet (100%)'
+            : getPaymentMethodLabel(selectedPaymentMethod)}
+          {!useWallet && onChangePaymentMethod && (
+            <>
+              {' · '}
+              <button
+                type="button"
+                onClick={onChangePaymentMethod}
+                className="text-rewear-text cursor-pointer font-semibold hover:underline"
+              >
+                Change
+              </button>
+            </>
+          )}
         </p>
       </div>
 

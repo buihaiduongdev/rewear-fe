@@ -1,5 +1,7 @@
 'use client';
 
+import { useState } from 'react';
+
 import Link from 'next/link';
 
 import { AddAddressDialog, DeliveryAddressModal } from '@/modules/address';
@@ -7,6 +9,10 @@ import { CartLink } from '@/modules/cart/components/CartLink';
 import { getApiErrorMessage } from '@/shared/api/api-error';
 import { MarketplaceHeader } from '@/shared/components/marketplace/MarketplaceHeader';
 import { MobileNavigation } from '@/shared/components/marketplace/MobileNavigation';
+import {
+  PolicyModals,
+  type PolicyModalType,
+} from '@/shared/components/marketplace/PolicyModals';
 import { ProductPhoto } from '@/shared/components/marketplace/ProductPhoto';
 import { formatPrice } from '@/shared/utils/product';
 import { Dialog } from '@base-ui/react/dialog';
@@ -20,9 +26,11 @@ import {
 } from './ShippingEstimate';
 
 const actionClass =
-  'bg-rewear-accent text-rewear-text flex h-[52px] w-full cursor-pointer items-center justify-center text-sm font-semibold disabled:opacity-50 md:h-12';
+  'bg-rewear-accent text-rewear-text flex h-[52px] w-full cursor-pointer items-center justify-center text-sm font-semibold transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50 md:h-12';
 
 export function CheckoutPage() {
+  const [policyModal, setPolicyModal] = useState<PolicyModalType>(null);
+
   const {
     router,
     id,
@@ -41,6 +49,21 @@ export function CheckoutPage() {
     setPaymentMethod,
     paymentModalOpen,
     setPaymentModalOpen,
+    useWallet,
+    handleToggleWallet,
+    availableWalletBalance,
+    canCoverWithWallet,
+    useCoins,
+    handleToggleCoins,
+    coinPending,
+    availableCoinBalance,
+    maxApplicableCoins,
+    coinDiscount,
+    payableTotal,
+    canPlaceOrder,
+    placingPayment,
+    paymentError,
+    handlePlaceOrder,
     handleAddressCreated,
     availableItems,
     selectedAddressObj,
@@ -53,6 +76,16 @@ export function CheckoutPage() {
     error,
     reserve,
   } = useCheckoutPage();
+
+  const placeOrderLabel = placingPayment
+    ? 'Processing…'
+    : useWallet
+      ? `Pay ${formatPrice(payableTotal)} with Wallet`
+      : paymentMethod === 'COD'
+        ? `Place COD order · ${formatPrice(payableTotal)}`
+        : paymentMethod === 'PAYOS'
+          ? `Pay now via PayOS · ${formatPrice(payableTotal)}`
+          : `Pay now via MoMo · ${formatPrice(payableTotal)}`;
 
   return (
     <div className="bg-rewear-surface text-rewear-text flex min-h-dvh flex-col">
@@ -94,7 +127,7 @@ export function CheckoutPage() {
         </div>
 
         {!!error && (
-          <p role="alert" className="text-sm text-red-600">
+          <p role="alert" className="text-sm text-[#BA1A1A]">
             {getApiErrorMessage(error)}
           </p>
         )}
@@ -135,7 +168,7 @@ export function CheckoutPage() {
           </div>
         )}
 
-        {/* HELD CHECKOUT VIEW: /checkout?id=... (FIGMA FRAME 1:2261) */}
+        {/* HELD CHECKOUT VIEW: /checkout?id=... */}
         {data && (
           <>
             {data.status !== 'HELD' && (
@@ -228,7 +261,7 @@ export function CheckoutPage() {
                                 {item.size}
                               </p>
                             )}
-                            <p className="text-base leading-6 font-semibold md:text-[28px] md:leading-[34px] md:tracking-[-0.02em]">
+                            <p className="text-base leading-6 font-semibold tabular-nums md:text-[28px] md:leading-[34px] md:tracking-[-0.02em]">
                               {formatPrice(item.price)}
                             </p>
                           </div>
@@ -246,9 +279,9 @@ export function CheckoutPage() {
                 ))}
               </div>
 
-              {/* Sticky Order Summary matching Figma Frame 1:2261 */}
+              {/* Sticky Order Summary */}
               <aside
-                className="bg-rewear-soft h-fit space-y-6 p-6"
+                className="bg-rewear-soft h-fit space-y-5 p-6"
                 aria-label="Checkout summary"
               >
                 <div className="space-y-2">
@@ -256,15 +289,80 @@ export function CheckoutPage() {
                     Order summary
                   </h2>
                   {data.status === 'HELD' && data.expiresAt && (
-                    <div className="text-rewear-muted text-sm md:text-base">
+                    <div className="text-rewear-muted font-mono text-sm">
                       <CheckoutCountdown deadline={data.expiresAt} />
                     </div>
                   )}
                 </div>
 
+                {/* Reward Coins & Refund Wallet controls */}
+                {data.status === 'HELD' && (
+                  <div className="border-rewear-border space-y-3 border-y py-4">
+                    <label className="flex cursor-pointer items-start justify-between gap-3">
+                      <div className="space-y-0.5">
+                        <span className="text-rewear-text block text-sm font-semibold">
+                          Use Reward Coins
+                        </span>
+                        <span className="text-rewear-muted block text-xs">
+                          Available:{' '}
+                          <span className="font-mono">
+                            {formatPrice(availableCoinBalance)}
+                          </span>{' '}
+                          · Up to 10% of items (
+                          <span className="font-mono">
+                            {formatPrice(maxApplicableCoins)}
+                          </span>
+                          )
+                        </span>
+                      </div>
+                      <input
+                        type="checkbox"
+                        aria-label="Use Reward Coins"
+                        checked={useCoins}
+                        disabled={
+                          coinPending ||
+                          placingPayment ||
+                          (!useCoins && maxApplicableCoins <= 0)
+                        }
+                        onChange={(e) =>
+                          void handleToggleCoins(e.target.checked)
+                        }
+                        className="accent-rewear-text mt-1 size-4 shrink-0 cursor-pointer disabled:cursor-not-allowed"
+                      />
+                    </label>
+
+                    <label className="flex cursor-pointer items-start justify-between gap-3">
+                      <div className="space-y-0.5">
+                        <span className="text-rewear-text block text-sm font-semibold">
+                          Pay with Refund Wallet
+                        </span>
+                        <span className="text-rewear-muted block text-xs">
+                          Balance:{' '}
+                          <span className="font-mono">
+                            {formatPrice(availableWalletBalance)}
+                          </span>
+                          {!canCoverWithWallet && availableWalletBalance > 0
+                            ? ' · Full order coverage required'
+                            : canCoverWithWallet
+                              ? ' · Covers 100% of total'
+                              : ' · No refund balance'}
+                        </span>
+                      </div>
+                      <input
+                        type="checkbox"
+                        aria-label="Pay with Refund Wallet"
+                        checked={useWallet}
+                        disabled={placingPayment || !canCoverWithWallet}
+                        onChange={(e) => handleToggleWallet(e.target.checked)}
+                        className="accent-rewear-text mt-1 size-4 shrink-0 cursor-pointer disabled:cursor-not-allowed"
+                      />
+                    </label>
+                  </div>
+                )}
+
                 <div className="flex items-center justify-between text-base">
                   <span className="text-rewear-muted">Items</span>
-                  <span className="text-sm font-semibold">
+                  <span className="font-mono text-sm font-semibold">
                     {formatPrice(data.subtotal)}
                   </span>
                 </div>
@@ -277,17 +375,39 @@ export function CheckoutPage() {
                   onQuote={handleQuote}
                   selectedPaymentMethod={paymentMethod}
                   onChangePaymentMethod={() => setPaymentModalOpen(true)}
+                  coinDiscount={coinDiscount}
+                  useWallet={useWallet}
+                  payableTotal={payableTotal}
                 />
 
-                <button type="button" disabled={true} className={actionClass}>
-                  Payment unavailable
+                {paymentError && (
+                  <p
+                    role="alert"
+                    className="border border-[#BA1A1A]/30 bg-red-50 px-3 py-2 text-xs text-[#BA1A1A]"
+                  >
+                    {paymentError}
+                  </p>
+                )}
+
+                <button
+                  type="button"
+                  disabled={!canPlaceOrder}
+                  onClick={() => void handlePlaceOrder()}
+                  className={actionClass}
+                >
+                  {placeOrderLabel}
                 </button>
+
+                <p className="text-rewear-muted text-xs leading-5">
+                  Earn 0.5% back in Reward Coins after delivery settles. Funds
+                  stay escrow-protected for 72h after delivery.
+                </p>
 
                 <div className="flex flex-col gap-2 pt-1">
                   {data.status === 'HELD' && (
                     <button
                       type="button"
-                      disabled={cancel.isPending}
+                      disabled={cancel.isPending || placingPayment}
                       onClick={handleCancelAndReturnToCart}
                       className="text-rewear-text flex min-h-8 cursor-pointer items-center justify-center text-center text-sm font-semibold hover:underline disabled:opacity-50"
                     >
@@ -338,7 +458,10 @@ export function CheckoutPage() {
                                 : 'Cancel checkout'}
                             </button>
                             {cancel.isError && (
-                              <p role="alert" className="text-sm text-red-600">
+                              <p
+                                role="alert"
+                                className="text-sm text-[#BA1A1A]"
+                              >
                                 {getApiErrorMessage(cancel.error)}
                               </p>
                             )}
@@ -361,16 +484,30 @@ export function CheckoutPage() {
           disabled={create.isPending}
         />
         <PaymentMethodModal
+          key={paymentMethod}
           open={paymentModalOpen}
           onOpenChange={setPaymentModalOpen}
           selectedMethod={paymentMethod}
-          onSelectMethod={setPaymentMethod}
+          onSelectMethod={(next) => {
+            setPaymentMethod(next);
+            if (useWallet) handleToggleWallet(false);
+          }}
         />
       </main>
-      <footer className="text-rewear-muted mx-auto hidden w-full max-w-[1280px] justify-between px-12 py-6 text-sm font-semibold md:flex">
+      <footer className="border-rewear-border text-rewear-muted mx-auto hidden w-full max-w-[1280px] items-center justify-between border-t px-12 py-6 text-sm font-semibold md:flex">
         <span>© 2026 RE.WEAR</span>
-        <span className="text-rewear-text">Help &amp; returns</span>
+        <button
+          type="button"
+          onClick={() => setPolicyModal('help')}
+          className="text-rewear-text cursor-pointer hover:underline"
+        >
+          Help &amp; returns
+        </button>
       </footer>
+      <PolicyModals
+        openType={policyModal}
+        onClose={() => setPolicyModal(null)}
+      />
       <MobileNavigation
         cartAction={
           <CartLink className="bg-rewear-soft flex min-h-11 items-center justify-center px-3" />
