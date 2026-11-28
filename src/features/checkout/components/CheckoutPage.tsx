@@ -1,5 +1,4 @@
 'use client';
-
 import Link from 'next/link';
 
 import { AddAddressDialog, DeliveryAddressModal } from '@/modules/address';
@@ -14,6 +13,7 @@ import { Dialog } from '@base-ui/react/dialog';
 import { useCheckoutPage } from '../hooks/use-checkout-page';
 import { CheckoutCountdown } from './CheckoutCountdown';
 import { PaymentMethodModal } from './PaymentMethodModal';
+import { PayosCheckoutAction } from './PayosCheckoutAction';
 import {
   ShippingEstimateForOrder,
   ShippingEstimateSummary,
@@ -279,9 +279,13 @@ export function CheckoutPage() {
                   onChangePaymentMethod={() => setPaymentModalOpen(true)}
                 />
 
-                <button type="button" disabled={true} className={actionClass}>
-                  Payment unavailable
-                </button>
+                <PayosCheckoutAction
+                  checkoutId={data.id}
+                  status={data.status}
+                  expiresAt={data.expiresAt}
+                  quoteReady={shippingState.complete}
+                  quoteTotal={quote?.grandTotal}
+                />
 
                 <div className="flex flex-col gap-2 pt-1">
                   {data.status === 'HELD' && (

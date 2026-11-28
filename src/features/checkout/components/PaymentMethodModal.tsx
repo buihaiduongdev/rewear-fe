@@ -26,31 +26,10 @@ export type PaymentMethodOption = {
 
 export const PAYMENT_METHODS: PaymentMethodOption[] = [
   {
-    id: 'MOMO',
-    name: 'MoMo',
-    category: 'Wallet',
+    id: 'PAYOS',
+    name: 'PayOS',
+    category: 'Bank transfer / VietQR',
     available: true,
-  },
-  {
-    id: 'VNPAY',
-    name: 'VNPAY',
-    category: 'Bank app / QR code',
-    available: false,
-    statusText: 'Unavailable',
-  },
-  {
-    id: 'ZALOPAY',
-    name: 'ZaloPay',
-    category: 'Wallet',
-    available: false,
-    statusText: 'Unavailable',
-  },
-  {
-    id: 'CARD',
-    name: 'Bank card',
-    category: 'Domestic / Visa / Mastercard',
-    available: false,
-    statusText: 'Unavailable',
   },
 ];
 

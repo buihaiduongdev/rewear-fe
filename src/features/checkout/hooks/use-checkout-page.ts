@@ -58,7 +58,7 @@ export function useCheckoutPage() {
   const [addressId, setAddressId] = useState('');
   const [cancelOpen, setCancelOpen] = useState(false);
   const [addressModalOpen, setAddressModalOpen] = useState(false);
-  const [paymentMethod, setPaymentMethod] = useState<PaymentMethodId>('MOMO');
+  const [paymentMethod, setPaymentMethod] = useState<PaymentMethodId>('PAYOS');
   const [paymentModalOpen, setPaymentModalOpen] = useState(false);
 
   useEffect(() => {

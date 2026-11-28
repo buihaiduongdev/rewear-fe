@@ -1,12 +1,10 @@
 import type { ReactNode } from 'react';
 
-import { DM_Sans } from 'next/font/google';
 import Image from 'next/image';
 import Link from 'next/link';
 
+import { dmSans } from '@/shared/config/fonts';
 import { Search } from 'lucide-react';
-
-const dmSans = DM_Sans({ subsets: ['latin', 'latin-ext'], display: 'swap' });
 
 export function LoginShell({ children }: { children: ReactNode }) {
   return (

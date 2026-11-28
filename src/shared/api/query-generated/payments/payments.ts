@@ -25,8 +25,8 @@ import type {
   PaymentControllerCreate200,
   PaymentControllerCreateBody,
   PaymentControllerFind200,
-  PaymentControllerIpnBody,
   PaymentControllerReconcile200,
+  PaymentControllerWebhookBody,
 } from '../../models/index';
 import { orvalRequest } from '../../orval-request';
 
@@ -58,7 +58,7 @@ export const paymentControllerCreate = (
 ) => {
   return orvalRequest<PaymentControllerCreate200>(
     {
-      url: `/api/checkouts/${id}/payments/momo`,
+      url: `/api/checkouts/${id}/payments/payos`,
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       data: paymentControllerCreateBody,
@@ -388,44 +388,44 @@ export const usePaymentControllerReconcile = <
     queryClient,
   );
 };
-export const paymentControllerIpn = (
-  paymentControllerIpnBody: PaymentControllerIpnBody,
+export const paymentControllerWebhook = (
+  paymentControllerWebhookBody: PaymentControllerWebhookBody,
   options?: SecondParameter<typeof orvalRequest>,
   signal?: AbortSignal,
 ) => {
   return orvalRequest<void>(
     {
-      url: `/api/payments/momo/ipn`,
+      url: `/api/payments/payos/webhook`,
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      data: paymentControllerIpnBody,
+      data: paymentControllerWebhookBody,
       signal,
     },
     options,
   );
 };
 
-export const getPaymentControllerIpnMutationKey = () =>
-  ['paymentControllerIpn'] as const;
+export const getPaymentControllerWebhookMutationKey = () =>
+  ['paymentControllerWebhook'] as const;
 
-export const getPaymentControllerIpnMutationOptions = <
+export const getPaymentControllerWebhookMutationOptions = <
   TError = unknown,
   TContext = unknown,
 >(options?: {
   mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof paymentControllerIpn>>,
+    Awaited<ReturnType<typeof paymentControllerWebhook>>,
     TError,
-    PaymentControllerIpnMutationVariables,
+    PaymentControllerWebhookMutationVariables,
     TContext
   >;
   request?: SecondParameter<typeof orvalRequest>;
 }): UseMutationOptions<
-  Awaited<ReturnType<typeof paymentControllerIpn>>,
+  Awaited<ReturnType<typeof paymentControllerWebhook>>,
   TError,
-  PaymentControllerIpnMutationVariables,
+  PaymentControllerWebhookMutationVariables,
   TContext
 > => {
-  const mutationKey = getPaymentControllerIpnMutationKey();
+  const mutationKey = getPaymentControllerWebhookMutationKey();
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation &&
       'mutationKey' in options.mutation &&
@@ -435,45 +435,48 @@ export const getPaymentControllerIpnMutationOptions = <
     : { mutation: { mutationKey }, request: undefined };
 
   const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof paymentControllerIpn>>,
-    PaymentControllerIpnMutationVariables
+    Awaited<ReturnType<typeof paymentControllerWebhook>>,
+    PaymentControllerWebhookMutationVariables
   > = (props) => {
     const { data } = props ?? {};
 
-    return paymentControllerIpn(data, requestOptions);
+    return paymentControllerWebhook(data, requestOptions);
   };
 
   return { mutationFn, ...mutationOptions };
 };
 
-export type PaymentControllerIpnMutationResult = NonNullable<
-  Awaited<ReturnType<typeof paymentControllerIpn>>
+export type PaymentControllerWebhookMutationResult = NonNullable<
+  Awaited<ReturnType<typeof paymentControllerWebhook>>
 >;
-export type PaymentControllerIpnMutationBody = PaymentControllerIpnBody;
-export type PaymentControllerIpnMutationError = unknown;
-export type PaymentControllerIpnMutationVariables = {
-  data: PaymentControllerIpnBody;
+export type PaymentControllerWebhookMutationBody = PaymentControllerWebhookBody;
+export type PaymentControllerWebhookMutationError = unknown;
+export type PaymentControllerWebhookMutationVariables = {
+  data: PaymentControllerWebhookBody;
 };
 
-export const usePaymentControllerIpn = <TError = unknown, TContext = unknown>(
+export const usePaymentControllerWebhook = <
+  TError = unknown,
+  TContext = unknown,
+>(
   options?: {
     mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof paymentControllerIpn>>,
+      Awaited<ReturnType<typeof paymentControllerWebhook>>,
       TError,
-      PaymentControllerIpnMutationVariables,
+      PaymentControllerWebhookMutationVariables,
       TContext
     >;
     request?: SecondParameter<typeof orvalRequest>;
   },
   queryClient?: QueryClient,
 ): UseMutationResult<
-  Awaited<ReturnType<typeof paymentControllerIpn>>,
+  Awaited<ReturnType<typeof paymentControllerWebhook>>,
   TError,
-  PaymentControllerIpnMutationVariables,
+  PaymentControllerWebhookMutationVariables,
   TContext
 > => {
   return useMutation(
-    getPaymentControllerIpnMutationOptions(options),
+    getPaymentControllerWebhookMutationOptions(options),
     queryClient,
   );
 };

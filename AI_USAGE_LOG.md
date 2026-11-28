@@ -678,3 +678,16 @@ Ghi một mục cho mỗi task có dùng AI. Cập nhật liên kết PR/commit 
 - **Cách kiểm chứng:** Chạy `pnpm check` (TypeScript noEmit pass, ESLint 0 errors, Prettier pass), `vitest run tests/administrative-division-fields.test.tsx` pass 2/2.
 - **Lỗi hoặc đề xuất sai của AI đã phát hiện:** Lỗi type casting `any` kích hoạt cảnh báo lint trong `use-pickup-address-form.ts`; đã điều chỉnh dùng `as unknown as PickupLocationControllerSaveShopBody`.
 - **Minh chứng:** PR #18; branch `buihaiduongdev/ghn-pickup-settings`.
+
+
+### 2026-11-28 — Frontend thanh toán PayOS và trang kết quả
+
+- **Người thực hiện:** Bùi Thành Tâm.
+- **Công cụ:** Codex, Figma MCP.
+- **Prompt chính:** Code frontend thanh toán sau khi cấu hình PayOS/webhook; dùng Figma và bổ sung giao diện thiếu.
+- **Phạm vi:** Thay lựa chọn MoMo bằng PayOS/VietQR ở checkout, nối API tạo thanh toán, thêm /payment-result và /payment-cancel. Refresh riêng Payments trong OpenAPI và sinh lại client/hook/schema bằng Orval, giữ backend nguyên trạng.
+- **Quy tắc:** Chỉ backend PAID mới xác nhận thành công; không tin status/code/cancel trên URL. Giữ request ID theo buyer/checkout/lần thất bại để retry không tạo thanh toán trùng. Giữ context trước chuyển hướng, xử lý mất mạng/lỗi lưu phiên; hiển thị lại số tiền khi server báo khác; không tự hủy checkout ở trang cancel. Thiếu context dẫn về đơn hàng để tra cứu, không đoán giao dịch.
+- **Thiết kế:** Tái sử dụng frame xác minh 48:571 và token/component hiện có. Bổ sung nhóm PayOS editable trong Re.wear-design, section 228:352, gồm desktop và mobile; kiểm tra ảnh render và sửa clipping ở bản mobile.
+- **Kiểm chứng:** 19 Vitest suites / 57 tests đạt; TypeScript noEmit và ESLint toàn frontend đạt. Kiểm tra trình duyệt bằng tài khoản seed với trạng thái thiếu context ở desktop/mobile; không tạo hoặc chuyển tiền thật. Production build thành công sau khi chuyển DM Sans/Geist Mono sang next/font/local, giữ nguyên font gốc và giấy phép SIL OFL. Thử checkout seed bị chặn vì pickup GHN chưa CONNECTED; lần kết nối Second Story trả UNKNOWN nên đã dừng, không retry tạo kho và không tạo link/chuyển tiền PayOS.
+- **Phát hiện đã sửa:** Review độc lập tìm ra request ID bị đổi khi retry sau lỗi mạng, nguy cơ mất context khi storage lỗi và thiếu xác nhận số tiền mới. Đã sửa và thêm regression tests; context được ghi lại trước mỗi lần chuyển hướng.
+- **Minh chứng:** Branch feat/payos-payment-frontend; docs/payos-checkout-testing.md. Chưa push/merge; chưa kiểm chứng giao dịch PayOS end-to-end thật.

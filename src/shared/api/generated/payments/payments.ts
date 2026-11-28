@@ -9,8 +9,8 @@ import type {
   PaymentControllerCreate200,
   PaymentControllerCreateBody,
   PaymentControllerFind200,
-  PaymentControllerIpnBody,
   PaymentControllerReconcile200,
+  PaymentControllerWebhookBody,
 } from '../../models/index';
 import { orvalRequest } from '../../orval-request';
 
@@ -23,7 +23,7 @@ export const paymentControllerCreate = (
 ) => {
   return orvalRequest<PaymentControllerCreate200>(
     {
-      url: `/api/checkouts/${id}/payments/momo`,
+      url: `/api/checkouts/${id}/payments/payos`,
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       data: paymentControllerCreateBody,
@@ -49,16 +49,16 @@ export const paymentControllerReconcile = (
     options,
   );
 };
-export const paymentControllerIpn = (
-  paymentControllerIpnBody: PaymentControllerIpnBody,
+export const paymentControllerWebhook = (
+  paymentControllerWebhookBody: PaymentControllerWebhookBody,
   options?: SecondParameter<typeof orvalRequest<void>>,
 ) => {
   return orvalRequest<void>(
     {
-      url: `/api/payments/momo/ipn`,
+      url: `/api/payments/payos/webhook`,
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      data: paymentControllerIpnBody,
+      data: paymentControllerWebhookBody,
     },
     options,
   );
@@ -72,6 +72,6 @@ export type PaymentControllerFindResult = NonNullable<
 export type PaymentControllerReconcileResult = NonNullable<
   Awaited<ReturnType<typeof paymentControllerReconcile>>
 >;
-export type PaymentControllerIpnResult = NonNullable<
-  Awaited<ReturnType<typeof paymentControllerIpn>>
+export type PaymentControllerWebhookResult = NonNullable<
+  Awaited<ReturnType<typeof paymentControllerWebhook>>
 >;

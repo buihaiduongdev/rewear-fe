@@ -132,7 +132,7 @@ export function ShippingEstimateSummary({
   quote,
   state,
   onQuote,
-  selectedPaymentMethod = 'MOMO',
+  selectedPaymentMethod = 'PAYOS',
   onChangePaymentMethod,
 }: {
   checkout: Checkout;
@@ -203,13 +203,7 @@ export function ShippingEstimateSummary({
       <div className="space-y-1 pt-2">
         <p className="text-sm font-semibold">Payment method &rsaquo;</p>
         <p className="text-rewear-muted text-base">
-          {selectedPaymentMethod === 'CARD'
-            ? 'Bank card'
-            : selectedPaymentMethod === 'VNPAY'
-              ? 'VNPAY'
-              : selectedPaymentMethod === 'ZALOPAY'
-                ? 'ZaloPay'
-                : 'MoMo'}
+          {selectedPaymentMethod === 'PAYOS' ? 'PayOS · VietQR' : 'PayOS'}
           {' · '}
           <button
             type="button"

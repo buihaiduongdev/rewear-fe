@@ -223,64 +223,29 @@ export const PaymentControllerReconcileResponse = zod.object({
   }),
 });
 
-export const paymentControllerIpnBodyPartnerCodeMax = 50;
+export const paymentControllerWebhookBodyDataOrderCodeMin = 0;
+export const paymentControllerWebhookBodyDataOrderCodeMax = 9007199254740991;
 
-export const paymentControllerIpnBodyOrderIdMax = 200;
+export const paymentControllerWebhookBodyDataAmountMin = 0;
+export const paymentControllerWebhookBodyDataAmountMax = 9007199254740991;
 
-export const paymentControllerIpnBodyRequestIdMax = 50;
-
-export const paymentControllerIpnBodyAmountMin = 0;
-export const paymentControllerIpnBodyAmountMax = 9007199254740991;
-
-export const paymentControllerIpnBodyTransIdMin = 0;
-export const paymentControllerIpnBodyTransIdMax = 9007199254740991;
-
-export const paymentControllerIpnBodyResultCodeMin = 0;
-export const paymentControllerIpnBodyResultCodeMax = 9007199254740991;
-
-export const paymentControllerIpnBodyResponseTimeMin = 0;
-export const paymentControllerIpnBodyResponseTimeMax = 9007199254740991;
-
-export const paymentControllerIpnBodyMessageMax = 1000;
-
-export const paymentControllerIpnBodyOrderInfoMax = 255;
-
-export const paymentControllerIpnBodyOrderTypeMax = 50;
-
-export const paymentControllerIpnBodyPayTypeMax = 50;
-
-export const paymentControllerIpnBodyExtraDataMax = 1000;
-
-export const paymentControllerIpnBodySignatureRegExp = new RegExp(
-  '^[a-f0-9]{64}$',
-);
-
-export const PaymentControllerIpnBody = zod.strictObject({
-  partnerCode: zod.string().max(paymentControllerIpnBodyPartnerCodeMax),
-  orderId: zod.string().max(paymentControllerIpnBodyOrderIdMax),
-  requestId: zod.string().max(paymentControllerIpnBodyRequestIdMax),
-  amount: zod
-    .int()
-    .min(paymentControllerIpnBodyAmountMin)
-    .max(paymentControllerIpnBodyAmountMax),
-  transId: zod
-    .int()
-    .min(paymentControllerIpnBodyTransIdMin)
-    .max(paymentControllerIpnBodyTransIdMax),
-  resultCode: zod
-    .int()
-    .min(paymentControllerIpnBodyResultCodeMin)
-    .max(paymentControllerIpnBodyResultCodeMax),
-  responseTime: zod
-    .int()
-    .min(paymentControllerIpnBodyResponseTimeMin)
-    .max(paymentControllerIpnBodyResponseTimeMax),
-  message: zod.string().max(paymentControllerIpnBodyMessageMax),
-  orderInfo: zod.string().max(paymentControllerIpnBodyOrderInfoMax),
-  orderType: zod.string().max(paymentControllerIpnBodyOrderTypeMax),
-  payType: zod.string().max(paymentControllerIpnBodyPayTypeMax),
-  extraData: zod.string().max(paymentControllerIpnBodyExtraDataMax),
-  signature: zod.string().regex(paymentControllerIpnBodySignatureRegExp),
+export const PaymentControllerWebhookBody = zod.strictObject({
+  code: zod.string(),
+  desc: zod.string(),
+  success: zod.boolean().optional(),
+  data: zod.looseObject({
+    orderCode: zod
+      .int()
+      .min(paymentControllerWebhookBodyDataOrderCodeMin)
+      .max(paymentControllerWebhookBodyDataOrderCodeMax),
+    amount: zod
+      .int()
+      .min(paymentControllerWebhookBodyDataAmountMin)
+      .max(paymentControllerWebhookBodyDataAmountMax),
+    description: zod.string(),
+    reference: zod.string(),
+  }),
+  signature: zod.string().min(1),
 });
 
-export const PaymentControllerIpnResponse = zod.void();
+export const PaymentControllerWebhookResponse = zod.unknown();
